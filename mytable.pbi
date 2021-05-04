@@ -325,6 +325,7 @@ Declare MyTableGetColumnData(canvas,column.i)
 Declare MyTableGetColumnSort(canvas,column.i)
 Declare MyTableAutosizeColumn(canvas,col.i)
 Declare MyTableAutosizeRow(canvas,row.i)
+Declare MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
 
 Declare.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0)
 Declare MyTableRemoveRow(canvas,row.i)
@@ -2979,6 +2980,42 @@ Procedure MyTableAutosizeRow(canvas,row.i)
 		If Not all
 			*this\dirty=#True
 			_MyTableRecalc(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected file=CreateFile(#PB_Any,filename,encode)
+		If file
+			Protected first.b=#True
+			If header And ListSize(*this\cols())>0				
+				ForEach *this\cols()
+					If Not first
+						WriteString(file,sep,encode)
+					EndIf
+					WriteString(file,fieldquote,encode)
+					WriteString(file,*this\cols()\text,encode)
+					WriteString(file,fieldquote,encode)
+					first=#False
+				Next
+				WriteString(file,linebreak,encode)
+			EndIf
+			ForEach *this\rows()
+				first=#True
+				ForEach *this\rows()\cells()
+					If Not first
+						WriteString(file,sep,encode)
+					EndIf
+					WriteString(file,fieldquote,encode)
+					WriteString(file,*this\rows()\cells()\text,encode)
+					WriteString(file,fieldquote,encode)
+					first=#False
+				Next
+				WriteString(file,linebreak,encode)
+			Next
+			CloseFile(file)
 		EndIf
 	EndIf
 EndProcedure
