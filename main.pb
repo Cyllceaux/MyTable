@@ -108,7 +108,7 @@ MyTableRegister(mainWindow,canvasTree,hscrollTree,vscrollTree,#MYTABLE_TABLE_FLA
 MyTableRegister(mainWindow,canvasTree2,hscrollTree2,vscrollTree2,#MYTABLE_TABLE_FLAGS_LAST_STRETCH|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_MULTISELECT)
 MyTableRegister(mainWindow,canvasBild,hscrollBild,vscrollBild,#MYTABLE_TABLE_FLAGS_LAST_STRETCH|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_GRID)
 MyTableRegister(mainWindow,canvasTable3,hscrollTable3,vscrollTable3,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_CALLBACK,@CanvasTable3Callback())
-MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING)
+MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT)
 
 MyTableAddColumn(canvasTree,"Kategorien",0)
 MyTableAddColumn(canvasTree2,"Orte",0)
@@ -185,7 +185,7 @@ MyTableRedraw(canvasTable,#True)
 
 MyTableRedraw(canvasTree2,#False)
 For i=1 To 100
-	MyTableAddRow(canvasTree2,"Ort "+Str(i))
+	MyTableAddRow(canvasTree2,"Ort "+Str(i))	
 Next
 MyTableRedraw(canvasTree2,#True)
 
@@ -197,14 +197,22 @@ MyTableRedraw(canvasTable2,#True)
 
 For i=1 To 10000
 	MyTableAddRow(canvasTable4,Str(i)+"|firma "+Str(i)+"|Vorname "+Str(i)+#CRLF$+"|Nachname "+Str(i)+"|"+FormatDate("%dd.%mm.%yyyy",AddDate(Date(1980,1,1,0,0,0),#PB_Date_Day,i))+"|012345678-"+Str(i)+"|test"+Str(i)+"@test.de")
+	If i % 9=0
+		MyTableSetRowHeight(canvasTable4,i-1,50)
+	EndIf
 Next
 MyTableRedraw(canvasTable4,#True)
+
+	
 
 
 MyTableAutosizeColumn(canvasTable,#PB_Ignore)
 MyTableAutosizeColumn(canvasTable2,#PB_Ignore)
 MyTableAutosizeColumn(canvasTable3,#PB_Ignore)
 MyTableAutosizeColumn(canvasTable4,#PB_Ignore)
+
+
+MyTableAutosizeRow(canvasTable2,#PB_Ignore)
 
 PostEvent(#PB_Event_SizeWindow,mainWindow,0)
 
