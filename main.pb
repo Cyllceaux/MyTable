@@ -116,6 +116,48 @@ Procedure RightClick(canvas,*element)
 	EndSelect
 EndProcedure
 
+Global customwindow=0
+Global customcombobox=0
+
+Procedure CancelCustomEditCell(canvas,*cell.strMyTableCell)
+	If IsWindow(customwindow)
+		*cell\dirty=#True
+		*cell\text=GetGadgetText(customcombobox)
+		CloseWindow(customwindow)
+	EndIf
+	customwindow=0
+	customcombobox=0
+EndProcedure
+
+Procedure CustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
+
+	If IsWindow(customwindow)
+		CloseWindow(customwindow)
+		customwindow=0
+	EndIf
+	customwindow=OpenWindow(#PB_Any,
+	                  x,
+	                  y,
+	                  w,
+	                  h,
+	                  "",
+	                  #PB_Window_BorderLess,
+	                  GadgetID(*cell\table\canvas))
+	customcombobox=ComboBoxGadget(#PB_Any,
+	                        0,
+	                        0,
+	                        WindowWidth(customwindow),
+	                        WindowHeight(customwindow),
+	                        #PB_ComboBox_Editable)	
+	SetGadgetData(customcombobox,*cell)
+	SetWindowData(customwindow,*cell)
+	Protected idx
+	For idx=1 To 10
+		AddGadgetItem(customcombobox,-1,"Vorname "+idx)
+	Next
+	SetGadgetText(customcombobox,*cell\text)
+EndProcedure
+
 BindEvent(#PB_Event_SizeWindow,@evtResizeWindow(),mainWindow)
 BindEvent(#PB_Event_RestoreWindow,@evtResizeWindow(),mainWindow)
 BindEvent(#PB_Event_MaximizeWindow,@evtResizeWindow(),mainWindow)
@@ -158,6 +200,7 @@ MyTableAddColumn(canvasTable,"Vorname",200,#MYTABLE_COLUMN_FLAGS_EDITABLE)
 MyTableAddColumn(canvasTable,"Nachname",200,#MYTABLE_COLUMN_FLAGS_EDITABLE)
 MyTableAddColumn(canvasTable,"Geburtsdatum",150,#MYTABLE_COLUMN_FLAGS_CENTER|#MYTABLE_COLUMN_FLAGS_DATE|#MYTABLE_COLUMN_FLAGS_EDITABLE)
 MyTableAddColumn(canvasTable,"Uhrzeit",150,#MYTABLE_COLUMN_FLAGS_CENTER|#MYTABLE_COLUMN_FLAGS_TIME_LONG|#MYTABLE_COLUMN_FLAGS_EDITABLE)
+MyTableSetCustomCellEdit(canvasTable,1,@CustomEditCell(),@CancelCustomEditCell())
 
 
 MyTableAddColumn(canvasTable2,"ID",50,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_INTEGER|#MYTABLE_COLUMN_FLAGS_MIDDLE)

@@ -158,6 +158,9 @@ EndEnumeration
 #MYTABLE_COLUMN_FLAGS_DEFAULT_TIME = #MYTABLE_COLUMN_FLAGS_TIME|#MYTABLE_COLUMN_FLAGS_TIME_LONG
 #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME = #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE|#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME
 
+Prototype MyTableProtoEventCancelCustomEditCell(canvas,*cell.strMyTableCell)
+Prototype MyTableProtoEventCustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
+
 Structure strMyTableCol Extends strMyTableAObject
 	id.q
 	text.s	
@@ -165,6 +168,8 @@ Structure strMyTableCol Extends strMyTableAObject
 	sort.i	
 	flags.i
 	format.s
+	evtCustomEditCell.MyTableProtoEventCustomEditCell	
+	evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell
 EndStructure
 
 EnumerationBinary _MyTableTableFlags
@@ -197,6 +202,7 @@ Prototype MyTableProtoEventCellChangedText(canvas,*cell.strMyTableCell,old.s)
 Prototype MyTableProtoEventCellChangedValue(canvas,*cell.strMyTableCell,old.d)
 Prototype MyTableProtoEventCallback(canvas,*row.strMyTableRow)
 
+
 Structure strMyTableTable Extends _strMyTableAObject
 	name.s
 	window.i
@@ -224,6 +230,7 @@ Structure strMyTableTable Extends _strMyTableAObject
 	
 	editorgadget.i
 	editorwindow.i
+	*editcell.strMyTableCell
 	menu.i
 	
 	evtRowSelect.MyTableProtoEventRowSelected
@@ -236,6 +243,7 @@ Structure strMyTableTable Extends _strMyTableAObject
 	evtCellChangedText.MyTableProtoEventCellChangedText
 	evtCellChangedValue.MyTableProtoEventCellChangedValue
 	evtCallback.MyTableProtoEventCallback
+	
 	
 	selectedbackground.q
 	background.q
@@ -327,6 +335,7 @@ Declare MyTableSetColumnFlags(canvas,column.i,flags.i)
 Declare MyTableSetColumnImage(canvas,column.i,image.i)
 Declare MyTableSetColumnData(canvas,column.i,*data)
 Declare MyTableSetColumnSort(canvas,column.i,sort.i)
+Declare MyTableSetCustomCellEdit(canvas,column.i,evtCustomEditCell.MyTableProtoEventCustomEditCell,evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell)
 Declare.s MyTableGetColumnText(canvas,column.i)
 Declare MyTableGetColumnWidth(canvas,column.i)
 Declare MyTableGetColumnFlags(canvas,column.i)
@@ -430,8 +439,16 @@ Macro _callcountEnde(sname)
 EndMacro
 
 Procedure _MyTableStopEditCell(*this.strMyTableTable)
-	If *this
-		If IsWindow(*this\editorwindow)
+	Debug *this\editcell
+	If *this			
+		If *this\editcell
+			If *this\editcell\col\evtCancelCustomEditCell
+				*this\editcell\col\evtCancelCustomEditCell(*this\canvas,*this\editcell)
+				*this\dirty=#True
+				*this\editcell=0
+				_MyTableRecalc(*this)
+			EndIf
+		ElseIf IsWindow(*this\editorwindow)
 			Protected *cell.strMyTableCell=GetGadgetData(*this\editorgadget)
 			If *cell
 				Protected *col.strMyTableCol=0
@@ -496,34 +513,46 @@ Procedure _MyTableEditCell(*cell.strMyTableCell)
 				If IsWindow(*this\editorwindow)
 					CloseWindow(*this\editorwindow)					
 				EndIf
-				*this\editorwindow=OpenWindow(#PB_Any,
-				                              DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
-				                              DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
-				                              DesktopUnscaledX(*col\calcwidth),
-				                              DesktopUnscaledY(*row\calcheight),
-				                              "",
-				                              #PB_Window_BorderLess,
-				                              GadgetID(*this\canvas))
-				*this\editorgadget=EditorGadget(#PB_Any,
-				                                0,
-				                                0,
-				                                WindowWidth(*this\editorwindow),
-				                                WindowHeight(*this\editorwindow),
-				                                #PB_Editor_WordWrap)		
-				
-				SetGadgetText(*this\editorgadget,*cell\text)
-				HideGadget(*this\editorgadget,#False)
-				SetActiveGadget(*this\editorgadget)
-				SetGadgetData(*this\editorgadget,*cell)
-				SetWindowData(*this\editorwindow,*cell)
-				
-				AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Return,#MYTABLE_RETURN)
-				AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Escape,#MYTABLE_ESC)
-				
-				BindMenuEvent(*this\menu,#MYTABLE_RETURN,@MyTableEvtReturn())
-				BindMenuEvent(*this\menu,#MYTABLE_ESC,@MyTableEvtEsc())		
-				
-				BindGadgetEvent(*this\editorgadget,@MyTableEvtLostFocus(),#PB_EventType_LostFocus)
+				If *col\evtCustomEditCell
+					
+					*col\evtCustomEditCell(*this\canvas,
+					                       *cell,
+					                       DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
+					                       DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
+					                       DesktopUnscaledX(*col\calcwidth),
+					                       DesktopUnscaledY(*row\calcheight))
+					*this\editcell=*cell
+				Else
+					*this\editorwindow=OpenWindow(#PB_Any,
+					                              DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
+					                              DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
+					                              DesktopUnscaledX(*col\calcwidth),
+					                              DesktopUnscaledY(*row\calcheight),
+					                              "",
+					                              #PB_Window_BorderLess,
+					                              GadgetID(*this\canvas))
+					*this\editorgadget=EditorGadget(#PB_Any,
+					                                0,
+					                                0,
+					                                WindowWidth(*this\editorwindow),
+					                                WindowHeight(*this\editorwindow),
+					                                #PB_Editor_WordWrap)		
+					
+					SetGadgetText(*this\editorgadget,*cell\text)
+					HideGadget(*this\editorgadget,#False)
+					SetActiveGadget(*this\editorgadget)
+					SetGadgetData(*this\editorgadget,*cell)
+					SetWindowData(*this\editorwindow,*cell)
+					
+					AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Return,#MYTABLE_RETURN)
+					AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Escape,#MYTABLE_ESC)
+					
+					BindMenuEvent(*this\menu,#MYTABLE_RETURN,@MyTableEvtReturn())
+					BindMenuEvent(*this\menu,#MYTABLE_ESC,@MyTableEvtEsc())		
+					
+					BindGadgetEvent(*this\editorgadget,@MyTableEvtLostFocus(),#PB_EventType_LostFocus)
+					*this\editcell=0
+				EndIf
 			EndIf
 		EndIf
 	EndIf
@@ -1831,15 +1860,15 @@ Procedure MyTableEvtMouseDown()
 							EndIf
 						EndIf
 						If rightbutton 
-									If *this\evtColRightClick
-										*col=SelectElement(*this\cols(),col)
-										If *this\evtColRightClick(*this\canvas,*col)									
-											recalc=#True
-										EndIf
-									Else
-										redraw=#False
-									EndIf
+							If *this\evtColRightClick
+								*col=SelectElement(*this\cols(),col)
+								If *this\evtColRightClick(*this\canvas,*col)									
+									recalc=#True
 								EndIf
+							Else
+								redraw=#False
+							EndIf
+						EndIf	
 					ElseIf row>-1
 						SelectElement(*this\expRows(),row)
 						*row=*this\expRows()
@@ -2298,6 +2327,17 @@ Procedure MyTableSetColumnText(canvas,column.i,text.s)
 			*this\dirty=#True
 			_MyTableRedraw(*this)
 		EndIf
+	EndIf
+EndProcedure
+
+Procedure MyTableSetCustomCellEdit(canvas,column.i,evtCustomEditCell.MyTableProtoEventCustomEditCell,evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
+		
+		*col\evtCustomEditCell=evtCustomEditCell
+		*col\evtCancelCustomEditCell=evtCancelCustomEditCell
+		
 	EndIf
 EndProcedure
 
