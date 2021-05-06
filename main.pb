@@ -221,7 +221,7 @@ MyTableSetBackground(canvasBild,RGBA(10,10,10,255))
 
 
 MyTableAddColumn(canvasTable3,"Titel",0,#MYTABLE_COLUMN_FLAGS_SORTABLE)
-MyTableAddColumn(canvasTable3,"Album",0,#MYTABLE_COLUMN_FLAGS_SORTABLE)
+MyTableAddColumn(canvasTable3,"Album",0,#MYTABLE_COLUMN_FLAGS_SORTABLE|#MYTABLE_COLUMN_FLAGS_RIGHT)
 MyTableAddColumn(canvasTable3,"Länge",0,#MYTABLE_COLUMN_FLAGS_CENTER|#MYTABLE_COLUMN_FLAGS_TIME_LONG|#MYTABLE_COLUMN_FLAGS_SORTABLE)
 MyTableAddDirtyRow(canvasTable3,1000)
 

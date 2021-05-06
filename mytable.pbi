@@ -17,62 +17,62 @@ Global MyTableH12=DesktopScaledY(12)
 Global MyTableH14=DesktopScaledY(14)
 Global MyTableH16=DesktopScaledY(16)
 
-Global MyTableSortImageAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableSortImageDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageSortAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageSortDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
 
 
-StartDrawing(ImageOutput(MyTableSortImageAsc))
+StartDrawing(ImageOutput(MyTableDefaultImageSortAsc))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH2,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH2,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableSortImageDesc))
+StartDrawing(ImageOutput(MyTableDefaultImageSortDesc))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH14,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH14,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableImagePlus))
+StartDrawing(ImageOutput(MyTableDefaultImagePlus))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
 LineXY(MyTableW7,MyTableH4,MyTableW7,MyTableH10,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableImageMinus))
+StartDrawing(ImageOutput(MyTableDefaultImageMinus))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableImageCheckBox))
+StartDrawing(ImageOutput(MyTableDefaultImageCheckBox))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableImageCheckBoxChecked))
+StartDrawing(ImageOutput(MyTableDefaultImageCheckBoxChecked))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH4,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH12,MyTableW12,MyTableH4,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableImagePlusArrow))
+StartDrawing(ImageOutput(MyTableDefaultImagePlusArrow))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW8,MyTableH4,MyTableW12,MyTableH8,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH12,MyTableW12,MyTableH8,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableImageMinusArrow))
+StartDrawing(ImageOutput(MyTableDefaultImageMinusArrow))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(0,0,0,255))
@@ -265,6 +265,15 @@ Structure strMyTableTable Extends _strMyTableAObject
 	*rowResize.strMyTableRow
 	
 	*data
+	
+	sortImageAsc.i
+	sortImageDesc.i
+	
+	checkboxImage.i
+	checkboxImageChecked.i
+	
+	treeImage.i
+	treeImageExpanded.i
 EndStructure
 
 
@@ -316,6 +325,13 @@ Declare MyTableRedraw(canvas,redraw.b)
 Declare MyTableGetTableData(canvas)
 Declare.s MyTableGetTableName(canvas)
 Declare MyTableGetTableFixedColumns(canvas)
+
+Declare MyTableSetTableSortImageAsc(canvas,sortImageAsc.i)
+Declare MyTableSetTableSortImageDesc(canvas,sortImageDesc.i)
+Declare MyTableSetTableCheckboxImage(canvas,checkboxImage.i)
+Declare MyTableSetTableCheckboxImageChecked(canvas,checkboxImageChecked.i)
+Declare MyTableSetTableTreeImage(canvas,treeImage.i)
+Declare MyTableSetTableTreeImageExpanded(canvas,treeImageExpanded.i)
 
 Declare MyTableSetEventRowSelected(canvas,event.MyTableProtoEventRowSelected)
 Declare MyTableSetEventCellSelected(canvas,event.MyTableProtoEventCellSelected)
@@ -684,17 +700,9 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 			foi=MyTableW20 * (*row\level+1)
 			If ListSize(*row\rows())>0
 				If *row\expanded
-					If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW)
-						DrawAlphaImage(ImageID(MyTableImageMinusArrow),bx+foi-MyTableW20,by+valw)
-					Else
-						DrawAlphaImage(ImageID(MyTableImageMinus),bx+foi-MyTableW20,by+valw)
-					EndIf
+					DrawAlphaImage(ImageID(*this\treeImageExpanded),bx+foi-MyTableW20,by+valw)
 				Else
-					If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW)
-						DrawAlphaImage(ImageID(MyTableImagePlusArrow),bx+foi-MyTableW20,by+valw)
-					Else
-						DrawAlphaImage(ImageID(MyTableImagePlus),bx+foi-MyTableW20,by+valw)
-					EndIf
+					DrawAlphaImage(ImageID(*this\treeImage),bx+foi-MyTableW20,by+valw)					
 				EndIf
 			EndIf
 		EndIf
@@ -702,9 +710,9 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 		If firstcol And checkboxes
 			coi=MyTableW20
 			If *row\checked
-				DrawAlphaImage(ImageID(MyTableImageCheckBoxChecked),bx+foi,by+valw)
+				DrawAlphaImage(ImageID(*this\checkboxImage),bx+foi,by+valw)
 			Else
-				DrawAlphaImage(ImageID(MyTableImageCheckBox),bx+foi,by+valw)
+				DrawAlphaImage(ImageID(*this\checkboxImageChecked),bx+foi,by+valw)
 			EndIf
 		EndIf
 		
@@ -733,9 +741,9 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 		ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 			Protected img=0
 			If *cell\checked
-				img=MyTableImageCheckBoxChecked
+				img=*this\checkboxImageChecked
 			Else
-				img=MyTableImageCheckBox
+				img=*this\checkboxImage
 			EndIf
 			
 			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
@@ -751,7 +759,7 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 				color=*this\selectedforecolor
 			EndIf
 			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
-				_MyTableDrawText(bx+MyTableW2+*col\calcwidth/2-*cell\textwidth/2,by+valw,*cell\text,color)
+				_MyTableDrawText(bx+*col\calcwidth/2-*cell\textwidth/2,by+valw,*cell\text,color)
 			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
 				_MyTableDrawText(bx+*col\calcwidth-*cell\textwidth-MyTableW4,by+valw,*cell\text,color)
 			Else
@@ -778,7 +786,7 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 	EndIf
 	Protected soi.i=0
 	
-	If *col\sort
+	If *col\sort<>0
 		soi=MyTableW20
 	EndIf
 	
@@ -792,7 +800,7 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 	ClipOutput(bx,0,*col\calcwidth,*col\calcheight)
 	DrawingMode(#PB_2DDrawing_Transparent)					
 	If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
-		_MyTableDrawText(bx+MyTableW2+*col\calcwidth/2-*col\textwidth/2-soi,0,*col\text,*this\headerforecolor)
+		_MyTableDrawText(bx+(*col\calcwidth/2-(*col\textwidth+soi)/2),0,*col\text,*this\headerforecolor)
 	ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
 		_MyTableDrawText(bx+*col\calcwidth-*col\textwidth-MyTableW4-soi,0,*col\text,*this\headerforecolor)
 	Else
@@ -802,9 +810,9 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 	UnclipOutput()		
 	Select *col\sort
 		Case -1
-			DrawAlphaImage(ImageID(MyTableSortImageDesc),bx+*col\calcwidth-soi,0)
+			DrawAlphaImage(ImageID(*this\sortImageDesc),bx+*col\calcwidth-soi,0)
 		Case 1
-			DrawAlphaImage(ImageID(MyTableSortImageAsc),bx+*col\calcwidth-soi,0)
+			DrawAlphaImage(ImageID(*this\sortImageAsc),bx+*col\calcwidth-soi,0)
 	EndSelect
 	ProcedureReturn *col\calcwidth
 EndProcedure
@@ -1033,9 +1041,14 @@ EndProcedure
 Procedure.b _MyTableSort(*this.strMyTableTable,col.i)
 	Protected result.b=#False
 	If *this
-		Protected sortable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE)
+		ForEach *this\cols()
+			If ListIndex(*this\cols())<>col
+				*this\cols()\sort=0
+			EndIf
+		Next
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
-		If sortable Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE)
+		Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
+		If sortable 
 			_callcountStart(sort)
 			result=#True
 			Protected bdsort.b=Bool(Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN) Or 
@@ -2009,9 +2022,22 @@ Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_
 		\vscroll=vscroll
 		\flags=flags
 		\type=#MYTABLE_TYPE_TABLE
+		
+		\sortImageAsc=MyTableDefaultImageSortAsc
+		\sortImageDesc=MyTableDefaultImageSortDesc
+		
+		\checkboxImage=MyTableDefaultImageCheckBox
+		\checkboxImageChecked=MyTableDefaultImageCheckBoxChecked
+		
+		\treeImage=MyTableDefaultImageMinus
+		\treeImageExpanded=MyTableDefaultImagePlus
+		
 		If Bool(flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW)
 			\flags|#MYTABLE_TABLE_FLAGS_HIERARCHICAL
+			\treeImage=MyTableDefaultImagePlusArrow
+			\treeImageExpanded=MyTableDefaultImageMinusArrow
 		EndIf
+		
 		\lasth=GadgetHeight(canvas)
 		\lastw=GadgetWidth(canvas)
 		\dirty=#True
@@ -2034,6 +2060,8 @@ Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_
 		\font=GetGadgetFont(#PB_Default)
 		
 		\menu=CreatePopupMenu(#PB_Any)
+		
+		
 		
 		SetGadgetData(canvas,*this)
 		SetGadgetData(hscroll,*this)
@@ -2139,6 +2167,66 @@ Procedure MyTableSetTableFixedColumns(canvas,columns.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		*this\fixedcolumns=columns
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableSortImageAsc(canvas,sortImageAsc.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		
+		*this\sortImageAsc=sortImageAsc
+		*this\dirty=#True
+		_MyTableRedraw(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableSortImageDesc(canvas,sortImageDesc.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		
+		*this\sortImageDesc=sortImageDesc
+		*this\dirty=#True
+		_MyTableRedraw(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableCheckboxImage(canvas,checkboxImage.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		
+		*this\checkboxImage=checkboxImage
+		*this\dirty=#True
+		_MyTableRedraw(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableCheckboxImageChecked(canvas,checkboxImageChecked.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		
+		*this\checkboxImageChecked=checkboxImageChecked
+		*this\dirty=#True
+		_MyTableRedraw(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableTreeImage(canvas,treeImage.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		
+		*this\treeImage=treeImage
+		*this\dirty=#True
+		_MyTableRedraw(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableTreeImageExpanded(canvas,treeImageExpanded.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		
+		*this\treeImageExpanded=treeImageExpanded
+		*this\dirty=#True
+		_MyTableRedraw(*this)
 	EndIf
 EndProcedure
 
@@ -3123,6 +3211,7 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
 			w=_MyTableTextWidth(*col\text)
 			
+			
 			Protected hasimage.b=#False
 			ForEach *this\expRows()
 				*row=*this\expRows()
@@ -3150,8 +3239,9 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 					EndIf
 				EndIf
 			Next
-			*col\width=w+4
+			*col\width=w+8
 			
+			Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
 			If col=0
 				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
 				Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
@@ -3165,6 +3255,9 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 				If checkboxes
 					*col\width+20				
 				EndIf
+			EndIf
+			If sortable
+				*col\width+20				
 			EndIf
 			
 			
