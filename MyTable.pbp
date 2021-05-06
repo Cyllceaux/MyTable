@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-06 13:34" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-06 13:40" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="main.pb">
@@ -16,7 +16,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="a58cdb1196db459a28d719fd0299adfd"/>
+      <fingerprint md5="cb3f300ffc9451e054cc40073d1f8f0e"/>
     </file>
   </section>
   <section name="targets">
@@ -25,7 +25,7 @@
       <outputfile value="mytable.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
-      <compilecount enable="1" value="1231"/>
+      <compilecount enable="1" value="1232"/>
       <buildcount enable="1" value="0"/>
       <execonstant enable="1"/>
     </target>

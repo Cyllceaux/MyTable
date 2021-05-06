@@ -439,7 +439,6 @@ Macro _callcountEnde(sname)
 EndMacro
 
 Procedure _MyTableStopEditCell(*this.strMyTableTable)
-	Debug *this\editcell
 	If *this			
 		If *this\editcell
 			If *this\editcell\col\evtCancelCustomEditCell
