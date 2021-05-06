@@ -818,10 +818,10 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 				
 				Protected grid.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_GRID)
 				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
+				Protected checkboxes.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
 				Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
 				Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
 				Protected fullrowselect.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
-				Protected checkboxes.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
 				Protected idx=0
 				
 				Protected w=GadgetWidth(\canvas)
@@ -1557,17 +1557,16 @@ Procedure MyTableEvtMouseMove()
 		
 		Protected h=DesktopScaledY(GadgetHeight(*this\canvas))
 		
-		my=DesktopUnscaledY(my)
 		
 		If *this\resizecol
-			Protected newx=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX))-*this\oldx
+			Protected newx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)-*this\oldx
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
 			*this\colResize\width+newx
 			If *this\colResize\width<0
 				*this\colResize\width=0
 			EndIf
 			*this\colResize\dirty=#True
-			*this\oldx=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX))
+			*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 			*this\dirty=#True
 			_MyTableRecalc(*this)    
 		Else
@@ -1612,26 +1611,26 @@ Procedure MyTableEvtMouseMove()
 		
 		If resizerow
 			If *this\resizerow
-				Protected newy=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY))-*this\oldy
+				Protected newy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)-*this\oldy
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
 				*this\rowResize\height+newy
 				If *this\rowResize\height<0
 					*this\rowResize\height=0
 				EndIf
 				*this\rowResize\dirty=#True
-				*this\oldy=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY))
+				*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 				*this\dirty=#True
 				_MyTableRecalc(*this)    
 			Else
 				Protected hh=0
 				If Not noheader
-					hh+*this\headerheight
+					hh+DesktopScaledY(*this\headerheight)
 				EndIf
 				For idx=GetGadgetState(*this\vscroll) To (ListSize(*this\expRows())-1)
 					SelectElement(*this\expRows(),idx)
 					Protected *row.strMyTableRow=*this\expRows()
 					hh+*row\calcheight
-					If (hh+mytableh2)>=my And (hh-mytableh2)<=my
+					If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
 						SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
 						Break
 					EndIf
@@ -1677,8 +1676,6 @@ Procedure MyTableEvtMouseDown()
 		Protected recalc.b=#False
 		Protected redraw.b=#True
 		
-		my=DesktopUnscaledY(my)
-		
 		If ms
 			SetGadgetState(*this\vscroll,GetGadgetState(*this\vscroll)-ms)
 			*this\dirty=#True
@@ -1689,8 +1686,9 @@ Procedure MyTableEvtMouseDown()
 			Protected idx=0
 			Protected cc=ListSize(*this\expRows()) 
 			
+			
 			If Not noheader
-				If my<DesktopScaledY(*this\headerheight)
+				If my<=DesktopScaledY(*this\headerheight)
 					row-1
 				EndIf
 				hh+DesktopScaledY(*this\headerheight)
@@ -1702,24 +1700,25 @@ Procedure MyTableEvtMouseDown()
 					*row=*this\expRows()					
 					hh+*row\calcheight
 					If rowresizeable And leftbutton
-						If (hh+mytableh2)>=my And (hh-mytableh2)<=my
+						If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
 							*this\resizerow=#True
 							*this\rowResize=*row
-							*this\oldy=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY))
+							*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 							ProcedureReturn #False
 						EndIf
 					EndIf
 					
-					If hh>my
+					If hh>=my
 						row=idx
 						Break
 					EndIf
 					
-					If hh>h
+					If hh>=h
 						Break
 					EndIf
 				Next
 			EndIf
+			
 			
 			Protected col=0
 			Protected fw.b=#False
@@ -1733,7 +1732,7 @@ Procedure MyTableEvtMouseDown()
 							fw=#True
 							If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
 								*this\resizecol=#True
-								*this\oldx=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX))-mx
+								*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 								*this\colResize=*this\cols()
 								ProcedureReturn #False
 							EndIf							
@@ -1757,7 +1756,7 @@ Procedure MyTableEvtMouseDown()
 						
 						If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
 							*this\resizecol=#True
-							*this\oldx=DesktopUnscaledX(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX))-mx
+							*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 							*this\colResize=*this\cols()
 							ProcedureReturn #False
 						EndIf
@@ -1934,7 +1933,7 @@ Procedure MyTableEvtDouble()
 		Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
 		
 		Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
-		Protected my=DesktopUnscaledY(GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY))
+		Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 		Protected *row.strMyTableRow=0
 		Protected h=DesktopScaledX(GadgetHeight(*this\canvas))
 		
@@ -3124,8 +3123,12 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
 			w=_MyTableTextWidth(*col\text)
 			
+			Protected hasimage.b=#False
 			ForEach *this\expRows()
 				*row=*this\expRows()
+				If *row\image
+					hasimage=#True
+				EndIf
 				Protected *cell.strMyTableCell=SelectElement(*row\cells(),col)
 				If *cell
 					If *cell\textwidth=0
@@ -3142,12 +3145,29 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 							*cell\textheight=_MyTableTextHeight(*cell\text)
 						EndIf
 					EndIf
-					If *cell\textwidth>w
-						w=*cell\textwidth
+					If DesktopUnscaledX(*cell\textwidth)>w
+						w=DesktopUnscaledX(*cell\textwidth)
 					EndIf
 				EndIf
 			Next
-			*col\width=w+40
+			*col\width=w+4
+			
+			If col=0
+				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
+				Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
+				
+				If hasimage
+					*col\width+20				
+				EndIf
+				If hierarchical
+					*col\width+20				
+				EndIf
+				If checkboxes
+					*col\width+20				
+				EndIf
+			EndIf
+			
+			
 			*col\calcwidth=DesktopScaledX(*col\width)
 			
 			StopDrawing()
@@ -3181,8 +3201,8 @@ Procedure MyTableAutosizeRow(canvas,row.i)
 			*row\dirty=#True
 			*row\height=0
 			ForEach *row\cells()
-				If *row\cells()\textheight>*row\height
-					*row\height=*row\cells()\textheight
+				If DesktopUnscaledY(*row\cells()\textheight)>*row\height
+					*row\height=DesktopUnscaledY(*row\cells()\textheight)
 				EndIf
 			Next
 			*row\height+4

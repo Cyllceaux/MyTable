@@ -1,6 +1,6 @@
 ﻿EnableExplicit
 
-#DEBUG_LEVEL=1
+#DEBUG_LEVEL=0
 
 DebugLevel #DEBUG_LEVEL
 
