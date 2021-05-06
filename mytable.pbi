@@ -189,12 +189,16 @@ EndEnumeration
 Prototype MyTableProtoEventRowSelected(canvas,*row.strMyTableRow)
 Prototype MyTableProtoEventCellSelected(canvas,*cell.strMyTableCell)
 Prototype MyTableProtoEventRowChecked(canvas,*row.strMyTableRow)
+Prototype MyTableProtoEventRowRightClick(canvas,*row.strMyTableRow)
+Prototype MyTableProtoEventColRightClick(canvas,*col.strMyTableCol)
 Prototype MyTableProtoEventCellChecked(canvas,*cell.strMyTableCell)
+Prototype MyTableProtoEventCellRightClick(canvas,*cell.strMyTableCell)
 Prototype MyTableProtoEventCellChangedText(canvas,*cell.strMyTableCell,old.s)
 Prototype MyTableProtoEventCellChangedValue(canvas,*cell.strMyTableCell,old.d)
 Prototype MyTableProtoEventCallback(canvas,*row.strMyTableRow)
 
 Structure strMyTableTable Extends _strMyTableAObject
+	name.s
 	window.i
 	canvas.i
 	vscroll.i
@@ -225,7 +229,10 @@ Structure strMyTableTable Extends _strMyTableAObject
 	evtRowSelect.MyTableProtoEventRowSelected
 	evtCellSelect.MyTableProtoEventCellSelected
 	evtRowChecked.MyTableProtoEventRowChecked
+	evtRowRightClick.MyTableProtoEventRowRightClick
+	evtColRightClick.MyTableProtoEventColRightClick
 	evtCellChecked.MyTableProtoEventCellChecked
+	evtCellRightClick.MyTableProtoEventCellRightClick
 	evtCellChangedText.MyTableProtoEventCellChangedText
 	evtCellChangedValue.MyTableProtoEventCellChangedValue
 	evtCallback.MyTableProtoEventCallback
@@ -254,22 +261,13 @@ EndStructure
 
 
 
-Declare MyTableRegisterEvents(canvas,
-                              evtRowSelect.MyTableProtoEventRowSelected,
-                              evtCellSelect.MyTableProtoEventCellSelected,
-                              evtRowChecked.MyTableProtoEventRowChecked,
-                              evtCellChecked.MyTableProtoEventCellChecked,
-                              evtCellChangedText.MyTableProtoEventCellChangedText,
-                              evtCellChangedValue.MyTableProtoEventCellChangedValue,
-                              evtCallback.MyTableProtoEventCallback)
-
 Declare _MyTableRedraw(*this.strMyTableTable)
 Declare _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 Declare _MyTableClearMaps(*this.strMyTableTable)
 Declare.b _MyTableSort(*this.strMyTableTable,col.i)
 Declare _MyTableResize(*this.strMyTableTable)
 Declare _MyTableRecalcExp(*this.strMyTableTable,*row.strMyTableRow,w)
-Declare _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0)
+Declare _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare _MyTableRowExpand(*row.strMyTableRow,expanded.b)	
 Declare _MyTableDrawText(x,y,text.s,color.q)
 Declare _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed.b)
@@ -291,10 +289,11 @@ Declare MyTableEvtReturn()
 Declare MyTableEvtEsc()
 Declare MyTableEvtLostFocus()
 
-Declare MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0)
-Declare MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0)
+Declare MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+Declare MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare MyTableUnRegister(canvas)
 Declare MyTableSetTableFlags(canvas,flags.i)
+Declare MyTableSetTableName(canvas,name.s)
 Declare MyTableSetTableRowHeight(canvas,flags.i)
 Declare MyTableSetTableSelectedRow(canvas,row.i)
 Declare MyTableSetTableSelectedRowById(canvas,rowid.i)
@@ -307,7 +306,18 @@ Declare MyTableGetTableSelectedRow(canvas)
 Declare MyTableGetTableSelectedCell(canvas)
 Declare MyTableRedraw(canvas,redraw.b)
 Declare MyTableGetTableData(canvas)
+Declare.s MyTableGetTableName(canvas)
 Declare MyTableGetTableFixedColumns(canvas)
+
+Declare MyTableSetEventRowSelected(canvas,event.MyTableProtoEventRowSelected)
+Declare MyTableSetEventCellSelected(canvas,event.MyTableProtoEventCellSelected)
+Declare MyTableSetEventRowChecked(canvas,event.MyTableProtoEventRowChecked)
+Declare MyTableSetEventRowRightClick(canvas,event.MyTableProtoEventRowRightClick)
+Declare MyTableSetEventCellChecked(canvas,event.MyTableProtoEventCellChecked)
+Declare MyTableSetEventCellRightClick(canvas,event.MyTableProtoEventCellRightClick)
+Declare MyTableSetEventCellChangedText(canvas,event.MyTableProtoEventCellChangedText)
+Declare MyTableSetEventCellChangedValue(canvas,event.MyTableProtoEventCellChangedValue)
+Declare MyTableSetEventCallback(canvas,event.MyTableProtoEventCallback)
 
 Declare.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0)
 Declare MyTableRemoveColumn(canvas,column.i)
@@ -373,6 +383,51 @@ Declare.q MyTableGetHeaderbackgroundFixedColumns(canvas)
 Declare.q MyTableGetForecolor(canvas)
 Declare.q MyTableGetHeaderforecolor(canvas)
 Declare.q MyTableGetSelectedforecolor(canvas)
+
+Macro MM
+	"
+EndMacro
+
+CompilerIf #PB_Compiler_Debugger And Not Defined(DEBUG_LEVEL,#PB_Constant)
+	#DEBUG_LEVEL=0
+CompilerEndIf
+
+CompilerIf #PB_Compiler_Debugger And Not Defined(DEBUG_MS_MAX,#PB_Constant)
+	#DEBUG_MS_MAX=200
+CompilerEndIf
+
+Macro _callcountStart(sname)
+	CompilerIf #PB_Compiler_Debugger And #DEBUG_LEVEL=1
+		Static NewMap callcount.i()
+		Static NewMap callms.i()
+		Static NewMap callmssum.i()		
+		callms(MM#sname#MM+"_"+Str(*this\canvas))=ElapsedMilliseconds()		
+	CompilerEndIf
+EndMacro
+
+Macro _callcountEnde(sname)
+	CompilerIf #PB_Compiler_Debugger And #DEBUG_LEVEL=1
+		callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
+		
+		
+		Protected tname.s=""
+		If *this\name=""
+			tname=Str(*this\canvas)
+		Else
+			tname=*this\name
+		EndIf
+		
+		Protected debugline.s=LSet(tname+":",16," ")
+		debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(*this\canvas)),20," ")
+		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
+		callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
+		If _#sname#ms>#DEBUG_MS_MAX
+			DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(#DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
+		EndIf
+		debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas)))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas))/callcount(MM#sname#MM+"_"+Str(*this\canvas)))+ "ms"
+		Debug debugline,1
+	CompilerEndIf
+EndMacro
 
 Procedure _MyTableStopEditCell(*this.strMyTableTable)
 	If *this
@@ -731,6 +786,7 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 		With *this
 			If \redraw And \dirty
 				_MyTableClearMaps(*this)
+				_callcountStart(redraw)
 				
 				Protected grid.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_GRID)
 				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
@@ -823,7 +879,7 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 				
 				StopDrawing()
 				
-				
+				_callcountEnde(redraw)
 				\dirty=#False
 			EndIf			
 		EndWith
@@ -860,6 +916,7 @@ Procedure _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 	If *this
 		If (*this\dirty And *this\redraw) Or force
 			_MyTableClearMaps(*this)
+			_callcountStart(recalc)
 			With *this
 				Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
 				Protected allrowcount.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT)
@@ -939,6 +996,7 @@ Procedure _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 				
 				
 			EndWith
+			_callcountEnde(recalc)
 			_MyTableRedraw(*this)
 		EndIf
 	EndIf
@@ -950,6 +1008,7 @@ Procedure.b _MyTableSort(*this.strMyTableTable,col.i)
 		Protected sortable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE)
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
 		If sortable Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE)
+			_callcountStart(sort)
 			result=#True
 			Protected bdsort.b=Bool(Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN) Or 
 			                        Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME) Or 
@@ -983,6 +1042,7 @@ Procedure.b _MyTableSort(*this.strMyTableTable,col.i)
 						SortStructuredList(*this\rows(),#PB_Sort_Descending,OffsetOf(strMyTableRow\sort),TypeOf(strMyTableRow\sort))
 					EndIf
 			EndSelect
+			_callcountEnde(sort)
 		EndIf
 	EndIf
 	ProcedureReturn result
@@ -994,7 +1054,7 @@ Procedure _MyTableResize(*this.strMyTableTable)
 			Protected w=GadgetWidth(\canvas)
 			Protected h=GadgetHeight(\canvas)
 			If w<>\lastw Or h<>\lasth Or \dirty
-				
+				_callcountStart(resize)
 				\lasth=h
 				\lastw=w
 				ResizeGadget(\vscroll,
@@ -1009,6 +1069,7 @@ Procedure _MyTableResize(*this.strMyTableTable)
 				             \lastw-GadgetWidth(\vscroll),
 				             #PB_Ignore)
 				\dirty=#True
+				_callcountEnde(resize)
 				_MyTableRecalc(*this)
 			EndIf
 		EndWith
@@ -1576,6 +1637,9 @@ Procedure MyTableEvtMouseDown()
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		
+		Protected leftbutton.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_LeftButton)
+		Protected rightbutton.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_RightButton)
+		
 		Protected h=DesktopScaledY(GadgetHeight(*this\canvas))
 		
 		Protected *cell.strMyTableCell=0
@@ -1583,6 +1647,7 @@ Procedure MyTableEvtMouseDown()
 		Protected *row.strMyTableRow=0
 		
 		Protected recalc.b=#False
+		Protected redraw.b=#True
 		
 		my=DesktopUnscaledY(my)
 		
@@ -1608,7 +1673,7 @@ Procedure MyTableEvtMouseDown()
 					SelectElement(*this\expRows(),idx)
 					*row=*this\expRows()					
 					hh+*row\calcheight
-					If rowresizeable
+					If rowresizeable And leftbutton
 						If (hh+mytableh2)>=my And (hh-mytableh2)<=my
 							*this\resizerow=#True
 							*this\rowResize=*row
@@ -1636,7 +1701,7 @@ Procedure MyTableEvtMouseDown()
 				ForEach *this\cols()
 					If ListIndex(*this\cols())<*this\fixedcolumns
 						mx-*this\cols()\calcwidth
-						If mx>=-MyTableW2 And mx<=MyTableW2
+						If mx>=-MyTableW2 And mx<=MyTableW2 And leftbutton
 							fw=#True
 							If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
 								*this\resizecol=#True
@@ -1660,7 +1725,7 @@ Procedure MyTableEvtMouseDown()
 				col=0
 				ForEach *this\cols()
 					mx-*this\cols()\calcwidth
-					If mx>=-MyTableW2 And mx<=MyTableW2
+					If mx>=-MyTableW2 And mx<=MyTableW2 And leftbutton
 						
 						If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
 							*this\resizecol=#True
@@ -1714,8 +1779,20 @@ Procedure MyTableEvtMouseDown()
 								ClearMap(*this\selected())
 							EndIf
 							If row=-1 And Not noheader
-								If _MyTableSort(*this,col)
-									recalc=#True
+								If leftbutton
+									If _MyTableSort(*this,col)
+										recalc=#True
+									EndIf
+								EndIf
+								If rightbutton 
+									If *this\evtColRightClick
+										*col=SelectElement(*this\cols(),col)
+										If *this\evtColRightClick(*this\canvas,*col)									
+											recalc=#True
+										EndIf
+									Else
+										redraw=#False
+									EndIf
 								EndIf
 							ElseIf row>-1
 								SelectElement(*this\expRows(),row)
@@ -1723,7 +1800,10 @@ Procedure MyTableEvtMouseDown()
 								If fullrow
 									*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
 									If *this\evtRowSelect
-										*this\evtRowSelect(*this\canvas,row)
+										*this\evtRowSelect(*this\canvas,*row)
+									EndIf
+									If rightbutton And *this\evtRowRightClick
+										*this\evtRowRightClick(*this\canvas,*row)
 									EndIf
 									
 								Else
@@ -1731,6 +1811,9 @@ Procedure MyTableEvtMouseDown()
 									*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
 									If *this\evtCellSelect
 										*this\evtCellSelect(*this\canvas,*cell)
+									EndIf
+									If rightbutton And *this\evtCellRightClick
+										*this\evtCellRightClick(*this\canvas,*cell)
 									EndIf
 									
 								EndIf
@@ -1742,16 +1825,31 @@ Procedure MyTableEvtMouseDown()
 						ClearMap(*this\selected())
 					EndIf
 					If row=-1 And Not noheader
-						If _MyTableSort(*this,col)
-							recalc=#True
+						If leftbutton
+							If _MyTableSort(*this,col)
+								recalc=#True
+							EndIf
 						EndIf
+						If rightbutton 
+									If *this\evtColRightClick
+										*col=SelectElement(*this\cols(),col)
+										If *this\evtColRightClick(*this\canvas,*col)									
+											recalc=#True
+										EndIf
+									Else
+										redraw=#False
+									EndIf
+								EndIf
 					ElseIf row>-1
 						SelectElement(*this\expRows(),row)
 						*row=*this\expRows()
 						If fullrow
 							*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
 							If *this\evtRowSelect
-								*this\evtRowSelect(*this\canvas,row)
+								*this\evtRowSelect(*this\canvas,*row)
+							EndIf
+							If rightbutton And *this\evtRowRightClick
+								*this\evtRowRightClick(*this\canvas,*row)
 							EndIf
 							
 						Else
@@ -1759,6 +1857,9 @@ Procedure MyTableEvtMouseDown()
 							*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
+							EndIf
+							If rightbutton And *this\evtCellRightClick
+								*this\evtCellRightClick(*this\canvas,*cell)
 							EndIf
 							
 						EndIf
@@ -1775,7 +1876,7 @@ Procedure MyTableEvtMouseDown()
 		
 		If recalc
 			_MyTableRecalc(*this)
-		Else
+		ElseIf redraw
 			_MyTableRedraw(*this)
 		EndIf
 	EndIf
@@ -1871,9 +1972,10 @@ Procedure MyTableEvtDouble()
 	EndIf
 EndProcedure
 
-Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0)
+Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
 	With *this
+		\name=name
 		\window=window
 		\canvas=canvas
 		\hscroll=hscroll
@@ -1914,6 +2016,7 @@ Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_
 		BindGadgetEvent(\vscroll,@MyTableEvtScroll())
 		BindGadgetEvent(\canvas,@MyTableEvtMouseDown(),#PB_EventType_MouseWheel)
 		BindGadgetEvent(\canvas,@MyTableEvtMouseDown(),#PB_EventType_LeftButtonDown)
+		BindGadgetEvent(\canvas,@MyTableEvtMouseDown(),#PB_EventType_RightButtonDown)
 		BindGadgetEvent(\canvas,@MyTableEvtMouseUp(),#PB_EventType_LeftButtonUp)
 		BindGadgetEvent(\canvas,@MyTableEvtMouseMove(),#PB_EventType_MouseMove)
 		BindGadgetEvent(\canvas,@MyTableEvtDouble(),#PB_EventType_LeftDoubleClick)
@@ -1925,15 +2028,15 @@ Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_
 	ProcedureReturn *this
 EndProcedure
 
-Procedure MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0)
-	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback)
+Procedure MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)
 	BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
 	_MyTableResize(*this)
 	ProcedureReturn *this
 EndProcedure
 
-Procedure MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0)
-	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback)	
+Procedure MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)	
 	BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
 	_MyTableRecalc(*this)
 	ProcedureReturn *this
@@ -1966,6 +2069,15 @@ Procedure MyTableSetTableFlags(canvas,flags.i)
 			*this\flags=flags
 			*this\dirty=#True
 			_MyTableRecalc(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure MyTableSetTableName(canvas,name.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		If *this\name<>name
+			*this\name=name
 		EndIf
 	EndIf
 EndProcedure
@@ -2090,6 +2202,13 @@ Procedure MyTableGetTableData(canvas)
 	EndIf
 EndProcedure
 
+Procedure.s MyTableGetTableName(canvas)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		ProcedureReturn *this\name
+	EndIf
+EndProcedure
+
 Procedure MyTableGetTableFixedColumns(canvas)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
@@ -2110,6 +2229,7 @@ EndProcedure
 Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
+		_callcountStart(addcol)
 		LastElement(*this\cols())
 		Protected *col.strMyTableCol=AddElement(*this\cols())
 		With *col
@@ -2145,6 +2265,7 @@ Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS
 			*cell\col=*col
 			*cell\table=*this
 		Next
+		_callcountEnde(addcol)
 		_MyTableRecalc(*this)
 		ProcedureReturn *col\id
 	EndIf
@@ -2305,6 +2426,7 @@ EndProcedure
 Procedure MyTableAddDirtyRow(canvas,rows.i,parentid.q=0)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
+		_callcountStart(adddirtyrows)
 		Protected i=0
 		Protected *row.strMyTableRow=0
 		If parentid>0
@@ -2323,6 +2445,7 @@ Procedure MyTableAddDirtyRow(canvas,rows.i,parentid.q=0)
 			Next
 		EndIf
 		*this\dirty=#True
+		_callcountEnde(adddirtyrows)
 		_MyTableRecalc(*this)
 	EndIf	
 EndProcedure
@@ -2699,25 +2822,73 @@ Procedure MyTableGetCellImage(canvas,row.i,col.i)
 	EndIf
 EndProcedure
 
-Procedure MyTableRegisterEvents(canvas,
-                                evtRowSelect.MyTableProtoEventRowSelected,
-                                evtCellSelect.MyTableProtoEventCellSelected,
-                                evtRowChecked.MyTableProtoEventRowChecked,
-                                evtCellChecked.MyTableProtoEventCellChecked,
-                                evtCellChangedText.MyTableProtoEventCellChangedText,
-                                evtCellChangedValue.MyTableProtoEventCellChangedValue,
-                                evtCallback.MyTableProtoEventCallback)
+Procedure MyTableSetEventRowSelected(canvas,event.MyTableProtoEventRowSelected)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
-		With *this
-			\evtRowSelect=evtRowSelect
-			\evtCellSelect=evtCellSelect
-			\evtRowChecked=evtRowChecked
-			\evtCellChecked=evtCellChecked
-			\evtCellChangedText=evtCellChangedText
-			\evtCellChangedValue=evtCellChangedValue
-			\evtCallback=evtCallback
-		EndWith
+		*this\evtRowSelect=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventCellSelected(canvas,event.MyTableProtoEventCellSelected)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtCellSelect=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventRowChecked(canvas,event.MyTableProtoEventRowChecked)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtRowChecked=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventRowRightClick(canvas,event.MyTableProtoEventRowRightClick)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtRowRightClick=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventColRightClick(canvas,event.MyTableProtoEventColRightClick)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtColRightClick=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventCellChecked(canvas,event.MyTableProtoEventCellChecked)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtCellChecked=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventCellRightClick(canvas,event.MyTableProtoEventCellRightClick)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtCellRightClick=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventCellChangedText(canvas,event.MyTableProtoEventCellChangedText)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtCellChangedText=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventCellChangedValue(canvas,event.MyTableProtoEventCellChangedValue)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtCellChangedValue=event
+	EndIf
+EndProcedure
+
+Procedure MyTableSetEventCallback(canvas,event.MyTableProtoEventCallback)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\evtCallback=event
 	EndIf
 EndProcedure
 
@@ -2888,25 +3059,25 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	Protected *row.strMyTableRow=0
 	
-	Static all.b=#False
+	Static NewMap all.b()
 	
 	If *this
-		Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
 		
 		If col=#PB_Ignore
+			_callcountStart(autosizecol)
 			Protected c=ListSize(*this\cols())-1
 			Protected i=0
-			all=#True
+			all(Str(canvas))=#True
 			_MyTableRecalc(*this,#True)
 			For i=0 To c
 				MyTableAutosizeColumn(canvas,i)
 			Next
-			all=#False
+			all(Str(canvas))=#False
 		Else
 			StartDrawing(CanvasOutput(*this\canvas))			
 			DrawingFont(*this\font)
 			
-			If Not all
+			If Not all(Str(canvas))
 				_MyTableRecalc(*this,#True)
 			EndIf
 			
@@ -2942,26 +3113,29 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 			
 			StopDrawing()
 		EndIf
-		*this\dirty=#True
-		_MyTableRedraw(*this)
+		If Not all(Str(canvas))
+			_callcountEnde(autosizecol)
+			*this\dirty=#True
+			_MyTableRedraw(*this)
+		EndIf
 	EndIf
 EndProcedure
 
 Procedure MyTableAutosizeRow(canvas,row.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
-	Static all.b=#False
+	Static NewMap all.b()
 	
 	If *this
-		Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
 		
 		If row=#PB_Ignore
+			_callcountStart(autosizerow)
 			Protected c=ListSize(*this\rows())-1
 			Protected i=0
-			all=#True
+			all(Str(canvas))=#True
 			For i=0 To c
 				MyTableAutosizeRow(canvas,i)
 			Next
-			all=#False
+			all(Str(canvas))=#False
 		Else
 			
 			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
@@ -2977,7 +3151,8 @@ Procedure MyTableAutosizeRow(canvas,row.i)
 			
 			
 		EndIf
-		If Not all
+		If Not all(Str(canvas))
+			_callcountEnde(autosizerow)
 			*this\dirty=#True
 			_MyTableRecalc(*this)
 		EndIf
