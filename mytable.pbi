@@ -1,4 +1,37 @@
-﻿Global MyTableW2=DesktopScaledX(2)
+﻿;/ ===========================
+;/ =   mytable.pbi    =
+;/ ===========================
+;/
+;/ [ PB V5.7x / 64Bit / all OS / DPI ]
+;/
+;/ © 2021 Cyllceaux (05/2021)
+;/
+
+
+;{ ===== MIT License =====
+;
+; Copyright (c) 2021 Silko Pillasch
+;
+; Permission is hereby granted, free of charge, to any person obtaining a copy
+; of this software and associated documentation files (the "Software"), to deal
+; in the Software without restriction, including without limitation the rights
+; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+; copies of the Software, and to permit persons to whom the Software is
+; furnished to do so, subject to the following conditions:
+; 
+; The above copyright notice and this permission notice shall be included in all
+; copies or substantial portions of the Software.
+;
+; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+; SOFTWARE.
+;}
+
+Global MyTableW2=DesktopScaledX(2)
 Global MyTableW4=DesktopScaledX(4)
 Global MyTableW7=DesktopScaledX(7)
 Global MyTableW8=DesktopScaledX(8)
@@ -146,12 +179,14 @@ EnumerationBinary _MyTableColumnFlags
 	#MYTABLE_COLUMN_FLAGS_DOUBLE
 	#MYTABLE_COLUMN_FLAGS_BOOLEAN
 	#MYTABLE_COLUMN_FLAGS_EDITABLE
+	#MYTABLE_COLUMN_FLAGS_NO_EDITABLE
 	#MYTABLE_COLUMN_FLAGS_IMAGE
 	#MYTABLE_COLUMN_FLAGS_TOP
 	#MYTABLE_COLUMN_FLAGS_MIDDLE
 	#MYTABLE_COLUMN_FLAGS_BOTTOM
 	#MYTABLE_COLUMN_FLAGS_RESIZEABLE
 	#MYTABLE_COLUMN_FLAGS_SORTABLE
+	#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE
 EndEnumeration
 
 #MYTABLE_COLUMN_FLAGS_DEFAULT = #MYTABLE_COLUMN_FLAGS_LEFT|#MYTABLE_COLUMN_FLAGS_TEXT
@@ -188,9 +223,11 @@ EnumerationBinary _MyTableTableFlags
 	#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE	
 	#MYTABLE_TABLE_FLAGS_SORTABLE
 	#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT
+	#MYTABLE_TABLE_FLAGS_EDITABLE
 EndEnumeration
 
 #MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE|#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE
+#MYTABLE_TABLE_FLAGS_GRID_DEFAULT=#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT|#MYTABLE_TABLE_FLAGS_EDITABLE|#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE|#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE
 
 Prototype MyTableProtoEventRowSelected(canvas,*row.strMyTableRow)
 Prototype MyTableProtoEventCellSelected(canvas,*cell.strMyTableCell)
@@ -225,6 +262,7 @@ Structure strMyTableTable Extends _strMyTableAObject
 	headerheight.i
 	bvs.b
 	bhs.b
+	datagrid.b
 	Map selected.b()
 	List expRows.i()
 	expheight.i
@@ -286,6 +324,7 @@ Declare.b _MyTableSort(*this.strMyTableTable,col.i)
 Declare _MyTableResize(*this.strMyTableTable)
 Declare _MyTableRecalcExp(*this.strMyTableTable,*row.strMyTableRow,w)
 Declare _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+Declare _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare _MyTableRowExpand(*row.strMyTableRow,expanded.b)	
 Declare _MyTableDrawText(x,y,text.s,color.q)
 Declare _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed.b)
@@ -294,6 +333,8 @@ Declare _MyTableEditCell(*cell.strMyTableCell)
 Declare _MyTableStopEditCell(*this.strMyTableTable)
 Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
+Declare.s _MyTableGridColumnName(col.i)
+Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
 
 Declare MyTableEvtResize()
 Declare MyTableEvtDialogResize()
@@ -309,6 +350,8 @@ Declare MyTableEvtLostFocus()
 
 Declare MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+Declare MyTableGridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+Declare MyTableGridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare MyTableUnRegister(canvas)
 Declare MyTableSetTableFlags(canvas,flags.i)
 Declare MyTableSetTableName(canvas,name.s)
@@ -518,62 +561,64 @@ Procedure _MyTableEditCell(*cell.strMyTableCell)
 		Protected *row.strMyTableRow=*cell\row
 		Protected *this.strMyTableTable=*cell\table
 		
-		If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_EDITABLE)
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-				*cell\checked=Bool(*cell\checked=#False)
-				*cell\value=*cell\checked
-				*cell\text=Str(*cell\checked)
-				*cell\textwidth=0
-				*cell\textheight=0
-				*cell\dirty=#True
-				*this\dirty=#True
-				If *this\evtCellChecked
-					*this\evtCellChecked(*this\canvas,*cell)
-				EndIf
-				_MyTableRedraw(*this)
-			Else
-				If IsWindow(*this\editorwindow)
-					CloseWindow(*this\editorwindow)					
-				EndIf
-				If *col\evtCustomEditCell
-					
-					*col\evtCustomEditCell(*this\canvas,
-					                       *cell,
-					                       DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
-					                       DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
-					                       DesktopUnscaledX(*col\calcwidth),
-					                       DesktopUnscaledY(*row\calcheight))
-					*this\editcell=*cell
+		If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_EDITABLE)
+			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_EDITABLE) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_EDITABLE)
+				If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+					*cell\checked=Bool(*cell\checked=#False)
+					*cell\value=*cell\checked
+					*cell\text=Str(*cell\checked)
+					*cell\textwidth=0
+					*cell\textheight=0
+					*cell\dirty=#True
+					*this\dirty=#True
+					If *this\evtCellChecked
+						*this\evtCellChecked(*this\canvas,*cell)
+					EndIf
+					_MyTableRedraw(*this)
 				Else
-					*this\editorwindow=OpenWindow(#PB_Any,
-					                              DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
-					                              DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
-					                              DesktopUnscaledX(*col\calcwidth),
-					                              DesktopUnscaledY(*row\calcheight),
-					                              "",
-					                              #PB_Window_BorderLess,
-					                              GadgetID(*this\canvas))
-					*this\editorgadget=EditorGadget(#PB_Any,
-					                                0,
-					                                0,
-					                                WindowWidth(*this\editorwindow),
-					                                WindowHeight(*this\editorwindow),
-					                                #PB_Editor_WordWrap)		
-					
-					SetGadgetText(*this\editorgadget,*cell\text)
-					HideGadget(*this\editorgadget,#False)
-					SetActiveGadget(*this\editorgadget)
-					SetGadgetData(*this\editorgadget,*cell)
-					SetWindowData(*this\editorwindow,*cell)
-					
-					AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Return,#MYTABLE_RETURN)
-					AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Escape,#MYTABLE_ESC)
-					
-					BindMenuEvent(*this\menu,#MYTABLE_RETURN,@MyTableEvtReturn())
-					BindMenuEvent(*this\menu,#MYTABLE_ESC,@MyTableEvtEsc())		
-					
-					BindGadgetEvent(*this\editorgadget,@MyTableEvtLostFocus(),#PB_EventType_LostFocus)
-					*this\editcell=0
+					If IsWindow(*this\editorwindow)
+						CloseWindow(*this\editorwindow)					
+					EndIf
+					If *col\evtCustomEditCell
+						
+						*col\evtCustomEditCell(*this\canvas,
+						                       *cell,
+						                       DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
+						                       DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
+						                       DesktopUnscaledX(*col\calcwidth),
+						                       DesktopUnscaledY(*row\calcheight))
+						*this\editcell=*cell
+					Else
+						*this\editorwindow=OpenWindow(#PB_Any,
+						                              DesktopUnscaledX(*cell\startx+2)+WindowX(*this\window,#PB_Window_InnerCoordinate)+GadgetX(*this\canvas,#PB_Gadget_WindowCoordinate),
+						                              DesktopUnscaledY(*cell\starty+2)+WindowY(*this\window,#PB_Window_InnerCoordinate)+GadgetY(*this\canvas,#PB_Gadget_WindowCoordinate),
+						                              DesktopUnscaledX(*col\calcwidth),
+						                              DesktopUnscaledY(*row\calcheight),
+						                              "",
+						                              #PB_Window_BorderLess,
+						                              GadgetID(*this\canvas))
+						*this\editorgadget=EditorGadget(#PB_Any,
+						                                0,
+						                                0,
+						                                WindowWidth(*this\editorwindow),
+						                                WindowHeight(*this\editorwindow),
+						                                #PB_Editor_WordWrap)		
+						
+						SetGadgetText(*this\editorgadget,*cell\text)
+						HideGadget(*this\editorgadget,#False)
+						SetActiveGadget(*this\editorgadget)
+						SetGadgetData(*this\editorgadget,*cell)
+						SetWindowData(*this\editorwindow,*cell)
+						
+						AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Return,#MYTABLE_RETURN)
+						AddKeyboardShortcut(*this\editorwindow,#PB_Shortcut_Escape,#MYTABLE_ESC)
+						
+						BindMenuEvent(*this\menu,#MYTABLE_RETURN,@MyTableEvtReturn())
+						BindMenuEvent(*this\menu,#MYTABLE_ESC,@MyTableEvtEsc())		
+						
+						BindGadgetEvent(*this\editorgadget,@MyTableEvtLostFocus(),#PB_EventType_LostFocus)
+						*this\editcell=0
+					EndIf
 				EndIf
 			EndIf
 		EndIf
@@ -630,6 +675,9 @@ EndProcedure
 Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b,grid.b,hierarchical.b,checkboxes.b)
 	Protected *cell.strMyTableCell=0
 	Protected *col.strMyTableCol=0
+	While ListSize(*row\cells())<ListSize(*this\cols())
+		_MyTableGetOrAddCell(*this,*row,-1)
+	Wend
 	If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CALLBACK) And *row\dirty And *this\evtCallback
 		*this\evtCallback(*this\canvas,*row)
 		ForEach *row\cells()
@@ -678,7 +726,7 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 		If fixed
 			Box(bx,by,*col\calcwidth,*row\calcheight,*this\backgroundfixed)	
 		EndIf
-		If (fullrowselect And *this\selected(Str(*row))=#True) Or *this\selected(Str(*cell))=#True
+		If *this\selected(Str(*row)) Or *this\selected(Str(*cell)) Or *this\selected(Str(*col))
 			Box(bx,by,*col\calcwidth,*row\calcheight,*this\selectedbackground)	
 			selected=#True
 		EndIf
@@ -802,7 +850,11 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 	If fixed
 		Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackgroundfixed)
 	Else
-		Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackground2)
+		If *this\selected(Str(*col))
+			Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\selectedbackground)
+		Else
+			Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackground2)
+		EndIf
 	EndIf
 	ClipOutput(bx,0,*col\calcwidth,*col\calcheight)
 	DrawingMode(#PB_2DDrawing_Transparent)					
@@ -1064,26 +1116,26 @@ Procedure.b _MyTableSort(*this.strMyTableTable,col.i)
 			                        Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE))
 			ForEach *this\rows()
 				Protected *row.strMyTableRow=*this\rows()
-				SelectElement(*row\cells(),col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
 				If bdsort
-					*row\dsort=*row\cells()\value
+					*row\dsort=*cell\value
 				Else
-					*row\sort=*row\cells()\text
+					*row\sort=*cell\text
 				EndIf
 			Next
-			Select *this\cols()\sort
+			Select *col\sort
 				Case -1
-					*this\cols()\sort=0				
+					*col\sort=0				
 					SortStructuredList(*this\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\id),TypeOf(strMyTableRow\id))				
 				Case 0
-					*this\cols()\sort=1
+					*col\sort=1
 					If bdsort
 						SortStructuredList(*this\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\dsort),TypeOf(strMyTableRow\dsort))
 					Else
 						SortStructuredList(*this\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\sort),TypeOf(strMyTableRow\sort))
 					EndIf
 				Case 1
-					*this\cols()\sort=-1
+					*col\sort=-1
 					If bdsort
 						SortStructuredList(*this\rows(),#PB_Sort_Descending,OffsetOf(strMyTableRow\dsort),TypeOf(strMyTableRow\dsort))
 					Else
@@ -1131,14 +1183,24 @@ Procedure _MyTableAddDirtyRow(*this.strMyTableTable,*row.strMyTableRow)
 	*row\id=*this\lastRowid	
 	*row\type=#MYTABLE_TYPE_ROW
 	*row\height=*this\rowheight
-	Protected i
-	For i=1 To ListSize(*this\cols())		
-		Protected *cell.strMyTableCell=AddElement(*row\cells())
+EndProcedure
+
+Procedure _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
+	Protected *cell.strMyTableCell=0
+	If col=-1
+		col=ListSize(*row\cells())
+		*cell=AddElement(*row\cells())
 		*cell\row=*row
 		*cell\table=*this
 		*cell\type=#MYTABLE_TYPE_CELL
-		*cell\col=SelectElement(*this\cols(),i-1)
-	Next
+		*cell\col=SelectElement(*this\cols(),col)		
+	Else
+		*cell=SelectElement(*row\cells(),col)
+		If *cell=0
+			ProcedureReturn _MyTableGetOrAddCell(*this,*row,-1)
+		EndIf
+	EndIf
+	ProcedureReturn *cell
 EndProcedure
 
 Procedure MyTableEvtResize()
@@ -1300,7 +1362,7 @@ Procedure MyTableEvtKeyDown()
 								Next
 								listidx-1
 								If listidx>-1				
-									*cell=SelectElement(*row\cells(),listidx)
+									*cell=_MyTableGetOrAddCell(*this,*row,listidx)
 								EndIf
 								AddElement(selected())
 								selected()=*cell									
@@ -1319,7 +1381,7 @@ Procedure MyTableEvtKeyDown()
 						If Not fullrowselect						
 							SelectElement(*this\expRows(),0)
 							*row=*this\expRows()
-							*cell=SelectElement(*row\cells(),ListSize(*row\cells())-1)
+							*cell=_MyTableGetOrAddCell(*this,*row,ListSize(*row\cells())-1)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -1345,7 +1407,7 @@ Procedure MyTableEvtKeyDown()
 								Next
 								listidx+1
 								If listidx<ListSize(*row\cells())									
-									*cell=SelectElement(*row\cells(),listidx)
+									*cell=_MyTableGetOrAddCell(*this,*row,listidx)
 								EndIf
 								AddElement(selected())
 								selected()=*cell
@@ -1364,7 +1426,7 @@ Procedure MyTableEvtKeyDown()
 						If Not fullrowselect
 							SelectElement(*this\expRows(),0)
 							*row=*this\expRows()
-							*cell=SelectElement(*row\cells(),0)
+							*cell=_MyTableGetOrAddCell(*this,*row,0)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -1427,7 +1489,7 @@ Procedure MyTableEvtKeyDown()
 								If listidx>-1
 									SelectElement(*this\expRows(),listidx)
 									*row=*this\expRows()
-									*cell=SelectElement(*row\cells(),colidx)
+									*cell=_MyTableGetOrAddCell(*this,*row,colidx)
 								EndIf								
 								AddElement(selected())
 								selected()=*cell
@@ -1454,7 +1516,7 @@ Procedure MyTableEvtKeyDown()
 						Else
 							SelectElement(*this\expRows(),ListSize(*this\expRows())-1)
 							*row=*this\expRows()
-							*cell=SelectElement(*row\cells(),0)
+							*cell=_MyTableGetOrAddCell(*this,*row,0)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -1517,7 +1579,7 @@ Procedure MyTableEvtKeyDown()
 								If listidx<ListSize(*this\expRows())
 									SelectElement(*this\expRows(),listidx)
 									*row=*this\expRows()
-									*cell=SelectElement(*row\cells(),colidx)
+									*cell=_MyTableGetOrAddCell(*this,*row,colidx)
 								EndIf								
 								AddElement(selected())
 								selected()=*cell
@@ -1544,7 +1606,7 @@ Procedure MyTableEvtKeyDown()
 						Else
 							SelectElement(*this\expRows(),0)
 							*row=*this\expRows()
-							*cell=SelectElement(*row\cells(),0)
+							*cell=_MyTableGetOrAddCell(*this,*row,0)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -1612,9 +1674,11 @@ Procedure MyTableEvtMouseMove()
 						mx-*col\calcwidth
 						If mx>=-MyTableW2 And mx<=MyTableW2
 							fw=#True
-							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
-								SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)								
-								ProcedureReturn #False
+							If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
+								If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
+									SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)								
+									ProcedureReturn #False
+								EndIf
 							EndIf
 							Break
 						EndIf
@@ -1633,9 +1697,11 @@ Procedure MyTableEvtMouseMove()
 					*col=*this\cols()
 					mx-*col\calcwidth
 					If mx>=-MyTableW2 And mx<=MyTableW2
-						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
-							SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
-							ProcedureReturn #False
+						If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
+							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
+								SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
+								ProcedureReturn #False
+							EndIf
 						EndIf
 						Break
 					EndIf
@@ -1716,7 +1782,7 @@ Procedure MyTableEvtMouseMove()
 				GadgetToolTip(*this\canvas,*row\tooltip)
 			Else
 				If col>-1
-					*cell=SelectElement(*row\cells(),col)
+					*cell=_MyTableGetOrAddCell(*this,*row,col)
 					GadgetToolTip(*this\canvas,*cell\tooltip)
 				EndIf
 			EndIf
@@ -1807,16 +1873,19 @@ Procedure MyTableEvtMouseDown()
 			If *this\fixedcolumns>0
 				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 				ForEach *this\cols()
+					*col=*this\cols()
 					If ListIndex(*this\cols())<*this\fixedcolumns
-						mx-*this\cols()\calcwidth
+						mx-*col\calcwidth
 						If mx>=-MyTableW2 And mx<=MyTableW2 And leftbutton
 							fw=#True
-							If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
-								*this\resizecol=#True
-								*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
-								*this\colResize=*this\cols()
-								ProcedureReturn #False
-							EndIf							
+							If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
+								If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
+									*this\resizecol=#True
+									*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+									*this\colResize=*this\cols()
+									ProcedureReturn #False
+								EndIf				
+							EndIf
 						ElseIf mx<=0
 							fw=#True
 							Break
@@ -1832,14 +1901,16 @@ Procedure MyTableEvtMouseDown()
 				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
 				col=0
 				ForEach *this\cols()
-					mx-*this\cols()\calcwidth
+					*col=*this\cols()
+					mx-*col\calcwidth
 					If mx>=-MyTableW2 And mx<=MyTableW2 And leftbutton
-						
-						If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
-							*this\resizecol=#True
-							*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
-							*this\colResize=*this\cols()
-							ProcedureReturn #False
+						If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
+							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
+								*this\resizecol=#True
+								*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+								*this\colResize=*this\cols()
+								ProcedureReturn #False
+							EndIf
 						EndIf
 					ElseIf mx<=0
 						
@@ -1851,11 +1922,14 @@ Procedure MyTableEvtMouseDown()
 			EndIf
 			
 			If row<cc And col<ListSize(*this\cols())
+				*col=SelectElement(*this\cols(),col)
+				Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
 				If col=0 And (checkboxes Or hierarchical) And row>-1
 					mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
 					
 					SelectElement(*this\expRows(),row)
 					*row=*this\expRows()
+					
 					Protected lv=MyTablew20 * *row\level
 					Select  mx
 						Case MyTablew20+lv To (MyTablew20*2)+lv
@@ -1886,10 +1960,14 @@ Procedure MyTableEvtMouseDown()
 							If Not control Or Not multiselect
 								ClearMap(*this\selected())
 							EndIf
-							If row=-1 And Not noheader
+							If row=-1 And Not noheader								
 								If leftbutton
-									If _MyTableSort(*this,col)
-										recalc=#True
+									If sortable									
+										If _MyTableSort(*this,col)
+											recalc=#True
+										EndIf
+									ElseIf *this\datagrid
+										*this\selected(Str(*col))=#True
 									EndIf
 								EndIf
 								If rightbutton 
@@ -1915,7 +1993,7 @@ Procedure MyTableEvtMouseDown()
 									EndIf
 									
 								Else
-									*cell=SelectElement(*row\cells(),col)
+									*cell=_MyTableGetOrAddCell(*this,*row,col)
 									*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
 									If *this\evtCellSelect
 										*this\evtCellSelect(*this\canvas,*cell)
@@ -1934,8 +2012,12 @@ Procedure MyTableEvtMouseDown()
 					EndIf
 					If row=-1 And Not noheader
 						If leftbutton
-							If _MyTableSort(*this,col)
-								recalc=#True
+							If sortable									
+								If _MyTableSort(*this,col)
+									recalc=#True
+								EndIf
+							ElseIf *this\datagrid								
+								*this\selected(Str(*col))=#True
 							EndIf
 						EndIf
 						If rightbutton 
@@ -1961,15 +2043,24 @@ Procedure MyTableEvtMouseDown()
 							EndIf
 							
 						Else
-							*cell=SelectElement(*row\cells(),col)
-							*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
-							If *this\evtCellSelect
-								*this\evtCellSelect(*this\canvas,*cell)
+							If *this\datagrid And col=0
+								*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
+								If *this\evtRowSelect
+									*this\evtRowSelect(*this\canvas,*row)
+								EndIf
+								If rightbutton And *this\evtRowRightClick
+									*this\evtRowRightClick(*this\canvas,*row)
+								EndIf
+							Else
+								*cell=_MyTableGetOrAddCell(*this,*row,col)
+								*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
+								If *this\evtCellSelect
+									*this\evtCellSelect(*this\canvas,*cell)
+								EndIf
+								If rightbutton And *this\evtCellRightClick
+									*this\evtCellRightClick(*this\canvas,*cell)
+								EndIf
 							EndIf
-							If rightbutton And *this\evtCellRightClick
-								*this\evtCellRightClick(*this\canvas,*cell)
-							EndIf
-							
 						EndIf
 					EndIf
 					*this\dirty=#True
@@ -2072,11 +2163,53 @@ Procedure MyTableEvtDouble()
 			If row>-1
 				SelectElement(*this\expRows(),row)		
 				*row=*this\expRows()
-				Protected *cell.strMyTableCell=SelectElement(*row\cells(),col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
 				_MyTableEditCell(*cell)				
 			EndIf
 		EndIf					
 		
+	EndIf
+EndProcedure
+
+Procedure.s _MyTableGridColumnName(col.i)
+	Protected ac=Asc("A")
+	Protected result.s=""	
+	While col > 0
+		Protected ic = col % 26
+		If ic = 0
+			result + "Z"
+			col = (col / 26) - 1
+		Else
+			result + Chr(ac+(ic-1))
+			col = col / 26
+		EndIf
+	Wend
+	
+	ProcedureReturn result
+EndProcedure
+
+Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)
+	If *this
+		*this\fixedcolumns=1
+		*this\backgroundfixed=*this\headerbackground1
+		*this\headerbackgroundfixed=*this\headerbackground2
+		*this\datagrid=#True
+		
+		Protected redraw.b=*this\redraw
+		Protected idx
+		*this\redraw=#False
+		MyTableAddColumn(*this\canvas,"",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
+		For idx=1 To cols
+			MyTableAddColumn(*this\canvas,_MyTableGridColumnName(idx),100)
+		Next
+		
+		For idx=1 To rows
+			MyTableAddRow(*this\canvas,Str(idx))
+		Next
+		MyTableAutosizeColumn(*this\canvas,0)
+		
+		*this\redraw=redraw
 	EndIf
 EndProcedure
 
@@ -2160,6 +2293,20 @@ EndProcedure
 
 Procedure MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)	
+	BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
+	_MyTableRecalc(*this)
+	ProcedureReturn *this
+EndProcedure
+
+Procedure MyTableGridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+	Protected *this.strMyTableTable=_MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
+	BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
+	_MyTableResize(*this)
+	ProcedureReturn *this
+EndProcedure
+
+Procedure MyTableGridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+	Protected *this.strMyTableTable=_MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
 	BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
 	_MyTableRecalc(*this)
 	ProcedureReturn *this
@@ -2521,7 +2668,8 @@ Procedure MyTableSetColumnFlags(canvas,column.i,flags.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
-		If *col\flags<>flags
+		
+		If *col\flags<>flags And (*this\datagrid=#False Or column>0)
 			*col\flags=flags
 			*col\dirty=#True
 			*this\dirty=#True
@@ -2665,6 +2813,9 @@ Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*dat
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=0
+		Protected *cell.strMyTableCell=0
+		Protected *col.strMyTableCol=0
+		
 		If parentid>0
 			Protected *parent.strMyTableRow=*this\rowsById(Str(parentid))
 			LastElement(*parent\rows())
@@ -2697,30 +2848,31 @@ Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*dat
 			EndIf
 			\dirty=#True
 			\table=*this
-			Protected c=CountString(text,sep)+1
+			
+			
 			Protected i=0
-			For i=1 To c
-				Protected *cell.strMyTableCell=AddElement(*row\cells())
-				Protected *col.strMyTableCol=SelectElement(*this\cols(),i-1)
-				*cell\text=StringField(text,i,sep)
-				*cell\row=*row
-				*cell\col=*col
-				*cell\table=*this
-				*cell\type=#MYTABLE_TYPE_CELL
-				If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-					*cell\value=ParseDate(*col\format,*cell\text)
-				ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-					*cell\value=Val(*cell\text)
-				ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-					*cell\value=ValD(*cell\text)
-				ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-					*cell\value=Bool(*cell\text="1" Or 
-					                 LCase(*cell\text)="x" Or 
-					                 LCase(*cell\text)="true" Or
-					                 LCase(*cell\text)="yes")
-					*cell\checked=*cell\value
-				EndIf
-			Next
+			
+			If text<>""
+				Protected c=CountString(text,sep)+1
+				For i=1 To c
+					*cell=_MyTableGetOrAddCell(*this,*row,-1)
+					*col=*cell\col
+					*cell\text=StringField(text,i,sep)
+					If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+						*cell\value=ParseDate(*col\format,*cell\text)
+					ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+						*cell\value=Val(*cell\text)
+					ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+						*cell\value=ValD(*cell\text)
+					ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+						*cell\value=Bool(*cell\text="1" Or 
+						                 LCase(*cell\text)="x" Or 
+						                 LCase(*cell\text)="true" Or
+						                 LCase(*cell\text)="yes")
+						*cell\checked=*cell\value
+					EndIf
+				Next
+			EndIf
 		EndWith
 		*this\rowsById(Str(*row\id))=*row
 		*this\dirty=#True
@@ -2998,7 +3150,7 @@ Procedure MyTableSetCellImage(canvas,row.i,col.i,image.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\image<>image
 			*cell\image=image		
@@ -3339,7 +3491,7 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 				If *row\image
 					hasimage=#True
 				EndIf
-				Protected *cell.strMyTableCell=SelectElement(*row\cells(),col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
 				If *cell
 					If *cell\textwidth=0
 						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)

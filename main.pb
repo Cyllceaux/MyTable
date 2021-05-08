@@ -28,49 +28,57 @@ images(9)=CatchImage(#PB_Any,?Blueray_drive_png_start)
 
 Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 
-Global canvasTable=CanvasGadget(#PB_Any,0,0,WindowWidth(mainWindow),WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollTable=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasTable)-20,GadgetWidth(canvasTable)-20,20,0,0,100)
-Global vscrollTable=ScrollBarGadget(#PB_Any,GadgetWidth(canvasTable)-20,0,20,GadgetHeight(canvasTable)-20,0,0,100,#PB_ScrollBar_Vertical)              
+
+Global canvasTable=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollTable=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollTable=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
-Global canvasTable2=CanvasGadget(#PB_Any,0,0,WindowWidth(mainWindow),WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollTable2=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasTable2)-20,GadgetWidth(canvasTable2)-20,20,0,0,100)
-Global vscrollTable2=ScrollBarGadget(#PB_Any,GadgetWidth(canvasTable2)-20,0,20,GadgetHeight(canvasTable2)-20,0,0,100,#PB_ScrollBar_Vertical)              
+Global canvasTable2=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollTable2=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollTable2=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
-Global canvasTree=CanvasGadget(#PB_Any,0,0,WindowWidth(mainWindow),WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollTree=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasTree)-20,GadgetWidth(canvasTree)-20,20,0,0,100)
-Global vscrollTree=ScrollBarGadget(#PB_Any,GadgetWidth(canvasTree)-20,0,20,GadgetHeight(canvasTree)-20,0,0,100,#PB_ScrollBar_Vertical)              
+Global canvasTree=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollTree=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollTree=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
-Global canvasTree2=CanvasGadget(#PB_Any,0,0,WindowWidth(mainWindow),WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollTree2=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasTree2)-20,GadgetWidth(canvasTree2)-20,20,0,0,100)
-Global vscrollTree2=ScrollBarGadget(#PB_Any,GadgetWidth(canvasTree2)-20,0,20,GadgetHeight(canvasTree2)-20,0,0,100,#PB_ScrollBar_Vertical)              
+Global canvasTree2=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollTree2=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollTree2=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
-Global canvasBild=CanvasGadget(#PB_Any,WindowWidth(mainWindow)-150,0,150,WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollBild=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasBild)-20,GadgetWidth(canvasBild)-20,20,0,0,100)
-Global vscrollBild=ScrollBarGadget(#PB_Any,GadgetWidth(canvasBild)-20,0,20,GadgetHeight(canvasBild)-20,0,0,100,#PB_ScrollBar_Vertical)              
+Global canvasBild=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollBild=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollBild=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
-Global canvasTable3=CanvasGadget(#PB_Any,WindowWidth(mainWindow)-150,0,150,WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollTable3=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasTable3)-20,GadgetWidth(canvasTable3)-20,20,0,0,100)
-Global vscrollTable3=ScrollBarGadget(#PB_Any,GadgetWidth(canvasTable3)-20,0,20,GadgetHeight(canvasTable3)-20,0,0,100,#PB_ScrollBar_Vertical)              
+Global canvasTable3=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollTable3=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollTable3=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
-Global canvasTable4=CanvasGadget(#PB_Any,WindowWidth(mainWindow)-150,0,150,WindowHeight(mainWindow),#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
-Global hscrollTable4=ScrollBarGadget(#PB_Any,0,GadgetHeight(canvasTable4)-20,GadgetWidth(canvasTable4)-20,20,0,0,100)
-Global vscrollTable4=ScrollBarGadget(#PB_Any,GadgetWidth(canvasTable4)-20,0,20,GadgetHeight(canvasTable4)-20,0,0,100,#PB_ScrollBar_Vertical)              
+Global canvasTable4=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollTable4=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollTable4=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 
 
-
+Global panel=PanelGadget(#PB_Any,0,0,WindowWidth(mainWindow),WindowHeight(mainWindow))
+AddGadgetItem(panel,-1,"Tables")
 Global splitter=SplitterGadget(#PB_Any,0,0,0,0,canvasTable,canvasTable2,#PB_Splitter_FirstFixed|#PB_Splitter_Separator)
 Global splitter2=SplitterGadget(#PB_Any,0,0,0,0,canvasTree,canvasTree2,#PB_Splitter_FirstFixed|#PB_Splitter_Separator)
 Global splitter3=SplitterGadget(#PB_Any,0,0,0,0,splitter2,splitter,#PB_Splitter_FirstFixed|#PB_Splitter_Vertical|#PB_Splitter_Separator)
 Global splitter4=SplitterGadget(#PB_Any,0,0,0,0,splitter3,canvasBild,#PB_Splitter_SecondFixed|#PB_Splitter_Vertical|#PB_Splitter_Separator)
 Global splitter5=SplitterGadget(#PB_Any,0,0,0,0,canvasTable3,canvasTable4,#PB_Splitter_FirstFixed|#PB_Splitter_Separator)
-Global splitter6=SplitterGadget(#PB_Any,0,0,WindowWidth(mainWindow),WindowHeight(mainWindow),splitter4,splitter5,#PB_Splitter_FirstFixed|#PB_Splitter_Vertical|#PB_Splitter_Separator)
+Global splitter6=SplitterGadget(#PB_Any,0,0,GetGadgetAttribute(panel,#PB_Panel_ItemWidth),GetGadgetAttribute(panel,#PB_Panel_ItemHeight),splitter4,splitter5,#PB_Splitter_FirstFixed|#PB_Splitter_Vertical|#PB_Splitter_Separator)
+AddGadgetItem(panel,-1,"Simple Grid")
+Global canvasGrid=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollGrid=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollGrid=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
+CloseGadgetList()
+CloseGadgetList()
 
 SetGadgetState(splitter,300)
 SetGadgetState(splitter2,300)
@@ -78,6 +86,7 @@ SetGadgetState(splitter3,300)
 SetGadgetState(splitter4,400)
 SetGadgetState(splitter5,300)
 SetGadgetState(splitter6,800)
+
 
 Procedure CanvasTable3Callback(canvas,*row.strMyTableRow)
 	Protected titelnr=*row\id
@@ -99,11 +108,23 @@ Procedure CanvasTable3Callback(canvas,*row.strMyTableRow)
 EndProcedure
 
 Procedure evtResizeWindow()
-	ResizeGadget(splitter6,
+	ResizeGadget(panel,
 	             #PB_Ignore,
 	             #PB_Ignore,
 	             WindowWidth(EventWindow()),
 	             WindowHeight(EventWindow()))
+	
+	ResizeGadget(splitter6,
+	             #PB_Ignore,
+	             #PB_Ignore,
+	             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
+	             GetGadgetAttribute(panel,#PB_Panel_ItemHeight))
+	
+	ResizeGadget(canvasGrid,
+	             #PB_Ignore,
+	             #PB_Ignore,
+	             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
+	             GetGadgetAttribute(panel,#PB_Panel_ItemHeight))
 EndProcedure
 
 Procedure RightClick(canvas,*element)
@@ -189,6 +210,10 @@ MyTableRegister(mainWindow,canvasBild,hscrollBild,vscrollBild,#MYTABLE_TABLE_FLA
 MyTableRegister(mainWindow,canvasTable3,hscrollTable3,vscrollTable3,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_CALLBACK,@CanvasTable3Callback(),"canvasTable3")
 MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT,0,"canvasTable4")
 
+MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,65000,255,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
+
+
+
 MyTableSetEventCellRightClick(canvasTable,@RightClick())
 MyTableSetEventRowRightClick(canvasTable2,@RightClick())
 MyTableSetEventColRightClick(canvasTable3,@RightClick())
@@ -237,6 +262,8 @@ MyTableAddColumn(canvasTable4,"Geburtsdatum",0)
 MyTableAddColumn(canvasTable4,"Mail",0)
 MyTableAddColumn(canvasTable4,"Telefon",0)
 MyTableSetTableFixedColumns(canvasTable4,2)
+
+
 
 _makeTimestamp(AddCol)
 
@@ -308,6 +335,7 @@ _makeTimestamp(autosizeRow)
 
 PostEvent(#PB_Event_SizeWindow,mainWindow,0)
 
+ResizeWindow(mainWindow,#PB_Ignore,#PB_Ignore,1100,620)
 
 Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 
