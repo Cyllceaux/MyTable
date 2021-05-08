@@ -101,6 +101,7 @@ Structure strMyTableAObject Extends _strMyTableAObject
 	textwidth.i
 	textheight.i
 	*table.strMyTableTable
+	tooltip.s
 EndStructure
 
 Structure strMyTableCell Extends strMyTableAObject
@@ -343,13 +344,14 @@ Declare MyTableSetEventCellChangedText(canvas,event.MyTableProtoEventCellChanged
 Declare MyTableSetEventCellChangedValue(canvas,event.MyTableProtoEventCellChangedValue)
 Declare MyTableSetEventCallback(canvas,event.MyTableProtoEventCallback)
 
-Declare.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0)
+Declare.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0,tooltip.s="")
 Declare MyTableRemoveColumn(canvas,column.i)
 Declare MyTableSetColumnText(canvas,column.i,text.s)
 Declare MyTableSetColumnWidth(canvas,column.i,width.i)
 Declare MyTableSetColumnFlags(canvas,column.i,flags.i)
 Declare MyTableSetColumnImage(canvas,column.i,image.i)
 Declare MyTableSetColumnData(canvas,column.i,*data)
+Declare MyTableSetColumnTooltip(canvas,column.i,tooltip.s)
 Declare MyTableSetColumnSort(canvas,column.i,sort.i)
 Declare MyTableSetCustomCellEdit(canvas,column.i,evtCustomEditCell.MyTableProtoEventCustomEditCell,evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell)
 Declare.s MyTableGetColumnText(canvas,column.i)
@@ -357,23 +359,26 @@ Declare MyTableGetColumnWidth(canvas,column.i)
 Declare MyTableGetColumnFlags(canvas,column.i)
 Declare MyTableGetColumnImage(canvas,column.i)
 Declare MyTableGetColumnData(canvas,column.i)
+Declare.s MyTableGetColumnTooltip(canvas,column.i)
 Declare MyTableGetColumnSort(canvas,column.i)
 Declare MyTableAutosizeColumn(canvas,col.i)
 Declare MyTableAutosizeRow(canvas,row.i)
 Declare MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
 
-Declare.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0)
+Declare.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0,tooltip.s="")
 Declare MyTableRemoveRow(canvas,row.i)
 Declare MyTableAddDirtyRow(canvas,rows.i,parentid.q=0)
 Declare MyTableClearRows(canvas)
 Declare MyTableSetRowImage(canvas,row.i,image.i)
 Declare MyTableSetRowData(canvas,row.i,*data)
+Declare MyTableSetRowTooltip(canvas,row.i,tooltip.s)
 Declare MyTableSetRowChecked(canvas,row.i,checked.b)
 Declare MyTableSetRowExpanded(canvas,row.i,expanded.b)
 Declare MyTableSetRowHeight(canvas,row.i,height.i)
 Declare MyTableGetRowImage(canvas,row.i)
 Declare MyTableGetRowDirty(canvas,row.i)
 Declare MyTableGetRowData(canvas,row.i)
+Declare.s MyTableGetRowTooltip(canvas,row.i)
 Declare.b MyTableGetRowChecked(canvas,row.i)
 Declare.b MyTableGetRowExpanded(canvas,row.i)
 Declare MyTableGetRowHeigth(canvas,row.i)
@@ -383,11 +388,13 @@ Declare MyTableSetCellText(canvas,row.i,col.i,text.s)
 Declare MyTableSetCellValue(canvas,row.i,col.i,value.d)
 Declare MyTableSetCellChecked(canvas,row.i,col.i,checked.b)
 Declare MyTableSetCellData(canvas,row.i,col.i,*data)
+Declare MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
 Declare MyTableSetCellImage(canvas,row.i,col.i,image.i)
 Declare.s MyTableGetCellText(canvas,row.i,col.i)
 Declare.d MyTableGetCellValue(canvas,row.i,col.i)
 Declare MyTableGetCellChecked(canvas,row.i,col.i)
 Declare MyTableGetCellData(canvas,row.i,col.i)
+Declare.s MyTableGetCellTooltip(canvas,row.i,col.i)
 Declare MyTableGetCellImage(canvas,row.i,col.i)
 
 Declare MyTableSetSelectedbackground(canvas,color.q)
@@ -1208,7 +1215,7 @@ Procedure MyTableEvtKeyDown()
 		Protected *cell.strMyTableCell=0
 		Protected *col.strMyTableCol=0
 		Protected listidx=-1,colidx=-1
-		Protected NewList selected.q()
+		Protected NewList selected.i()
 		
 		Select GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
 			Case #PB_Shortcut_Return,#PB_Shortcut_F2
@@ -1566,10 +1573,20 @@ Procedure MyTableEvtMouseMove()
 		Protected noheader.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
 		Protected resizerow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE)
 		Protected resizecol.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_COL_RESIZEABLE)
+		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
 		Protected idx=0
+		Protected hh=0
+		
+		Protected *row.strMyTableRow=0
+		Protected *col.strMyTableCol=0
+		Protected *cell.strMyTableCell=0
+		
+		Protected col=-1
+		Protected row=-1
 		
 		Protected h=DesktopScaledY(GadgetHeight(*this\canvas))
 		
+		GadgetToolTip(*this\canvas,"")
 		
 		If *this\resizecol
 			Protected newx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)-*this\oldx
@@ -1584,20 +1601,25 @@ Procedure MyTableEvtMouseMove()
 			_MyTableRecalc(*this)    
 		Else
 			
-			Protected col=0
+			
 			Protected fw.b=#False
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_Default)
 			If *this\fixedcolumns>0
 				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 				ForEach *this\cols()
 					If ListIndex(*this\cols())<*this\fixedcolumns
-						mx-*this\cols()\calcwidth
+						*col=*this\cols()
+						mx-*col\calcwidth
 						If mx>=-MyTableW2 And mx<=MyTableW2
 							fw=#True
-							If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
-								SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
+							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
+								SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)								
 								ProcedureReturn #False
 							EndIf
+							Break
+						EndIf
+						If mx<0
+							col=ListIndex(*this\cols())
 							Break
 						EndIf
 					EndIf
@@ -1608,19 +1630,24 @@ Procedure MyTableEvtMouseMove()
 				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
 				col=0
 				ForEach *this\cols()
-					mx-*this\cols()\calcwidth
+					*col=*this\cols()
+					mx-*col\calcwidth
 					If mx>=-MyTableW2 And mx<=MyTableW2
-						If Bool(*this\cols()\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
+						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
 							SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
 							ProcedureReturn #False
 						EndIf
 						Break
-						
+					EndIf
+					If mx<0
+						col=ListIndex(*this\cols())
+						Break
 					EndIf
 				Next			
 				
 			EndIf
 		EndIf
+		
 		
 		If resizerow
 			If *this\resizerow
@@ -1635,25 +1662,66 @@ Procedure MyTableEvtMouseMove()
 				*this\dirty=#True
 				_MyTableRecalc(*this)    
 			Else
-				Protected hh=0
+				hh=0
 				If Not noheader
-					hh+DesktopScaledY(*this\headerheight)
+					hh+DesktopScaledY(*this\headerheight)					
 				EndIf
+				If my-hh>0
+					
+					
+					For idx=GetGadgetState(*this\vscroll) To (ListSize(*this\expRows())-1)
+						SelectElement(*this\expRows(),idx)
+						*row=*this\expRows()
+						hh+*row\calcheight
+						If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
+							SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
+							ProcedureReturn #False
+						EndIf
+						If my-hh<0
+							row=idx
+							Break
+						EndIf
+						
+					Next
+				EndIf
+			EndIf
+		Else
+			hh=0
+			If Not noheader
+				hh+DesktopScaledY(*this\headerheight)					
+			EndIf
+			If my-hh>0
+				
+				
 				For idx=GetGadgetState(*this\vscroll) To (ListSize(*this\expRows())-1)
 					SelectElement(*this\expRows(),idx)
-					Protected *row.strMyTableRow=*this\expRows()
+					*row=*this\expRows()
 					hh+*row\calcheight
-					If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
-						SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
+					If my-hh<0
+						row=idx
 						Break
 					EndIf
 					
-					If hh>h
-						Break
-					EndIf
 				Next
 			EndIf
 		EndIf
+		
+		If row=-1 And col>0
+			*col=SelectElement(*this\cols(),col)
+			GadgetToolTip(*this\canvas,*col\tooltip)
+		ElseIf row>-1
+			SelectElement(*this\expRows(),row)
+			*row=*this\expRows()
+			If fullrow
+				GadgetToolTip(*this\canvas,*row\tooltip)
+			Else
+				If col>-1
+					*cell=SelectElement(*row\cells(),col)
+					GadgetToolTip(*this\canvas,*cell\tooltip)
+				EndIf
+			EndIf
+		EndIf
+		
 		
 	EndIf
 EndProcedure
@@ -2341,7 +2409,7 @@ Procedure MyTableRedraw(canvas,redraw.b)
 EndProcedure
 
 
-Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0)
+Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0,tooltip.s="")
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		_callcountStart(addcol)
@@ -2355,6 +2423,7 @@ Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS
 			\data=*data
 			\sort=sort
 			\dirty=#True
+			\tooltip=tooltip
 			\type=#MYTABLE_TYPE_COL
 			If Bool(flags & #MYTABLE_COLUMN_FLAGS_DATE)
 				\format="%dd.%mm.%yyyy"
@@ -2413,6 +2482,14 @@ Procedure MyTableSetColumnText(canvas,column.i,text.s)
 			*this\dirty=#True
 			_MyTableRedraw(*this)
 		EndIf
+	EndIf
+EndProcedure
+
+Procedure MyTableSetColumnTooltip(canvas,column.i,tooltip.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
+		*col\tooltip=tooltip
 	EndIf
 EndProcedure
 
@@ -2507,6 +2584,14 @@ Procedure.s MyTableGetColumnText(canvas,column.i)
 	EndIf
 EndProcedure
 
+Procedure.s MyTableGetColumnTooltip(canvas,column.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
+		ProcedureReturn *col\tooltip
+	EndIf
+EndProcedure
+
 Procedure MyTableGetColumnWidth(canvas,column.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
@@ -2576,7 +2661,7 @@ Procedure MyTableAddDirtyRow(canvas,rows.i,parentid.q=0)
 	EndIf	
 EndProcedure
 
-Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0)
+Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0,tooltip.s="")
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=0
@@ -2598,11 +2683,12 @@ Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*dat
 			\data=*data
 			\image=image
 			\type=#MYTABLE_TYPE_ROW
+			\tooltip=tooltip
 			If IsImage(image)				
 				\sclaedimage=CopyImage(image,#PB_Any)
 				ResizeImage(\sclaedimage,MyTableW16,MyTableH16)
 			EndIf
-			If id=#PB_Ignore Or id=*this\lastRowid
+			If id=#PB_Ignore Or id<=*this\lastRowid
 				*this\lastRowid+1
 				\id=*this\lastRowid
 			Else
@@ -2697,6 +2783,14 @@ Procedure MyTableSetRowData(canvas,row.i,*data)
 	EndIf
 EndProcedure
 
+Procedure MyTableSetRowTooltip(canvas,row.i,tooltip.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		*row\tooltip=tooltip		
+	EndIf
+EndProcedure
+
 
 Procedure MyTableSetRowDirty(canvas,row.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
@@ -2761,6 +2855,14 @@ Procedure MyTableGetRowData(canvas,row.i)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
 		ProcedureReturn *row\data
+	EndIf
+EndProcedure
+
+Procedure.s MyTableGetRowTooltip(canvas,row.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		ProcedureReturn *row\tooltip
 	EndIf
 EndProcedure
 
@@ -2882,6 +2984,16 @@ Procedure MyTableSetCellData(canvas,row.i,col.i,*data)
 	EndIf
 EndProcedure
 
+Procedure MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *col.strMyTableCol=*cell\col
+		*cell\tooltip=tooltip
+	EndIf
+EndProcedure
+
 Procedure MyTableSetCellImage(canvas,row.i,col.i,image.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
@@ -2909,6 +3021,15 @@ Procedure.s MyTableGetCellText(canvas,row.i,col.i)
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
 		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
 		ProcedureReturn *cell\text
+	EndIf
+EndProcedure
+
+Procedure.s MyTableGetCellTooltip(canvas,row.i,col.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		ProcedureReturn *cell\tooltip
 	EndIf
 EndProcedure
 

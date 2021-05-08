@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-06 16:51" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-06 21:12" user="silko" host="AQUALAD"/>
   </section>
   <section name="files">
     <file name="main.pb">

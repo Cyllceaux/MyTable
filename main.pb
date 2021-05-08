@@ -88,10 +88,14 @@ Procedure CanvasTable3Callback(canvas,*row.strMyTableRow)
 	EndIf
 	Protected *cell.strMyTableCell=SelectElement(*row\cells(),0)
 	*cell\text="Titel "+titelnr
+	*cell\tooltip="TT: Titel "+titelnr
 	*cell=SelectElement(*row\cells(),1)
 	*cell\text="Album "+albumnr
+	*cell\tooltip="TT: Album "+albumnr
 	*cell=SelectElement(*row\cells(),2)	
-	*cell\text=FormatDate(*cell\col\format,AddDate(0,#PB_Date_Second,Random(10000,100)))	
+	Protected ln.s=FormatDate(*cell\col\format,AddDate(0,#PB_Date_Second,Random(10000,100)))	
+	*cell\text=ln
+	*cell\tooltip="TT: "+ln
 EndProcedure
 
 Procedure evtResizeWindow()
@@ -236,7 +240,7 @@ MyTableSetTableFixedColumns(canvasTable4,2)
 
 _makeTimestamp(AddCol)
 
-Define i,g,h
+Define i,g,h,idx
 i=0
 MyTableRedraw(canvasBild,#False)
 For i=0 To 9
@@ -247,7 +251,7 @@ MyTableRedraw(canvasBild,#True)
 
 
 
-
+idx=0
 MyTableRedraw(canvasTree,#False)
 For i=1 To 10
 	Define id=MyTableAddRow(canvasTree,"Kategorie "+Str(i),"",#PB_Ignore,rowImage,0,Random(1,0),Random(1,0))	
@@ -257,6 +261,8 @@ For i=1 To 10
 			MyTableAddRow(canvasTree,"SubKategorie "+Str(g)+" "+Str(h),"",#PB_Ignore,rowImageSub2,0,Random(1,0),Random(1,0),sub)
 		Next
 	Next
+	MyTableSetRowTooltip(canvasTree,idx,"Row "+Str(id))
+	idx+1
 Next
 MyTableRedraw(canvasTree,#True)
 
