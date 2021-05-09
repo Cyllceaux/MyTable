@@ -316,7 +316,16 @@ Structure strMyTableTable Extends _strMyTableAObject
 EndStructure
 
 
+Structure strMyTableExportRow
+	List cells.s()
+EndStructure
 
+Structure strMyTableExportTable
+	List cols.s()
+	List rows.strMyTableExportRow()
+EndStructure
+
+Declare _MyTableExportInit(canvas)
 Declare _MyTableRedraw(*this.strMyTableTable)
 Declare _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 Declare _MyTableClearMaps(*this.strMyTableTable)
@@ -407,6 +416,8 @@ Declare MyTableGetColumnSort(canvas,column.i)
 Declare MyTableAutosizeColumn(canvas,col.i)
 Declare MyTableAutosizeRow(canvas,row.i)
 Declare MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
+Declare MyTableExportXML(canvas,filename.s)
+Declare MyTableExportJSON(canvas,filename.s)
 
 Declare.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0,tooltip.s="")
 Declare MyTableRemoveRow(canvas,row.i)
@@ -503,6 +514,32 @@ Macro _callcountEnde(sname)
 		Debug debugline,1
 	CompilerEndIf
 EndMacro
+
+Procedure _MyTableExportInit(canvas)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	Protected *result.strMyTableExportTable=0
+	Protected *cell.strMyTableCell=0
+	Protected *row.strMyTableRow=0
+	
+	If *this
+		*result=AllocateStructure(strMyTableExportTable)
+		ForEach *this\cols()
+			AddElement(*result\cols()):*result\cols()=*this\cols()\text
+		Next
+		Protected c=ListSize(*this\cols())-1
+		Protected idx=0
+		ForEach *this\rows()
+			*row=*this\rows()
+			Protected *exportrow.strMyTableExportRow=AddElement(*result\rows())
+			For idx=0 To c
+				*cell=_MyTableGetOrAddCell(*this,*this\rows(),idx)
+				AddElement(*exportrow\cells()):*exportrow\cells()=*cell\text
+			Next
+		Next
+	EndIf
+	
+	ProcedureReturn *result
+EndProcedure
 
 Procedure _MyTableStopEditCell(*this.strMyTableTable)
 	If *this			
@@ -1195,9 +1232,14 @@ Procedure _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1
 		*cell\type=#MYTABLE_TYPE_CELL
 		*cell\col=SelectElement(*this\cols(),col)		
 	Else
-		*cell=SelectElement(*row\cells(),col)
-		If *cell=0
-			ProcedureReturn _MyTableGetOrAddCell(*this,*row,-1)
+		While col>=ListSize(*row\cells())
+			*cell=_MyTableGetOrAddCell(*this,*row,-1)
+		Wend
+		If Not *cell
+			*cell=SelectElement(*row\cells(),col)
+			If *cell=0
+				ProcedureReturn _MyTableGetOrAddCell(*this,*row,-1)
+			EndIf
 		EndIf
 	EndIf
 	ProcedureReturn *cell
@@ -2191,6 +2233,7 @@ EndProcedure
 Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)
 	If *this
+		_callcountStart(GridRegister)
 		*this\fixedcolumns=1
 		*this\backgroundfixed=*this\headerbackground1
 		*this\headerbackgroundfixed=*this\headerbackground2
@@ -2207,9 +2250,13 @@ Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#
 		For idx=1 To rows
 			MyTableAddRow(*this\canvas,Str(idx))
 		Next
-		MyTableAutosizeColumn(*this\canvas,0)
 		
+		
+		_callcountEnde(GridRegister)
+		
+		MyTableAutosizeColumn(*this\canvas,0)
 		*this\redraw=redraw
+		
 	EndIf
 EndProcedure
 
@@ -2855,7 +2902,7 @@ Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*dat
 			If text<>""
 				Protected c=CountString(text,sep)+1
 				For i=1 To c
-					*cell=_MyTableGetOrAddCell(*this,*row,-1)
+					*cell=_MyTableGetOrAddCell(*this,*row,i-1)
 					*col=*cell\col
 					*cell\text=StringField(text,i,sep)
 					If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
@@ -3473,6 +3520,7 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 			Next
 			all(Str(canvas))=#False
 		Else
+			_callcountStart(autosizecol)
 			StartDrawing(CanvasOutput(*this\canvas))			
 			DrawingFont(*this\font)
 			
@@ -3507,8 +3555,9 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 							*cell\textheight=_MyTableTextHeight(*cell\text)
 						EndIf
 					EndIf
-					If DesktopUnscaledX(*cell\textwidth)>w
-						w=DesktopUnscaledX(*cell\textwidth)
+					Protected dux=DesktopUnscaledX(*cell\textwidth)
+					If dux>w
+						w=dux
 					EndIf
 				EndIf
 			Next
@@ -3617,5 +3666,36 @@ Procedure MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote
 			Next
 			CloseFile(file)
 		EndIf
+	EndIf
+EndProcedure
+
+
+
+Procedure MyTableExportXML(canvas,filename.s)
+	Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
+	If *table
+		Protected xml=CreateXML(#PB_Any,#PB_UTF8)
+		If xml
+			InsertXMLStructure(xml,*table,strMyTableExportTable)
+			FormatXML(xml,#PB_XML_ReIndent|#PB_XML_ReFormat)
+			SetXMLStandalone(xml,#PB_XML_StandaloneYes)
+			SaveXML(xml,filename,#PB_XML_StringFormat)
+			FreeXML(xml)
+		EndIf
+	
+	FreeStructure(*table)
+	EndIf
+EndProcedure
+
+Procedure MyTableExportJSON(canvas,filename.s)
+	Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
+	If *table
+		Protected json=CreateJSON(#PB_Any)
+		If json
+			InsertJSONStructure(JSONValue(json),*table,strMyTableExportTable)
+			SaveJSON(json,filename,#PB_JSON_PrettyPrint)
+			FreeJSON(json)
+		EndIf
+		FreeStructure(*table)
 	EndIf
 EndProcedure
