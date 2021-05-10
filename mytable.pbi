@@ -31,6 +31,60 @@
 ; SOFTWARE.
 ;}
 
+
+Macro MM
+	"
+EndMacro
+
+CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant)
+	#MYTABLE_DEBUG_LEVEL=0
+CompilerEndIf
+
+CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_MS_MAX,#PB_Constant)
+	#MYTABLE_DEBUG_MS_MAX=200
+CompilerEndIf
+
+CompilerIf Not Defined(MYTABLE_EXPORT_XML,#PB_Constant)
+	#MYTABLE_EXPORT_XML=1
+CompilerEndIf
+
+CompilerIf Not Defined(MYTABLE_EXPORT_JSON,#PB_Constant)
+	#MYTABLE_EXPORT_JSON=1
+CompilerEndIf
+
+Macro _callcountStart(sname)
+	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG_LEVEL=1
+		Static NewMap callcount.i()
+		Static NewMap callms.i()
+		Static NewMap callmssum.i()		
+		callms(MM#sname#MM+"_"+Str(*this\canvas))=ElapsedMilliseconds()		
+	CompilerEndIf
+EndMacro
+
+Macro _callcountEnde(sname)
+	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG_LEVEL=1
+		callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
+		
+		
+		Protected tname.s=""
+		If *this\name=""
+			tname=Str(*this\canvas)
+		Else
+			tname=*this\name
+		EndIf
+		
+		Protected debugline.s=LSet(tname+":",16," ")
+		debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(*this\canvas)),20," ")
+		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
+		callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
+		If _#sname#ms>#MYTABLE_DEBUG_MS_MAX
+			DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
+		EndIf
+		debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas)))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas))/callcount(MM#sname#MM+"_"+Str(*this\canvas)))+ "ms"
+		Debug debugline,1
+	CompilerEndIf
+EndMacro
+
 Global MyTableW2=DesktopScaledX(2)
 Global MyTableW4=DesktopScaledX(4)
 Global MyTableW7=DesktopScaledX(7)
@@ -315,15 +369,16 @@ Structure strMyTableTable Extends _strMyTableAObject
 	treeImageExpanded.i
 EndStructure
 
-
-Structure strMyTableExportRow
-	List cells.s()
-EndStructure
-
-Structure strMyTableExportTable
-	List cols.s()
-	List rows.strMyTableExportRow()
-EndStructure
+CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
+	Structure strMyTableExportRow
+		List cells.s()
+	EndStructure
+	
+	Structure strMyTableExportTable
+		List cols.s()
+		List rows.strMyTableExportRow()
+	EndStructure
+CompilerEndIf
 
 Declare _MyTableExportInit(canvas)
 Declare _MyTableRedraw(*this.strMyTableTable)
@@ -344,6 +399,9 @@ Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
+Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
+Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+
 
 Declare MyTableEvtResize()
 Declare MyTableEvtDialogResize()
@@ -378,6 +436,15 @@ Declare MyTableRedraw(canvas,redraw.b)
 Declare MyTableGetTableData(canvas)
 Declare.s MyTableGetTableName(canvas)
 Declare MyTableGetTableFixedColumns(canvas)
+Declare MyTableAutosizeColumn(canvas,col.i)
+Declare MyTableAutosizeRow(canvas,row.i)
+Declare MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
+CompilerIf #MYTABLE_EXPORT_XML
+	Declare MyTableExportXML(canvas,filename.s)
+CompilerEndIf
+CompilerIf #MYTABLE_EXPORT_JSON
+	Declare MyTableExportJSON(canvas,filename.s)
+CompilerEndIf
 
 Declare MyTableSetTableSortImageAsc(canvas,sortImageAsc.i)
 Declare MyTableSetTableSortImageDesc(canvas,sortImageDesc.i)
@@ -413,11 +480,7 @@ Declare MyTableGetColumnImage(canvas,column.i)
 Declare MyTableGetColumnData(canvas,column.i)
 Declare.s MyTableGetColumnTooltip(canvas,column.i)
 Declare MyTableGetColumnSort(canvas,column.i)
-Declare MyTableAutosizeColumn(canvas,col.i)
-Declare MyTableAutosizeRow(canvas,row.i)
-Declare MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
-Declare MyTableExportXML(canvas,filename.s)
-Declare MyTableExportJSON(canvas,filename.s)
+
 
 Declare.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,parentid.q=0,tooltip.s="")
 Declare MyTableRemoveRow(canvas,row.i)
@@ -470,75 +533,67 @@ Declare.q MyTableGetForecolor(canvas)
 Declare.q MyTableGetHeaderforecolor(canvas)
 Declare.q MyTableGetSelectedforecolor(canvas)
 
-Macro MM
-	"
-EndMacro
 
-CompilerIf #PB_Compiler_Debugger And Not Defined(DEBUG_LEVEL,#PB_Constant)
-	#DEBUG_LEVEL=0
-CompilerEndIf
-
-CompilerIf #PB_Compiler_Debugger And Not Defined(DEBUG_MS_MAX,#PB_Constant)
-	#DEBUG_MS_MAX=200
-CompilerEndIf
-
-Macro _callcountStart(sname)
-	CompilerIf #PB_Compiler_Debugger And #DEBUG_LEVEL=1
-		Static NewMap callcount.i()
-		Static NewMap callms.i()
-		Static NewMap callmssum.i()		
-		callms(MM#sname#MM+"_"+Str(*this\canvas))=ElapsedMilliseconds()		
-	CompilerEndIf
-EndMacro
-
-Macro _callcountEnde(sname)
-	CompilerIf #PB_Compiler_Debugger And #DEBUG_LEVEL=1
-		callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
+CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
+	Procedure _MyTableExportInit(canvas)
+		Protected *this.strMyTableTable=GetGadgetData(canvas)
+		Protected *result.strMyTableExportTable=0
+		Protected *cell.strMyTableCell=0
+		Protected *row.strMyTableRow=0
 		
-		
-		Protected tname.s=""
-		If *this\name=""
-			tname=Str(*this\canvas)
-		Else
-			tname=*this\name
-		EndIf
-		
-		Protected debugline.s=LSet(tname+":",16," ")
-		debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(*this\canvas)),20," ")
-		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
-		callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
-		If _#sname#ms>#DEBUG_MS_MAX
-			DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(#DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
-		EndIf
-		debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas)))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas))/callcount(MM#sname#MM+"_"+Str(*this\canvas)))+ "ms"
-		Debug debugline,1
-	CompilerEndIf
-EndMacro
-
-Procedure _MyTableExportInit(canvas)
-	Protected *this.strMyTableTable=GetGadgetData(canvas)
-	Protected *result.strMyTableExportTable=0
-	Protected *cell.strMyTableCell=0
-	Protected *row.strMyTableRow=0
-	
-	If *this
-		*result=AllocateStructure(strMyTableExportTable)
-		ForEach *this\cols()
-			AddElement(*result\cols()):*result\cols()=*this\cols()\text
-		Next
-		Protected c=ListSize(*this\cols())-1
-		Protected idx=0
-		ForEach *this\rows()
-			*row=*this\rows()
-			Protected *exportrow.strMyTableExportRow=AddElement(*result\rows())
-			For idx=0 To c
-				*cell=_MyTableGetOrAddCell(*this,*this\rows(),idx)
-				AddElement(*exportrow\cells()):*exportrow\cells()=*cell\text
+		If *this
+			*result=AllocateStructure(strMyTableExportTable)
+			ForEach *this\cols()
+				AddElement(*result\cols()):*result\cols()=*this\cols()\text
 			Next
-		Next
+			Protected c=ListSize(*this\cols())-1
+			Protected idx=0
+			ForEach *this\rows()
+				*row=*this\rows()
+				Protected *exportrow.strMyTableExportRow=AddElement(*result\rows())
+				For idx=0 To c
+					*cell=_MyTableGetOrAddCell(*this,*this\rows(),idx)
+					AddElement(*exportrow\cells()):*exportrow\cells()=*cell\text
+				Next
+			Next
+		EndIf
+		
+		ProcedureReturn *result
+	EndProcedure
+CompilerEndIf
+
+Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
+	*cell\text=text	
+	If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+		*cell\value=ParseDate(*cell\col\format,*cell\text)
+	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+		*cell\value=Val(*cell\text)
+	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+		*cell\value=ValD(*cell\text)
+	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+		*cell\value=Bool(*cell\text="1" Or 
+		                 LCase(*cell\text)="x" Or 
+		                 LCase(*cell\text)="true" Or
+		                 LCase(*cell\text)="yes")
+		*cell\checked=*cell\value
 	EndIf
-	
-	ProcedureReturn *result
+EndProcedure
+
+Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+	If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+		If value
+			*cell\text=""
+		Else
+			*cell\text=FormatDate(*cell\col\format,*cell\value)
+		EndIf
+	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+		*cell\text=Str(value)
+	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+		*cell\text=FormatNumber(value)
+	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+		*cell\checked=*cell\value
+		*cell\text=Str(value)
+	EndIf
 EndProcedure
 
 Procedure _MyTableStopEditCell(*this.strMyTableTable)
@@ -2901,24 +2956,15 @@ Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*dat
 			
 			If text<>""
 				Protected c=CountString(text,sep)+1
-				For i=1 To c
-					*cell=_MyTableGetOrAddCell(*this,*row,i-1)
-					*col=*cell\col
-					*cell\text=StringField(text,i,sep)
-					If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-						*cell\value=ParseDate(*col\format,*cell\text)
-					ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-						*cell\value=Val(*cell\text)
-					ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-						*cell\value=ValD(*cell\text)
-					ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-						*cell\value=Bool(*cell\text="1" Or 
-						                 LCase(*cell\text)="x" Or 
-						                 LCase(*cell\text)="true" Or
-						                 LCase(*cell\text)="yes")
-						*cell\checked=*cell\value
-					EndIf
-				Next
+				If c=1
+					*cell=_MyTableGetOrAddCell(*this,*row,0)
+					_MyTableFillCellText(*cell,text)
+				Else
+					For i=1 To c
+						*cell=_MyTableGetOrAddCell(*this,*row,i-1)
+						_MyTableFillCellText(*cell,StringField(text,i,sep))
+					Next
+				EndIf
 			EndIf
 		EndWith
 		*this\rowsById(Str(*row\id))=*row
@@ -3107,19 +3153,7 @@ Procedure MyTableSetCellText(canvas,row.i,col.i,text.s)
 			*cell\textwidth=0
 			*cell\textheight=0
 			*cell\dirty=#True
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-				*cell\value=ParseDate(*col\format,*cell\text)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-				*cell\value=Val(*cell\text)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-				*cell\value=ValD(*cell\text)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-				*cell\value=Bool(*cell\text="1" Or 
-				                 LCase(*cell\text)="x" Or 
-				                 LCase(*cell\text)="true" Or
-				                 LCase(*cell\text)="yes")
-				*cell\checked=*cell\value
-			EndIf
+			_MyTableFillCellText(*cell,text)
 			_MyTableRedraw(*this)
 		EndIf
 	EndIf
@@ -3136,20 +3170,7 @@ Procedure MyTableSetCellValue(canvas,row.i,col.i,value.d)
 			*cell\textwidth=0
 			*cell\textheight=0
 			*cell\dirty=#True
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-				If value
-					*cell\text=""
-				Else
-					*cell\text=FormatDate(*col\format,*cell\value)
-				EndIf
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-				*cell\text=Str(value)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-				*cell\text=FormatNumber(value)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-				*cell\checked=*cell\value
-				*cell\text=Str(value)
-			EndIf
+			_MyTableFillCellValue(*cell,value)
 			_MyTableRedraw(*this)
 		EndIf
 	EndIf
@@ -3670,32 +3691,36 @@ Procedure MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote
 EndProcedure
 
 
-
-Procedure MyTableExportXML(canvas,filename.s)
-	Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
-	If *table
-		Protected xml=CreateXML(#PB_Any,#PB_UTF8)
-		If xml
-			InsertXMLStructure(xml,*table,strMyTableExportTable)
-			FormatXML(xml,#PB_XML_ReIndent|#PB_XML_ReFormat)
-			SetXMLStandalone(xml,#PB_XML_StandaloneYes)
-			SaveXML(xml,filename,#PB_XML_StringFormat)
-			FreeXML(xml)
+CompilerIf #MYTABLE_EXPORT_XML
+	Procedure MyTableExportXML(canvas,filename.s)
+		Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
+		If *table
+			Protected xml=CreateXML(#PB_Any,#PB_UTF8)
+			If xml
+				InsertXMLStructure(xml,*table,strMyTableExportTable)
+				FormatXML(xml,#PB_XML_ReIndent|#PB_XML_ReFormat)
+				SetXMLStandalone(xml,#PB_XML_StandaloneYes)
+				SaveXML(xml,filename,#PB_XML_StringFormat)
+				FreeXML(xml)
+			EndIf
+			
+			FreeStructure(*table)
 		EndIf
+	EndProcedure
+CompilerEndIf
+
+CompilerIf #MYTABLE_EXPORT_JSON
+	Procedure MyTableExportJSON(canvas,filename.s)
+		Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
+		If *table
+			Protected json=CreateJSON(#PB_Any)
+			If json
+				InsertJSONStructure(JSONValue(json),*table,strMyTableExportTable)
+				SaveJSON(json,filename,#PB_JSON_PrettyPrint)
+				FreeJSON(json)
+			EndIf
+			FreeStructure(*table)
+		EndIf
+	EndProcedure
 	
-	FreeStructure(*table)
-	EndIf
-EndProcedure
-
-Procedure MyTableExportJSON(canvas,filename.s)
-	Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
-	If *table
-		Protected json=CreateJSON(#PB_Any)
-		If json
-			InsertJSONStructure(JSONValue(json),*table,strMyTableExportTable)
-			SaveJSON(json,filename,#PB_JSON_PrettyPrint)
-			FreeJSON(json)
-		EndIf
-		FreeStructure(*table)
-	EndIf
-EndProcedure
+CompilerEndIf

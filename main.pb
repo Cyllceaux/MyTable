@@ -1,8 +1,8 @@
 ﻿EnableExplicit
 
-#DEBUG_LEVEL=0
+#MYTABLE_DEBUG_LEVEL=0
 
-DebugLevel #DEBUG_LEVEL
+DebugLevel #MYTABLE_DEBUG_LEVEL
 
 UsePNGImageDecoder()
 
@@ -155,25 +155,25 @@ Procedure CancelCustomEditCell(canvas,*cell.strMyTableCell)
 EndProcedure
 
 Procedure CustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
-
+	
 	If IsWindow(customwindow)
 		CloseWindow(customwindow)
 		customwindow=0
 	EndIf
 	customwindow=OpenWindow(#PB_Any,
-	                  x,
-	                  y,
-	                  w,
-	                  h,
-	                  "",
-	                  #PB_Window_BorderLess,
-	                  GadgetID(*cell\table\canvas))
+	                        x,
+	                        y,
+	                        w,
+	                        h,
+	                        "",
+	                        #PB_Window_BorderLess,
+	                        GadgetID(*cell\table\canvas))
 	customcombobox=ComboBoxGadget(#PB_Any,
-	                        0,
-	                        0,
-	                        WindowWidth(customwindow),
-	                        WindowHeight(customwindow),
-	                        #PB_ComboBox_Editable)	
+	                              0,
+	                              0,
+	                              WindowWidth(customwindow),
+	                              WindowHeight(customwindow),
+	                              #PB_ComboBox_Editable)	
 	SetGadgetData(customcombobox,*cell)
 	SetWindowData(customwindow,*cell)
 	Protected idx
@@ -192,11 +192,13 @@ Macro DQ
 EndMacro
 
 Macro _makeTimestamp(name)
-	CompilerIf #PB_Compiler_Debugger And #DEBUG_LEVEL=1
-		Debug "",1
-		Debug "------------------"+DQ#name#DQ+"------Dauer: "+Str(ElapsedMilliseconds()-timestamp)+"ms -----------------------------------------------",1
-		timestamp=ElapsedMilliseconds()
-		Debug "",1
+	CompilerIf #PB_Compiler_Debugger 
+		CompilerIf #MYTABLE_DEBUG_LEVEL=1
+			Debug "",1
+			Debug "------------------"+DQ#name#DQ+"------Dauer: "+Str(ElapsedMilliseconds()-timestamp)+"ms -----------------------------------------------",1
+			timestamp=ElapsedMilliseconds()
+			Debug "",1
+		CompilerEndIf
 	CompilerEndIf
 EndMacro
 
@@ -346,6 +348,8 @@ MyTableUnRegister(canvasTree)
 MyTableUnRegister(canvasTree2)
 MyTableUnRegister(canvasTable3)
 MyTableUnRegister(canvasTable4)
+MyTableUnRegister(canvasGrid)
+
 
 DataSection
 	
