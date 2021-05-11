@@ -546,8 +546,8 @@ Declare.q MyTableGetSelectedforecolor(canvas)
 
 CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	Procedure _MyTableExportInit(canvas)
-		_callcountStart(exportData)
 		Protected *this.strMyTableTable=GetGadgetData(canvas)
+		_callcountStart(exportData)
 		Protected *result.strMyTableExportTable=0
 		Protected *cell.strMyTableCell=0
 		Protected *row.strMyTableRow=0
@@ -783,8 +783,9 @@ EndProcedure
 
 Procedure _MyTableTextWidth(text.s)
 	Protected result.i=0
-	If FindString(text,#CRLF$)
-		Protected c=CountString(text,#CRLF$)+1		
+	Protected c=CountString(text,#CRLF$)		
+	If c>0
+		c+1
 		Protected idx=0
 		For idx=1 To c
 			Protected v=TextWidth(StringField(text,idx,#CRLF$))
@@ -799,8 +800,9 @@ Procedure _MyTableTextWidth(text.s)
 EndProcedure
 
 Procedure _MyTableDrawText(x,y,text.s,color.q)
-	If FindString(text,#CRLF$)
-		Protected c=CountString(text,#CRLF$)+1
+	Protected c=CountString(text,#CRLF$)
+	If c>0
+		c+1
 		Protected i=0
 		Protected yc=0
 		For i=1 To c
@@ -1327,6 +1329,7 @@ EndProcedure
 Procedure _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
 	Protected *cell.strMyTableCell=0
 	If col=-1
+		LastElement(*row\cells())
 		col=ListSize(*row\cells())
 		*cell=AddElement(*row\cells())
 		*cell\row=*row
@@ -2349,8 +2352,10 @@ Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#
 			MyTableAddColumn(*this\canvas,_MyTableGridColumnName(idx),100)
 		Next
 		
+		MyTableAddDirtyRow(*this\canvas,rows)
 		For idx=1 To rows
-			MyTableAddRow(*this\canvas,Str(idx))
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,SelectElement(*this\rows(),idx-1))
+			*cell\text=Str(idx)
 		Next
 		
 		
@@ -3644,7 +3649,12 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 			
 			Protected w=0
 			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
-			w=_MyTableTextWidth(*col\text)
+			If *col\textwidth=0
+				w=_MyTableTextWidth(*col\text)
+				*col\textwidth=w
+			Else
+				w=*col\textwidth
+			EndIf
 			
 			
 			Protected hasimage.b=#False

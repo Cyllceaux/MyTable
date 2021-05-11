@@ -1,6 +1,6 @@
 ﻿EnableExplicit
 
-#MYTABLE_DEBUG_LEVEL=0
+#MYTABLE_DEBUG_LEVEL = 0
 
 DebugLevel #MYTABLE_DEBUG_LEVEL
 
@@ -94,6 +94,9 @@ Procedure CanvasTable3Callback(canvas,*row.strMyTableRow)
 	If titelnr>10
 		albumnr=titelnr/10
 		titelnr-(albumnr*10)
+		If titelnr=0
+			titelnr=10
+		EndIf
 	EndIf
 	Protected *cell.strMyTableCell=SelectElement(*row\cells(),0)
 	*cell\text="Titel "+titelnr
