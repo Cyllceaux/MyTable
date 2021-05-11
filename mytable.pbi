@@ -86,6 +86,7 @@ Macro _callcountEnde(sname)
 	CompilerEndIf
 EndMacro
 
+
 Global MyTableW2=DesktopScaledX(2)
 Global MyTableW4=DesktopScaledX(4)
 Global MyTableW7=DesktopScaledX(7)
@@ -325,6 +326,9 @@ Structure strMyTableTable Extends _strMyTableAObject
 	editorgadget.i
 	editorwindow.i
 	*editcell.strMyTableCell
+	*lastcell.strMyTableCell
+	*lastrow.strMyTableCell
+	*lastcol.strMyTableCell
 	menu.i
 	
 	evtRowSelect.MyTableProtoEventRowSelected
@@ -370,6 +374,11 @@ Structure strMyTableTable Extends _strMyTableAObject
 	treeImageExpanded.i
 EndStructure
 
+Structure strMyTableRowCol
+	row.i
+	col.i
+EndStructure
+
 CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	Structure strMyTableExportRow
 		List cells.s()
@@ -405,6 +414,10 @@ Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+Declare _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b)
+Declare _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b)
+Declare _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b)
+Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 
 
 
@@ -620,6 +633,323 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	EndProcedure
 	
 CompilerEndIf
+
+Procedure _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
+	
+	If *this
+		Protected noheader.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
+		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
+		Protected colresizeable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_COL_RESIZEABLE)
+		Protected rowresizeable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE)
+		
+		Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
+		Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
+		Protected ms=GetGadgetAttribute(*this\canvas,#PB_Canvas_WheelDelta)
+		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
+		
+		Protected leftbutton.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_LeftButton)
+		Protected rightbutton.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_RightButton)
+		
+		Protected h=DesktopScaledY(GadgetHeight(*this\canvas))
+		
+		
+		Protected *row.strMyTableRow=0
+		Protected *col.strMyTableCol=0
+		Protected row=0
+		Protected hh=0
+		Protected idx=0
+		Protected cc=ListSize(*this\expRows()) 
+		Protected col=0
+		Protected fw.b=#False
+		
+		SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_Default)
+		
+		
+		If Not noheader
+			If my<=DesktopScaledY(*this\headerheight)
+				row-1
+			EndIf
+			hh+DesktopScaledY(*this\headerheight)
+		EndIf
+		
+		If row=0
+			For idx=GetGadgetState(*this\vscroll) To (cc-1)
+				SelectElement(*this\expRows(),idx)
+				*row=*this\expRows()					
+				hh+*row\calcheight
+				If rowresizeable
+					If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
+						SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
+						If leftbutton And down
+							*this\resizerow=#True
+							*this\rowResize=*row
+							*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
+						EndIf
+						ProcedureReturn #False
+						Break
+					EndIf
+				EndIf
+				
+				If hh>=my
+					row=idx
+					Break
+				EndIf
+				
+				If hh>=h
+					Break
+				EndIf
+			Next
+		EndIf
+		
+		
+		If *this\fixedcolumns>0
+			mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+			ForEach *this\cols()
+				*col=*this\cols()
+				If ListIndex(*this\cols())<*this\fixedcolumns
+					mx-*col\calcwidth
+					If mx>=-MyTableW2 And mx<=MyTableW2
+						fw=#True
+						If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
+							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
+								SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
+								If leftbutton And down
+									*this\resizecol=#True
+									*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+									*this\colResize=*this\cols()
+								EndIf				
+								ProcedureReturn #False
+							EndIf				
+						EndIf
+					ElseIf mx<=0
+						fw=#True
+						Break
+					Else
+						col+1
+					EndIf
+				EndIf
+			Next
+			
+		EndIf
+		
+		If Not fw
+			mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
+			col=0
+			ForEach *this\cols()
+				*col=*this\cols()
+				mx-*col\calcwidth
+				If mx>=-MyTableW2 And mx<=MyTableW2
+					If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
+						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
+							SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
+							If leftbutton And down
+								*this\resizecol=#True
+								*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+								*this\colResize=*this\cols()							
+							EndIf
+							ProcedureReturn #False
+						EndIf
+					EndIf
+				ElseIf mx<=0
+					
+					Break
+				Else
+					col+1
+				EndIf
+			Next			
+		EndIf
+		
+	EndIf
+	
+	If col>=ListSize(*this\cols())
+		col=-1
+	EndIf
+	If row>=ListSize(*this\expRows())
+		row=-1
+	EndIf
+	
+	Protected *result.strMyTableRowCol=AllocateStructure(strMyTableRowCol)
+	*result\col=col
+	*result\row=row		
+	ProcedureReturn *result
+EndProcedure
+
+Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b)
+	If (Not control And Not shift) Or Not multiselect
+		ClearMap(*this\selected())
+	EndIf	
+	If Not shift
+		*this\lastcell=*cell
+	EndIf
+	If shift And multiselect
+		Protected *tr.strMyTableCell=0
+		If *this\lastcell
+			*tr=*this\lastcell			
+		Else
+			ForEach *this\selected()
+				If *this\selected() And Val(MapKey(*this\selected()))<>*cell
+					Protected *o.strMyTableAObject=Val(MapKey(*this\selected()))
+					If *o\type=#MYTABLE_TYPE_CELL
+						*tr=*o
+					EndIf
+				EndIf
+			Next
+		EndIf
+		If *tr
+			Protected min=0
+			Protected max=0
+			Protected idx=0
+			ForEach *tr\row\cells()
+				If *tr\row\cells()=*tr
+					idx=ListIndex(*tr\row\cells())
+					min=idx
+					max=idx
+					Break
+				EndIf
+			Next
+			
+			ForEach *cell\row\cells()
+				If *cell\row\cells()=*cell
+					idx=ListIndex(*cell\row\cells())
+					If idx<min:min=idx:EndIf
+					If idx>max:max=idx:EndIf
+					Break
+				EndIf
+			Next
+			
+			Protected selecte.b=#False
+			Protected ende.b=#False
+			ForEach *this\rows()
+				If *this\rows()=*tr\row
+					selecte=Bool(selecte=#False)
+					ende=Bool(selecte=#False)
+				EndIf
+				If *this\rows()=*cell\row
+					selecte=Bool(selecte=#False)
+					ende=Bool(selecte=#False)
+				EndIf
+				
+				If selecte Or *this\rows()=*cell\row Or *this\rows()=*tr\row
+					For idx=min To max
+						Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),idx)	
+						*this\selected(Str(*tc))=#True
+						If *this\evtCellSelect
+							*this\evtCellSelect(*this\canvas,*tc)
+						EndIf
+					Next
+				EndIf
+				
+				If ende
+					Break
+				EndIf
+			Next
+		Else
+			*this\selected(Str(*cell))=Bool(*this\selected(Str(*cell))=#False)
+			If *this\evtCellSelect
+				*this\evtCellSelect(*this\canvas,*cell)
+			EndIf
+		EndIf
+	Else
+		*this\selected(Str(*cell))=Bool(*this\selected(Str(*cell))=#False)
+		If *this\evtCellSelect
+			*this\evtCellSelect(*this\canvas,*cell)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b)
+	*this\lastcol=*col
+	If (Not control And Not shift) Or Not multiselect
+		ClearMap(*this\selected())
+	EndIf
+	If shift And multiselect
+		Protected *tr.strMyTableCol=0
+		ForEach *this\selected()
+			If *this\selected() And Val(MapKey(*this\selected()))<>*col
+				Protected *o.strMyTableAObject=Val(MapKey(*this\selected()))
+				If *o\type=#MYTABLE_TYPE_COL
+					*tr=*o
+				EndIf
+			EndIf
+		Next
+		If *tr
+			Protected selecte.b=#False
+			Protected ende.b=#False
+			ForEach *this\cols()
+				If *this\cols()=*tr
+					selecte=Bool(selecte=#False)
+					ende=Bool(selecte=#False)
+				EndIf
+				If *this\cols()=*col
+					selecte=Bool(selecte=#False)
+					ende=Bool(selecte=#False)
+				EndIf
+				If (selecte And *this\cols()<>*tr) Or *this\cols()=*col
+					*this\selected(Str(*this\cols()))=#True					
+				EndIf
+				If ende
+					Break
+				EndIf
+			Next
+		Else
+			*this\selected(Str(*col))=Bool(*this\selected(Str(*col))=#False)
+		EndIf
+	Else
+		*this\selected(Str(*col))=Bool(*this\selected(Str(*col))=#False)
+	EndIf
+EndProcedure
+
+Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b)
+	*this\lastrow=*row
+	If (Not control And Not shift) Or Not multiselect
+		ClearMap(*this\selected())
+	EndIf
+	If shift And multiselect
+		Protected *tr.strMyTableRow=0
+		ForEach *this\selected()
+			If *this\selected() And Val(MapKey(*this\selected()))<>*row
+				Protected *o.strMyTableAObject=Val(MapKey(*this\selected()))
+				If *o\type=#MYTABLE_TYPE_ROW
+					*tr=*o
+				EndIf
+			EndIf
+		Next
+		If *tr
+			Protected selecte.b=#False
+			Protected ende.b=#False
+			ForEach *this\rows()
+				If *this\rows()=*tr
+					selecte=Bool(selecte=#False)
+					ende=Bool(selecte=#False)
+				EndIf
+				If *this\rows()=*row
+					selecte=Bool(selecte=#False)
+					ende=Bool(selecte=#False)
+				EndIf
+				If (selecte And *this\rows()<>*tr) Or *this\rows()=*row
+					*this\selected(Str(*this\rows()))=#True
+					If *this\evtRowSelect
+						*this\evtRowSelect(*this\canvas,*this\rows())
+					EndIf					
+				EndIf
+				If ende
+					Break
+				EndIf
+			Next
+		Else
+			*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
+			If *this\evtRowSelect
+				*this\evtRowSelect(*this\canvas,*row)
+			EndIf
+		EndIf
+	Else
+		*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
+		If *this\evtRowSelect
+			*this\evtRowSelect(*this\canvas,*row)
+		EndIf
+	EndIf
+EndProcedure
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
@@ -1406,6 +1736,9 @@ Procedure MyTableEvtMouseUp()
 		*this\oldy=0
 		*this\colResize=0
 		*this\rowResize=0
+		*this\lastcell=0
+		*this\lastrow=0
+		*this\lastcol=0
 	EndIf
 EndProcedure
 
@@ -1783,6 +2116,10 @@ Procedure MyTableEvtMouseMove()
 		Protected resizerow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE)
 		Protected resizecol.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_COL_RESIZEABLE)
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
+		Protected leftbutton.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_LeftButton)
+		Protected rightbutton.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_RightButton)
+		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+		
 		Protected idx=0
 		Protected hh=0
 		
@@ -1797,6 +2134,43 @@ Procedure MyTableEvtMouseMove()
 		
 		GadgetToolTip(*this\canvas,"")
 		
+		
+		Protected *rowcol.strMyTableRowCol=_MyTableGetRowCol(*this,#False,#False,#True)
+		
+		If multiselect And *rowcol And leftbutton
+			If (fullrow Or (*this\datagrid And *rowcol\col=0)) And *this\lastrow And *rowcol\row>-1
+				*row=SelectElement(*this\rows(),*rowcol\row)
+				If *row<>*this\lastrow
+					_MyTableSelectRow(*this,*row,#False,#True,multiselect)
+					*this\dirty=#True
+					_MyTableRedraw(*this)
+				EndIf
+			EndIf
+			
+			If *this\lastcol And *rowcol\col>-1
+				*col=SelectElement(*this\cols(),*rowcol\col)
+				If *col<>*this\lastcol
+					_MyTableSelectCol(*this,*col,#False,#True,multiselect)
+					*this\dirty=#True
+					_MyTableRedraw(*this)
+				EndIf
+			EndIf
+			
+			If *this\lastcell And *rowcol\col>-1 And *rowcol\row>-1
+				*row=SelectElement(*this\rows(),*rowcol\row)
+				*cell=SelectElement(*row\cells(),*rowcol\col)
+				If *cell<>*this\lastcell
+					_MyTableSelectCell(*this,*cell,#False,#True,multiselect)
+					*this\dirty=#True
+					_MyTableRedraw(*this)
+				EndIf
+			EndIf
+			
+			*row=0
+			*col=0
+			*cell=0
+		EndIf
+		
 		If *this\resizecol
 			Protected newx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)-*this\oldx
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
@@ -1807,141 +2181,58 @@ Procedure MyTableEvtMouseMove()
 			*this\colResize\dirty=#True
 			*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 			*this\dirty=#True
-			_MyTableRecalc(*this)    
-		Else
-			
-			
-			Protected fw.b=#False
-			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_Default)
-			If *this\fixedcolumns>0
-				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
-				ForEach *this\cols()
-					If ListIndex(*this\cols())<*this\fixedcolumns
-						*col=*this\cols()
-						mx-*col\calcwidth
-						If mx>=-MyTableW2 And mx<=MyTableW2
-							fw=#True
-							If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
-								If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
-									SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)								
-									ProcedureReturn #False
-								EndIf
-							EndIf
-							Break
-						EndIf
-						If mx<0
-							col=ListIndex(*this\cols())
-							Break
-						EndIf
-					EndIf
-				Next
-			EndIf
-			
-			If Not fw
-				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
-				col=0
-				ForEach *this\cols()
-					*col=*this\cols()
-					mx-*col\calcwidth
-					If mx>=-MyTableW2 And mx<=MyTableW2
-						If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
-							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or resizecol
-								SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
-								ProcedureReturn #False
-							EndIf
-						EndIf
-						Break
-					EndIf
-					If mx<0
-						col=ListIndex(*this\cols())
-						Break
-					EndIf
-				Next			
-				
-			EndIf
+			_MyTableRecalc(*this)    					
 		EndIf
 		
+		If *this\resizerow
+			Protected newy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)-*this\oldy
+			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
+			*this\rowResize\height+newy
+			If *this\rowResize\height<0
+				*this\rowResize\height=0
+			EndIf
+			*this\rowResize\dirty=#True
+			*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
+			*this\dirty=#True
+			_MyTableRecalc(*this)    					
+		EndIf
 		
-		If resizerow
-			If *this\resizerow
-				Protected newy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)-*this\oldy
-				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
-				*this\rowResize\height+newy
-				If *this\rowResize\height<0
-					*this\rowResize\height=0
-				EndIf
-				*this\rowResize\dirty=#True
-				*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
-				*this\dirty=#True
-				_MyTableRecalc(*this)    
-			Else
-				hh=0
-				If Not noheader
-					hh+DesktopScaledY(*this\headerheight)					
-				EndIf
-				If my-hh>0
-					
-					
-					For idx=GetGadgetState(*this\vscroll) To (ListSize(*this\expRows())-1)
-						SelectElement(*this\expRows(),idx)
-						*row=*this\expRows()
-						hh+*row\calcheight
-						If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
-							SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
-							ProcedureReturn #False
-						EndIf
-						If my-hh<0
-							row=idx
-							Break
-						EndIf
-						
-					Next
-				EndIf
-			EndIf
-		Else
-			hh=0
-			If Not noheader
-				hh+DesktopScaledY(*this\headerheight)					
-			EndIf
-			If my-hh>0
-				
-				
-				For idx=GetGadgetState(*this\vscroll) To (ListSize(*this\expRows())-1)
-					SelectElement(*this\expRows(),idx)
-					*row=*this\expRows()
-					hh+*row\calcheight
-					If my-hh<0
-						row=idx
-						Break
+		If *rowcol
+			row=*rowcol\row
+			col=*rowcol\col
+			
+			If row=-1 And col>0
+				*col=SelectElement(*this\cols(),col)
+				GadgetToolTip(*this\canvas,*col\tooltip)
+			ElseIf row>-1
+				SelectElement(*this\expRows(),row)
+				*row=*this\expRows()
+				If fullrow
+					GadgetToolTip(*this\canvas,*row\tooltip)
+				Else
+					If col>-1
+						*cell=_MyTableGetOrAddCell(*this,*row,col)
+						GadgetToolTip(*this\canvas,*cell\tooltip)
 					EndIf
-					
-				Next
-			EndIf
-		EndIf
-		
-		If row=-1 And col>0
-			*col=SelectElement(*this\cols(),col)
-			GadgetToolTip(*this\canvas,*col\tooltip)
-		ElseIf row>-1
-			SelectElement(*this\expRows(),row)
-			*row=*this\expRows()
-			If fullrow
-				GadgetToolTip(*this\canvas,*row\tooltip)
-			Else
-				If col>-1
-					*cell=_MyTableGetOrAddCell(*this,*row,col)
-					GadgetToolTip(*this\canvas,*cell\tooltip)
 				EndIf
 			EndIf
+			
 		EndIf
 		
-		
+		If *rowcol
+			FreeStructure(*rowcol)
+		EndIf
 	EndIf
 EndProcedure
 
 Procedure MyTableEvtMouseDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	If *this
+		
+		*this\lastcell=0
+		*this\lastrow=0
+		*this\lastcol=0
+		
 		
 		Protected noheader.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
@@ -1975,248 +2266,154 @@ Procedure MyTableEvtMouseDown()
 			*this\dirty=#True
 		Else
 			
-			Protected row=0
+			
 			Protected hh=0
 			Protected idx=0
 			Protected cc=ListSize(*this\expRows()) 
 			
-			
-			If Not noheader
-				If my<=DesktopScaledY(*this\headerheight)
-					row-1
-				EndIf
-				hh+DesktopScaledY(*this\headerheight)
-			EndIf
-			
-			If row=0
-				For idx=GetGadgetState(*this\vscroll) To (cc-1)
-					SelectElement(*this\expRows(),idx)
-					*row=*this\expRows()					
-					hh+*row\calcheight
-					If rowresizeable And leftbutton
-						If (hh+MyTableH2)>=my And (hh-MyTableH2)<=my
-							*this\resizerow=#True
-							*this\rowResize=*row
-							*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
-							ProcedureReturn #False
-						EndIf
-					EndIf
-					
-					If hh>=my
-						row=idx
-						Break
-					EndIf
-					
-					If hh>=h
-						Break
-					EndIf
-				Next
-			EndIf
-			
-			
-			Protected col=0
-			Protected fw.b=#False
-			
-			If *this\fixedcolumns>0
-				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
-				ForEach *this\cols()
-					*col=*this\cols()
-					If ListIndex(*this\cols())<*this\fixedcolumns
-						mx-*col\calcwidth
-						If mx>=-MyTableW2 And mx<=MyTableW2 And leftbutton
-							fw=#True
-							If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
-								If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
-									*this\resizecol=#True
-									*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
-									*this\colResize=*this\cols()
-									ProcedureReturn #False
-								EndIf				
-							EndIf
-						ElseIf mx<=0
-							fw=#True
-							Break
-						Else
-							col+1
-						EndIf
-					EndIf
-				Next
+			Protected *rowcol.strMyTableRowCol=_MyTableGetRowCol(*this,#True,#False,#False)
+			If *rowcol
+				Protected row=*rowcol\row
+				Protected col=*rowcol\col
 				
-			EndIf
-			
-			If Not fw
-				mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
-				col=0
-				ForEach *this\cols()
-					*col=*this\cols()
-					mx-*col\calcwidth
-					If mx>=-MyTableW2 And mx<=MyTableW2 And leftbutton
-						If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE)
-							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RESIZEABLE) Or colresizeable
-								*this\resizecol=#True
-								*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
-								*this\colResize=*this\cols()
-								ProcedureReturn #False
-							EndIf
-						EndIf
-					ElseIf mx<=0
+				
+				If row<cc And col<ListSize(*this\cols())
+					*col=SelectElement(*this\cols(),col)
+					Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
+					If col=0 And (checkboxes Or hierarchical) And row>-1
+						mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
 						
-						Break
-					Else
-						col+1
-					EndIf
-				Next			
-			EndIf
-			
-			If row<cc And col<ListSize(*this\cols())
-				*col=SelectElement(*this\cols(),col)
-				Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
-				If col=0 And (checkboxes Or hierarchical) And row>-1
-					mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)+GetGadgetState(*this\hscroll)
-					
-					SelectElement(*this\expRows(),row)
-					*row=*this\expRows()
-					
-					Protected lv=MyTablew20 * *row\level
-					Select  mx
-						Case MyTablew20+lv To (MyTablew20*2)+lv
-							If hierarchical And checkboxes
-								*row\checked=Bool(*row\checked=#False)
-								*this\dirty=#True
-								If *this\evtRowChecked
-									*this\evtRowChecked(*this\canvas,*row)
-								EndIf
-							EndIf
-						Case 0+lv To MyTablew20+lv
-							If hierarchical And checkboxes
-								*row\expanded=Bool(*row\expanded=#False)
-								recalc=#True
-								*this\dirty=#True
-							ElseIf hierarchical
-								*row\expanded=Bool(*row\expanded=#False)
-								recalc=#True
-								*this\dirty=#True
-							ElseIf checkboxes
-								*row\checked=Bool(*row\checked=#False)
-								*this\dirty=#True
-								If *this\evtRowChecked
-									*this\evtRowChecked(*this\canvas,*row)
-								EndIf
-							EndIf
-						Default
-							If Not control Or Not multiselect
-								ClearMap(*this\selected())
-							EndIf
-							If row=-1 And Not noheader								
-								If leftbutton
-									If sortable									
-										If _MyTableSort(*this,col)
-											recalc=#True
-										EndIf
-									ElseIf *this\datagrid
-										*this\selected(Str(*col))=#True
-									EndIf
-								EndIf
-								If rightbutton 
-									If *this\evtColRightClick
-										*col=SelectElement(*this\cols(),col)
-										If *this\evtColRightClick(*this\canvas,*col)									
-											recalc=#True
-										EndIf
-									Else
-										redraw=#False
-									EndIf
-								EndIf
-							ElseIf row>-1
-								SelectElement(*this\expRows(),row)
-								*row=*this\expRows()
-								If fullrow
-									*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
-									If *this\evtRowSelect
-										*this\evtRowSelect(*this\canvas,*row)
-									EndIf
-									If rightbutton And *this\evtRowRightClick
-										*this\evtRowRightClick(*this\canvas,*row)
-									EndIf
-									
-								Else
-									*cell=_MyTableGetOrAddCell(*this,*row,col)
-									*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
-									If *this\evtCellSelect
-										*this\evtCellSelect(*this\canvas,*cell)
-									EndIf
-									If rightbutton And *this\evtCellRightClick
-										*this\evtCellRightClick(*this\canvas,*cell)
-									EndIf
-									
-								EndIf
-							EndIf
-							*this\dirty=#True
-					EndSelect					
-				Else
-					If Not control Or Not multiselect
-						ClearMap(*this\selected())
-					EndIf
-					If row=-1 And Not noheader
-						If leftbutton
-							If sortable									
-								If _MyTableSort(*this,col)
-									recalc=#True
-								EndIf
-							ElseIf *this\datagrid								
-								*this\selected(Str(*col))=#True
-							EndIf
-						EndIf
-						If rightbutton 
-							If *this\evtColRightClick
-								*col=SelectElement(*this\cols(),col)
-								If *this\evtColRightClick(*this\canvas,*col)									
-									recalc=#True
-								EndIf
-							Else
-								redraw=#False
-							EndIf
-						EndIf	
-					ElseIf row>-1
 						SelectElement(*this\expRows(),row)
 						*row=*this\expRows()
-						If fullrow
-							*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
-							If *this\evtRowSelect
-								*this\evtRowSelect(*this\canvas,*row)
-							EndIf
-							If rightbutton And *this\evtRowRightClick
-								*this\evtRowRightClick(*this\canvas,*row)
-							EndIf
-							
-						Else
-							If *this\datagrid And col=0
-								*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
-								If *this\evtRowSelect
-									*this\evtRowSelect(*this\canvas,*row)
+						
+						Protected lv=MyTablew20 * *row\level
+						Select  mx
+							Case MyTablew20+lv To (MyTablew20*2)+lv
+								If hierarchical And checkboxes
+									*row\checked=Bool(*row\checked=#False)
+									*this\dirty=#True
+									If *this\evtRowChecked
+										*this\evtRowChecked(*this\canvas,*row)
+									EndIf
 								EndIf
+							Case 0+lv To MyTablew20+lv
+								If hierarchical And checkboxes
+									*row\expanded=Bool(*row\expanded=#False)
+									recalc=#True
+									*this\dirty=#True
+								ElseIf hierarchical
+									*row\expanded=Bool(*row\expanded=#False)
+									recalc=#True
+									*this\dirty=#True
+								ElseIf checkboxes
+									*row\checked=Bool(*row\checked=#False)
+									*this\dirty=#True
+									If *this\evtRowChecked
+										*this\evtRowChecked(*this\canvas,*row)
+									EndIf
+								EndIf
+							Default
+								
+								If row=-1 And Not noheader								
+									If leftbutton
+										If sortable									
+											If _MyTableSort(*this,col)
+												recalc=#True
+											EndIf
+										ElseIf *this\datagrid										
+											_MyTableSelectCol(*this,*col,control,shift,multiselect)
+										EndIf
+									EndIf
+									If rightbutton 
+										If *this\evtColRightClick
+											*col=SelectElement(*this\cols(),col)
+											If *this\evtColRightClick(*this\canvas,*col)									
+												recalc=#True
+											EndIf
+										Else
+											redraw=#False
+										EndIf
+									EndIf
+								ElseIf row>-1
+									SelectElement(*this\expRows(),row)
+									*row=*this\expRows()
+									If fullrow									
+										_MyTableSelectRow(*this,*row,control,shift,multiselect)
+										
+										If rightbutton And *this\evtRowRightClick
+											*this\evtRowRightClick(*this\canvas,*row)
+										EndIf
+										
+									Else
+										*cell=_MyTableGetOrAddCell(*this,*row,col)
+										_MyTableSelectCell(*this,*cell,control,shift,multiselect)
+										
+										If rightbutton And *this\evtCellRightClick
+											*this\evtCellRightClick(*this\canvas,*cell)
+										EndIf
+										
+									EndIf
+								EndIf
+								*this\dirty=#True
+						EndSelect					
+					Else
+						
+						If row=-1 And Not noheader
+							If leftbutton
+								If sortable									
+									If _MyTableSort(*this,col)
+										recalc=#True
+									EndIf
+								ElseIf *this\datagrid																
+									_MyTableSelectCol(*this,*col,control,shift,multiselect)
+								EndIf
+							EndIf
+							If rightbutton 
+								If *this\evtColRightClick
+									*col=SelectElement(*this\cols(),col)
+									If *this\evtColRightClick(*this\canvas,*col)									
+										recalc=#True
+									EndIf
+								Else
+									redraw=#False
+								EndIf
+							EndIf	
+						ElseIf row>-1
+							SelectElement(*this\expRows(),row)
+							*row=*this\expRows()
+							If fullrow							
+								_MyTableSelectRow(*this,*row,control,shift,multiselect)
+								
 								If rightbutton And *this\evtRowRightClick
 									*this\evtRowRightClick(*this\canvas,*row)
 								EndIf
+								
 							Else
-								*cell=_MyTableGetOrAddCell(*this,*row,col)
-								*this\selected(Str(*row\cells()))=Bool(*this\selected(Str(*row\cells()))=#False)
-								If *this\evtCellSelect
-									*this\evtCellSelect(*this\canvas,*cell)
-								EndIf
-								If rightbutton And *this\evtCellRightClick
-									*this\evtCellRightClick(*this\canvas,*cell)
+								If *this\datagrid And col=0								
+									_MyTableSelectRow(*this,*row,control,shift,multiselect)
+									
+									If rightbutton And *this\evtRowRightClick
+										*this\evtRowRightClick(*this\canvas,*row)
+									EndIf
+								Else
+									*cell=_MyTableGetOrAddCell(*this,*row,col)
+									_MyTableSelectCell(*this,*cell,control,shift,multiselect)
+									
+									If rightbutton And *this\evtCellRightClick
+										*this\evtCellRightClick(*this\canvas,*cell)
+									EndIf
 								EndIf
 							EndIf
 						EndIf
+						*this\dirty=#True
+					EndIf
+				Else
+					If (Not control And Not shift) Or Not multiselect
+						ClearMap(*this\selected())
 					EndIf
 					*this\dirty=#True
 				EndIf
-			Else
-				If Not control Or Not multiselect
-					ClearMap(*this\selected())
-				EndIf
-				*this\dirty=#True
+				FreeStructure(*rowcol)
 			EndIf
 		EndIf
 		
