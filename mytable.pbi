@@ -2437,7 +2437,7 @@ EndProcedure
 Procedure MyTableSetTableFlags(canvas,flags.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
-		If *this\flags<>flags
+		If *this\flags<>flags And Not *this\datagrid
 			*this\flags=flags
 			*this\dirty=#True
 			_MyTableRecalc(*this)
@@ -2689,15 +2689,12 @@ Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS
 			\table=*this
 			*this\lastColid+1
 			\id=*this\lastColid
+			If *this\datagrid
+				\text=_MyTableGridColumnName(ListSize(*this\cols()))
+			EndIf
 		EndWith
 		*this\colsById(Str(*col\id))=*col
 		*this\dirty=#True
-		ForEach *this\rows()
-			Protected *cell.strMyTableCell=AddElement(*this\rows()\cells())
-			*cell\row=*this\rows()
-			*cell\col=*col
-			*cell\table=*this
-		Next
 		_callcountEnde(addcol)
 		_MyTableRecalc(*this)
 		ProcedureReturn *col\id
@@ -2715,6 +2712,13 @@ Procedure MyTableRemoveColumn(canvas,column.i)
 			DeleteElement(*this\rows()\cells())
 			*this\rows()\dirty=#True
 		Next
+		If *this\datagrid
+		Protected idx=0
+		For idx=2 To ListSize(*this\cols())
+			*col=SelectElement(*this\cols(),idx-1)
+			*col\text=_MyTableGridColumnName(idx-1)
+		Next
+		EndIf
 		_MyTableRecalc(*this)
 	EndIf
 EndProcedure
@@ -2723,7 +2727,7 @@ Procedure MyTableSetColumnText(canvas,column.i,text.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
-		If *col\text<>text
+		If *col\text<>text And Not *this\datagrid
 			*col\text=text
 			*col\dirty=#True
 			*col\textwidth=0
