@@ -379,9 +379,12 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 		List cols.s()
 		List rows.strMyTableExportRow()
 	EndStructure
+	
+	Declare _MyTableExportInit(canvas)
+	Declare _MyTableImport(*this.strMyTableTable,*table.strMyTableExportTable,add.b)
 CompilerEndIf
 
-Declare _MyTableExportInit(canvas)
+
 Declare _MyTableRedraw(*this.strMyTableTable)
 Declare _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 Declare _MyTableClearMaps(*this.strMyTableTable)
@@ -402,6 +405,7 @@ Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+
 
 
 Declare MyTableEvtResize()
@@ -442,9 +446,11 @@ Declare MyTableAutosizeRow(canvas,row.i)
 Declare MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
 CompilerIf #MYTABLE_EXPORT_XML
 	Declare MyTableExportXML(canvas,filename.s)
+	Declare MyTableImportXML(canvas,filename.s,add.b)
 CompilerEndIf
 CompilerIf #MYTABLE_EXPORT_JSON
 	Declare MyTableExportJSON(canvas,filename.s)
+	Declare MyTableImportJSON(canvas,filename.s,add.b)
 CompilerEndIf
 
 Declare MyTableSetTableSortImageAsc(canvas,sortImageAsc.i)
@@ -466,6 +472,7 @@ Declare MyTableSetEventCallback(canvas,event.MyTableProtoEventCallback)
 
 Declare.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0,tooltip.s="")
 Declare MyTableRemoveColumn(canvas,column.i)
+Declare MyTableClearCols(canvas)
 Declare MyTableSetColumnText(canvas,column.i,text.s)
 Declare MyTableSetColumnWidth(canvas,column.i,width.i)
 Declare MyTableSetColumnFlags(canvas,column.i,flags.i)
@@ -546,15 +553,21 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 		
 		If *this
 			*result=AllocateStructure(strMyTableExportTable)
-			ForEach *this\cols()
-				AddElement(*result\cols()):*result\cols()=*this\cols()\text
-			Next
+			If Not *this\datagrid
+				ForEach *this\cols()
+					AddElement(*result\cols()):*result\cols()=*this\cols()\text
+				Next
+			EndIf
 			Protected c=ListSize(*this\cols())-1
 			Protected idx=0
+			Protected start=0
+			If *this\datagrid
+				start=1
+			EndIf
 			ForEach *this\rows()
 				*row=*this\rows()
 				Protected *exportrow.strMyTableExportRow=AddElement(*result\rows())
-				For idx=0 To c
+				For idx=start To c					
 					*cell=_MyTableGetOrAddCell(*this,*this\rows(),idx)
 					AddElement(*exportrow\cells()):*exportrow\cells()=*cell\text
 				Next
@@ -563,6 +576,45 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 		
 		ProcedureReturn *result
 	EndProcedure
+	
+	Procedure _MyTableImport(*this.strMyTableTable,*table.strMyTableExportTable,add.b)
+		If *table And *this
+			Protected *row.strMyTableRow=0
+			Protected *cell.strMyTableCell=0
+			Protected *exprow.strMyTableExportRow=0
+				Protected redraw.b=*this\redraw
+				*this\redraw=#False
+				If Not add
+					MyTableClearRows(*this\canvas)
+					MyTableClearCols(*this\canvas)
+					If *this\datagrid
+						MyTableAddColumn(*this\canvas," ",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
+						If ListSize(*table\rows())>0
+							*exprow=FirstElement(*table\rows())
+							ForEach *exprow\cells()
+								MyTableAddColumn(*this\canvas,"",100)
+							Next
+						EndIf
+					Else
+						ForEach *table\cols()
+							MyTableAddColumn(*this\canvas,*table\cols(),100)
+						Next
+					EndIf					
+				EndIf
+				ForEach *table\rows()
+					MyTableAddRow(*this\canvas,"")
+					*row=LastElement(*this\rows())
+					ForEach *table\rows()\cells()
+						*cell=_MyTableGetOrAddCell(*this,*row)
+						_MyTableFillCellText(*cell,*table\rows()\cells())
+					Next
+				Next
+								
+				*this\redraw=redraw
+				_MyTableRecalc(*this)
+			EndIf
+	EndProcedure
+	
 CompilerEndIf
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
@@ -2704,11 +2756,11 @@ Procedure MyTableRemoveColumn(canvas,column.i)
 			*this\rows()\dirty=#True
 		Next
 		If *this\datagrid
-		Protected idx=0
-		For idx=2 To ListSize(*this\cols())
-			*col=SelectElement(*this\cols(),idx-1)
-			*col\text=_MyTableGridColumnName(idx-1)
-		Next
+			Protected idx=0
+			For idx=2 To ListSize(*this\cols())
+				*col=SelectElement(*this\cols(),idx-1)
+				*col\text=_MyTableGridColumnName(idx-1)
+			Next
 		EndIf
 		_MyTableRecalc(*this)
 	EndIf
@@ -3017,6 +3069,21 @@ Procedure MyTableClearRows(canvas)
 		ClearMap(*this\rowsById())
 		*this\dirty=#True
 		*this\lastRowid=0
+		_MyTableRecalc(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableClearCols(canvas)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		ClearList(*this\cols())
+		ClearMap(*this\colsById())
+		*this\dirty=#True
+		*this\lastColid=0
+		ForEach *this\rows()
+			ClearList(*this\rows()\cells())
+			*this\rows()\dirty=#True
+		Next
 		_MyTableRecalc(*this)
 	EndIf
 EndProcedure
@@ -3729,6 +3796,21 @@ CompilerIf #MYTABLE_EXPORT_XML
 			FreeStructure(*table)
 		EndIf
 	EndProcedure
+	
+	Procedure MyTableImportXML(canvas,filename.s,add.b)
+		Protected *this.strMyTableTable=GetGadgetData(canvas)
+		Protected xml=LoadXML(#PB_Any,filename)
+		
+		If xml And XMLStatus(xml)=#PB_XML_Success
+			Protected *table.strMyTableExportTable=AllocateStructure(strMyTableExportTable)
+			ExtractXMLStructure(MainXMLNode(xml),*table,strMyTableExportTable)
+			_MyTableImport(*this,*table,add)
+		Else
+			MessageRequester("XML Fehler",XMLError(xml),#PB_MessageRequester_Error)
+		EndIf
+		FreeXML(xml)
+	EndProcedure
+	
 CompilerEndIf
 
 CompilerIf #MYTABLE_EXPORT_JSON
@@ -3743,6 +3825,21 @@ CompilerIf #MYTABLE_EXPORT_JSON
 			EndIf
 			FreeStructure(*table)
 		EndIf
+	EndProcedure
+	
+	Procedure MyTableImportJSON(canvas,filename.s,add.b)
+		Protected *this.strMyTableTable=GetGadgetData(canvas)
+		Protected json=LoadJSON(#PB_Any,filename)
+		
+		If json
+			Protected *table.strMyTableExportTable=AllocateStructure(strMyTableExportTable)
+			ExtractJSONStructure(JSONValue(json),*table,strMyTableExportTable)
+			_MyTableImport(*this,*table,add)
+			FreeJSON(json)
+		Else
+			MessageRequester("JSON Fehler",JSONErrorMessage(),#PB_MessageRequester_Error)
+		EndIf
+		
 	EndProcedure
 	
 CompilerEndIf
