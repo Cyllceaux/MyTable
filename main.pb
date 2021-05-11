@@ -149,9 +149,15 @@ Procedure CancelCustomEditCell(canvas,*cell.strMyTableCell)
 		*cell\dirty=#True
 		*cell\text=GetGadgetText(customcombobox)
 		CloseWindow(customwindow)
+		MyTableRedraw(canvas,#True)
 	EndIf
 	customwindow=0
 	customcombobox=0
+EndProcedure
+
+Procedure CustomEditCellChange()
+	Protected *cell.strMyTableCell=GetGadgetData(EventGadget())
+	CancelCustomEditCell(*cell\table\canvas,*cell)	
 EndProcedure
 
 Procedure CustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
@@ -181,6 +187,7 @@ Procedure CustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
 		AddGadgetItem(customcombobox,-1,"Vorname "+idx)
 	Next
 	SetGadgetText(customcombobox,*cell\text)
+	BindGadgetEvent(customcombobox,@CustomEditCellChange(),#PB_EventType_Change)
 EndProcedure
 
 BindEvent(#PB_Event_SizeWindow,@evtResizeWindow(),mainWindow)

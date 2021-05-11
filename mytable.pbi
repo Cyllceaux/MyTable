@@ -63,8 +63,9 @@ EndMacro
 
 Macro _callcountEnde(sname)
 	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG_LEVEL=1
+		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
 		callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
-		
+		callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
 		
 		Protected tname.s=""
 		If *this\name=""
@@ -75,8 +76,8 @@ Macro _callcountEnde(sname)
 		
 		Protected debugline.s=LSet(tname+":",16," ")
 		debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(*this\canvas)),20," ")
-		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
-		callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
+		
+		
 		If _#sname#ms>#MYTABLE_DEBUG_MS_MAX
 			DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
 		EndIf
@@ -471,6 +472,7 @@ Declare MyTableSetColumnFlags(canvas,column.i,flags.i)
 Declare MyTableSetColumnImage(canvas,column.i,image.i)
 Declare MyTableSetColumnData(canvas,column.i,*data)
 Declare MyTableSetColumnTooltip(canvas,column.i,tooltip.s)
+Declare MyTableSetColumnFormat(canvas,column.i,format.s)
 Declare MyTableSetColumnSort(canvas,column.i,sort.i)
 Declare MyTableSetCustomCellEdit(canvas,column.i,evtCustomEditCell.MyTableProtoEventCustomEditCell,evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell)
 Declare.s MyTableGetColumnText(canvas,column.i)
@@ -479,6 +481,7 @@ Declare MyTableGetColumnFlags(canvas,column.i)
 Declare MyTableGetColumnImage(canvas,column.i)
 Declare MyTableGetColumnData(canvas,column.i)
 Declare.s MyTableGetColumnTooltip(canvas,column.i)
+Declare.s MyTableGetColumnFormat(canvas,column.i)
 Declare MyTableGetColumnSort(canvas,column.i)
 
 
@@ -580,8 +583,9 @@ Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 EndProcedure
 
 Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+	*cell\value=value
 	If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-		If value
+		If value=0
 			*cell\text=""
 		Else
 			*cell\text=FormatDate(*cell\col\format,*cell\value)
@@ -772,22 +776,9 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 	Wend
 	If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CALLBACK) And *row\dirty And *this\evtCallback
 		*this\evtCallback(*this\canvas,*row)
-		ForEach *row\cells()
+		ForEach *row\cells()			
 			*cell=*row\cells()
-			*col=*cell\col
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-				*cell\value=ParseDate(*col\format,*cell\text)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-				*cell\value=Val(*cell\text)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-				*cell\value=ValD(*cell\text)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-				*cell\value=Bool(*cell\text="1" Or 
-				                 LCase(*cell\text)="x" Or 
-				                 LCase(*cell\text)="true" Or
-				                 LCase(*cell\text)="yes")
-				*cell\checked=*cell\value
-			EndIf
+			_MyTableFillCellText(*cell,*cell\text)			
 		Next
 		*row\dirty=#False
 	EndIf
@@ -950,7 +941,7 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 	EndIf
 	ClipOutput(bx,0,*col\calcwidth,*col\calcheight)
 	DrawingMode(#PB_2DDrawing_Transparent)					
-	If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
+	If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER) Or *this\datagrid
 		_MyTableDrawText(bx+(*col\calcwidth/2-(*col\textwidth+soi)/2),0,*col\text,*this\headerforecolor)
 	ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
 		_MyTableDrawText(bx+*col\calcwidth-*col\textwidth-MyTableW4-soi,0,*col\text,*this\headerforecolor)
@@ -2297,7 +2288,7 @@ Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#
 		Protected redraw.b=*this\redraw
 		Protected idx
 		*this\redraw=#False
-		MyTableAddColumn(*this\canvas,"",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
+		MyTableAddColumn(*this\canvas," ",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
 		For idx=1 To cols
 			MyTableAddColumn(*this\canvas,_MyTableGridColumnName(idx),100)
 		Next
@@ -2689,7 +2680,7 @@ Procedure.q MyTableAddColumn(canvas,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS
 			\table=*this
 			*this\lastColid+1
 			\id=*this\lastColid
-			If *this\datagrid
+			If *this\datagrid And text=""
 				\text=_MyTableGridColumnName(ListSize(*this\cols()))
 			EndIf
 		EndWith
@@ -2733,6 +2724,25 @@ Procedure MyTableSetColumnText(canvas,column.i,text.s)
 			*col\textwidth=0
 			*col\textheight=0
 			*this\dirty=#True
+			_MyTableRedraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure MyTableSetColumnFormat(canvas,column.i,format.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
+		If *col\format<>format
+			*col\format=format
+			*col\dirty=#True
+			*col\textwidth=0
+			*col\textheight=0
+			*this\dirty=#True
+			ForEach *this\rows()
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),column)
+				_MyTableFillCellValue(*cell,*cell\value)
+			Next
 			_MyTableRedraw(*this)
 		EndIf
 	EndIf
@@ -2835,6 +2845,14 @@ Procedure.s MyTableGetColumnText(canvas,column.i)
 	If *this
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
 		ProcedureReturn *col\text
+	EndIf
+EndProcedure
+
+Procedure.s MyTableGetColumnFormat(canvas,column.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
+		ProcedureReturn *col\format
 	EndIf
 EndProcedure
 
