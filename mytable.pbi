@@ -546,6 +546,7 @@ Declare.q MyTableGetSelectedforecolor(canvas)
 
 CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	Procedure _MyTableExportInit(canvas)
+		_callcountStart(exportData)
 		Protected *this.strMyTableTable=GetGadgetData(canvas)
 		Protected *result.strMyTableExportTable=0
 		Protected *cell.strMyTableCell=0
@@ -573,46 +574,49 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 				Next
 			Next
 		EndIf
-		
+		_callcountEnde(exportData)
 		ProcedureReturn *result
 	EndProcedure
 	
 	Procedure _MyTableImport(*this.strMyTableTable,*table.strMyTableExportTable,add.b)
 		If *table And *this
+			_callcountStart(ImportData)
 			Protected *row.strMyTableRow=0
 			Protected *cell.strMyTableCell=0
 			Protected *exprow.strMyTableExportRow=0
-				Protected redraw.b=*this\redraw
-				*this\redraw=#False
-				If Not add
-					MyTableClearRows(*this\canvas)
-					MyTableClearCols(*this\canvas)
-					If *this\datagrid
-						MyTableAddColumn(*this\canvas," ",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
-						If ListSize(*table\rows())>0
-							*exprow=FirstElement(*table\rows())
-							ForEach *exprow\cells()
-								MyTableAddColumn(*this\canvas,"",100)
-							Next
-						EndIf
-					Else
-						ForEach *table\cols()
-							MyTableAddColumn(*this\canvas,*table\cols(),100)
+			Protected redraw.b=*this\redraw
+			*this\redraw=#False
+			If Not add
+				MyTableClearRows(*this\canvas)
+				MyTableClearCols(*this\canvas)
+				If *this\datagrid
+					MyTableAddColumn(*this\canvas," ",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
+					If ListSize(*table\rows())>0
+						*exprow=FirstElement(*table\rows())
+						ForEach *exprow\cells()
+							MyTableAddColumn(*this\canvas,"",100)
 						Next
-					EndIf					
-				EndIf
-				ForEach *table\rows()
-					MyTableAddRow(*this\canvas,"")
-					*row=LastElement(*this\rows())
-					ForEach *table\rows()\cells()
-						*cell=_MyTableGetOrAddCell(*this,*row)
-						_MyTableFillCellText(*cell,*table\rows()\cells())
+					EndIf
+				Else
+					ForEach *table\cols()
+						MyTableAddColumn(*this\canvas,*table\cols(),100)
 					Next
-				Next
-								
-				*this\redraw=redraw
-				_MyTableRecalc(*this)
+				EndIf					
 			EndIf
+			ForEach *table\rows()
+				MyTableAddRow(*this\canvas,"")
+				*row=LastElement(*this\rows())
+				ForEach *table\rows()\cells()
+					*cell=_MyTableGetOrAddCell(*this,*row)
+					_MyTableFillCellText(*cell,*table\rows()\cells())
+				Next
+			Next
+			
+			*this\redraw=redraw
+			_callcountEnde(ImportData)
+			_MyTableRecalc(*this)
+			
+		EndIf
 	EndProcedure
 	
 CompilerEndIf
@@ -3781,6 +3785,7 @@ EndProcedure
 
 
 CompilerIf #MYTABLE_EXPORT_XML
+	
 	Procedure MyTableExportXML(canvas,filename.s)
 		Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
 		If *table
@@ -3814,6 +3819,7 @@ CompilerIf #MYTABLE_EXPORT_XML
 CompilerEndIf
 
 CompilerIf #MYTABLE_EXPORT_JSON
+	
 	Procedure MyTableExportJSON(canvas,filename.s)
 		Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
 		If *table
