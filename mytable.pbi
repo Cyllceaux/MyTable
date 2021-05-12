@@ -320,6 +320,7 @@ Structure strMyTableTable Extends _strMyTableAObject
 	bhs.b
 	datagrid.b
 	Map selected.b()
+	Map tempselected.b()
 	List expRows.i()
 	expheight.i
 	
@@ -414,9 +415,9 @@ Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
-Declare _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b)
-Declare _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b)
-Declare _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b)
+Declare _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
+Declare _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
+Declare _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 
 
@@ -775,11 +776,18 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 	ProcedureReturn *result
 EndProcedure
 
-Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b)
+Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
 	If (Not control And Not shift) Or Not multiselect
-		ClearMap(*this\selected())
+		If Not temp
+			ClearMap(*this\selected())
+		EndIf
 	EndIf	
-	If Not shift
+	
+	
+	ClearMap(*this\tempselected())
+	
+	
+	If Not temp
 		*this\lastcell=*cell
 	EndIf
 	If shift And multiselect
@@ -833,9 +841,14 @@ Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.
 				If selecte Or *this\rows()=*cell\row Or *this\rows()=*tr\row
 					For idx=min To max
 						Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),idx)	
-						*this\selected(Str(*tc))=#True
-						If *this\evtCellSelect
-							*this\evtCellSelect(*this\canvas,*tc)
+						If temp 
+							
+							*this\tempselected(Str(*tc))=Bool(*this\tempselected(Str(*tc))=#False)
+						Else
+							*this\selected(Str(*tc))=#True
+							If *this\evtCellSelect
+								*this\evtCellSelect(*this\canvas,*tc)
+							EndIf
 						EndIf
 					Next
 				EndIf
@@ -845,21 +858,32 @@ Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.
 				EndIf
 			Next
 		Else
+			If temp	
+				*this\tempselected(Str(*cell))=Bool(*this\tempselected(Str(*cell))=#False)
+			Else
+				*this\selected(Str(*cell))=Bool(*this\selected(Str(*cell))=#False)
+				If *this\evtCellSelect
+					*this\evtCellSelect(*this\canvas,*cell)
+				EndIf
+			EndIf
+		EndIf
+	Else
+		If temp	
+			*this\tempselected(Str(*cell))=Bool(*this\tempselected(Str(*cell))=#False)
+		Else
 			*this\selected(Str(*cell))=Bool(*this\selected(Str(*cell))=#False)
 			If *this\evtCellSelect
 				*this\evtCellSelect(*this\canvas,*cell)
 			EndIf
 		EndIf
-	Else
-		*this\selected(Str(*cell))=Bool(*this\selected(Str(*cell))=#False)
-		If *this\evtCellSelect
-			*this\evtCellSelect(*this\canvas,*cell)
-		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b)
-	*this\lastcol=*col
+Procedure _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
+	If Not temp
+		*this\lastcol=*col
+	EndIf
+	ClearMap(*this\tempselected())
 	If (Not control And Not shift) Or Not multiselect
 		ClearMap(*this\selected())
 	EndIf
@@ -886,22 +910,37 @@ Procedure _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,s
 					ende=Bool(selecte=#False)
 				EndIf
 				If (selecte And *this\cols()<>*tr) Or *this\cols()=*col
-					*this\selected(Str(*this\cols()))=#True					
+					If temp
+						*this\tempselected(Str(*this\cols()))=Bool(*this\tempselected(Str(*this\cols()))=#False)
+					Else
+						*this\selected(Str(*this\cols()))=Bool(*this\selected(Str(*this\cols()))=#False)
+					EndIf		
 				EndIf
 				If ende
 					Break
 				EndIf
 			Next
 		Else
-			*this\selected(Str(*col))=Bool(*this\selected(Str(*col))=#False)
+			If temp
+				*this\tempselected(Str(*col))=Bool(*this\tempselected(Str(*col))=#False)
+			Else
+				*this\selected(Str(*col))=Bool(*this\selected(Str(*col))=#False)
+			EndIf
 		EndIf
 	Else
-		*this\selected(Str(*col))=Bool(*this\selected(Str(*col))=#False)
+		If temp
+			*this\tempselected(Str(*col))=Bool(*this\tempselected(Str(*col))=#False)
+		Else
+			*this\selected(Str(*col))=Bool(*this\selected(Str(*col))=#False)
+		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b)
-	*this\lastrow=*row
+Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
+	If Not temp
+		*this\lastrow=*row
+	EndIf
+	ClearMap(*this\tempselected())
 	If (Not control And Not shift) Or Not multiselect
 		ClearMap(*this\selected())
 	EndIf
@@ -928,25 +967,37 @@ Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,s
 					ende=Bool(selecte=#False)
 				EndIf
 				If (selecte And *this\rows()<>*tr) Or *this\rows()=*row
-					*this\selected(Str(*this\rows()))=#True
-					If *this\evtRowSelect
-						*this\evtRowSelect(*this\canvas,*this\rows())
-					EndIf					
+					If temp
+						*this\tempselected(Str(*this\rows()))=Bool(*this\tempselected(Str(*this\rows()))=#False)
+					Else
+						*this\selected(Str(*this\rows()))=Bool(*this\selected(Str(*this\rows()))=#False)
+						If *this\evtRowSelect
+							*this\evtRowSelect(*this\canvas,*this\rows())
+						EndIf
+					EndIf		
 				EndIf
 				If ende
 					Break
 				EndIf
 			Next
 		Else
+			If temp
+				*this\tempselected(Str(*row))=Bool(*this\tempselected(Str(*row))=#False)
+			Else
+				*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
+				If *this\evtRowSelect
+					*this\evtRowSelect(*this\canvas,*row)
+				EndIf
+			EndIf
+		EndIf
+	Else
+		If temp
+			*this\tempselected(Str(*row))=Bool(*this\tempselected(Str(*row))=#False)
+		Else
 			*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
 			If *this\evtRowSelect
 				*this\evtRowSelect(*this\canvas,*row)
 			EndIf
-		EndIf
-	Else
-		*this\selected(Str(*row))=Bool(*this\selected(Str(*row))=#False)
-		If *this\evtRowSelect
-			*this\evtRowSelect(*this\canvas,*row)
 		EndIf
 	EndIf
 EndProcedure
@@ -1197,7 +1248,12 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 		If fixed
 			Box(bx,by,*col\calcwidth,*row\calcheight,*this\backgroundfixed)	
 		EndIf
-		If *this\selected(Str(*row)) Or *this\selected(Str(*cell)) Or *this\selected(Str(*col))
+		If *this\selected(Str(*row)) Or 
+		   *this\selected(Str(*cell)) Or 
+		   *this\selected(Str(*col)) Or 
+		   *this\tempselected(Str(*row)) Or 
+		   *this\tempselected(Str(*cell)) Or 
+		   *this\tempselected(Str(*col))
 			Box(bx,by,*col\calcwidth,*row\calcheight,*this\selectedbackground)	
 			selected=#True
 		EndIf
@@ -1321,7 +1377,7 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 	If fixed
 		Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackgroundfixed)
 	Else
-		If *this\selected(Str(*col))
+		If *this\selected(Str(*col)) Or *this\tempselected(Str(*col))
 			Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\selectedbackground)
 		Else
 			Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackground2)
@@ -1739,6 +1795,15 @@ Procedure MyTableEvtMouseUp()
 		*this\lastcell=0
 		*this\lastrow=0
 		*this\lastcol=0
+		If MapSize(*this\tempselected())>0
+			ForEach *this\tempselected()
+				*this\selected(MapKey(*this\tempselected()))=*this\tempselected()
+			Next
+			ClearMap(*this\tempselected())
+			*this\dirty=#True
+			_MyTableRedraw(*this)
+		EndIf
+		ClearMap(*this\tempselected())
 	EndIf
 EndProcedure
 
@@ -2141,7 +2206,7 @@ Procedure MyTableEvtMouseMove()
 			If (fullrow Or (*this\datagrid And *rowcol\col=0)) And *this\lastrow And *rowcol\row>-1
 				*row=SelectElement(*this\rows(),*rowcol\row)
 				If *row<>*this\lastrow
-					_MyTableSelectRow(*this,*row,#False,#True,multiselect)
+					_MyTableSelectRow(*this,*row,#False,#True,multiselect,#True)
 					*this\dirty=#True
 					_MyTableRedraw(*this)
 				EndIf
@@ -2150,7 +2215,7 @@ Procedure MyTableEvtMouseMove()
 			If *this\lastcol And *rowcol\col>-1
 				*col=SelectElement(*this\cols(),*rowcol\col)
 				If *col<>*this\lastcol
-					_MyTableSelectCol(*this,*col,#False,#True,multiselect)
+					_MyTableSelectCol(*this,*col,#False,#True,multiselect,#True)
 					*this\dirty=#True
 					_MyTableRedraw(*this)
 				EndIf
@@ -2160,7 +2225,7 @@ Procedure MyTableEvtMouseMove()
 				*row=SelectElement(*this\rows(),*rowcol\row)
 				*cell=SelectElement(*row\cells(),*rowcol\col)
 				If *cell<>*this\lastcell
-					_MyTableSelectCell(*this,*cell,#False,#True,multiselect)
+					_MyTableSelectCell(*this,*cell,#False,#True,multiselect,#True)
 					*this\dirty=#True
 					_MyTableRedraw(*this)
 				EndIf
@@ -2232,6 +2297,7 @@ Procedure MyTableEvtMouseDown()
 		*this\lastcell=0
 		*this\lastrow=0
 		*this\lastcol=0
+		ClearMap(*this\tempselected())
 		
 		
 		Protected noheader.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
@@ -2321,7 +2387,7 @@ Procedure MyTableEvtMouseDown()
 												recalc=#True
 											EndIf
 										ElseIf *this\datagrid										
-											_MyTableSelectCol(*this,*col,control,shift,multiselect)
+											_MyTableSelectCol(*this,*col,control,shift,multiselect,#False)
 										EndIf
 									EndIf
 									If rightbutton 
@@ -2338,7 +2404,7 @@ Procedure MyTableEvtMouseDown()
 									SelectElement(*this\expRows(),row)
 									*row=*this\expRows()
 									If fullrow									
-										_MyTableSelectRow(*this,*row,control,shift,multiselect)
+										_MyTableSelectRow(*this,*row,control,shift,multiselect,#False)
 										
 										If rightbutton And *this\evtRowRightClick
 											*this\evtRowRightClick(*this\canvas,*row)
@@ -2346,7 +2412,7 @@ Procedure MyTableEvtMouseDown()
 										
 									Else
 										*cell=_MyTableGetOrAddCell(*this,*row,col)
-										_MyTableSelectCell(*this,*cell,control,shift,multiselect)
+										_MyTableSelectCell(*this,*cell,control,shift,multiselect,#False)
 										
 										If rightbutton And *this\evtCellRightClick
 											*this\evtCellRightClick(*this\canvas,*cell)
@@ -2365,7 +2431,7 @@ Procedure MyTableEvtMouseDown()
 										recalc=#True
 									EndIf
 								ElseIf *this\datagrid																
-									_MyTableSelectCol(*this,*col,control,shift,multiselect)
+									_MyTableSelectCol(*this,*col,control,shift,multiselect,#False)
 								EndIf
 							EndIf
 							If rightbutton 
@@ -2382,7 +2448,7 @@ Procedure MyTableEvtMouseDown()
 							SelectElement(*this\expRows(),row)
 							*row=*this\expRows()
 							If fullrow							
-								_MyTableSelectRow(*this,*row,control,shift,multiselect)
+								_MyTableSelectRow(*this,*row,control,shift,multiselect,#False)
 								
 								If rightbutton And *this\evtRowRightClick
 									*this\evtRowRightClick(*this\canvas,*row)
@@ -2390,14 +2456,14 @@ Procedure MyTableEvtMouseDown()
 								
 							Else
 								If *this\datagrid And col=0								
-									_MyTableSelectRow(*this,*row,control,shift,multiselect)
+									_MyTableSelectRow(*this,*row,control,shift,multiselect,#False)
 									
 									If rightbutton And *this\evtRowRightClick
 										*this\evtRowRightClick(*this\canvas,*row)
 									EndIf
 								Else
 									*cell=_MyTableGetOrAddCell(*this,*row,col)
-									_MyTableSelectCell(*this,*cell,control,shift,multiselect)
+									_MyTableSelectCell(*this,*cell,control,shift,multiselect,#False)
 									
 									If rightbutton And *this\evtCellRightClick
 										*this\evtCellRightClick(*this\canvas,*cell)
