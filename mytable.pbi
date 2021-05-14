@@ -260,6 +260,7 @@ Structure strMyTableCol Extends strMyTableAObject
 	sort.i	
 	flags.i
 	format.s
+	canNull.b
 	evtCustomEditCell.MyTableProtoEventCustomEditCell	
 	evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell
 EndStructure
@@ -492,6 +493,7 @@ Declare MyTableSetColumnWidth(canvas,column.i,width.i)
 Declare MyTableSetColumnFlags(canvas,column.i,flags.i)
 Declare MyTableSetColumnImage(canvas,column.i,image.i)
 Declare MyTableSetColumnData(canvas,column.i,*data)
+Declare MyTableSetColumnCanNull(canvas,column.i,canNull.b)
 Declare MyTableSetColumnTooltip(canvas,column.i,tooltip.s)
 Declare MyTableSetColumnFormat(canvas,column.i,format.s)
 Declare MyTableSetColumnSort(canvas,column.i,sort.i)
@@ -503,6 +505,7 @@ Declare MyTableGetColumnImage(canvas,column.i)
 Declare MyTableGetColumnData(canvas,column.i)
 Declare.s MyTableGetColumnTooltip(canvas,column.i)
 Declare.s MyTableGetColumnFormat(canvas,column.i)
+Declare.b MyTableGetColumnCanNull(canvas,column.i)
 Declare MyTableGetColumnSort(canvas,column.i)
 
 
@@ -1004,6 +1007,9 @@ EndProcedure
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
+	If text=""
+		*cell\col\canNull=#True
+	EndIf
 	If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
 		*cell\value=ParseDate(*cell\col\format,*cell\text)
 	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
@@ -1021,19 +1027,24 @@ EndProcedure
 
 Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
 	*cell\value=value
-	If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-		If value=0
-			*cell\text=""
-		Else
-			*cell\text=FormatDate(*cell\col\format,*cell\value)
-		EndIf
-	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-		*cell\text=Str(value)
-	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-		*cell\text=FormatNumber(value)
-	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+	If value=0 And Not *cell\col\canNull
+		*cell\text=""
 		*cell\checked=*cell\value
-		*cell\text=Str(value)
+	Else
+		If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+			If value=0
+				*cell\text=""
+			Else
+				*cell\text=FormatDate(*cell\col\format,*cell\value)
+			EndIf
+		ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+			*cell\text=Str(value)
+		ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+			*cell\text=FormatNumber(value)
+		ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+			*cell\checked=*cell\value
+			*cell\text=Str(value)
+		EndIf
 	EndIf
 EndProcedure
 
@@ -1383,6 +1394,7 @@ Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed
 			Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackground2)
 		EndIf
 	EndIf
+	
 	ClipOutput(bx,0,*col\calcwidth,*col\calcheight)
 	DrawingMode(#PB_2DDrawing_Transparent)					
 	If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER) Or *this\datagrid
@@ -3151,6 +3163,14 @@ Procedure MyTableSetColumnData(canvas,column.i,*data)
 	EndIf
 EndProcedure
 
+Procedure MyTableSetColumnCanNull(canvas,column.i,canNull.b)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)		
+		*col\canNull=canNull		
+	EndIf
+EndProcedure
+
 Procedure MyTableSetColumnSort(canvas,column.i,sort.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
@@ -3185,6 +3205,14 @@ Procedure.s MyTableGetColumnTooltip(canvas,column.i)
 	If *this
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
 		ProcedureReturn *col\tooltip
+	EndIf
+EndProcedure
+
+Procedure.b MyTableGetColumnCanNull(canvas,column.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
+		ProcedureReturn *col\canNull
 	EndIf
 EndProcedure
 

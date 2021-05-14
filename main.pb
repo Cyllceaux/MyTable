@@ -222,7 +222,7 @@ MyTableRegister(mainWindow,canvasBild,hscrollBild,vscrollBild,#MYTABLE_TABLE_FLA
 MyTableRegister(mainWindow,canvasTable3,hscrollTable3,vscrollTable3,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_CALLBACK,@CanvasTable3Callback(),"canvasTable3")
 MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT,0,"canvasTable4")
 
-MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,65000,255,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
+MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,32000,255,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
 
 
 
