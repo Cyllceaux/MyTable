@@ -87,6 +87,7 @@ Macro _callcountEnde(sname)
 EndMacro
 
 
+Global MyTableW1=DesktopScaledX(1)
 Global MyTableW2=DesktopScaledX(2)
 Global MyTableW4=DesktopScaledX(4)
 Global MyTableW7=DesktopScaledX(7)
@@ -415,6 +416,7 @@ Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
+Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
 Declare _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
@@ -533,12 +535,14 @@ Declare MyTableSetCellValue(canvas,row.i,col.i,value.d)
 Declare MyTableSetCellChecked(canvas,row.i,col.i,checked.b)
 Declare MyTableSetCellData(canvas,row.i,col.i,*data)
 Declare MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
+Declare MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
 Declare MyTableSetCellImage(canvas,row.i,col.i,image.i)
 Declare.s MyTableGetCellText(canvas,row.i,col.i)
 Declare.d MyTableGetCellValue(canvas,row.i,col.i)
 Declare MyTableGetCellChecked(canvas,row.i,col.i)
 Declare MyTableGetCellData(canvas,row.i,col.i)
 Declare.s MyTableGetCellTooltip(canvas,row.i,col.i)
+Declare.s MyTableGetCellFormula(canvas,row.i,col.i)
 Declare MyTableGetCellImage(canvas,row.i,col.i)
 
 Declare MyTableSetSelectedbackground(canvas,color.q)
@@ -1005,6 +1009,10 @@ Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,s
 	EndIf
 EndProcedure
 
+Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
+	_MyTableFillCellText(*cell,formula)
+EndProcedure
+
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
 	If text=""
@@ -1257,7 +1265,7 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 		
 		Protected selected.b=#False
 		If fixed
-			Box(bx,by,*col\calcwidth,*row\calcheight,*this\backgroundfixed)	
+			Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\backgroundfixed)	
 		EndIf
 		If *this\selected(Str(*row)) Or 
 		   *this\selected(Str(*cell)) Or 
@@ -1273,7 +1281,7 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 		
 		DrawingMode(#PB_2DDrawing_Outlined)	
 		If grid
-			Box(bx,by,*col\calcwidth,*row\calcheight,*this\headerbackground2)
+			Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground2)
 		EndIf
 		
 		Protected foi.i=0
@@ -2251,7 +2259,7 @@ Procedure MyTableEvtMouseMove()
 		If *this\resizecol
 			Protected newx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)-*this\oldx
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
-			*this\colResize\width+newx
+			*this\colResize\width+DesktopUnscaledX(newx)
 			If *this\colResize\width<0
 				*this\colResize\width=0
 			EndIf
@@ -2264,7 +2272,7 @@ Procedure MyTableEvtMouseMove()
 		If *this\resizerow
 			Protected newy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)-*this\oldy
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
-			*this\rowResize\height+newy
+			*this\rowResize\height+DesktopUnscaledY(newy)
 			If *this\rowResize\height<0
 				*this\rowResize\height=0
 			EndIf
@@ -3535,7 +3543,7 @@ Procedure MyTableSetCellText(canvas,row.i,col.i,text.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\text<>text
 			*cell\text=text
@@ -3548,11 +3556,28 @@ Procedure MyTableSetCellText(canvas,row.i,col.i,text.s)
 	EndIf
 EndProcedure
 
+Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *col.strMyTableCol=*cell\col
+		If *cell\formula<>formula
+			*cell\formula=formula
+			*cell\textwidth=0
+			*cell\textheight=0
+			*cell\dirty=#True
+			_MyTableFillCellFormula(*cell,formula)
+			_MyTableRedraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
 Procedure MyTableSetCellValue(canvas,row.i,col.i,value.d)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\value<>value		
 			*cell\value=value		
@@ -3569,7 +3594,7 @@ Procedure MyTableSetCellChecked(canvas,row.i,col.i,checked.b)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\checked<>checked
 			*cell\value=checked		
@@ -3587,7 +3612,7 @@ Procedure MyTableSetCellData(canvas,row.i,col.i,*data)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		*cell\data=*data
 	EndIf
@@ -3597,7 +3622,7 @@ Procedure MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		*cell\tooltip=tooltip
 	EndIf
@@ -3628,8 +3653,17 @@ Procedure.s MyTableGetCellText(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
 		ProcedureReturn *cell\text
+	EndIf
+EndProcedure
+
+Procedure.s MyTableGetCellFormula(canvas,row.i,col.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		ProcedureReturn *cell\formula
 	EndIf
 EndProcedure
 
@@ -3637,7 +3671,7 @@ Procedure.s MyTableGetCellTooltip(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
 		ProcedureReturn *cell\tooltip
 	EndIf
 EndProcedure
@@ -3646,7 +3680,7 @@ Procedure.d MyTableGetCellValue(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
 		ProcedureReturn *cell\value
 	EndIf
 EndProcedure
@@ -3655,7 +3689,7 @@ Procedure MyTableGetCellChecked(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
 		ProcedureReturn *cell\checked
 	EndIf
 EndProcedure
@@ -3664,7 +3698,7 @@ Procedure MyTableGetCellData(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
 		ProcedureReturn *cell\data
 	EndIf
 EndProcedure
@@ -3673,7 +3707,7 @@ Procedure MyTableGetCellImage(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=SelectElement(*this\rows()\cells(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
 		ProcedureReturn *cell\image
 	EndIf
 EndProcedure
