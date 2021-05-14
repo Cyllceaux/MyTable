@@ -78,6 +78,12 @@ Global canvasGrid=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_B
 Global hscrollGrid=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
 Global vscrollGrid=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
+AddGadgetItem(panel,-1,"Formula Grid")
+Global stringFormula=StringGadget(#PB_Any,0,0,0,22,"")
+Global canvasFormula=CanvasGadget(#PB_Any,0,24,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+Global hscrollFormula=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
+Global vscrollFormula=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
+CloseGadgetList()
 CloseGadgetList()
 
 SetGadgetState(splitter,300)
@@ -128,6 +134,27 @@ Procedure evtResizeWindow()
 	             #PB_Ignore,
 	             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
 	             GetGadgetAttribute(panel,#PB_Panel_ItemHeight))
+	
+	ResizeGadget(stringFormula,
+	             #PB_Ignore,
+	             #PB_Ignore,
+	             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
+	             #PB_Ignore)
+	
+	ResizeGadget(canvasFormula,
+	             #PB_Ignore,
+	             #PB_Ignore,
+	             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
+	             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-24)
+EndProcedure
+
+Procedure SelectCell(canvas,*cell.strMyTableCell)
+	If *cell\formula=""
+		SetGadgetText(stringFormula,*cell\text)
+	Else
+		SetGadgetText(stringFormula,*cell\formula)
+	EndIf
+	SetGadgetData(stringFormula,*cell)
 EndProcedure
 
 Procedure RightClick(canvas,*element)
@@ -223,12 +250,14 @@ MyTableRegister(mainWindow,canvasTable3,hscrollTable3,vscrollTable3,#MYTABLE_TAB
 MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT,0,"canvasTable4")
 
 MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,32000,255,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
+MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,1024,64,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula")
 
 
 
 MyTableSetEventCellRightClick(canvasTable,@RightClick())
 MyTableSetEventRowRightClick(canvasTable2,@RightClick())
 MyTableSetEventColRightClick(canvasTable3,@RightClick())
+MyTableSetEventCellSelected(canvasFormula,@SelectCell())
 
 _makeTimestamp(Register)
 
@@ -359,6 +388,7 @@ MyTableUnRegister(canvasTree2)
 MyTableUnRegister(canvasTable3)
 MyTableUnRegister(canvasTable4)
 MyTableUnRegister(canvasGrid)
+MyTableUnRegister(canvasFormula)
 
 
 DataSection

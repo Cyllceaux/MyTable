@@ -282,6 +282,7 @@ EnumerationBinary _MyTableTableFlags
 	#MYTABLE_TABLE_FLAGS_SORTABLE
 	#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT
 	#MYTABLE_TABLE_FLAGS_EDITABLE
+	#MYTABLE_TABLE_FLAGS_FORMULA
 EndEnumeration
 
 #MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE|#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE
@@ -322,6 +323,7 @@ Structure strMyTableTable Extends _strMyTableAObject
 	bhs.b
 	datagrid.b
 	Map selected.b()
+	Map formula.b()
 	Map tempselected.b()
 	List expRows.i()
 	expheight.i
@@ -1010,11 +1012,19 @@ Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,s
 EndProcedure
 
 Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
-	_MyTableFillCellText(*cell,formula)
+	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
+		*cell\formula=formula
+		*cell\text="#FORMEL#"
+		*cell\table\formula(Str(*cell))=#True
+	Else
+		*cell\table\formula(Str(*cell))=#False
+		_MyTableFillCellText(*cell,formula)
+	EndIf
 EndProcedure
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
+	*cell\formula=""
 	If text=""
 		*cell\col\canNull=#True
 	EndIf
@@ -1062,6 +1072,9 @@ Procedure _MyTableStopEditCell(*this.strMyTableTable)
 			If *this\editcell\col\evtCancelCustomEditCell
 				*this\editcell\col\evtCancelCustomEditCell(*this\canvas,*this\editcell)
 				*this\dirty=#True
+				If *this\evtCellSelect
+					*this\evtCellSelect(*this\canvas,*this\editcell)
+				EndIf
 				*this\editcell=0
 				_MyTableRecalc(*this)
 			EndIf
@@ -1080,20 +1093,14 @@ Procedure _MyTableStopEditCell(*this.strMyTableTable)
 						*cell\dirty=#True
 						*cell\textwidth=0					
 						*cell\textheight=0					
-						*cell\text=s
+						_MyTableFillCellFormula(*cell,s)
 						If *this\evtCellChangedText
 							*this\evtCellChangedText(*this\canvas,*cell,sold)
 						EndIf
-						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-							*cell\value=ValD(s)
-						EndIf
-						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-							*cell\value=ValD(s)
-						EndIf
-						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-							*cell\value=ParseDate(*col\format,s)
-						EndIf
 						*this\dirty=#True
+						If *this\evtCellSelect
+							*this\evtCellSelect(*this\canvas,*cell)
+						EndIf
 						_MyTableRedraw(*this)
 					EndIf
 					
@@ -1156,7 +1163,11 @@ Procedure _MyTableEditCell(*cell.strMyTableCell)
 						                                WindowHeight(*this\editorwindow),
 						                                #PB_Editor_WordWrap)		
 						
-						SetGadgetText(*this\editorgadget,*cell\text)
+						If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And *cell\formula<>""
+							SetGadgetText(*this\editorgadget,*cell\formula)
+						Else
+							SetGadgetText(*this\editorgadget,*cell\text)
+						EndIf
 						HideGadget(*this\editorgadget,#False)
 						SetActiveGadget(*this\editorgadget)
 						SetGadgetData(*this\editorgadget,*cell)
@@ -1549,6 +1560,13 @@ Procedure _MyTableClearMaps(*this.strMyTableTable)
 		ForEach *this\selected()
 			If Not *this\selected()
 				DeleteMapElement(*this\selected())
+			EndIf
+		Next
+	EndIf	
+	If *this
+		ForEach *this\formula()
+			If Not *this\formula()
+				DeleteMapElement(*this\formula())
 			EndIf
 		Next
 	EndIf	
