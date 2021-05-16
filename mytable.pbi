@@ -460,6 +460,7 @@ Declare MyTableGetTableRowHeight(canvas)
 Declare MyTableGetTableSelectedRow(canvas)
 Declare MyTableGetTableSelectedCell(canvas)
 Declare MyTableRedraw(canvas,redraw.b)
+Declare MyTableRecalc(canvas)
 Declare MyTableGetTableData(canvas)
 Declare.s MyTableGetTableName(canvas)
 Declare MyTableGetTableFixedColumns(canvas)
@@ -649,10 +650,17 @@ CompilerEndIf
 
 Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
 	If *this
+		Protected *cell.strMyTableCell=0
 		_MyTableClearMaps(*this)
 		ForEach *this\formulaCells()
 			If *this\formulaCells()
-				Protected *cell.strMyTableCell=Val(MapKey(*this\formulaCells()))
+				*cell=Val(MapKey(*this\formulaCells()))
+				*cell\calced=#False
+			EndIf
+		Next
+		ForEach *this\formulaCells()
+			If *this\formulaCells()
+				*cell=Val(MapKey(*this\formulaCells()))
 				If Not *cell\calced
 					_MyTableFormulaCalcCell(*cell)
 				EndIf
@@ -663,7 +671,8 @@ EndProcedure
 
 Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 	If *cell
-		*cell\text="#FORMEL#"
+		*cell\text="#FORMULA#"
+		*cell\calced=#True
 	EndIf
 EndProcedure
 
@@ -3038,6 +3047,15 @@ Procedure MyTableRedraw(canvas,redraw.b)
 	If *this
 		*this\redraw=redraw
 		*this\dirty=#True
+		_MyTableRecalc(*this)
+	EndIf
+EndProcedure
+
+Procedure MyTableRecalc(canvas)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		*this\dirty=#True
+		_MyTableFormulaCalcTable(*this)
 		_MyTableRecalc(*this)
 	EndIf
 EndProcedure
