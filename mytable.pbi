@@ -203,6 +203,7 @@ Structure strMyTableCell Extends strMyTableAObject
 	startx.i
 	starty.i
 	formula.s
+	calced.b
 EndStructure
 
 Structure strMyTableRow Extends strMyTableAObject
@@ -323,7 +324,7 @@ Structure strMyTableTable Extends _strMyTableAObject
 	bhs.b
 	datagrid.b
 	Map selected.b()
-	Map formula.b()
+	Map formulaCells.b()
 	Map tempselected.b()
 	List expRows.i()
 	expheight.i
@@ -424,6 +425,8 @@ Declare _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,
 Declare _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
+Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
+Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
 
 
 
@@ -643,6 +646,26 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	EndProcedure
 	
 CompilerEndIf
+
+Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
+	If *this
+		_MyTableClearMaps(*this)
+		ForEach *this\formulaCells()
+			If *this\formulaCells()
+				Protected *cell.strMyTableCell=Val(MapKey(*this\formulaCells()))
+				If Not *cell\calced
+					_MyTableFormulaCalcCell(*cell)
+				EndIf
+			EndIf
+		Next
+	EndIf
+EndProcedure
+
+Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
+	If *cell
+		*cell\text="#FORMEL#"
+	EndIf
+EndProcedure
 
 Procedure _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 	
@@ -1014,10 +1037,10 @@ EndProcedure
 Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
 		*cell\formula=formula
-		*cell\text="#FORMEL#"
-		*cell\table\formula(Str(*cell))=#True
+		*cell\table\formulaCells(Str(*cell))=#True
+		_MyTableFormulaCalcCell(*cell)
 	Else
-		*cell\table\formula(Str(*cell))=#False
+		*cell\table\formulaCells(Str(*cell))=#False
 		_MyTableFillCellText(*cell,formula)
 	EndIf
 EndProcedure
@@ -1025,6 +1048,7 @@ EndProcedure
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
 	*cell\formula=""
+	*cell\calced=#True
 	If text=""
 		*cell\col\canNull=#True
 	EndIf
@@ -1564,9 +1588,9 @@ Procedure _MyTableClearMaps(*this.strMyTableTable)
 		Next
 	EndIf	
 	If *this
-		ForEach *this\formula()
-			If Not *this\formula()
-				DeleteMapElement(*this\formula())
+		ForEach *this\formulaCells()
+			If Not *this\formulaCells()
+				DeleteMapElement(*this\formulaCells())
 			EndIf
 		Next
 	EndIf	
