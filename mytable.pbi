@@ -405,25 +405,25 @@ Declare _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 Declare _MyTableClearMaps(*this.strMyTableTable)
 Declare.b _MyTableSort(*this.strMyTableTable,col.i)
 Declare _MyTableResize(*this.strMyTableTable)
-Declare _MyTableRecalcExp(*this.strMyTableTable,*row.strMyTableRow,w)
+Declare _MyTableRecalcExp(*row.strMyTableRow,w)
 Declare _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare _MyTableRowExpand(*row.strMyTableRow,expanded.b)	
 Declare _MyTableDrawText(x,y,text.s,color.q)
-Declare _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed.b)
-Declare _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w.i,bx.i,by.i,fixed.b,fullrowselect.b,grid.b,hierarchical.b,checkboxes.b)
+Declare _MyTableDrawHeader(*col.strMyTableCol,bx.i,fixed.b)
+Declare _MyTableDrawRow(*row.strMyTableRow,w.i,bx.i,by.i,fixed.b,fullrowselect.b,grid.b,hierarchical.b,checkboxes.b)
 Declare _MyTableEditCell(*cell.strMyTableCell)
 Declare _MyTableStopEditCell(*this.strMyTableTable)
 Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
-Declare _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
+Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
 Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
-Declare _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
-Declare _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
-Declare _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
+Declare _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
+Declare _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
+Declare _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
 Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
@@ -595,7 +595,7 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 				*row=*this\rows()
 				Protected *exportrow.strMyTableExportRow=AddElement(*result\rows())
 				For idx=start To c					
-					*cell=_MyTableGetOrAddCell(*this,*this\rows(),idx)
+					*cell=_MyTableGetOrAddCell(*this\rows(),idx)
 					AddElement(*exportrow\cells()):*exportrow\cells()=*cell\text
 				Next
 			Next
@@ -633,7 +633,7 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 				MyTableAddRow(*this\canvas,"")
 				*row=LastElement(*this\rows())
 				ForEach *table\rows()\cells()
-					*cell=_MyTableGetOrAddCell(*this,*row)
+					*cell=_MyTableGetOrAddCell(*row)
 					_MyTableFillCellText(*cell,*table\rows()\cells())
 				Next
 			Next
@@ -808,7 +808,8 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 	ProcedureReturn *result
 EndProcedure
 
-Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
+Procedure _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
+	Protected *this.strMyTableTable=*cell\table
 	If (Not control And Not shift) Or Not multiselect
 		If Not temp
 			ClearMap(*this\selected())
@@ -872,7 +873,7 @@ Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.
 				
 				If selecte Or *this\rows()=*cell\row Or *this\rows()=*tr\row
 					For idx=min To max
-						Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),idx)	
+						Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),idx)	
 						If temp 
 							
 							*this\tempselected(Str(*tc))=Bool(*this\tempselected(Str(*tc))=#False)
@@ -911,7 +912,8 @@ Procedure _MyTableSelectCell(*this.strMyTableTable,*cell.strMyTableCell,control.
 	EndIf
 EndProcedure
 
-Procedure _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
+Procedure _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
+	Protected *this.strMyTableTable=*col\table
 	If Not temp
 		*this\lastcol=*col
 	EndIf
@@ -968,7 +970,8 @@ Procedure _MyTableSelectCol(*this.strMyTableTable,*col.strMyTableCol,control.b,s
 	EndIf
 EndProcedure
 
-Procedure _MyTableSelectRow(*this.strMyTableTable,*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
+Procedure _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
+	Protected *this.strMyTableTable=*row\table
 	If Not temp
 		*this\lastrow=*row
 	EndIf
@@ -1261,11 +1264,12 @@ Procedure _MyTableRowExpand(*row.strMyTableRow,expanded.b)
 	Next
 EndProcedure
 
-Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b,grid.b,hierarchical.b,checkboxes.b)
+Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b,grid.b,hierarchical.b,checkboxes.b)
+	Protected *this.strMyTableTable=*row\table
 	Protected *cell.strMyTableCell=0
 	Protected *col.strMyTableCol=0
 	While ListSize(*row\cells())<ListSize(*this\cols())
-		_MyTableGetOrAddCell(*this,*row,-1)
+		_MyTableGetOrAddCell(*row,-1)
 	Wend
 	If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CALLBACK) And *row\dirty And *this\evtCallback
 		*this\evtCallback(*this\canvas,*row)
@@ -1413,7 +1417,9 @@ Procedure _MyTableDrawRow(*this.strMyTableTable,*row.strMyTableRow,w,bx.i,by.i,f
 	ProcedureReturn *row\calcheight
 EndProcedure
 
-Procedure _MyTableDrawHeader(*this.strMyTableTable,*col.strMyTableCol,bx.i,fixed.b)
+Procedure _MyTableDrawHeader(*col.strMyTableCol,bx.i,fixed.b)
+	Protected *this.strMyTableTable=*col\table
+	
 	If *col\textwidth=0
 		*col\textwidth=_MyTableTextWidth(*col\text)
 	EndIf
@@ -1506,7 +1512,7 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 					ForEach \cols()
 						Protected *col.strMyTableCol=\cols()
 						
-						bx+_MyTableDrawHeader(*this,*col,bx,#False)
+						bx+_MyTableDrawHeader(*col,bx,#False)
 						firstcol=#False
 						If bx>=w
 							Break
@@ -1518,7 +1524,7 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 						firstcol=#True
 						For idx=1 To *this\fixedcolumns
 							*col=SelectElement(\cols(),idx-1)
-							bx+_MyTableDrawHeader(*this,*col,bx,#True)
+							bx+_MyTableDrawHeader(*col,bx,#True)
 							firstcol=#False
 						Next
 					EndIf
@@ -1534,7 +1540,7 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 					SelectElement(\expRows(),i)				
 					*row=\expRows()
 					bx=-GetGadgetState(\hscroll)
-					by+_MyTableDrawRow(*this,*row,w,bx,by,#False,fullrowselect,grid,hierarchical,checkboxes)
+					by+_MyTableDrawRow(*row,w,bx,by,#False,fullrowselect,grid,hierarchical,checkboxes)
 					If by>=h
 						Break
 					EndIf
@@ -1545,7 +1551,7 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 					For i=GetGadgetState(\vscroll) To c
 						SelectElement(\expRows(),i)				
 						*row=\expRows()
-						by+_MyTableDrawRow(*this,*row,w,0,by,#True,fullrowselect,grid,hierarchical,checkboxes)
+						by+_MyTableDrawRow(*row,w,0,by,#True,fullrowselect,grid,hierarchical,checkboxes)
 						If by>=h
 							Break
 						EndIf
@@ -1563,7 +1569,8 @@ Procedure _MyTableRedraw(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
-Procedure _MyTableRecalcExp(*this.strMyTableTable,*parent.strMyTableRow,w)
+Procedure _MyTableRecalcExp(*parent.strMyTableRow,w)
+	Protected *this.strMyTableTable=*parent\table
 	ForEach *parent\rows()
 		Protected *row.strMyTableRow=*parent\rows()
 		AddElement(*this\expRows()):*this\expRows()=*row
@@ -1573,7 +1580,7 @@ Procedure _MyTableRecalcExp(*this.strMyTableTable,*parent.strMyTableRow,w)
 			*row\dirty=#False
 		EndIf
 		If *row\expanded
-			_MyTableRecalcExp(*this,*row,w)
+			_MyTableRecalcExp(*row,w)
 		EndIf
 		*this\expheight+*row\calcheight
 	Next
@@ -1636,7 +1643,7 @@ Procedure _MyTableRecalc(*this.strMyTableTable,force.b=#False)
 						EndIf
 					EndIf
 					If *row\expanded And hierarchical
-						_MyTableRecalcExp(*this,*row,w)
+						_MyTableRecalcExp(*row,w)
 					EndIf
 					*this\expheight+*row\calcheight
 				Next
@@ -1705,7 +1712,7 @@ Procedure.b _MyTableSort(*this.strMyTableTable,col.i)
 			                        Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE))
 			ForEach *this\rows()
 				Protected *row.strMyTableRow=*this\rows()
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
 				If bdsort
 					*row\dsort=*cell\value
 				Else
@@ -1774,7 +1781,8 @@ Procedure _MyTableAddDirtyRow(*this.strMyTableTable,*row.strMyTableRow)
 	*row\height=*this\rowheight
 EndProcedure
 
-Procedure _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1)
+Procedure _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
+	Protected *this.strMyTableTable=*row\table
 	Protected *cell.strMyTableCell=0
 	If col=-1
 		LastElement(*row\cells())
@@ -1783,15 +1791,15 @@ Procedure _MyTableGetOrAddCell(*this.strMyTableTable,*row.strMyTableRow,col.i=-1
 		*cell\row=*row
 		*cell\table=*this
 		*cell\type=#MYTABLE_TYPE_CELL
-		*cell\col=SelectElement(*this\cols(),col)		
+		*cell\col=SelectElement(*this\cols(),col)
 	Else
 		While col>=ListSize(*row\cells())
-			*cell=_MyTableGetOrAddCell(*this,*row,-1)
+			*cell=_MyTableGetOrAddCell(*row,-1)
 		Wend
 		If Not *cell
 			*cell=SelectElement(*row\cells(),col)
 			If *cell=0
-				ProcedureReturn _MyTableGetOrAddCell(*this,*row,-1)
+				ProcedureReturn _MyTableGetOrAddCell(*row,-1)
 			EndIf
 		EndIf
 	EndIf
@@ -1969,7 +1977,7 @@ Procedure MyTableEvtKeyDown()
 								Next
 								listidx-1
 								If listidx>-1				
-									*cell=_MyTableGetOrAddCell(*this,*row,listidx)
+									*cell=_MyTableGetOrAddCell(*row,listidx)
 								EndIf
 								AddElement(selected())
 								selected()=*cell									
@@ -1988,7 +1996,7 @@ Procedure MyTableEvtKeyDown()
 						If Not fullrowselect						
 							SelectElement(*this\expRows(),0)
 							*row=*this\expRows()
-							*cell=_MyTableGetOrAddCell(*this,*row,ListSize(*row\cells())-1)
+							*cell=_MyTableGetOrAddCell(*row,ListSize(*row\cells())-1)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -2014,7 +2022,7 @@ Procedure MyTableEvtKeyDown()
 								Next
 								listidx+1
 								If listidx<ListSize(*row\cells())									
-									*cell=_MyTableGetOrAddCell(*this,*row,listidx)
+									*cell=_MyTableGetOrAddCell(*row,listidx)
 								EndIf
 								AddElement(selected())
 								selected()=*cell
@@ -2033,7 +2041,7 @@ Procedure MyTableEvtKeyDown()
 						If Not fullrowselect
 							SelectElement(*this\expRows(),0)
 							*row=*this\expRows()
-							*cell=_MyTableGetOrAddCell(*this,*row,0)
+							*cell=_MyTableGetOrAddCell(*row,0)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -2096,7 +2104,7 @@ Procedure MyTableEvtKeyDown()
 								If listidx>-1
 									SelectElement(*this\expRows(),listidx)
 									*row=*this\expRows()
-									*cell=_MyTableGetOrAddCell(*this,*row,colidx)
+									*cell=_MyTableGetOrAddCell(*row,colidx)
 								EndIf								
 								AddElement(selected())
 								selected()=*cell
@@ -2123,7 +2131,7 @@ Procedure MyTableEvtKeyDown()
 						Else
 							SelectElement(*this\expRows(),ListSize(*this\expRows())-1)
 							*row=*this\expRows()
-							*cell=_MyTableGetOrAddCell(*this,*row,0)
+							*cell=_MyTableGetOrAddCell(*row,0)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -2186,7 +2194,7 @@ Procedure MyTableEvtKeyDown()
 								If listidx<ListSize(*this\expRows())
 									SelectElement(*this\expRows(),listidx)
 									*row=*this\expRows()
-									*cell=_MyTableGetOrAddCell(*this,*row,colidx)
+									*cell=_MyTableGetOrAddCell(*row,colidx)
 								EndIf								
 								AddElement(selected())
 								selected()=*cell
@@ -2213,7 +2221,7 @@ Procedure MyTableEvtKeyDown()
 						Else
 							SelectElement(*this\expRows(),0)
 							*row=*this\expRows()
-							*cell=_MyTableGetOrAddCell(*this,*row,0)
+							*cell=_MyTableGetOrAddCell(*row,0)
 							*this\selected(Str(*cell))=#True
 							If *this\evtCellSelect
 								*this\evtCellSelect(*this\canvas,*cell)
@@ -2268,7 +2276,7 @@ Procedure MyTableEvtMouseMove()
 			If (fullrow Or (*this\datagrid And *rowcol\col=0)) And *this\lastrow And *rowcol\row>-1
 				*row=SelectElement(*this\rows(),*rowcol\row)
 				If *row<>*this\lastrow
-					_MyTableSelectRow(*this,*row,#False,#True,multiselect,#True)
+					_MyTableSelectRow(*row,#False,#True,multiselect,#True)
 					*this\dirty=#True
 					_MyTableRedraw(*this)
 				EndIf
@@ -2277,7 +2285,7 @@ Procedure MyTableEvtMouseMove()
 			If *this\lastcol And *rowcol\col>-1
 				*col=SelectElement(*this\cols(),*rowcol\col)
 				If *col<>*this\lastcol
-					_MyTableSelectCol(*this,*col,#False,#True,multiselect,#True)
+					_MyTableSelectCol(*col,#False,#True,multiselect,#True)
 					*this\dirty=#True
 					_MyTableRedraw(*this)
 				EndIf
@@ -2287,7 +2295,7 @@ Procedure MyTableEvtMouseMove()
 				*row=SelectElement(*this\rows(),*rowcol\row)
 				*cell=SelectElement(*row\cells(),*rowcol\col)
 				If *cell<>*this\lastcell
-					_MyTableSelectCell(*this,*cell,#False,#True,multiselect,#True)
+					_MyTableSelectCell(*cell,#False,#True,multiselect,#True)
 					*this\dirty=#True
 					_MyTableRedraw(*this)
 				EndIf
@@ -2338,7 +2346,7 @@ Procedure MyTableEvtMouseMove()
 					GadgetToolTip(*this\canvas,*row\tooltip)
 				Else
 					If col>-1
-						*cell=_MyTableGetOrAddCell(*this,*row,col)
+						*cell=_MyTableGetOrAddCell(*row,col)
 						GadgetToolTip(*this\canvas,*cell\tooltip)
 					EndIf
 				EndIf
@@ -2449,7 +2457,7 @@ Procedure MyTableEvtMouseDown()
 												recalc=#True
 											EndIf
 										ElseIf *this\datagrid										
-											_MyTableSelectCol(*this,*col,control,shift,multiselect,#False)
+											_MyTableSelectCol(*col,control,shift,multiselect,#False)
 										EndIf
 									EndIf
 									If rightbutton 
@@ -2466,15 +2474,15 @@ Procedure MyTableEvtMouseDown()
 									SelectElement(*this\expRows(),row)
 									*row=*this\expRows()
 									If fullrow									
-										_MyTableSelectRow(*this,*row,control,shift,multiselect,#False)
+										_MyTableSelectRow(*row,control,shift,multiselect,#False)
 										
 										If rightbutton And *this\evtRowRightClick
 											*this\evtRowRightClick(*this\canvas,*row)
 										EndIf
 										
 									Else
-										*cell=_MyTableGetOrAddCell(*this,*row,col)
-										_MyTableSelectCell(*this,*cell,control,shift,multiselect,#False)
+										*cell=_MyTableGetOrAddCell(*row,col)
+										_MyTableSelectCell(*cell,control,shift,multiselect,#False)
 										
 										If rightbutton And *this\evtCellRightClick
 											*this\evtCellRightClick(*this\canvas,*cell)
@@ -2493,7 +2501,7 @@ Procedure MyTableEvtMouseDown()
 										recalc=#True
 									EndIf
 								ElseIf *this\datagrid																
-									_MyTableSelectCol(*this,*col,control,shift,multiselect,#False)
+									_MyTableSelectCol(*col,control,shift,multiselect,#False)
 								EndIf
 							EndIf
 							If rightbutton 
@@ -2510,7 +2518,7 @@ Procedure MyTableEvtMouseDown()
 							SelectElement(*this\expRows(),row)
 							*row=*this\expRows()
 							If fullrow							
-								_MyTableSelectRow(*this,*row,control,shift,multiselect,#False)
+								_MyTableSelectRow(*row,control,shift,multiselect,#False)
 								
 								If rightbutton And *this\evtRowRightClick
 									*this\evtRowRightClick(*this\canvas,*row)
@@ -2518,14 +2526,14 @@ Procedure MyTableEvtMouseDown()
 								
 							Else
 								If *this\datagrid And col=0								
-									_MyTableSelectRow(*this,*row,control,shift,multiselect,#False)
+									_MyTableSelectRow(*row,control,shift,multiselect,#False)
 									
 									If rightbutton And *this\evtRowRightClick
 										*this\evtRowRightClick(*this\canvas,*row)
 									EndIf
 								Else
-									*cell=_MyTableGetOrAddCell(*this,*row,col)
-									_MyTableSelectCell(*this,*cell,control,shift,multiselect,#False)
+									*cell=_MyTableGetOrAddCell(*row,col)
+									_MyTableSelectCell(*cell,control,shift,multiselect,#False)
 									
 									If rightbutton And *this\evtCellRightClick
 										*this\evtCellRightClick(*this\canvas,*cell)
@@ -2635,7 +2643,7 @@ Procedure MyTableEvtDouble()
 			If row>-1
 				SelectElement(*this\expRows(),row)		
 				*row=*this\expRows()
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
 				_MyTableEditCell(*cell)				
 			EndIf
 		EndIf					
@@ -2679,7 +2687,7 @@ Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#
 		
 		MyTableAddDirtyRow(*this\canvas,rows)
 		For idx=1 To rows
-			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,SelectElement(*this\rows(),idx-1))
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*this\rows(),idx-1))
 			*cell\text=Str(idx)
 		Next
 		
@@ -3126,7 +3134,7 @@ Procedure MyTableSetColumnFormat(canvas,column.i,format.s)
 			*col\textheight=0
 			*this\dirty=#True
 			ForEach *this\rows()
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),column)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),column)
 				_MyTableFillCellValue(*cell,*cell\value)
 			Next
 			_MyTableRedraw(*this)
@@ -3381,11 +3389,11 @@ Procedure.q MyTableAddRow(canvas,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*dat
 			If text<>""
 				Protected c=CountString(text,sep)+1
 				If c=1
-					*cell=_MyTableGetOrAddCell(*this,*row,0)
+					*cell=_MyTableGetOrAddCell(*row,0)
 					_MyTableFillCellText(*cell,text)
 				Else
 					For i=1 To c
-						*cell=_MyTableGetOrAddCell(*this,*row,i-1)
+						*cell=_MyTableGetOrAddCell(*row,i-1)
 						_MyTableFillCellText(*cell,StringField(text,i,sep))
 					Next
 				EndIf
@@ -3585,7 +3593,7 @@ Procedure MyTableSetCellText(canvas,row.i,col.i,text.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\text<>text
 			*cell\text=text
@@ -3602,7 +3610,7 @@ Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\formula<>formula
 			*cell\formula=formula
@@ -3619,7 +3627,7 @@ Procedure MyTableSetCellValue(canvas,row.i,col.i,value.d)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\value<>value		
 			*cell\value=value		
@@ -3636,7 +3644,7 @@ Procedure MyTableSetCellChecked(canvas,row.i,col.i,checked.b)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\checked<>checked
 			*cell\value=checked		
@@ -3654,7 +3662,7 @@ Procedure MyTableSetCellData(canvas,row.i,col.i,*data)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		*cell\data=*data
 	EndIf
@@ -3664,7 +3672,7 @@ Procedure MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		*cell\tooltip=tooltip
 	EndIf
@@ -3674,7 +3682,7 @@ Procedure MyTableSetCellImage(canvas,row.i,col.i,image.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\image<>image
 			*cell\image=image		
@@ -3695,7 +3703,7 @@ Procedure.s MyTableGetCellText(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\text
 	EndIf
 EndProcedure
@@ -3704,7 +3712,7 @@ Procedure.s MyTableGetCellFormula(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\formula
 	EndIf
 EndProcedure
@@ -3713,7 +3721,7 @@ Procedure.s MyTableGetCellTooltip(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\tooltip
 	EndIf
 EndProcedure
@@ -3722,7 +3730,7 @@ Procedure.d MyTableGetCellValue(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\value
 	EndIf
 EndProcedure
@@ -3731,7 +3739,7 @@ Procedure MyTableGetCellChecked(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\checked
 	EndIf
 EndProcedure
@@ -3740,7 +3748,7 @@ Procedure MyTableGetCellData(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\data
 	EndIf
 EndProcedure
@@ -3749,7 +3757,7 @@ Procedure MyTableGetCellImage(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*this\rows(),col)		
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\image
 	EndIf
 EndProcedure
@@ -4030,7 +4038,7 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 				If *row\image
 					hasimage=#True
 				EndIf
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,*row,col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
 				If *cell
 					If *cell\textwidth=0
 						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
