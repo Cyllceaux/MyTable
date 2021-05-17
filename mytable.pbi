@@ -435,7 +435,7 @@ Declare _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,
 Declare _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
-
+Declare _MyTableEditSetPos(Gadget, Position)
 
 
 Declare MyTableEvtResize()
@@ -582,7 +582,12 @@ CompilerIf #MYTABLE_FORMULA
 	XIncludeFile "mytablecalc.pbi"
 CompilerEndIf
 
-XIncludeFile "mytabletools.pbi"
+Procedure _MyTableEditSetPos(Gadget, Position)
+	CompilerSelect #PB_Compiler_OS
+		CompilerCase #PB_OS_Windows
+			SendMessage_(GadgetID(Gadget), #EM_SETSEL, Position, Position)
+	CompilerEndSelect
+EndProcedure
 
 CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	Procedure _MyTableExportInit(canvas)
@@ -1057,6 +1062,9 @@ Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 		                 LCase(*cell\text)="yes")
 		*cell\checked=*cell\value
 	EndIf
+	CompilerIf #MYTABLE_FORMULA
+		_MyTableFormulaCalcTable(*cell\table)
+	CompilerEndIf
 EndProcedure
 
 Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
@@ -1080,6 +1088,9 @@ Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
 			*cell\text=Str(value)
 		EndIf
 	EndIf
+	CompilerIf #MYTABLE_FORMULA
+		_MyTableFormulaCalcTable(*cell\table)
+	CompilerEndIf
 EndProcedure
 
 Procedure _MyTableStopEditCell(*this.strMyTableTable)
@@ -1198,7 +1209,7 @@ Procedure _MyTableEditCell(*cell.strMyTableCell,defaultIfEmpty.s="")
 							EndIf
 							SetGadgetText(*this\editorgadget,*cell\text)
 						CompilerEndIf
-						SetPos(*this\editorgadget,Len(GetGadgetText(*this\editorgadget)))
+						_MyTableEditSetPos(*this\editorgadget,Len(GetGadgetText(*this\editorgadget)))
 						HideGadget(*this\editorgadget,#False)
 						SetActiveGadget(*this\editorgadget)
 						SetGadgetData(*this\editorgadget,*cell)
@@ -1906,7 +1917,7 @@ Procedure MyTableEvtKeyDown()
 		Protected *col.strMyTableCol=0
 		Protected listidx=-1,colidx=-1
 		Protected NewList selected.i()
-				
+		
 		Select GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
 				CompilerIf #MYTABLE_FORMULA
 				Case #PB_Shortcut_0
@@ -3648,27 +3659,6 @@ Procedure MyTableSetCellText(canvas,row.i,col.i,text.s)
 	EndIf
 EndProcedure
 
-CompilerIf #MYTABLE_FORMULA
-	
-	Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-			Protected *col.strMyTableCol=*cell\col
-			If *cell\formula<>formula
-				*cell\formula=formula
-				*cell\textwidth=0
-				*cell\textheight=0
-				*cell\dirty=#True
-				_MyTableFillCellFormula(*cell,formula)
-				_MyTableRedraw(*this)
-			EndIf
-		EndIf
-	EndProcedure
-	
-CompilerEndIf
-
 Procedure MyTableSetCellValue(canvas,row.i,col.i,value.d)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
@@ -3773,20 +3763,6 @@ Procedure.s MyTableGetCellText(canvas,row.i,col.i)
 		ProcedureReturn *cell\text
 	EndIf
 EndProcedure
-
-
-CompilerIf #MYTABLE_FORMULA
-	
-	Procedure.s MyTableGetCellFormula(canvas,row.i,col.i)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
-			ProcedureReturn *cell\formula
-		EndIf
-	EndProcedure
-	
-CompilerEndIf
 
 Procedure.s MyTableGetCellTooltip(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)

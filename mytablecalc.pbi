@@ -81,3 +81,29 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 		*cell\calced=#True
 	EndIf
 EndProcedure
+
+Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+		Protected *col.strMyTableCol=*cell\col
+		If *cell\formula<>formula
+			*cell\formula=formula
+			*cell\textwidth=0
+			*cell\textheight=0
+			*cell\dirty=#True
+			_MyTableFillCellFormula(*cell,formula)
+			_MyTableRedraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure.s MyTableGetCellFormula(canvas,row.i,col.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
+		ProcedureReturn *cell\formula
+	EndIf
+EndProcedure

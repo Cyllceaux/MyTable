@@ -80,7 +80,7 @@ Global hscrollGrid=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
 Global vscrollGrid=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 CloseGadgetList()
 AddGadgetItem(panel,-1,"Formula Grid")
-Global stringFormula=StringGadget(#PB_Any,0,0,0,22,"")
+Global stringFormula=StringGadget(#PB_Any,0,0,0,22,""):DisableGadget(stringFormula,#True)
 Global canvasFormula=CanvasGadget(#PB_Any,0,24,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
 Global hscrollFormula=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
 Global vscrollFormula=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
@@ -160,6 +160,7 @@ Procedure SelectCell(canvas,*cell.strMyTableCell)
 		SetGadgetText(stringFormula,*cell\text)
 	CompilerEndIf
 	SetGadgetData(stringFormula,*cell)
+	DisableGadget(stringFormula,#False)
 EndProcedure
 
 Procedure RightClick(canvas,*element)
@@ -254,8 +255,8 @@ MyTableRegister(mainWindow,canvasBild,hscrollBild,vscrollBild,#MYTABLE_TABLE_FLA
 MyTableRegister(mainWindow,canvasTable3,hscrollTable3,vscrollTable3,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_CALLBACK,@CanvasTable3Callback(),"canvasTable3")
 MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT,0,"canvasTable4")
 
-MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,32000,255,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
-MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,1024,64,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula")
+MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,10000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
+MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula")
 
 
 
