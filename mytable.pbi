@@ -36,6 +36,10 @@ Macro MM
 	"
 EndMacro
 
+CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG,#PB_Constant)
+	#MYTABLE_DEBUG=0
+CompilerEndIf
+
 CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant)
 	#MYTABLE_DEBUG_LEVEL=0
 CompilerEndIf
@@ -52,8 +56,12 @@ CompilerIf Not Defined(MYTABLE_EXPORT_JSON,#PB_Constant)
 	#MYTABLE_EXPORT_JSON=1
 CompilerEndIf
 
+CompilerIf Not Defined(MYTABLE_FORMULA,#PB_Constant)
+	#MYTABLE_FORMULA=1
+CompilerEndIf
+
 Macro _callcountStart(sname)
-	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG_LEVEL=1
+	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG
 		Static NewMap callcount.i()
 		Static NewMap callms.i()
 		Static NewMap callmssum.i()		
@@ -62,7 +70,7 @@ Macro _callcountStart(sname)
 EndMacro
 
 Macro _callcountEnde(sname)
-	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG_LEVEL=1
+	CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG
 		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
 		callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
 		callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
@@ -82,7 +90,7 @@ Macro _callcountEnde(sname)
 			DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
 		EndIf
 		debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas)))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas))/callcount(MM#sname#MM+"_"+Str(*this\canvas)))+ "ms"
-		Debug debugline,1
+		Debug debugline,#MYTABLE_DEBUG_LEVEL
 	CompilerEndIf
 EndMacro
 
@@ -178,6 +186,7 @@ EndEnumeration
 
 Structure _strMyTableAObject
 	type.i
+	flags.i
 EndStructure
 
 Structure strMyTableAObject Extends _strMyTableAObject
@@ -202,8 +211,10 @@ Structure strMyTableCell Extends strMyTableAObject
 	*col.strMyTableCol	
 	startx.i
 	starty.i
-	formula.s
-	calced.b
+	CompilerIf #MYTABLE_FORMULA
+		formula.s
+		calced.b
+	CompilerEndIf
 EndStructure
 
 Structure strMyTableRow Extends strMyTableAObject
@@ -259,8 +270,7 @@ Structure strMyTableCol Extends strMyTableAObject
 	id.q
 	text.s	
 	width.i
-	sort.i	
-	flags.i
+	sort.i		
 	format.s
 	canNull.b
 	evtCustomEditCell.MyTableProtoEventCustomEditCell	
@@ -282,8 +292,9 @@ EnumerationBinary _MyTableTableFlags
 	#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE	
 	#MYTABLE_TABLE_FLAGS_SORTABLE
 	#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT
-	#MYTABLE_TABLE_FLAGS_EDITABLE
+	#MYTABLE_TABLE_FLAGS_EDITABLE	
 	#MYTABLE_TABLE_FLAGS_FORMULA
+	#MYTABLE_TABLE_FLAGS_READONLY
 EndEnumeration
 
 #MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE|#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE
@@ -311,7 +322,6 @@ Structure strMyTableTable Extends _strMyTableAObject
 	Map rowsById.i()
 	List cols.strMyTableCol()	
 	Map colsById.i()
-	flags.i
 	redraw.b
 	dirty.b
 	lastw.i
@@ -324,7 +334,9 @@ Structure strMyTableTable Extends _strMyTableAObject
 	bhs.b
 	datagrid.b
 	Map selected.b()
-	Map formulaCells.b()
+	CompilerIf #MYTABLE_FORMULA
+		Map formulaCells.b()
+	CompilerEndIf
 	Map tempselected.b()
 	List expRows.i()
 	expheight.i
@@ -419,15 +431,18 @@ Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
-Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
+CompilerIf #MYTABLE_FORMULA
+	Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
+CompilerEndIf
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
 Declare _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
-Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
-Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
-
+CompilerIf #MYTABLE_FORMULA
+	Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
+	Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
+CompilerEndIf
 
 
 Declare MyTableEvtResize()
@@ -538,17 +553,23 @@ Declare MyTableGetRowCount(canvas)
 
 Declare MyTableSetCellText(canvas,row.i,col.i,text.s)
 Declare MyTableSetCellValue(canvas,row.i,col.i,value.d)
+Declare MyTableSetCellFlags(canvas,row.i,col.i,flags.i)
 Declare MyTableSetCellChecked(canvas,row.i,col.i,checked.b)
 Declare MyTableSetCellData(canvas,row.i,col.i,*data)
 Declare MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
-Declare MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
+CompilerIf #MYTABLE_FORMULA
+	Declare MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
+CompilerEndIf
 Declare MyTableSetCellImage(canvas,row.i,col.i,image.i)
 Declare.s MyTableGetCellText(canvas,row.i,col.i)
 Declare.d MyTableGetCellValue(canvas,row.i,col.i)
+Declare MyTableGetCellFlags(canvas,row.i,col.i)
 Declare MyTableGetCellChecked(canvas,row.i,col.i)
 Declare MyTableGetCellData(canvas,row.i,col.i)
 Declare.s MyTableGetCellTooltip(canvas,row.i,col.i)
-Declare.s MyTableGetCellFormula(canvas,row.i,col.i)
+CompilerIf #MYTABLE_FORMULA
+	Declare.s MyTableGetCellFormula(canvas,row.i,col.i)
+CompilerEndIf
 Declare MyTableGetCellImage(canvas,row.i,col.i)
 
 Declare MyTableSetSelectedbackground(canvas,color.q)
@@ -648,33 +669,38 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	
 CompilerEndIf
 
-Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
-	If *this
-		Protected *cell.strMyTableCell=0
-		_MyTableClearMaps(*this)
-		ForEach *this\formulaCells()
-			If *this\formulaCells()
-				*cell=Val(MapKey(*this\formulaCells()))
-				*cell\calced=#False
-			EndIf
-		Next
-		ForEach *this\formulaCells()
-			If *this\formulaCells()
-				*cell=Val(MapKey(*this\formulaCells()))
-				If Not *cell\calced
-					_MyTableFormulaCalcCell(*cell)
-				EndIf
-			EndIf
-		Next
-	EndIf
-EndProcedure
 
-Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
-	If *cell
-		*cell\text="#FORMULA#"
-		*cell\calced=#True
-	EndIf
-EndProcedure
+CompilerIf #MYTABLE_FORMULA
+	
+	Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
+		If *this
+			Protected *cell.strMyTableCell=0
+			_MyTableClearMaps(*this)
+			ForEach *this\formulaCells()
+				If *this\formulaCells()
+					*cell=Val(MapKey(*this\formulaCells()))
+					*cell\calced=#False
+				EndIf
+			Next
+			ForEach *this\formulaCells()
+				If *this\formulaCells()
+					*cell=Val(MapKey(*this\formulaCells()))
+					If Not *cell\calced
+						_MyTableFormulaCalcCell(*cell)
+					EndIf
+				EndIf
+			Next
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
+		If *cell
+			*cell\text="#FORMULA#"
+			*cell\calced=#True
+		EndIf
+	EndProcedure
+	
+CompilerEndIf
 
 Procedure _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 	
@@ -1046,21 +1072,27 @@ Procedure _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,t
 	EndIf
 EndProcedure
 
-Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
-	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
-		*cell\formula=formula
-		*cell\table\formulaCells(Str(*cell))=#True
-		_MyTableFormulaCalcCell(*cell)
-	Else
-		*cell\table\formulaCells(Str(*cell))=#False
-		_MyTableFillCellText(*cell,formula)
-	EndIf
-EndProcedure
+
+CompilerIf #MYTABLE_FORMULA
+	Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
+		If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
+			*cell\formula=formula
+			*cell\table\formulaCells(Str(*cell))=#True
+			_MyTableFormulaCalcCell(*cell)
+		Else
+			*cell\table\formulaCells(Str(*cell))=#False
+			_MyTableFillCellText(*cell,formula)
+		EndIf
+	EndProcedure
+CompilerEndIf
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
-	*cell\formula=""
-	*cell\calced=#True
+	
+	CompilerIf #MYTABLE_FORMULA
+		*cell\formula=""
+		*cell\calced=#True
+	CompilerEndIf
 	If text=""
 		*cell\col\canNull=#True
 	EndIf
@@ -1128,8 +1160,13 @@ Procedure _MyTableStopEditCell(*this.strMyTableTable)
 					If s<>*cell\text				
 						*cell\dirty=#True
 						*cell\textwidth=0					
-						*cell\textheight=0					
-						_MyTableFillCellFormula(*cell,s)
+						*cell\textheight=0				
+						
+						CompilerIf #MYTABLE_FORMULA
+							_MyTableFillCellFormula(*cell,s)
+						CompilerElse
+							_MyTableFillCellText(*cell,s)
+						CompilerEndIf
 						If *this\evtCellChangedText
 							*this\evtCellChangedText(*this\canvas,*cell,sold)
 						EndIf
@@ -1156,7 +1193,7 @@ Procedure _MyTableEditCell(*cell.strMyTableCell)
 		Protected *row.strMyTableRow=*cell\row
 		Protected *this.strMyTableTable=*cell\table
 		
-		If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_EDITABLE)
+		If Not Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_NO_EDITABLE) And Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_READONLY)
 			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_EDITABLE) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_EDITABLE)
 				If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 					*cell\checked=Bool(*cell\checked=#False)
@@ -1198,12 +1235,15 @@ Procedure _MyTableEditCell(*cell.strMyTableCell)
 						                                WindowWidth(*this\editorwindow),
 						                                WindowHeight(*this\editorwindow),
 						                                #PB_Editor_WordWrap)		
-						
-						If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And *cell\formula<>""
-							SetGadgetText(*this\editorgadget,*cell\formula)
-						Else
+						CompilerIf #MYTABLE_FORMULA
+							If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And *cell\formula<>""
+								SetGadgetText(*this\editorgadget,*cell\formula)
+							Else
+								SetGadgetText(*this\editorgadget,*cell\text)
+							EndIf
+						CompilerElse
 							SetGadgetText(*this\editorgadget,*cell\text)
-						EndIf
+						CompilerEndIf
 						HideGadget(*this\editorgadget,#False)
 						SetActiveGadget(*this\editorgadget)
 						SetGadgetData(*this\editorgadget,*cell)
@@ -1277,6 +1317,8 @@ Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b
 	Protected *this.strMyTableTable=*row\table
 	Protected *cell.strMyTableCell=0
 	Protected *col.strMyTableCol=0
+	Protected flags=0
+	
 	While ListSize(*row\cells())<ListSize(*this\cols())
 		_MyTableGetOrAddCell(*row,-1)
 	Wend
@@ -1293,18 +1335,24 @@ Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b
 	ForEach *row\cells()
 		*cell=*row\cells()
 		*col=*cell\col
+		flags=*cell\flags
+		
+		If Not flags
+			flags=*col\flags
+		EndIf
+		
 		If ListIndex(*row\cells())>=*this\fixedcolumns And fixed
 			Break
 		EndIf
 		If *cell\textheight=0
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+			If Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 				*cell\textheight=MyTableW20
 			Else
 				*cell\textheight=_MyTableTextHeight(*cell\text)
 			EndIf
 		EndIf
 		If *cell\textwidth=0
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+			If Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 				*cell\textwidth=MyTableW20
 			Else
 				*cell\textwidth=_MyTableTextWidth(*cell\text)
@@ -1337,9 +1385,9 @@ Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b
 		Protected cob.i=0
 		
 		Protected valw=0
-		If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_MIDDLE)
+		If Bool(flags & #MYTABLE_COLUMN_FLAGS_MIDDLE)
 			valw=*row\calcheight/2-*cell\textheight/2
-		ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOTTOM)
+		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOTTOM)
 			valw=*row\calcheight-*cell\textheight
 		Else
 			valw=MyTableH2
@@ -1377,17 +1425,17 @@ Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b
 		DrawingMode(#PB_2DDrawing_Transparent)			
 		
 		
-		If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_IMAGE)
+		If Bool(flags & #MYTABLE_COLUMN_FLAGS_IMAGE)
 			If IsImage(*cell\image)
-				If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
+				If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
 					DrawAlphaImage(ImageID(*cell\image),bx+MyTableW2+*col\calcwidth/2-*cell\textwidth/2,by+valw)
-				ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
+				ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
 					DrawAlphaImage(ImageID(*cell\image),bx+*col\calcwidth-*cell\textwidth-MyTableW4,by+valw)
 				Else
 					DrawAlphaImage(ImageID(*cell\image),bx+MyTableW2+foi,by+valw)
 				EndIf	
 			EndIf
-		ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 			Protected img=0
 			If *cell\checked
 				img=*this\checkboxImageChecked
@@ -1395,9 +1443,9 @@ Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b
 				img=*this\checkboxImage
 			EndIf
 			
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
+			If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
 				DrawAlphaImage(ImageID(img),bx+MyTableW2+*col\calcwidth/2-*cell\textwidth/2,by+valw)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
+			ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
 				DrawAlphaImage(ImageID(img),bx+*col\calcwidth-*cell\textwidth-MyTableW4,by+valw)
 			Else
 				DrawAlphaImage(ImageID(img),bx+MyTableW2+foi,by+valw)
@@ -1407,9 +1455,9 @@ Procedure _MyTableDrawRow(*row.strMyTableRow,w,bx.i,by.i,fixed.b,fullrowselect.b
 			If selected
 				color=*this\selectedforecolor
 			EndIf
-			If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER)
+			If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
 				_MyTableDrawText(bx+*col\calcwidth/2-*cell\textwidth/2,by+valw,*cell\text,color)
-			ElseIf Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
+			ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
 				_MyTableDrawText(bx+*col\calcwidth-*cell\textwidth-MyTableW4,by+valw,*cell\text,color)
 			Else
 				_MyTableDrawText(bx+MyTableW2+foi+coi+cob,by+valw,*cell\text,color)
@@ -1602,14 +1650,15 @@ Procedure _MyTableClearMaps(*this.strMyTableTable)
 				DeleteMapElement(*this\selected())
 			EndIf
 		Next
-	EndIf	
-	If *this
-		ForEach *this\formulaCells()
-			If Not *this\formulaCells()
-				DeleteMapElement(*this\formulaCells())
-			EndIf
-		Next
-	EndIf	
+		
+		CompilerIf #MYTABLE_FORMULA
+			ForEach *this\formulaCells()
+				If Not *this\formulaCells()
+					DeleteMapElement(*this\formulaCells())
+				EndIf
+			Next
+		CompilerEndIf
+	EndIf		
 EndProcedure
 
 Procedure _MyTableRecalc(*this.strMyTableTable,force.b=#False)
@@ -3055,7 +3104,9 @@ Procedure MyTableRecalc(canvas)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		*this\dirty=#True
-		_MyTableFormulaCalcTable(*this)
+		CompilerIf #MYTABLE_FORMULA
+			_MyTableFormulaCalcTable(*this)
+		CompilerEndIf
 		_MyTableRecalc(*this)
 	EndIf
 EndProcedure
@@ -3624,22 +3675,26 @@ Procedure MyTableSetCellText(canvas,row.i,col.i,text.s)
 	EndIf
 EndProcedure
 
-Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
-	Protected *this.strMyTableTable=GetGadgetData(canvas)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		Protected *col.strMyTableCol=*cell\col
-		If *cell\formula<>formula
-			*cell\formula=formula
-			*cell\textwidth=0
-			*cell\textheight=0
-			*cell\dirty=#True
-			_MyTableFillCellFormula(*cell,formula)
-			_MyTableRedraw(*this)
+CompilerIf #MYTABLE_FORMULA
+	
+	Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
+		Protected *this.strMyTableTable=GetGadgetData(canvas)
+		If *this
+			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+			Protected *col.strMyTableCol=*cell\col
+			If *cell\formula<>formula
+				*cell\formula=formula
+				*cell\textwidth=0
+				*cell\textheight=0
+				*cell\dirty=#True
+				_MyTableFillCellFormula(*cell,formula)
+				_MyTableRedraw(*this)
+			EndIf
 		EndIf
-	EndIf
-EndProcedure
+	EndProcedure
+	
+CompilerEndIf
 
 Procedure MyTableSetCellValue(canvas,row.i,col.i,value.d)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
@@ -3654,6 +3709,26 @@ Procedure MyTableSetCellValue(canvas,row.i,col.i,value.d)
 			*cell\dirty=#True
 			_MyTableFillCellValue(*cell,value)
 			_MyTableRedraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure MyTableSetCellFlags(canvas,row.i,col.i,flags.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+		Protected *col.strMyTableCol=*cell\col
+		If *cell\flags<>flags		
+			If *cell\flags=*cell\col\flags
+				*cell\flags=0
+			Else
+				*cell\flags=flags		
+			EndIf
+			*cell\textwidth=0
+			*cell\textheight=0
+			*cell\dirty=#True
+			_MyTableRecalc(*this)
 		EndIf
 	EndIf
 EndProcedure
@@ -3726,14 +3801,19 @@ Procedure.s MyTableGetCellText(canvas,row.i,col.i)
 	EndIf
 EndProcedure
 
-Procedure.s MyTableGetCellFormula(canvas,row.i,col.i)
-	Protected *this.strMyTableTable=GetGadgetData(canvas)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
-		ProcedureReturn *cell\formula
-	EndIf
-EndProcedure
+
+CompilerIf #MYTABLE_FORMULA
+	
+	Procedure.s MyTableGetCellFormula(canvas,row.i,col.i)
+		Protected *this.strMyTableTable=GetGadgetData(canvas)
+		If *this
+			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
+			ProcedureReturn *cell\formula
+		EndIf
+	EndProcedure
+	
+CompilerEndIf
 
 Procedure.s MyTableGetCellTooltip(canvas,row.i,col.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
@@ -3750,6 +3830,19 @@ Procedure.d MyTableGetCellValue(canvas,row.i,col.i)
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
 		ProcedureReturn *cell\value
+	EndIf
+EndProcedure
+
+Procedure MyTableGetCellFlags(canvas,row.i,col.i)
+	Protected *this.strMyTableTable=GetGadgetData(canvas)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
+		If *cell\flags
+			ProcedureReturn *cell\flags
+		Else
+			ProcedureReturn *cell\col\flags
+		EndIf
 	EndIf
 EndProcedure
 

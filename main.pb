@@ -1,5 +1,6 @@
 ﻿EnableExplicit
 
+#MYTABLE_DEBUG = 0
 #MYTABLE_DEBUG_LEVEL = 0
 
 DebugLevel #MYTABLE_DEBUG_LEVEL
@@ -149,11 +150,15 @@ Procedure evtResizeWindow()
 EndProcedure
 
 Procedure SelectCell(canvas,*cell.strMyTableCell)
-	If *cell\formula=""
+	CompilerIf #MYTABLE_FORMULA
+		If *cell\formula=""
+			SetGadgetText(stringFormula,*cell\text)
+		Else
+			SetGadgetText(stringFormula,*cell\formula)
+		EndIf
+	CompilerElse
 		SetGadgetText(stringFormula,*cell\text)
-	Else
-		SetGadgetText(stringFormula,*cell\formula)
-	EndIf
+	CompilerEndIf
 	SetGadgetData(stringFormula,*cell)
 EndProcedure
 
