@@ -423,7 +423,7 @@ Declare _MyTableRowExpand(*row.strMyTableRow,expanded.b)
 Declare _MyTableDrawText(x,y,text.s,color.q)
 Declare _MyTableDrawHeader(*col.strMyTableCol,bx.i,fixed.b)
 Declare _MyTableDrawRow(*row.strMyTableRow,w.i,bx.i,by.i,fixed.b,fullrowselect.b,grid.b,hierarchical.b,checkboxes.b)
-Declare _MyTableEditCell(*cell.strMyTableCell)
+Declare _MyTableEditCell(*cell.strMyTableCell,defaultIfEmpty.s="")
 Declare _MyTableStopEditCell(*this.strMyTableTable)
 Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
@@ -579,10 +579,10 @@ Declare.q MyTableGetHeaderforecolor(canvas)
 Declare.q MyTableGetSelectedforecolor(canvas)
 
 CompilerIf #MYTABLE_FORMULA
-	
 	XIncludeFile "mytablecalc.pbi"
-	
 CompilerEndIf
+
+XIncludeFile "mytabletools.pbi"
 
 CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	Procedure _MyTableExportInit(canvas)
@@ -1135,7 +1135,7 @@ Procedure _MyTableStopEditCell(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
-Procedure _MyTableEditCell(*cell.strMyTableCell)
+Procedure _MyTableEditCell(*cell.strMyTableCell,defaultIfEmpty.s="")
 	If *cell
 		Protected *col.strMyTableCol=*cell\col
 		Protected *row.strMyTableRow=*cell\row
@@ -1184,14 +1184,21 @@ Procedure _MyTableEditCell(*cell.strMyTableCell)
 						                                WindowHeight(*this\editorwindow),
 						                                #PB_Editor_WordWrap)		
 						CompilerIf #MYTABLE_FORMULA
+							If *cell\formula=""
+								*cell\formula=defaultIfEmpty
+							EndIf
 							If Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And *cell\formula<>""
 								SetGadgetText(*this\editorgadget,*cell\formula)
 							Else
 								SetGadgetText(*this\editorgadget,*cell\text)
 							EndIf
 						CompilerElse
+							If *cell\text=""
+								*cell\text=defaultIfEmpty
+							EndIf
 							SetGadgetText(*this\editorgadget,*cell\text)
 						CompilerEndIf
+						SetPos(*this\editorgadget,Len(GetGadgetText(*this\editorgadget)))
 						HideGadget(*this\editorgadget,#False)
 						SetActiveGadget(*this\editorgadget)
 						SetGadgetData(*this\editorgadget,*cell)
@@ -1899,9 +1906,25 @@ Procedure MyTableEvtKeyDown()
 		Protected *col.strMyTableCol=0
 		Protected listidx=-1,colidx=-1
 		Protected NewList selected.i()
-		
+				
 		Select GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
-			Case #PB_Shortcut_Return,#PB_Shortcut_F2
+				CompilerIf #MYTABLE_FORMULA
+				Case #PB_Shortcut_0
+					If shift
+						_MyTableClearMaps(*this)
+						If Not fullrowselect
+							ForEach *this\selected()
+								*cell=Val(MapKey(*this\selected()))
+								_MyTableEditCell(*cell,"=")
+								
+								Break
+							Next
+						EndIf
+					EndIf
+				Case #PB_Shortcut_Return,#PB_Shortcut_F2,#PB_Shortcut_Execute	
+				CompilerElse
+				Case #PB_Shortcut_Return,#PB_Shortcut_F2
+				CompilerEndIf
 				_MyTableClearMaps(*this)
 				If Not fullrowselect
 					ForEach *this\selected()
@@ -1911,6 +1934,8 @@ Procedure MyTableEvtKeyDown()
 						Break
 					Next
 				EndIf
+				
+				
 			Case #PB_Shortcut_Multiply
 				If hierarchical And fullrowselect
 					_MyTableClearMaps(*this)
