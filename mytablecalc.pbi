@@ -42,6 +42,8 @@ EndEnumeration
 Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
 Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
+Declare _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
+Declare _MyTableGridColumnFromColumnName(col.s)
 
 Declare MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
 Declare.s MyTableGetCellFormula(canvas,row.i,col.i)
@@ -86,13 +88,72 @@ CompilerElse
 	#MyTableHK="'"
 CompilerEndIf
 
-Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
+Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
+Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
+Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
+
+Procedure _MyTableGridColumnFromColumnName(col.s)
+	Protected result=0
+	Protected idx=0
+	Protected scol.s=UCase(col)
+	For idx=1 To Len(scol)
+		Protected cidx=Asc(Mid(scol,idx,1))-64
+		Protected delta=0
+		If idx=1
+			delta=cidx-1
+		Else
+			If cidx=0
+				delta=26*(idx-1)
+			Else
+				delta=(cidx-1)+(26*(idx-1))
+			EndIf
+		EndIf
+		result+delta
+	Next
 	
-		
+	ProcedureReturn result
+EndProcedure
+
+Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
+	Protected *cell.strMyTableCell=0
+	If cell<>""
+		Protected row.s=""
+		Protected col.s=""
+		If ExamineRegularExpression(MyTableRegExRow,cell)
+			While NextRegularExpressionMatch(MyTableRegExRow)			
+				row=RegularExpressionMatchString(MyTableRegExRow)
+			Wend
+		EndIf
+		If ExamineRegularExpression(MyTableRegExCol,cell)
+			While NextRegularExpressionMatch(MyTableRegExCol)			
+				col=RegularExpressionMatchString(MyTableRegExCol)
+			Wend
+		EndIf
+	EndIf
+	If row<>"" And col<>""
+		Protected *rc.strMyTableRowCol=AllocateStructure(strMyTableRowCol)
+		*rc\row=Val(row)-1
+		*rc\col=_MyTableGridColumnFromColumnName(col)+1
+		*cell=_MyTableGetOrAddCell(SelectElement(*this\rows(),*rc\row),*rc\col)		
+		If Not *cell\calced
+			_MyTableFormulaCalcCell(*cell)
+		EndIf
+		FreeStructure(*rc)
+	EndIf
+	ProcedureReturn *cell
+EndProcedure
+
+Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
+	Protected *formulacell.strMyTableCell=0
+	Protected error.b=#False
+	
 	If *cell
 		*cell\text="#FORMULA#"
 		Protected NewMap strings.s()
-		Protected line.s=Mid(*cell\formula,2)
+		Protected NewMap cells.s()
+		
+		Protected formula.s=*cell\formula		
+		Protected line.s=Mid(formula,2)
 		
 		Protected idx=0
 		If ExamineRegularExpression(MyTableRegExHK,line)
@@ -101,26 +162,65 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 				idx+1
 			Wend
 		EndIf
+		idx=0
+		If ExamineRegularExpression(MyTableRegExCells,line)
+			While NextRegularExpressionMatch(MyTableRegExCells)			
+				cells("!"+Str(idx)+"!")=RegularExpressionMatchString(MyTableRegExCells)
+				idx+1
+			Wend
+		EndIf
 		ForEach strings()
 			line=ReplaceString(line,strings(),MapKey(strings()))
 		Next
+		line=ReplaceString(line,"+"," + ")
+		line=ReplaceString(line,"-"," - ")
+		line=ReplaceString(line,"*"," * ")
+		line=ReplaceString(line,"/"," / ")
+		line=ReplaceString(line,","," , ")
+		line=ReplaceString(line,";"," ; ")
+		line=ReplaceString(line,"&"," & ")
+		line=ReplaceString(line,"%"," % ")
 		
 		While FindString(line,"  ")
 			line=ReplaceString(line,"  "," ")
 		Wend
 		
-		If line<>""
-			
-			
-			line=ReplaceString(line," & ","")			
-			ForEach strings()
-				line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
-			Next	
-			
+		ForEach cells()
+			line=ReplaceString(line,cells(),MapKey(cells()))		
+		Next
+		
+		
+		If Not error
+			If line<>""
+				
+				
+				line=ReplaceString(line," & ","")			
+				ForEach strings()
+					line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
+				Next	
+				
+				ForEach cells()					
+					*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()))
+					If Not *formulacell
+						error=#True
+						Break
+					EndIf
+					line=ReplaceString(line,MapKey(cells()),*formulacell\text)
+				Next
+				
+			EndIf
 		EndIf
 		
-		_MyTableFillCellText(*cell,line,#False)
+		If error
+			_MyTableFillCellText(*cell,"#ERROR#",#False)
+		Else
+			_MyTableFillCellText(*cell,line,#False)
+		EndIf
+		
+		*cell\formula=formula
+		
 		FreeMap(strings())
+		FreeMap(cells())
 		*cell\calced=#True
 	EndIf
 EndProcedure

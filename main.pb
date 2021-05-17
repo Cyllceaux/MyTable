@@ -25,10 +25,15 @@ images(7)=CatchImage(#PB_Any,?Barcode_png_start)
 images(8)=CatchImage(#PB_Any,?Blue_gear_png_start)
 images(9)=CatchImage(#PB_Any,?Blueray_drive_png_start)
 
+Enumeration _menu
+	#MAIN_NULL
+	#MAIN_RETURN
+EndEnumeration
+
 
 
 Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
-
+Global menu=CreateMenu(#PB_Any,WindowID(mainWindow))
 
 Global canvasTable=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
 Global hscrollTable=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
@@ -93,6 +98,9 @@ SetGadgetState(splitter3,300)
 SetGadgetState(splitter4,400)
 SetGadgetState(splitter5,300)
 SetGadgetState(splitter6,800)
+
+
+
 
 
 Procedure CanvasTable3Callback(canvas,*row.strMyTableRow)
@@ -226,9 +234,29 @@ Procedure CustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
 	BindGadgetEvent(customcombobox,@CustomEditCellChange(),#PB_EventType_Change)
 EndProcedure
 
+Procedure EvtGF()
+	AddKeyboardShortcut(mainWindow,#PB_Shortcut_Return,#MAIN_RETURN)
+EndProcedure
+
+Procedure EvtLF()
+	RemoveKeyboardShortcut(mainWindow,#PB_Shortcut_Return)
+EndProcedure
+
+Procedure EvtReturn()
+	If GetActiveGadget()=stringFormula
+		Protected *cell.strMyTableCell=GetGadgetData(stringFormula)
+		_MyTableFillCellFormula(*cell,GetGadgetText(stringFormula))
+		MyTableRecalc(canvasFormula)
+	EndIf
+EndProcedure
+
 BindEvent(#PB_Event_SizeWindow,@evtResizeWindow(),mainWindow)
 BindEvent(#PB_Event_RestoreWindow,@evtResizeWindow(),mainWindow)
 BindEvent(#PB_Event_MaximizeWindow,@evtResizeWindow(),mainWindow)
+BindMenuEvent(menu,#MAIN_RETURN,@EvtReturn())
+BindGadgetEvent(stringFormula,@EvtGF(),#PB_EventType_Focus)
+BindGadgetEvent(stringFormula,@EvtLF(),#PB_EventType_LostFocus)
+
 
 Macro DQ
 	"
