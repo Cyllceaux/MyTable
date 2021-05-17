@@ -429,8 +429,8 @@ Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
-Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
-Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+Declare _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
+Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d,override.b=#True)
 Declare _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
@@ -1039,12 +1039,14 @@ Procedure _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,t
 	EndIf
 EndProcedure
 
-Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
+Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
 	*cell\text=text	
 	
 	CompilerIf #MYTABLE_FORMULA
-		*cell\formula=""
-		*cell\calced=#True
+		If override
+			*cell\formula=""
+			*cell\calced=#True
+		EndIf
 	CompilerEndIf
 	If text=""
 		*cell\col\canNull=#True
@@ -1058,17 +1060,26 @@ Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 		*cell\value=Bool(*cell\text="1" Or 
 		                 LCase(*cell\text)="x" Or 
+		                 LCase(*cell\text)="#true" Or
 		                 LCase(*cell\text)="true" Or
 		                 LCase(*cell\text)="yes")
 		*cell\checked=*cell\value
 	EndIf
 	CompilerIf #MYTABLE_FORMULA
-		_MyTableFormulaCalcTable(*cell\table)
+		If override
+			_MyTableFormulaCalcTable(*cell\table)
+		EndIf
 	CompilerEndIf
 EndProcedure
 
-Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
+Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d,override.b=#True)
 	*cell\value=value
+	CompilerIf #MYTABLE_FORMULA
+		If override
+			*cell\formula=""
+			*cell\calced=#True
+		EndIf
+	CompilerEndIf
 	If value=0 And Not *cell\col\canNull
 		*cell\text=""
 		*cell\checked=*cell\value
@@ -1089,7 +1100,9 @@ Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d)
 		EndIf
 	EndIf
 	CompilerIf #MYTABLE_FORMULA
-		_MyTableFormulaCalcTable(*cell\table)
+		If override
+			_MyTableFormulaCalcTable(*cell\table)
+		EndIf
 	CompilerEndIf
 EndProcedure
 

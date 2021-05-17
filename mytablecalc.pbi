@@ -31,6 +31,9 @@
 ; SOFTWARE.
 ;}
 
+CompilerIf Not Defined(MYTABLE_FORMULA_QUOTE,#PB_Constant)
+	#MYTABLE_FORMULA_DQUOTE=1
+CompilerEndIf
 
 EnumerationBinary _MyTableTableFlags
 	#MYTABLE_TABLE_FLAGS_FORMULA
@@ -75,9 +78,49 @@ Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
+CompilerIf #MYTABLE_FORMULA_DQUOTE
+	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,~"\".*?\"")
+	#MyTableHK=#DQUOTE$
+CompilerElse
+	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,"'.*?'")
+	#MyTableHK="'"
+CompilerEndIf
+
 Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
+	
+		
 	If *cell
 		*cell\text="#FORMULA#"
+		Protected NewMap strings.s()
+		Protected line.s=Mid(*cell\formula,2)
+		
+		Protected idx=0
+		If ExamineRegularExpression(MyTableRegExHK,line)
+			While NextRegularExpressionMatch(MyTableRegExHK)			
+				strings("#"+Str(idx)+"#")=RegularExpressionMatchString(MyTableRegExHK)
+				idx+1
+			Wend
+		EndIf
+		ForEach strings()
+			line=ReplaceString(line,strings(),MapKey(strings()))
+		Next
+		
+		While FindString(line,"  ")
+			line=ReplaceString(line,"  "," ")
+		Wend
+		
+		If line<>""
+			
+			
+			line=ReplaceString(line," & ","")			
+			ForEach strings()
+				line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
+			Next	
+			
+		EndIf
+		
+		_MyTableFillCellText(*cell,line,#False)
+		FreeMap(strings())
 		*cell\calced=#True
 	EndIf
 EndProcedure

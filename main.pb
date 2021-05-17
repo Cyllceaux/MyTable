@@ -256,7 +256,11 @@ MyTableRegister(mainWindow,canvasTable3,hscrollTable3,vscrollTable3,#MYTABLE_TAB
 MyTableRegister(mainWindow,canvasTable4,hscrollTable4,vscrollTable4,#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_STOP_DRAWING|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT,0,"canvasTable4")
 
 MyTableGridRegister(mainWindow,canvasGrid,hscrollGrid,vscrollGrid,10000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasGrid")
-MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula")
+CompilerIf #MYTABLE_FORMULA
+	MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula")
+CompilerElse
+	MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasFormula")
+CompilerEndIf
 
 
 
