@@ -293,7 +293,6 @@ EnumerationBinary _MyTableTableFlags
 	#MYTABLE_TABLE_FLAGS_SORTABLE
 	#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT
 	#MYTABLE_TABLE_FLAGS_EDITABLE	
-	#MYTABLE_TABLE_FLAGS_FORMULA
 	#MYTABLE_TABLE_FLAGS_READONLY
 EndEnumeration
 
@@ -431,18 +430,12 @@ Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s)
-CompilerIf #MYTABLE_FORMULA
-	Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
-CompilerEndIf
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d)
 Declare _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,temp.b)
 Declare _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
-CompilerIf #MYTABLE_FORMULA
-	Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
-	Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
-CompilerEndIf
+
 
 
 Declare MyTableEvtResize()
@@ -557,9 +550,6 @@ Declare MyTableSetCellFlags(canvas,row.i,col.i,flags.i)
 Declare MyTableSetCellChecked(canvas,row.i,col.i,checked.b)
 Declare MyTableSetCellData(canvas,row.i,col.i,*data)
 Declare MyTableSetCellTooltip(canvas,row.i,col.i,tooltip.s)
-CompilerIf #MYTABLE_FORMULA
-	Declare MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
-CompilerEndIf
 Declare MyTableSetCellImage(canvas,row.i,col.i,image.i)
 Declare.s MyTableGetCellText(canvas,row.i,col.i)
 Declare.d MyTableGetCellValue(canvas,row.i,col.i)
@@ -567,9 +557,6 @@ Declare MyTableGetCellFlags(canvas,row.i,col.i)
 Declare MyTableGetCellChecked(canvas,row.i,col.i)
 Declare MyTableGetCellData(canvas,row.i,col.i)
 Declare.s MyTableGetCellTooltip(canvas,row.i,col.i)
-CompilerIf #MYTABLE_FORMULA
-	Declare.s MyTableGetCellFormula(canvas,row.i,col.i)
-CompilerEndIf
 Declare MyTableGetCellImage(canvas,row.i,col.i)
 
 Declare MyTableSetSelectedbackground(canvas,color.q)
@@ -591,6 +578,11 @@ Declare.q MyTableGetForecolor(canvas)
 Declare.q MyTableGetHeaderforecolor(canvas)
 Declare.q MyTableGetSelectedforecolor(canvas)
 
+CompilerIf #MYTABLE_FORMULA
+	
+	XIncludeFile "mytablecalc.pbi"
+	
+CompilerEndIf
 
 CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 	Procedure _MyTableExportInit(canvas)
@@ -670,37 +662,7 @@ CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
 CompilerEndIf
 
 
-CompilerIf #MYTABLE_FORMULA
-	
-	Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
-		If *this
-			Protected *cell.strMyTableCell=0
-			_MyTableClearMaps(*this)
-			ForEach *this\formulaCells()
-				If *this\formulaCells()
-					*cell=Val(MapKey(*this\formulaCells()))
-					*cell\calced=#False
-				EndIf
-			Next
-			ForEach *this\formulaCells()
-				If *this\formulaCells()
-					*cell=Val(MapKey(*this\formulaCells()))
-					If Not *cell\calced
-						_MyTableFormulaCalcCell(*cell)
-					EndIf
-				EndIf
-			Next
-		EndIf
-	EndProcedure
-	
-	Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
-		If *cell
-			*cell\text="#FORMULA#"
-			*cell\calced=#True
-		EndIf
-	EndProcedure
-	
-CompilerEndIf
+
 
 Procedure _MyTableGetRowCol(*this.strMyTableTable,down.b,up.b,move.b)
 	
@@ -1071,20 +1033,6 @@ Procedure _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,t
 		EndIf
 	EndIf
 EndProcedure
-
-
-CompilerIf #MYTABLE_FORMULA
-	Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
-		If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
-			*cell\formula=formula
-			*cell\table\formulaCells(Str(*cell))=#True
-			_MyTableFormulaCalcCell(*cell)
-		Else
-			*cell\table\formulaCells(Str(*cell))=#False
-			_MyTableFillCellText(*cell,formula)
-		EndIf
-	EndProcedure
-CompilerEndIf
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s)
 	*cell\text=text	
