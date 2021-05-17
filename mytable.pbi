@@ -1040,6 +1040,11 @@ Procedure _MyTableSelectRow(*row.strMyTableRow,control.b,shift.b,multiselect.b,t
 EndProcedure
 
 Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
+	Protected flags=*cell\flags
+	If Not flags
+		flags=*cell\col\flags
+	EndIf
+	
 	*cell\text=text	
 	
 	CompilerIf #MYTABLE_FORMULA
@@ -1051,13 +1056,15 @@ Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
 	If text=""
 		*cell\col\canNull=#True
 	EndIf
-	If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+
+	
+	If Bool(flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
 		*cell\value=ParseDate(*cell\col\format,*cell\text)
-	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+	ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
 		*cell\value=Val(*cell\text)
-	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+	ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
 		*cell\value=ValD(*cell\text)
-	ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+	ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 		*cell\value=Bool(*cell\text="1" Or 
 		                 LCase(*cell\text)="x" Or 
 		                 LCase(*cell\text)="#true" Or
@@ -1073,6 +1080,11 @@ Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
 EndProcedure
 
 Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d,override.b=#True)
+	Protected flags=*cell\flags
+	If Not flags
+		flags=*cell\col\flags
+	EndIf
+	
 	*cell\value=value
 	CompilerIf #MYTABLE_FORMULA
 		If override
@@ -1084,17 +1096,17 @@ Procedure _MyTableFillCellValue(*cell.strMyTableCell,value.d,override.b=#True)
 		*cell\text=""
 		*cell\checked=*cell\value
 	Else
-		If Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+		If Bool(flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
 			If value=0
 				*cell\text=""
 			Else
 				*cell\text=FormatDate(*cell\col\format,*cell\value)
 			EndIf
-		ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
 			*cell\text=Str(value)
-		ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
 			*cell\text=FormatNumber(value)
-		ElseIf Bool(*cell\col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 			*cell\checked=*cell\value
 			*cell\text=Str(value)
 		EndIf
@@ -1830,13 +1842,15 @@ Procedure _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
 		*cell\type=#MYTABLE_TYPE_CELL
 		*cell\col=SelectElement(*this\cols(),col)
 	Else
-		While col>=ListSize(*row\cells())
-			*cell=_MyTableGetOrAddCell(*row,-1)
-		Wend
-		If Not *cell
-			*cell=SelectElement(*row\cells(),col)
-			If *cell=0
-				ProcedureReturn _MyTableGetOrAddCell(*row,-1)
+		If col<ListSize(*this\cols())
+			While col>=ListSize(*row\cells())
+				*cell=_MyTableGetOrAddCell(*row,-1)
+			Wend
+			If Not *cell
+				*cell=SelectElement(*row\cells(),col)
+				If *cell=0
+					ProcedureReturn _MyTableGetOrAddCell(*row,-1)
+				EndIf
 			EndIf
 		EndIf
 	EndIf
@@ -2468,7 +2482,7 @@ Procedure MyTableEvtMouseDown()
 				Protected col=*rowcol\col
 				
 				
-				If row<cc And col<ListSize(*this\cols())
+				If col>-1 And row<cc And col<ListSize(*this\cols())
 					*col=SelectElement(*this\cols(),col)
 					Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
 					If col=0 And (checkboxes Or hierarchical) And row>-1

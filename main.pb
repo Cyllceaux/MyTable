@@ -234,13 +234,19 @@ Procedure CustomEditCell(canvas,*cell.strMyTableCell,x,y,w,h)
 	BindGadgetEvent(customcombobox,@CustomEditCellChange(),#PB_EventType_Change)
 EndProcedure
 
-Procedure EvtGF()
-	AddKeyboardShortcut(mainWindow,#PB_Shortcut_Return,#MAIN_RETURN)
-EndProcedure
-
-Procedure EvtLF()
-	RemoveKeyboardShortcut(mainWindow,#PB_Shortcut_Return)
-EndProcedure
+;{
+; Workaround for Canvas
+	Procedure EvtGF()
+		AddKeyboardShortcut(mainWindow,#PB_Shortcut_Return,#MAIN_RETURN)
+	EndProcedure
+	
+	Procedure EvtLF()
+		RemoveKeyboardShortcut(mainWindow,#PB_Shortcut_Return)
+	EndProcedure
+	
+	BindGadgetEvent(stringFormula,@EvtGF(),#PB_EventType_Focus)
+	BindGadgetEvent(stringFormula,@EvtLF(),#PB_EventType_LostFocus)
+;}
 
 Procedure EvtReturn()
 	If GetActiveGadget()=stringFormula
@@ -254,8 +260,7 @@ BindEvent(#PB_Event_SizeWindow,@evtResizeWindow(),mainWindow)
 BindEvent(#PB_Event_RestoreWindow,@evtResizeWindow(),mainWindow)
 BindEvent(#PB_Event_MaximizeWindow,@evtResizeWindow(),mainWindow)
 BindMenuEvent(menu,#MAIN_RETURN,@EvtReturn())
-BindGadgetEvent(stringFormula,@EvtGF(),#PB_EventType_Focus)
-BindGadgetEvent(stringFormula,@EvtLF(),#PB_EventType_LostFocus)
+
 
 
 Macro DQ
@@ -397,6 +402,15 @@ For i=1 To 10000
 	EndIf
 Next
 MyTableRedraw(canvasTable4,#True)
+
+MyTableSetCellFormula(canvasFormula,0,0,"=1+1")
+MyTableSetCellFormula(canvasFormula,1,0,"=1*1")
+MyTableSetCellFormula(canvasFormula,2,0,"=1*1+1")
+MyTableSetCellFormula(canvasFormula,3,0,"=1*(1+1)")
+MyTableSetCellFormula(canvasFormula,0,1,~"=\"=1+1\"")
+MyTableSetCellFormula(canvasFormula,1,1,~"=\"=1*1\"")
+MyTableSetCellFormula(canvasFormula,2,1,~"=\"=1*1+1\"")
+MyTableSetCellFormula(canvasFormula,3,1,~"=\"=1*(1+1)\"")
 
 
 _makeTimestamp(AddRow)

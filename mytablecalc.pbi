@@ -105,7 +105,7 @@ Procedure _MyTableGridColumnFromColumnName(col.s)
 			If cidx=0
 				delta=26*(idx-1)
 			Else
-				delta=(cidx-1)+(26*(idx-1))
+				delta=cidx*26*(idx-1)
 			EndIf
 		EndIf
 		result+delta
@@ -135,8 +135,10 @@ Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
 		*rc\row=Val(row)-1
 		*rc\col=_MyTableGridColumnFromColumnName(col)+1
 		*cell=_MyTableGetOrAddCell(SelectElement(*this\rows(),*rc\row),*rc\col)		
-		If Not *cell\calced
-			_MyTableFormulaCalcCell(*cell)
+		If *cell
+			If Not *cell\calced
+				_MyTableFormulaCalcCell(*cell)
+			EndIf
 		EndIf
 		FreeStructure(*rc)
 	EndIf
@@ -146,11 +148,13 @@ EndProcedure
 Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 	Protected *formulacell.strMyTableCell=0
 	Protected error.b=#False
+	Protected errors.s=""
 	
 	If *cell
 		*cell\text="#FORMULA#"
 		Protected NewMap strings.s()
 		Protected NewMap cells.s()
+		Protected NewMap vcells.d()
 		
 		Protected formula.s=*cell\formula		
 		Protected line.s=Mid(formula,2)
@@ -202,9 +206,11 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 				ForEach cells()					
 					*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()))
 					If Not *formulacell
+						errors="#ERROR# Cell not Found: '"+UCase(cells())+"'"
 						error=#True
 						Break
 					EndIf
+					vcells(MapKey(cells()))=*formulacell\value
 					line=ReplaceString(line,MapKey(cells()),*formulacell\text)
 				Next
 				
@@ -212,7 +218,11 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 		EndIf
 		
 		If error
-			_MyTableFillCellText(*cell,"#ERROR#",#False)
+			If errors<>""
+				_MyTableFillCellText(*cell,errors,#False)
+			Else
+				_MyTableFillCellText(*cell,"#ERROR#",#False)
+			EndIf
 		Else
 			_MyTableFillCellText(*cell,line,#False)
 		EndIf
@@ -221,6 +231,7 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 		
 		FreeMap(strings())
 		FreeMap(cells())
+		FreeMap(vcells())
 		*cell\calced=#True
 	EndIf
 EndProcedure
@@ -229,7 +240,7 @@ Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col+1)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\formula<>formula
 			*cell\formula=formula
