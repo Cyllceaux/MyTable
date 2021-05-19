@@ -2835,6 +2835,7 @@ Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_
 		BindGadgetEvent(\canvas,@MyTableEvtKeyDown(),#PB_EventType_KeyDown)
 		
 		BindGadgetEvent(\canvas,@MyTableEvtLostFocus(),#PB_EventType_LostFocus)
+		
 	EndWith
 	
 	ProcedureReturn *this
@@ -2844,6 +2845,7 @@ Procedure MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_F
 	Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)
 	BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
 	_MyTableResize(*this)
+	
 	ProcedureReturn *this
 EndProcedure
 
