@@ -331,8 +331,8 @@ Structure strMyTableTable Extends _strMyTableAObject
 	headerheight.i
 	bvs.b
 	bhs.b
-	datagrid.b
 	Map selected.b()
+	datagrid.b
 	CompilerIf #MYTABLE_FORMULA
 		Map formulaCells.b()
 	CompilerEndIf
@@ -428,7 +428,7 @@ Declare _MyTableStopEditCell(*this.strMyTableTable)
 Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
 Declare.s _MyTableGridColumnName(col.i)
-Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
+Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1,force.b=#False)
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
 Declare _MyTableFillCellValue(*cell.strMyTableCell,value.d,override.b=#True)
 Declare _MyTableSelectCell(*cell.strMyTableCell,control.b,shift.b,multiselect.b,temp.b)
@@ -1830,9 +1830,10 @@ Procedure _MyTableAddDirtyRow(*this.strMyTableTable,*row.strMyTableRow)
 	*row\height=*this\rowheight
 EndProcedure
 
-Procedure _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
+Procedure _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1,force.b=#False)
 	Protected *this.strMyTableTable=*row\table
 	Protected *cell.strMyTableCell=0
+	Protected bgrid.b=Bool(*this\datagrid And Not force)
 	If col=-1
 		LastElement(*row\cells())
 		col=ListSize(*row\cells())
@@ -1842,6 +1843,7 @@ Procedure _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1)
 		*cell\type=#MYTABLE_TYPE_CELL
 		*cell\col=SelectElement(*this\cols(),col)
 	Else
+		col+bgrid
 		If col<ListSize(*this\cols())
 			While col>=ListSize(*row\cells())
 				*cell=_MyTableGetOrAddCell(*row,-1)
@@ -3709,6 +3711,7 @@ Procedure MyTableSetCellFlags(canvas,row.i,col.i,flags.i)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+	
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\flags<>flags		
@@ -4127,7 +4130,13 @@ Procedure MyTableAutosizeColumn(canvas,col.i)
 				If *row\image
 					hasimage=#True
 				EndIf
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
+				Protected force.b=#False
+				If *this\datagrid
+					force=#True
+				EndIf
+				
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,force)
+				
 				If *cell
 					If *cell\textwidth=0
 						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)

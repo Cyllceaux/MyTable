@@ -49,7 +49,11 @@ Declare MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
 Declare.s MyTableGetCellFormula(canvas,row.i,col.i)
 
 Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
-	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
+	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="'" And Right(formula,1)<>"'"
+		*cell\table\formulaCells(Str(*cell))=#False
+		_MyTableFillCellText(*cell,Mid(formula,2))
+		*cell\formula=formula
+	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
 		*cell\formula=formula
 		*cell\table\formulaCells(Str(*cell))=#True
 		_MyTableFormulaCalcCell(*cell)
@@ -238,9 +242,9 @@ EndProcedure
 
 Procedure MyTableSetCellFormula(canvas,row.i,col.i,formula.s)
 	Protected *this.strMyTableTable=GetGadgetData(canvas)
-	If *this
+	If *this		
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col+1)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		Protected *col.strMyTableCol=*cell\col
 		If *cell\formula<>formula
 			*cell\formula=formula

@@ -403,14 +403,15 @@ For i=1 To 10000
 Next
 MyTableRedraw(canvasTable4,#True)
 
-MyTableSetCellFormula(canvasFormula,0,0,"=1+1")
-MyTableSetCellFormula(canvasFormula,1,0,"=1*1")
-MyTableSetCellFormula(canvasFormula,2,0,"=1*1+1")
-MyTableSetCellFormula(canvasFormula,3,0,"=1*(1+1)")
-MyTableSetCellFormula(canvasFormula,0,1,~"=\"=1+1\"")
-MyTableSetCellFormula(canvasFormula,1,1,~"=\"=1*1\"")
-MyTableSetCellFormula(canvasFormula,2,1,~"=\"=1*1+1\"")
-MyTableSetCellFormula(canvasFormula,3,1,~"=\"=1*(1+1)\"")
+
+Define frow=0
+MyTableSetCellFormula(canvasFormula,frow,0,"Hello"):MyTableSetCellFormula(canvasFormula,frow,1,"World"):frow+1
+MyTableSetCellFormula(canvasFormula,frow,0,"=1+1"):MyTableSetCellFormula(canvasFormula,frow,1,~"=\"=1+1\""):frow+1
+MyTableSetCellFormula(canvasFormula,frow,0,"=1*1"):MyTableSetCellFormula(canvasFormula,frow,1,~"=\"=1*1\""):frow+1
+MyTableSetCellFormula(canvasFormula,frow,0,"=1*1+1"):MyTableSetCellFormula(canvasFormula,frow,1,~"=\"=1*1+1\""):frow+1
+MyTableSetCellFormula(canvasFormula,frow,0,"=1*(1+1)"):MyTableSetCellFormula(canvasFormula,frow,1,~"=\"=1*(1+1)\""):frow+1
+MyTableSetCellFormula(canvasFormula,frow,0,~"=A1 & \" \" & B1"):MyTableSetCellFormula(canvasFormula,frow,1,~"'=A1 & \" \" & B1"):frow+1
+
 
 
 _makeTimestamp(AddRow)
