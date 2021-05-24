@@ -39,6 +39,9 @@ EnumerationBinary _MyTableTableFlags
 	#MYTABLE_TABLE_FLAGS_FORMULA
 EndEnumeration
 
+#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA
+
+
 Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
 Declare _MyTableFormulaCalcCell(*cell.strMyTableCell)
@@ -86,15 +89,18 @@ EndProcedure
 
 CompilerIf #MYTABLE_FORMULA_DQUOTE
 	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,~"\".*?\"")
+	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[\"]{3,}")
 	#MyTableHK=#DQUOTE$
 CompilerElse
 	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,"'.*?'")
+	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[']{3,}")
 	#MyTableHK="'"
 CompilerEndIf
 
 Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
 Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
 Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
+
 
 Procedure _MyTableGridColumnFromColumnName(col.s)
 	Protected result=0
@@ -137,7 +143,7 @@ Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
 	If row<>"" And col<>""
 		Protected *rc.strMyTableRowCol=AllocateStructure(strMyTableRowCol)
 		*rc\row=Val(row)-1
-		*rc\col=_MyTableGridColumnFromColumnName(col)+1
+		*rc\col=_MyTableGridColumnFromColumnName(col)
 		*cell=_MyTableGetOrAddCell(SelectElement(*this\rows(),*rc\row),*rc\col)		
 		If *cell
 			If Not *cell\calced
@@ -157,13 +163,25 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 	If *cell
 		*cell\text="#FORMULA#"
 		Protected NewMap strings.s()
+		Protected NewMap dqstrings.s()
 		Protected NewMap cells.s()
 		Protected NewMap vcells.d()
 		
 		Protected formula.s=*cell\formula		
 		Protected line.s=Mid(formula,2)
+		Protected dqline.s=""
 		
 		Protected idx=0
+		If ExamineRegularExpression(MyTableRegDQuot,line)
+			While NextRegularExpressionMatch(MyTableRegDQuot)			
+				dqline=RegularExpressionMatchString(MyTableRegDQuot)
+				dqstrings("#DQ#"+Str(Len(dqline)-2)+"#QD#")=dqline
+			Wend
+			ForEach dqstrings()
+				line=ReplaceString(line,dqstrings(),MapKey(dqstrings())+#MyTableHK)
+			Next
+		EndIf
+		idx=0
 		If ExamineRegularExpression(MyTableRegExHK,line)
 			While NextRegularExpressionMatch(MyTableRegExHK)			
 				strings("#"+Str(idx)+"#")=RegularExpressionMatchString(MyTableRegExHK)
@@ -180,6 +198,8 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 		ForEach strings()
 			line=ReplaceString(line,strings(),MapKey(strings()))
 		Next
+		
+		
 		line=ReplaceString(line,"+"," + ")
 		line=ReplaceString(line,"-"," - ")
 		line=ReplaceString(line,"*"," * ")
@@ -206,6 +226,12 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 				ForEach strings()
 					line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
 				Next	
+				ForEach dqstrings()
+					dqline=ReplaceString(MapKey(dqstrings()),"#DQ#","")
+					dqline=ReplaceString(dqline,"#QD#","")
+					dqline=LSet(~"\"",Val(dqline),#MyTableHK)
+					line=ReplaceString(line,MapKey(dqstrings()),dqline)
+				Next
 				
 				ForEach cells()					
 					*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()))
@@ -234,6 +260,7 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 		*cell\formula=formula
 		
 		FreeMap(strings())
+		FreeMap(dqstrings())
 		FreeMap(cells())
 		FreeMap(vcells())
 		*cell\calced=#True

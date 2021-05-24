@@ -7,7 +7,7 @@ DebugLevel #MYTABLE_DEBUG_LEVEL
 
 UsePNGImageDecoder()
 
-XIncludeFile "mytable.pbi"
+XIncludeFile "..\mytable.pbi"
 
 Define rowImage=CatchImage(#PB_Any,?Briefcase_png_start)
 Define rowImageSub=CatchImage(#PB_Any,?Lock_png_start)
@@ -32,7 +32,7 @@ EndEnumeration
 
 
 
-Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable All",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 Global menu=CreateMenu(#PB_Any,WindowID(mainWindow))
 
 Global canvasTable=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
