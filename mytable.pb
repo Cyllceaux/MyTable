@@ -2017,7 +2017,9 @@ Module MyTable
 					Else
 						If col>-1
 							*cell=_MyTableGetOrAddCell(*row,col)
-							GadgetToolTip(*this\canvas,*cell\tooltip)
+							If *cell
+								GadgetToolTip(*this\canvas,*cell\tooltip)
+							EndIf
 						EndIf
 					EndIf
 				EndIf

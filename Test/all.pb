@@ -413,15 +413,21 @@ UseModule MyTable
 	Next
 	*canvasTable4\SetRedraw(#True)
 	
-	
+
 	Define frow=0
 	*canvasFormula\SetCellFormula(frow,0,"Hello"):*canvasFormula\SetCellFormula(frow,1,"World"):frow+1
-	*canvasFormula\SetCellFormula(frow,0,"=1+1"):*canvasFormula\SetCellFormula(frow,1,~"=\"=1+1\""):frow+1
-	*canvasFormula\SetCellFormula(frow,0,"=1*1"):*canvasFormula\SetCellFormula(frow,1,~"=\"=1*1\""):frow+1
-	*canvasFormula\SetCellFormula(frow,0,"=1*1+1"):*canvasFormula\SetCellFormula(frow,1,~"=\"=1*1+1\""):frow+1
-	*canvasFormula\SetCellFormula(frow,0,"=1*(1+1)"):*canvasFormula\SetCellFormula(frow,1,~"=\"=1*(1+1)\""):frow+1
-	*canvasFormula\SetCellFormula(frow,0,~"=A1 & \" \" & B1"):*canvasFormula\SetCellFormula(frow,1,~"'=A1 & \" \" & B1"):frow+1
+	*canvasFormula\SetCellFormula(frow,0,"=1+1"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,"=1*1"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,"=1*1+1"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,"=1*(1+1)"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,~"=A1 & \" \" & B1"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,~"=\"Test\"\"\""):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,~"=\"Test\"\"\"\""):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,~"=\"Test: \" & (1+1)"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,~"=\"Test: \" & (1.5*9.2)"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+	*canvasFormula\SetCellFormula(frow,0,~"=A2+A3+A4+A5"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
 	
+	*canvasFormula\AutosizeColumn(2)
 	
 	
 	_makeTimestamp(AddRow)
@@ -439,7 +445,6 @@ UseModule MyTable
 	
 	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
 	
-	ResizeWindow(mainWindow,#PB_Ignore,#PB_Ignore,1100,620)
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	

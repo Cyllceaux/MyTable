@@ -127,8 +127,10 @@ UseModule MyTable
 	*table\SetCellFormula(frow,0,~"=\"Test\"\"\"\""):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=\"Test: \" & (1+1)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=\"Test: \" & (1.5*9.2)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=A2+A3+A4+A5"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=A12"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	
-	
+	*table\AutosizeColumn(1)
 	*table\AutosizeColumn(2)
 	
 	_makeTimestamp(AddRow)
@@ -136,7 +138,6 @@ UseModule MyTable
 	
 	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
 	
-	ResizeWindow(mainWindow,#PB_Ignore,#PB_Ignore,1100,620)
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	

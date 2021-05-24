@@ -39,7 +39,9 @@ Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
 		*cell\formula=formula
 		*cell\table\formulaCells(Str(*cell))=#True
-		_MyTableFormulaCalcCell(*cell)
+		Protected NewList cells()
+		_MyTableFormulaCalcCell(*cell,cells())
+		FreeList(cells())
 	Else
 		*cell\table\formulaCells(Str(*cell))=#False
 		_MyTableFillCellText(*cell,formula)
@@ -60,7 +62,9 @@ Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
 			If *this\formulaCells()
 				*cell=Val(MapKey(*this\formulaCells()))
 				If Not *cell\calced
-					_MyTableFormulaCalcCell(*cell)
+					Protected NewList cells()
+					_MyTableFormulaCalcCell(*cell,cells())
+					FreeList(cells())
 				EndIf
 			EndIf
 		Next
@@ -110,7 +114,7 @@ Procedure _MyTableGridColumnFromColumnName(col.s)
 	ProcedureReturn result
 EndProcedure
 
-Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
+Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s,List calccells())
 	Protected *cell.strMyTableCell=0
 	If cell<>""
 		Protected row.s=""
@@ -132,8 +136,16 @@ Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
 		*rc\col=_MyTableGridColumnFromColumnName(col)
 		*cell=_MyTableGetOrAddCell(SelectElement(*this\rows(),*rc\row),*rc\col)		
 		If *cell
-			If Not *cell\calced
-				_MyTableFormulaCalcCell(*cell)
+			ForEach calccells()
+				If calccells()=*cell
+					*cell=-1
+					Break
+				EndIf
+			Next
+			If *cell<>0 And *cell<>-1
+				If Not *cell\calced
+					_MyTableFormulaCalcCell(*cell,calccells())
+				EndIf
 			EndIf
 		EndIf
 		FreeStructure(*rc)
@@ -212,97 +224,114 @@ Procedure.s _MyTableFormulaMath(line.s)
 	EndIf
 EndProcedure
 
-Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
+Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 	Protected *formulacell.strMyTableCell=0
 	Protected error.b=#False
 	Protected errors.s=""
 	
-	If *cell
-		*cell\text="#FORMULA#"
-		Protected NewMap strings.s()
-		Protected NewMap dqstrings.s()
-		Protected NewMap cells.s()
-		Protected NewMap vcells.d()
-		
-		Protected formula.s=*cell\formula		
-		Protected line.s=Mid(formula,2)
-		Protected dqline.s=""
-		
-		Protected idx=0
-		If ExamineRegularExpression(MyTableRegDQuot,line)
-			While NextRegularExpressionMatch(MyTableRegDQuot)			
-				dqline=RegularExpressionMatchString(MyTableRegDQuot)
-				dqstrings("#DQ#"+Str(Len(dqline)-2)+"#QD#")=dqline
-			Wend
-			ForEach dqstrings()
-				line=ReplaceString(line,dqstrings(),MapKey(dqstrings())+#MyTableHK)
-			Next
-		EndIf
-		idx=0
-		If ExamineRegularExpression(MyTableRegExHK,line)
-			While NextRegularExpressionMatch(MyTableRegExHK)			
-				strings("#"+Str(idx)+"#")=RegularExpressionMatchString(MyTableRegExHK)
-				idx+1
-			Wend
-		EndIf
-		idx=0
-		If ExamineRegularExpression(MyTableRegExCells,line)
-			While NextRegularExpressionMatch(MyTableRegExCells)			
-				cells("!"+Str(idx)+"!")=RegularExpressionMatchString(MyTableRegExCells)
-				idx+1
-			Wend
-		EndIf
-		ForEach strings()
-			line=ReplaceString(line,strings(),MapKey(strings()))
+	If *cell And Not *cell\calced
+		ForEach calccells()
+			If calccells()=*cell
+				error=#True
+				errors="#ERROR# Recursion"
+			EndIf
 		Next
-		
-		
-		line=ReplaceString(line,"+"," + ")
-		line=ReplaceString(line,"-"," - ")
-		line=ReplaceString(line,"*"," * ")
-		line=ReplaceString(line,"/"," / ")
-		line=ReplaceString(line,","," , ")
-		line=ReplaceString(line,";"," ; ")
-		line=ReplaceString(line,"&"," & ")
-		line=ReplaceString(line,"%"," % ")
-		
-		While FindString(line,"  ")
-			line=ReplaceString(line,"  "," ")
-		Wend
-		
-		ForEach cells()
-			line=ReplaceString(line,cells(),MapKey(cells()))		
-		Next
-		
-		
-		
 		If Not error
-			If line<>""
-				
-				line=_MyTableFormulaMath(line)
-				
-				line=ReplaceString(line," & ","")			
-				ForEach strings()
-					line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
-				Next	
+			AddElement(calccells())
+			calccells()=*cell
+			*cell\text="#FORMULA#"
+			Protected NewMap strings.s()
+			Protected NewMap dqstrings.s()
+			Protected NewMap cells.s()
+			Protected NewMap vcells.d()
+			
+			Protected formula.s=*cell\formula		
+			Protected line.s=Mid(formula,2)
+			Protected dqline.s=""
+			
+			Protected idx=0
+			If ExamineRegularExpression(MyTableRegDQuot,line)
+				While NextRegularExpressionMatch(MyTableRegDQuot)			
+					dqline=RegularExpressionMatchString(MyTableRegDQuot)
+					dqstrings("#DQ#"+Str(Len(dqline)-2)+"#QD#")=dqline
+				Wend
 				ForEach dqstrings()
-					dqline=ReplaceString(MapKey(dqstrings()),"#DQ#","")
-					dqline=ReplaceString(dqline,"#QD#","")
-					dqline=LSet(~"\"",Val(dqline),#MyTableHK)
-					line=ReplaceString(line,MapKey(dqstrings()),dqline)
+					line=ReplaceString(line,dqstrings(),MapKey(dqstrings())+#MyTableHK)
 				Next
-				
-				ForEach cells()					
-					*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()))
-					If Not *formulacell
-						errors="#ERROR# Cell not Found: '"+UCase(cells())+"'"
-						error=#True
-						Break
-					EndIf
-					vcells(MapKey(cells()))=*formulacell\value
-					line=ReplaceString(line,MapKey(cells()),*formulacell\text)
-				Next
-				
+			EndIf
+			idx=0
+			If ExamineRegularExpression(MyTableRegExHK,line)
+				While NextRegularExpressionMatch(MyTableRegExHK)			
+					strings("#"+Str(idx)+"#")=RegularExpressionMatchString(MyTableRegExHK)
+					idx+1
+				Wend
+			EndIf
+			idx=0
+			If ExamineRegularExpression(MyTableRegExCells,line)
+				While NextRegularExpressionMatch(MyTableRegExCells)			
+					cells("!"+Str(idx)+"!")=RegularExpressionMatchString(MyTableRegExCells)
+					idx+1
+				Wend
+			EndIf
+			ForEach strings()
+				line=ReplaceString(line,strings(),MapKey(strings()))
+			Next
+			
+			
+			line=ReplaceString(line,"+"," + ")
+			line=ReplaceString(line,"-"," - ")
+			line=ReplaceString(line,"*"," * ")
+			line=ReplaceString(line,"/"," / ")
+			line=ReplaceString(line,","," , ")
+			line=ReplaceString(line,";"," ; ")
+			line=ReplaceString(line,"&"," & ")
+			line=ReplaceString(line,"%"," % ")
+			
+			While FindString(line,"  ")
+				line=ReplaceString(line,"  "," ")
+			Wend
+			
+			ForEach cells()
+				line=ReplaceString(line,cells(),MapKey(cells()))		
+			Next
+			
+			
+			
+			If Not error
+				If line<>""
+					
+					ForEach cells()					
+						*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()),calccells())
+						If *formulacell=0
+							errors="#ERROR# Cell not Found: '"+UCase(cells())+"'"
+							error=#True
+							Break
+						EndIf
+						If *formulacell = *cell Or *formulacell=-1
+							errors="#ERROR# Recursion: '"+UCase(cells())+"'"
+							error=#True
+							Break
+						EndIf
+						vcells(MapKey(cells()))=*formulacell\value
+						line=ReplaceString(line,MapKey(cells()),*formulacell\text)
+					Next
+					
+					line=_MyTableFormulaMath(line)
+					
+					line=ReplaceString(line," & ","")			
+					ForEach strings()
+						line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
+					Next	
+					ForEach dqstrings()
+						dqline=ReplaceString(MapKey(dqstrings()),"#DQ#","")
+						dqline=ReplaceString(dqline,"#QD#","")
+						dqline=LSet(~"\"",Val(dqline),#MyTableHK)
+						line=ReplaceString(line,MapKey(dqstrings()),dqline)
+					Next
+					
+					
+					
+				EndIf
 			EndIf
 		EndIf
 		

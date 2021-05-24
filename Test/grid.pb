@@ -119,7 +119,7 @@ UseModule MyTable
 	
 	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
 	
-	ResizeWindow(mainWindow,#PB_Ignore,#PB_Ignore,1100,620)
+
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	
