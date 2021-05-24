@@ -2364,7 +2364,7 @@ Module MyTable
 			
 			_callcountEnde(GridRegister)
 			
-			_MyTable_Table_AutosizeCol(*this,0)
+			_MyTable_Table_AutosizeColExp(*this,0,#True)
 			*this\redraw=redraw
 			
 		EndIf
@@ -2632,64 +2632,7 @@ Module MyTable
 	
 	
 
-	
-	Procedure MyTableSetColumnWidth(canvas,column.i,width.i)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
-			If *col\width<>width
-				*col\width=width
-				*col\dirty=#True
-				*this\dirty=#True
-				_MyTable_Table_Recalc(*this)
-			EndIf
-		EndIf
-	EndProcedure
-	
-	
-	
-	Procedure MyTableSetColumnImage(canvas,column.i,image.i)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
-			If *col\image<>image
-				*col\image=image
-				*col\dirty=#True
-				*this\dirty=#True
-				_MyTable_Table_Redraw(*this)
-			EndIf
-		EndIf
-	EndProcedure
-	
-	Procedure MyTableSetColumnData(canvas,column.i,*data)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),column)		
-			*col\data=*data		
-		EndIf
-	EndProcedure
-	
-	Procedure MyTableSetColumnCanNull(canvas,column.i,canNull.b)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),column)		
-			*col\canNull=canNull		
-		EndIf
-	EndProcedure
-	
-	Procedure MyTableSetColumnSort(canvas,column.i,sort.i)
-		Protected *this.strMyTableTable=GetGadgetData(canvas)
-		If *this
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),column)
-			If *col\sort<>sort
-				*col\sort=sort
-				*col\dirty=#True
-				*this\dirty=#True
-				_MyTable_Table_Redraw(*this)
-			EndIf
-		EndIf
-	EndProcedure
-	
+
 	
 	
 	
@@ -2920,6 +2863,10 @@ Module MyTable
 		DataSectionGetterSetter(Col,Text)
 		DataSectionGetterSetter(Col,Tooltip)		
 		DataSectionGetterSetter(Col,Format)
+		DataSectionGetterSetter(Col,Image)
+		DataSectionGetterSetter(Col,Data)
+		DataSectionGetterSetter(Col,CanNull)
+		DataSectionGetterSetter(Col,Sort)
 
 		
 		DataSectionSetter(Col,CustomCellEdit)

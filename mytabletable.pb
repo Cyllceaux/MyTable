@@ -64,6 +64,10 @@ Procedure _MyTable_Table_SetCellTooltip(*this.strMyTableTable,row.i,col.i,toolti
 EndProcedure
 
 Procedure _MyTable_Table_AutosizeCol(*this.strMyTableTable,col.i=#PB_Ignore)
+	_MyTable_Table_AutosizeColExp(*this,col)
+EndProcedure
+
+Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
 	Protected *row.strMyTableRow=0
 	
 	Static NewMap all.b()
@@ -90,6 +94,7 @@ Procedure _MyTable_Table_AutosizeCol(*this.strMyTableTable,col.i=#PB_Ignore)
 			EndIf
 			
 			Protected w=0
+			
 			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
 			If *col\textwidth=0
 				w=_MyTableTextWidth(*col\text)
@@ -105,10 +110,7 @@ Procedure _MyTable_Table_AutosizeCol(*this.strMyTableTable,col.i=#PB_Ignore)
 				If *row\image
 					hasimage=#True
 				EndIf
-				Protected force.b=#False
-				If *this\datagrid
-					force=#True
-				EndIf
+				
 				
 				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,force)
 				

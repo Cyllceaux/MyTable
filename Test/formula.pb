@@ -114,6 +114,8 @@ UseModule MyTable
 	_makeTimestamp(Register)
 	
 	
+	
+	
 	Define frow=0
 	*table\SetCellFormula(frow,0,"Hello"):*table\SetCellFormula(frow,1,"World"):frow+1
 	*table\SetCellFormula(frow,0,"=1+1"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
@@ -124,8 +126,10 @@ UseModule MyTable
 	*table\SetCellFormula(frow,0,~"=\"Test\"\"\""):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=\"Test\"\"\"\""):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=\"Test: \" & (1+1)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=\"Test: \" & (1.5*9.2)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	
 	
+	*table\AutosizeColumn(2)
 	
 	_makeTimestamp(AddRow)
 	

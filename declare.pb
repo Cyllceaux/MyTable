@@ -53,6 +53,7 @@ Declare _MyTable_Table_Redraw(*this.strMyTableTable)
 Declare _MyTable_Table_Recalc(*this.strMyTableTable)
 Declare _MyTable_Table_AutosizeRow(*this.strMyTableTable,row.i=#PB_Ignore)
 Declare _MyTable_Table_AutosizeCol(*this.strMyTableTable,col.i=#PB_Ignore)
+
 Declare _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 
 
@@ -78,7 +79,7 @@ Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1,force.b=#False)
 Declare _MyTableClearMaps(*this.strMyTableTable)
 Declare _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare _MyTable_Table_RecalcExp(*this.strMyTableTable,force.b=#False)
-
+Declare _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
 
 ;- Events
 Declare MyTableEvtResize()

@@ -175,7 +175,7 @@ EndProcedure
 
 Procedure _MyTable_Col_SetCustomCellEdit(*this.strMyTableCol,evtCustomEditCell.MyTableProtoEventCustomEditCell,evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell)
 	If *this
-
+		
 		*this\evtCustomEditCell=evtCustomEditCell
 		*this\evtCancelCustomEditCell=evtCancelCustomEditCell
 		
@@ -364,4 +364,64 @@ EndProcedure
 
 Procedure _MyTable_Col_Dirty(*this.strMyTableCol)
 	*this\dirty=#True
+EndProcedure
+
+Procedure _MyTable_Col_SetWidth(*this.strMyTableCol,width.i)
+	
+	If *this
+		
+		If *this\width<>width
+			*this\width=width
+			*this\dirty=#True
+			*this\dirty=#True
+			*this\table\dirty=#True
+			_MyTable_Table_Recalc(*this\table)
+		EndIf
+	EndIf
+EndProcedure
+
+
+
+Procedure _MyTable_Col_SetImage(*this.strMyTableCol,image.i)
+	
+	If *this
+		
+		If *this\image<>image
+			*this\image=image
+			*this\dirty=#True
+			*this\dirty=#True
+			*this\table\dirty=#True
+			_MyTable_Table_Redraw(*this\table)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_SetData(*this.strMyTableCol,*data)
+	
+	If *this
+				
+		*this\data=*data		
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_SetCanNull(*this.strMyTableCol,canNull.b)
+	
+	If *this
+				
+		*this\canNull=canNull		
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_SetSort(*this.strMyTableCol,sort.i)
+	
+	If *this
+		
+		If *this\sort<>sort
+			*this\sort=sort
+			*this\dirty=#True
+			*this\dirty=#True
+			*this\table\dirty=#True
+			_MyTable_Table_Redraw(*this\table)
+		EndIf
+	EndIf
 EndProcedure

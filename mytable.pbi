@@ -210,6 +210,14 @@ DeclareModule MyTable
 		SetTooltip(value.s)
 		GetFormat.s()
 		SetFormat(value.s)
+		GetImage()
+		SetImage(image.i)
+		GetData()
+		SetData(*value)
+		GetCanNull.b()
+		SetCanNull(cannull.i)
+		GetSort()
+		SetSort(image.i)
 		
 		SetCustomCellEdit(event.MyTableProtoEventCustomEditCell,event.MyTableProtoEventCancelCustomEditCell)
 	EndInterface

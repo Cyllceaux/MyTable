@@ -80,6 +80,12 @@ CompilerEndIf
 Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
 Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
 Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
+Global MyTableRegMul=CreateRegularExpression(#PB_Any,"[\d+\.]+ \* [\d+\.]+")
+Global MyTableRegAdd=CreateRegularExpression(#PB_Any,"[\d+\.]+ \+ [\d+\.]+")
+Global MyTableRegSub=CreateRegularExpression(#PB_Any,"[\d+\.]+ \- [\d+\.]+")
+Global MyTableRegDiv=CreateRegularExpression(#PB_Any,"[\d+\.]+ \/ [\d+\.]+")
+Global MyTableRegMod=CreateRegularExpression(#PB_Any,"[\d+\.]+ \% [\d+\.]+")
+Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\([\d+\.]+\)")
 
 
 Procedure _MyTableGridColumnFromColumnName(col.s)
@@ -133,6 +139,77 @@ Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s)
 		FreeStructure(*rc)
 	EndIf
 	ProcedureReturn *cell
+EndProcedure
+
+Procedure.s _MyTableFormulaMath(line.s)
+	Protected result.s=line
+	Protected rech.s=""
+	Protected calc.b=#False
+	If ExamineRegularExpression(MyTableRegKL,result)
+		While NextRegularExpressionMatch(MyTableRegKL)			
+			rech=RegularExpressionMatchString(MyTableRegKL)
+			result=ReplaceString(result,rech,Mid(rech,2,Len(rech)-2))
+			calc=#True
+		Wend
+	EndIf
+	
+	If Not calc
+		If ExamineRegularExpression(MyTableRegMul,result)
+			While NextRegularExpressionMatch(MyTableRegMul)			
+				rech=RegularExpressionMatchString(MyTableRegMul)
+				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," * ")) * ValD(StringField(rech,2," * "))))
+				calc=#True
+			Wend
+		EndIf
+	EndIf
+	
+	If Not calc
+		If ExamineRegularExpression(MyTableRegDiv,result)
+			While NextRegularExpressionMatch(MyTableRegDiv)			
+				rech=RegularExpressionMatchString(MyTableRegDiv)
+				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," / ")) / ValD(StringField(rech,2," / "))))
+				calc=#True
+			Wend
+		EndIf
+	EndIf
+	
+	If Not calc
+		If ExamineRegularExpression(MyTableRegMod,result)
+			While NextRegularExpressionMatch(MyTableRegMod)			
+				rech=RegularExpressionMatchString(MyTableRegMod)
+				result=ReplaceString(result,rech,StrD(Mod(ValD(StringField(rech,1," % ")),ValD(StringField(rech,2," % ")))))
+				calc=#True
+			Wend
+		EndIf
+	EndIf
+	
+	If Not calc
+		If ExamineRegularExpression(MyTableRegAdd,result)
+			While NextRegularExpressionMatch(MyTableRegAdd)			
+				rech=RegularExpressionMatchString(MyTableRegAdd)
+				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," + ")) + ValD(StringField(rech,2," + "))))
+				calc=#True
+			Wend
+		EndIf
+	EndIf
+	
+	If Not calc
+		If ExamineRegularExpression(MyTableRegSub,result)
+			While NextRegularExpressionMatch(MyTableRegSub)			
+				rech=RegularExpressionMatchString(MyTableRegSub)
+				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," - ")) - ValD(StringField(rech,2," - "))))
+				calc=#True
+			Wend
+		EndIf
+	EndIf
+	
+	
+	
+	If calc
+		ProcedureReturn _MyTableFormulaMath(result)
+	Else
+		ProcedureReturn result
+	EndIf
 EndProcedure
 
 Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
@@ -198,9 +275,11 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell)
 		Next
 		
 		
+		
 		If Not error
 			If line<>""
 				
+				line=_MyTableFormulaMath(line)
 				
 				line=ReplaceString(line," & ","")			
 				ForEach strings()
