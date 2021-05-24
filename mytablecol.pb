@@ -81,7 +81,7 @@ Procedure _MyTable_Col_SetFormat(*this.strMyTableCol,format.s)
 			*this\dirty=#True
 			*this\table\dirty=#True
 			ForEach *this\table\rows()
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),column)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),*this\listindex)
 				_MyTableFillCellValue(*cell,*cell\value)
 			Next
 			_MyTable_Table_Redraw(*this\table)

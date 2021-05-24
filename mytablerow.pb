@@ -59,6 +59,7 @@ Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,rows.i)
 			*row=AddElement(*this\rows())					
 			_MyTableAddDirtyRow(*this,*row)
 			*this\level=*this\level+1
+			*row\listindex=ListIndex(*this\rows())
 		Next
 		
 		*this\dirty=#True
@@ -143,14 +144,14 @@ Procedure _MyTable_Row_SetHeight(*this.strMyTableRow,height.i)
 	
 	If *this
 		
-		If *row
-			If *this\height<>height
-				*this\height=height
-				*this\dirty=#True
-				*this\dirty=#True
-				_MyTable_Table_Recalc(*this\table)
-			EndIf
+		
+		If *this\height<>height
+			*this\height=height
+			*this\dirty=#True
+			*this\dirty=#True
+			_MyTable_Table_Recalc(*this\table)
 		EndIf
+		
 	EndIf
 EndProcedure
 
@@ -424,6 +425,7 @@ Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",id.q=#PB_Igno
 			\type=#MYTABLE_TYPE_ROW
 			\tooltip=tooltip
 			\level=*this\level+1
+			*row\listindex=ListIndex(*this\rows())
 			If IsImage(image)				
 				\sclaedimage=CopyImage(image,#PB_Any)
 				ResizeImage(\sclaedimage,MyTableW16,MyTableH16)

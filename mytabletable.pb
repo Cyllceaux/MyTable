@@ -223,6 +223,7 @@ Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 		LastElement(*this\rows())
 		For i=1 To rows
 			*row=AddElement(*this\rows())
+			*row\listindex=ListIndex(*this\rows())
 			_MyTableAddDirtyRow(*this,*row)				
 		Next
 		
@@ -245,6 +246,7 @@ Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_
 		*row=AddElement(*this\rows())
 		
 		With *row
+			*row\listindex=ListIndex(*this\rows())
 			\vtable=?vtable_row
 			\height=*this\rowheight
 			\brow=#True
@@ -307,6 +309,7 @@ Procedure _MyTable_Table_AddColumn(*this.strMyTableTable,text.s,width.i,flags.i=
 			\dirty=#True
 			\tooltip=tooltip
 			\type=#MYTABLE_TYPE_COL
+			\listindex=ListIndex(*this\cols())
 			If Bool(flags & #MYTABLE_COLUMN_FLAGS_DATE)
 				\format="%dd.%mm.%yyyy"
 			EndIf

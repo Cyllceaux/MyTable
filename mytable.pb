@@ -34,6 +34,8 @@
 
 Module MyTable
 	
+	EnableExplicit
+	
 	Macro MM
 		"
 	EndMacro
@@ -228,6 +230,7 @@ Module MyTable
 	EndStructure
 	
 	Structure strMyTableRow Extends strMyTableAObject
+		listindex.q
 		List cells.strMyTableCell()
 		List rows.strMyTableRow()
 		id.q	
@@ -247,6 +250,7 @@ Module MyTable
 	
 	
 	Structure strMyTableCol Extends strMyTableAObject
+		listindex.q
 		id.q
 		text.s	
 		width.i
