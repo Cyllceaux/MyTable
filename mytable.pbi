@@ -2603,7 +2603,7 @@ Procedure MyTableEvtMouseDown()
 										*this\evtRowRightClick(*this\canvas,*row)
 									EndIf
 								Else
-									*cell=_MyTableGetOrAddCell(*row,col)
+									*cell=_MyTableGetOrAddCell(*row,col,#True)
 									_MyTableSelectCell(*cell,control,shift,multiselect,#False)
 									
 									If rightbutton And *this\evtCellRightClick
@@ -2714,7 +2714,7 @@ Procedure MyTableEvtDouble()
 			If row>-1
 				SelectElement(*this\expRows(),row)		
 				*row=*this\expRows()
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,#True)
 				_MyTableEditCell(*cell)				
 			EndIf
 		EndIf					
