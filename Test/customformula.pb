@@ -11,7 +11,7 @@ EndEnumeration
 UseModule MyTable
 	
 	
-	Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable Formula",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable CustomFormula",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global menu=CreateMenu(#PB_Any,WindowID(mainWindow))
 	
 	
@@ -21,7 +21,28 @@ UseModule MyTable
 	Global vscrollFormula=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 	CloseGadgetList()
 	
+	Procedure.s FakeFormula(name.s,List cells.s())
+		FirstElement(cells())
+		ProcedureReturn "Hello World: "+cells()
+	EndProcedure
 	
+	Procedure.s RandomFormula(name.s,List cells.s())
+		Protected max=1
+		Protected min=0
+		
+		Select ListSize(cells())
+			Case 1
+				SelectElement(cells(),0)
+				max=Val(cells())
+			Case 2
+				SelectElement(cells(),0)
+				min=Val(cells())
+				SelectElement(cells(),1)
+				max=Val(cells())
+		EndSelect
+		
+		ProcedureReturn Str(Random(max,min))
+	EndProcedure
 	
 	Procedure evtResizeWindow()
 		
@@ -86,7 +107,8 @@ UseModule MyTable
 	
 	Define *table.MyTableTable=MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100,#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT)
 	*table\SetEventCellSelected(@SelectCell())
-	
+	*table\RegisterFormula("HELLOWORLD",@FakeFormula())
+	*table\RegisterFormula("RND",@RandomFormula())
 	
 	
 	
@@ -109,6 +131,8 @@ UseModule MyTable
 	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;A4;A5;A6)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;((A4+A5)*A6))"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;SUM(A4;A6))"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=HELLOWORLD(\"Silko\")"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=RND(1;100) & \"->\" & RND(1;RND(100;200)) & \"->\" & RND(1;100)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	
 	*table\AutosizeColumn(1)
 	*table\AutosizeColumn(2)

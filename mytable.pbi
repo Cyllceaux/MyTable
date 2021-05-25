@@ -97,6 +97,7 @@ DeclareModule MyTable
 		EndEnumeration
 		
 		#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA
+		Prototype.s MyTableProtoFormula(name.s,List cells.s())
 	CompilerEndIf
 	
 	Prototype MyTableProtoEventRowSelected(*row)
@@ -111,6 +112,8 @@ DeclareModule MyTable
 	Prototype MyTableProtoEventCallback(*row)
 	Prototype MyTableProtoEventCancelCustomEditCell(*cell)
 	Prototype MyTableProtoEventCustomEditCell(*cell,x,y,w,h)
+	
+	
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -251,6 +254,9 @@ DeclareModule MyTable
 		SetEventCallback(event.MyTableProtoEventCallback)
 		
 		SetCustomCellEdit(col.i,event.MyTableProtoEventCustomEditCell,event.MyTableProtoEventCancelCustomEditCell)
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			RegisterFormula(name.s,method.MyTableProtoFormula)
+		CompilerEndIf
 	EndInterface
 	
 	

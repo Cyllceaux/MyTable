@@ -31,6 +31,77 @@
 ; SOFTWARE.
 ;}
 
+CompilerIf #MYTABLE_FORMULA_DQUOTE
+	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,~"\".*?\"")
+	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[\"]{3,}")
+	#MyTableHK=#DQUOTE$
+CompilerElse
+	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,"'.*?'")
+	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[']{3,}")
+	#MyTableHK="'"
+CompilerEndIf
+
+Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
+Global MyTableRegExRange=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+\:[a-zA-Z]+\d+")
+Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
+Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
+Global MyTableRegMul=CreateRegularExpression(#PB_Any,"[\d+\.]+ \* [\d+\.]+")
+Global MyTableRegAdd=CreateRegularExpression(#PB_Any,"[\d+\.]+ \+ [\d+\.]+")
+Global MyTableRegSub=CreateRegularExpression(#PB_Any,"[\d+\.]+ \- [\d+\.]+")
+Global MyTableRegDiv=CreateRegularExpression(#PB_Any,"[\d+\.]+ \/ [\d+\.]+")
+Global MyTableRegMod=CreateRegularExpression(#PB_Any,"[\d+\.]+ \% [\d+\.]+")
+Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\([\d+\.]+\)")
+;Global MyTableRegFormula=CreateRegularExpression(#PB_Any,"[\w\d]+\(.*\)")
+Global MyTableRegFormula=CreateRegularExpression(#PB_Any,"[\w\d]+\([^()]*\)")
+
+
+Structure strMyTableRange
+	from.strMyTableRowCol
+	To.strMyTableRowCol
+EndStructure
+
+
+Procedure.s _MyTableFormulaExt(*this.strMyTableTable,name.s,List cells.s())
+	Protected form.MyTableProtoFormula=0
+	ForEach *this\forms()
+		If LCase(MapKey(*this\forms()))=LCase(name)
+			form=*this\forms()
+			Break
+		EndIf
+	Next
+	
+	If form
+		ProcedureReturn form(name,cells())
+	Else
+		ProcedureReturn "#ERROR#: Unknown Method '"+name+"'"
+	EndIf
+EndProcedure
+
+Procedure.s _MyTableFormula(*this.strMyTableTable,formula.s)
+	Protected result.s=formula
+	Protected dqline.s=""
+	Protected name.s=Mid(result,1,FindString(result,"(")-1)
+	result=Mid(result,Len(name)+2,Len(result)-2-Len(name))
+	
+	If ExamineRegularExpression(MyTableRegFormula,result)
+		While NextRegularExpressionMatch(MyTableRegFormula)			
+			dqline=RegularExpressionMatchString(MyTableRegFormula)
+			result=ReplaceString(result,dqline,_MyTableFormula(*this,dqline))
+		Wend
+	EndIf
+	
+	Protected c=CountString(result,";")
+	Protected i
+	Protected NewList cells.s()
+	For i=0 To c
+		AddElement(cells())
+		cells()=Trim(StringField(result,i+1,";"))
+	Next
+	result= _MyTableFormulaExt(*this,name,cells())
+	FreeList(cells())
+	ProcedureReturn result
+EndProcedure
+
 Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="'" And Right(formula,1)<>"'"
 		*cell\table\formulaCells(Str(*cell))=#False
@@ -39,6 +110,7 @@ Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
 		*cell\formula=formula
 		*cell\table\formulaCells(Str(*cell))=#True
+		*cell\calced=#False
 		Protected NewList cells()
 		_MyTableFormulaCalcCell(*cell,cells())
 		FreeList(cells())
@@ -71,26 +143,56 @@ Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
-CompilerIf #MYTABLE_FORMULA_DQUOTE
-	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,~"\".*?\"")
-	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[\"]{3,}")
-	#MyTableHK=#DQUOTE$
-CompilerElse
-	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,"'.*?'")
-	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[']{3,}")
-	#MyTableHK="'"
-CompilerEndIf
 
-Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
-Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
-Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
-Global MyTableRegMul=CreateRegularExpression(#PB_Any,"[\d+\.]+ \* [\d+\.]+")
-Global MyTableRegAdd=CreateRegularExpression(#PB_Any,"[\d+\.]+ \+ [\d+\.]+")
-Global MyTableRegSub=CreateRegularExpression(#PB_Any,"[\d+\.]+ \- [\d+\.]+")
-Global MyTableRegDiv=CreateRegularExpression(#PB_Any,"[\d+\.]+ \/ [\d+\.]+")
-Global MyTableRegMod=CreateRegularExpression(#PB_Any,"[\d+\.]+ \% [\d+\.]+")
-Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\([\d+\.]+\)")
-
+Procedure.s _MyTable_RangeString(range.s)
+	Protected result.s=""
+	If range<>""
+		
+		Protected row.s=""
+		Protected col.s=""
+		If ExamineRegularExpression(MyTableRegExRow,StringField(range,1,":"))
+			While NextRegularExpressionMatch(MyTableRegExRow)			
+				row=RegularExpressionMatchString(MyTableRegExRow)
+			Wend
+		EndIf
+		If ExamineRegularExpression(MyTableRegExCol,StringField(range,1,":"))
+			While NextRegularExpressionMatch(MyTableRegExCol)			
+				col=RegularExpressionMatchString(MyTableRegExCol)
+			Wend
+		EndIf
+		
+		
+		Protected *rc.strMyTableRange=AllocateStructure(strMyTableRange)
+		*rc\from\row=Val(row)-1
+		*rc\from\col=_MyTableGridColumnFromColumnName(col)
+		If ExamineRegularExpression(MyTableRegExRow,StringField(range,2,":"))
+			While NextRegularExpressionMatch(MyTableRegExRow)			
+				row=RegularExpressionMatchString(MyTableRegExRow)
+			Wend
+		EndIf
+		If ExamineRegularExpression(MyTableRegExCol,StringField(range,2,":"))
+			While NextRegularExpressionMatch(MyTableRegExCol)			
+				col=RegularExpressionMatchString(MyTableRegExCol)
+			Wend
+		EndIf
+		*rc\to\row=Val(row)-1
+		*rc\to\col=_MyTableGridColumnFromColumnName(col)
+		Protected i,g
+		Protected *cell.strMyTableCell
+		
+		For i=*rc\from\row To *rc\to\row
+			For g=*rc\from\col To *rc\to\col
+				If result<>""
+					result+"; "
+				EndIf
+				result+_MyTableGridColumnName(g+1)+Str(i+1)
+			Next
+		Next
+		
+		FreeStructure(*rc)
+	EndIf
+	ProcedureReturn result
+EndProcedure
 
 Procedure _MyTableGridColumnFromColumnName(col.s)
 	Protected result=0
@@ -159,7 +261,7 @@ Procedure.s _MyTableFormulaMath(line.s)
 	Protected calc.b=#False
 	If ExamineRegularExpression(MyTableRegKL,result)
 		While NextRegularExpressionMatch(MyTableRegKL)			
-			rech=RegularExpressionMatchString(MyTableRegKL)
+			rech=Trim(RegularExpressionMatchString(MyTableRegKL))
 			result=ReplaceString(result,rech,Mid(rech,2,Len(rech)-2))
 			calc=#True
 		Wend
@@ -243,11 +345,13 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 			Protected NewMap strings.s()
 			Protected NewMap dqstrings.s()
 			Protected NewMap cells.s()
+			Protected NewMap range.s()
 			Protected NewMap vcells.d()
 			
 			Protected formula.s=*cell\formula		
 			Protected line.s=Mid(formula,2)
 			Protected dqline.s=""
+			Protected ranges.s=""
 			
 			Protected idx=0
 			If ExamineRegularExpression(MyTableRegDQuot,line)
@@ -262,20 +366,37 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 			idx=0
 			If ExamineRegularExpression(MyTableRegExHK,line)
 				While NextRegularExpressionMatch(MyTableRegExHK)			
-					strings("#"+Str(idx)+"#")=RegularExpressionMatchString(MyTableRegExHK)
+					strings("##"+Str(idx)+"##")=RegularExpressionMatchString(MyTableRegExHK)
 					idx+1
 				Wend
 			EndIf
-			idx=0
-			If ExamineRegularExpression(MyTableRegExCells,line)
-				While NextRegularExpressionMatch(MyTableRegExCells)			
-					cells("!"+Str(idx)+"!")=RegularExpressionMatchString(MyTableRegExCells)
-					idx+1
-				Wend
-			EndIf
+			
+			
+			
 			ForEach strings()
 				line=ReplaceString(line,strings(),MapKey(strings()))
 			Next
+			
+			idx=0
+			If ExamineRegularExpression(MyTableRegExRange,line)
+				While NextRegularExpressionMatch(MyTableRegExRange)			
+					range("#_"+Str(idx)+"_#")=RegularExpressionMatchString(MyTableRegExRange)
+					idx+1
+				Wend
+			EndIf
+			
+			ForEach range()
+				ranges=_MyTable_RangeString(range())
+				line=ReplaceString(line,range(),ranges)
+			Next
+			
+			idx=0
+			If ExamineRegularExpression(MyTableRegExCells,line)
+				While NextRegularExpressionMatch(MyTableRegExCells)			
+					cells("#!"+Str(idx)+"!#")=RegularExpressionMatchString(MyTableRegExCells)
+					idx+1
+				Wend
+			EndIf
 			
 			
 			line=ReplaceString(line,"+"," + ")
@@ -291,10 +412,11 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 				line=ReplaceString(line,"  "," ")
 			Wend
 			
+			
+			
 			ForEach cells()
 				line=ReplaceString(line,cells(),MapKey(cells()))		
 			Next
-			
 			
 			
 			If Not error
@@ -335,6 +457,22 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 			EndIf
 		EndIf
 		
+		If Not error
+			If line<>""
+				idx=1
+				While idx
+					idx=0
+					If ExamineRegularExpression(MyTableRegFormula,line)
+						While NextRegularExpressionMatch(MyTableRegFormula)			
+							dqline=RegularExpressionMatchString(MyTableRegFormula)
+							line=ReplaceString(line,dqline,_MyTableFormula(*cell\table,dqline))
+							idx=1
+						Wend
+					EndIf
+				Wend
+			EndIf
+		EndIf	
+		
 		If error
 			If errors<>""
 				_MyTableFillCellText(*cell,errors,#False)
@@ -350,6 +488,7 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 		FreeMap(strings())
 		FreeMap(dqstrings())
 		FreeMap(cells())
+		FreeMap(range())
 		FreeMap(vcells())
 		*cell\calced=#True
 	EndIf
@@ -389,4 +528,23 @@ Procedure.s _MyTable_Table_GetCellFormula(*this.strMyTableTable,row.i,col.i)
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
 		ProcedureReturn _MyTable_Cell_GetFormula(*cell)
 	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetRegisterFormula(*this.strMyTableTable,name.s,method.MyTableProtoFormula)
+	If *this
+		*this\forms(name)=method
+	EndIf
+EndProcedure
+
+Procedure.s _MyTable_Formula_Sum(name.s,List cells.s())
+	Protected value.d=0
+	ForEach cells()
+		value+ValD(cells())
+	Next
+	
+	ProcedureReturn StrD(value)
+EndProcedure
+
+Procedure _MyTable_InitFormula(*this.strMyTableTable)
+	*this\forms("SUM")=@_MyTable_Formula_Sum()
 EndProcedure

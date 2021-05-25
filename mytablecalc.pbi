@@ -39,5 +39,6 @@ Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
 Declare _MyTableFormulaCalcCell(*cell.strMyTableCell,List cells())
 Declare _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s,List cells())
 Declare _MyTableGridColumnFromColumnName(col.s)
+Declare _MyTable_InitFormula(*this.strMyTableTable)
 
 MacroGetterSetter(Cell,Formula,s)

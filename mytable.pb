@@ -264,6 +264,7 @@ Module MyTable
 		datagrid.b
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			Map formulaCells.b()
+			Map forms.i()
 		CompilerEndIf
 		Map tempselected.b()
 		List expRows.i()
@@ -2394,6 +2395,12 @@ Module MyTable
 			_MyTable_Table_AutosizeColExp(*this,0,#True)
 			*this\redraw=redraw
 			
+			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+				If Bool(flags & #MYTABLE_TABLE_FLAGS_FORMULA)
+					_MyTable_InitFormula(*this)
+				EndIf
+			CompilerEndIf
+			
 		EndIf
 		ProcedureReturn *this
 	EndProcedure
@@ -2867,8 +2874,12 @@ Module MyTable
 		DataSectionSetter(Table,EventCellChangedText)
 		DataSectionSetter(Table,EventCellChangedValue)
 		DataSectionSetter(Table,EventCallback)
+		
 		DataSectionSetter(Table,CustomCellEdit)
 		
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			DataSectionSetter(Table,RegisterFormula)
+		CompilerEndIf
 		;- Row
 		vtable_row:
 		DataSectionDefault(Row)
