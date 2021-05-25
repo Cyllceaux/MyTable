@@ -1,11 +1,6 @@
 ﻿EnableExplicit
 
-#MYTABLE_DEBUG = 0
-#MYTABLE_DEBUG_LEVEL = 0
-
-DebugLevel #MYTABLE_DEBUG_LEVEL
-
-UsePNGImageDecoder()
+#MYTABLE_FORMULA = 0
 
 XIncludeFile "..\mytable.pbi"
 
@@ -17,12 +12,12 @@ EndEnumeration
 
 UseModule MyTable
 	
-	Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable Formula",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable Grid",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global menu=CreateMenu(#PB_Any,WindowID(mainWindow))
 	
 	
-	Global stringFormula=StringGadget(#PB_Any,0,0,0,22,""):DisableGadget(stringFormula,#True)
-	Global canvasFormula=CanvasGadget(#PB_Any,0,24,0,0,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
+	Global stringFormula=StringGadget(#PB_Any,0,0,WindowWidth(mainWindow),22,""):DisableGadget(stringFormula,#True)
+	Global canvasFormula=CanvasGadget(#PB_Any,0,24,WindowWidth(mainWindow),WindowHeight(mainWindow)-24,#PB_Canvas_Container|#PB_Canvas_Border|#PB_Canvas_Keyboard)
 	Global hscrollFormula=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,100)
 	Global vscrollFormula=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 	CloseGadgetList()
@@ -76,7 +71,11 @@ UseModule MyTable
 	Procedure EvtReturn()
 		If GetActiveGadget()=stringFormula
 			Protected *cell.MyTableCell=GetGadgetData(stringFormula)
-			*cell\SetFormula(GetGadgetText(stringFormula))
+			CompilerIf #MYTABLE_FORMULA
+				*cell\SetFormula(GetGadgetText(stringFormula))
+			CompilerElse
+				*cell\SetText(GetGadgetText(stringFormula))
+			CompilerEndIf
 			Protected *table.MyTableTable=*cell\GetTable()
 			*table\Recalc()
 		EndIf
@@ -89,35 +88,12 @@ UseModule MyTable
 	
 	
 	
-	Macro DQ
-		"
-	EndMacro
-	
-	Macro _makeTimestamp(name)
-		CompilerIf #PB_Compiler_Debugger 
-			CompilerIf #MYTABLE_DEBUG_LEVEL=1
-				Debug "",1
-				Debug "------------------"+DQ#name#DQ+"------Dauer: "+Str(ElapsedMilliseconds()-timestamp)+"ms -----------------------------------------------",1
-				timestamp=ElapsedMilliseconds()
-				Debug "",1
-			CompilerEndIf
-		CompilerEndIf
-	EndMacro
-	
-	Define timestamp=ElapsedMilliseconds()
-	
 	
 	Define *table.MyTableTable=MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100)
 	*table\SetEventCellSelected(@SelectCell())
 	
-	_makeTimestamp(Register)
-	
-	
-	
-	_makeTimestamp(AddRow)
-	
-	
-	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
+	Define frow=0
+	*table\SetCellText(frow,0,"Hello"):*table\SetCellText(frow,1,"World"):frow+1
 	
 
 	

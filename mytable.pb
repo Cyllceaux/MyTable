@@ -40,32 +40,9 @@ Module MyTable
 		"
 	EndMacro
 	
-	CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG,#PB_Constant)
-		#MYTABLE_DEBUG=0
-	CompilerEndIf
-	
-	CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant)
-		#MYTABLE_DEBUG_LEVEL=0
-	CompilerEndIf
-	
-	CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_MS_MAX,#PB_Constant)
-		#MYTABLE_DEBUG_MS_MAX=200
-	CompilerEndIf
-	
-	CompilerIf Not Defined(MYTABLE_EXPORT_XML,#PB_Constant)
-		#MYTABLE_EXPORT_XML=1
-	CompilerEndIf
-	
-	CompilerIf Not Defined(MYTABLE_EXPORT_JSON,#PB_Constant)
-		#MYTABLE_EXPORT_JSON=1
-	CompilerEndIf
-	
-	CompilerIf Not Defined(MYTABLE_FORMULA,#PB_Constant)
-		#MYTABLE_FORMULA=1
-	CompilerEndIf
 	
 	Macro _callcountStart(sname)
-		CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG
+		CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 			Static NewMap callcount.i()
 			Static NewMap callms.i()
 			Static NewMap callmssum.i()		
@@ -74,7 +51,7 @@ Module MyTable
 	EndMacro
 	
 	Macro _callcountEnde(sname)
-		CompilerIf #PB_Compiler_Debugger And #MYTABLE_DEBUG
+		CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 			Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
 			callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
 			callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
@@ -223,7 +200,7 @@ Module MyTable
 		*col.strMyTableCol	
 		startx.i
 		starty.i
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			formula.s
 			calced.b
 		CompilerEndIf
@@ -284,7 +261,7 @@ Module MyTable
 		bhs.b
 		Map selected.b()
 		datagrid.b
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			Map formulaCells.b()
 		CompilerEndIf
 		Map tempselected.b()
@@ -340,7 +317,7 @@ Module MyTable
 		col.i
 	EndStructure
 	
-	CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
+	CompilerIf Defined(MYTABLE_EXPORT_JSON,#PB_Module) Or Defined(MYTABLE_EXPORT_XML,#PB_Module)
 		Structure strMyTableExportRow
 			List cells.s()
 		EndStructure
@@ -357,7 +334,7 @@ Module MyTable
 	
 	XIncludeFile "declare.pb"
 	
-	CompilerIf #MYTABLE_FORMULA
+	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 		XIncludeFile "mytablecalc.pbi"
 	CompilerEndIf
 	
@@ -369,7 +346,7 @@ Module MyTable
 		CompilerEndSelect
 	EndProcedure
 	
-	CompilerIf #MYTABLE_EXPORT_JSON Or #MYTABLE_EXPORT_XML
+	CompilerIf Defined(MYTABLE_EXPORT_JSON,#PB_Module) Or Defined(MYTABLE_EXPORT_XML,#PB_Module)
 		Procedure _MyTableExportInit(canvas)
 			Protected *this.strMyTableTable=GetGadgetData(canvas)
 			_callcountStart(exportData)
@@ -827,7 +804,7 @@ Module MyTable
 		
 		*cell\text=text	
 		
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			If override
 				*cell\formula=""
 				*cell\calced=#True
@@ -856,7 +833,7 @@ Module MyTable
 			                 LCase(*cell\text)="yes")
 			*cell\checked=*cell\value
 		EndIf
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			If override
 				_MyTableFormulaCalcTable(*cell\table)
 			EndIf
@@ -875,7 +852,7 @@ Module MyTable
 		EndIf
 		
 		*cell\value=value
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			If override
 				*cell\formula=""
 				*cell\calced=#True
@@ -900,7 +877,7 @@ Module MyTable
 				*cell\text=Str(value)
 			EndIf
 		EndIf
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			If override
 				_MyTableFormulaCalcTable(*cell\table)
 			EndIf
@@ -935,7 +912,7 @@ Module MyTable
 							*cell\textwidth=0					
 							*cell\textheight=0				
 							
-							CompilerIf #MYTABLE_FORMULA
+							CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 								_MyTableFillCellFormula(*cell,s)
 							CompilerElse
 								_MyTableFillCellText(*cell,s)
@@ -1007,7 +984,7 @@ Module MyTable
 							                                WindowWidth(*this\editorwindow),
 							                                WindowHeight(*this\editorwindow),
 							                                #PB_Editor_WordWrap)		
-							CompilerIf #MYTABLE_FORMULA
+							CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 								If *cell\formula=""
 									*cell\formula=defaultIfEmpty
 								EndIf
@@ -1327,7 +1304,7 @@ Module MyTable
 				EndIf
 			Next
 			
-			CompilerIf #MYTABLE_FORMULA
+			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 				ForEach *this\formulaCells()
 					If Not *this\formulaCells()
 						DeleteMapElement(*this\formulaCells())
@@ -1547,7 +1524,7 @@ Module MyTable
 			Protected NewList selected.i()
 			
 			Select GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
-					CompilerIf #MYTABLE_FORMULA
+					CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 					Case #PB_Shortcut_0
 						If shift
 							_MyTableClearMaps(*this)
@@ -2695,7 +2672,7 @@ Module MyTable
 	EndProcedure
 	
 	
-	CompilerIf #MYTABLE_EXPORT_XML
+	CompilerIf Defined(MYTABLE_EXPORT_XML,#PB_Module)
 		
 		Procedure MyTableExportXML(canvas,filename.s)
 			Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
@@ -2729,7 +2706,7 @@ Module MyTable
 		
 	CompilerEndIf
 	
-	CompilerIf #MYTABLE_EXPORT_JSON
+	CompilerIf Defined(MYTABLE_EXPORT_JSON,#PB_Module)
 		
 		Procedure MyTableExportJSON(canvas,filename.s)
 			Protected *table.strMyTableExportTable=_MyTableExportInit(canvas)
@@ -2770,7 +2747,7 @@ Module MyTable
 	
 	
 	
-	CompilerIf #MYTABLE_FORMULA
+	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 		XIncludeFile "mytablecalc.pb"
 	CompilerEndIf
 	
@@ -2823,7 +2800,7 @@ Module MyTable
 		DataSectionGetterSetter(Table,CellText)
 		DataSectionGetterSetter(Table,CellTooltip)
 		DataSectionGetterSetter(Table,CellValue)
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Table,CellFormula)
 		CompilerEndIf
 		DataSectionGetterSetter(Table,CellImage)
@@ -2884,7 +2861,7 @@ Module MyTable
 		DataSectionGetterSetter(Cell,Data)
 		DataSectionGetterSetter(Cell,Image)
 		DataSectionGetterSetter(Cell,Value)
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Cell,Formula)
 		CompilerEndIf
 		DataSectionGetterSetter(Cell,Image)

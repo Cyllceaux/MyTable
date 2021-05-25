@@ -83,6 +83,7 @@ Procedure _MyTable_Cell_SetText(*this.strMyTableCell,text.s)
 			*this\textwidth=0
 			*this\textheight=0
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTableFillCellText(*this,text)
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
@@ -96,6 +97,7 @@ Procedure _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
 			*this\textwidth=0
 			*this\textheight=0
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTableFillCellValue(*this,value)
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
@@ -113,6 +115,7 @@ Procedure _MyTable_Cell_CellFlags(*this.strMyTableCell,flags.i)
 			*this\textwidth=0
 			*this\textheight=0
 			*this\dirty=#True
+			*this\table\dirty=#true
 			_MyTable_Table_Recalc(*this\table)
 		EndIf
 	EndIf

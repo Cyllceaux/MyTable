@@ -1,6 +1,7 @@
 ﻿EnableExplicit
 
 
+#MYTABLE_FORMULA = 0
 
 XIncludeFile "..\mytable.pbi"
 
@@ -12,7 +13,7 @@ EndEnumeration
 
 UseModule MyTable
 	
-	Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable Formula",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global mainWindow=OpenWindow(#PB_Any,0,0,1100,600,"MyTable Grid2",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global menu=CreateMenu(#PB_Any,WindowID(mainWindow))
 	
 	
@@ -39,8 +40,8 @@ UseModule MyTable
 	
 	Define *table.MyTableTable=MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,100,10)
 	
-	
-	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
+	Define frow=0
+	*table\SetCellText(frow,0,"Hello"):*table\SetCellText(frow,1,"World"):frow+1
 	
 	
 	

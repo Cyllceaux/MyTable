@@ -7,20 +7,24 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-24 18:56" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-25 07:19" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="25a5c21d4145b96808d2286fe9b949ca"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="4f451458cea73bb48350d85972018677"/>
+    </file>
+    <file name="global.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="a8328beb453123b29eee57aeeeddb250"/>
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="cd8edaf7eb2d8436208254bfeaab9325"/>
+      <fingerprint md5="fba89551d8b0c7945283e72243a80ec9"/>
     </file>
     <file name="mytable.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="7b9365eb9b410b0b849668d7929ef67e"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="ef194d9f098bebfe4ccd9f6cd443cfa8"/>
     </file>
     <file name="mytablecalc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -31,8 +35,8 @@
       <fingerprint md5="4431bf417a2d0d6b96cf6b34d558d81c"/>
     </file>
     <file name="mytablecell.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="a859ad674e819e92b44729ef0f90c4fe"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="f061774c0ce22c7e34ecfe1f4d90e9c0"/>
     </file>
     <file name="mytablecol.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -43,8 +47,8 @@
       <fingerprint md5="779d9a0833c4e7fbab062aa38a546936"/>
     </file>
     <file name="mytabletable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="6dfbcc798964eedfcb66a435f1830524"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="b97c358ed5b95edb11a12b9625df8b6c"/>
     </file>
     <file name="Test\all.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -52,40 +56,40 @@
     </file>
     <file name="Test\formula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="f81ee82aac1daca06fb473fc6c495a5e"/>
+      <fingerprint md5="b0c166ea782b546f13c460c544875d57"/>
     </file>
     <file name="Test\grid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="055192271024a6ae59660e2c1d0d76e7"/>
+      <fingerprint md5="3264d49fce926bb44a376eb8bedb35ec"/>
     </file>
     <file name="Test\grid2.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="2005721771163b06b9b5afd1de60b10d"/>
+      <fingerprint md5="cb29be1a7d7860ab39bc359e27e8e6ae"/>
     </file>
   </section>
   <section name="targets">
-    <target name="All" enabled="1" default="1">
+    <target name="All" enabled="0" default="1">
       <inputfile value="Test\all.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
-    <target name="Formula" enabled="1" default="0">
+    <target name="Formula" enabled="0" default="0">
       <inputfile value="Test\formula.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
-    <target name="grid" enabled="1" default="0">
+    <target name="grid" enabled="0" default="0">
       <inputfile value="Test\grid.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
-    <target name="grid2" enabled="1" default="0">
+    <target name="grid2" enabled="0" default="0">
       <inputfile value="Test\grid2.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>

@@ -209,7 +209,7 @@ EndProcedure
 Procedure _MyTable_Table_Recalc(*this.strMyTableTable)		
 	If *this
 		*this\dirty=#True
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			_MyTableFormulaCalcTable(*this)
 		CompilerEndIf
 		_MyTable_Table_RecalcExp(*this)

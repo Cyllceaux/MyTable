@@ -31,44 +31,10 @@
 ; SOFTWARE.
 ;}
 
-CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG,#PB_Constant)
-	#MYTABLE_DEBUG=0
-CompilerEndIf
-
-CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant)
-	#MYTABLE_DEBUG_LEVEL=0
-CompilerEndIf
-
-CompilerIf #PB_Compiler_Debugger And Not Defined(MYTABLE_DEBUG_MS_MAX,#PB_Constant)
-	#MYTABLE_DEBUG_MS_MAX=200
-CompilerEndIf
-
-CompilerIf Not Defined(MYTABLE_EXPORT_XML,#PB_Constant)
-	#MYTABLE_EXPORT_XML=1
-CompilerEndIf
-
-CompilerIf Not Defined(MYTABLE_EXPORT_JSON,#PB_Constant)
-	#MYTABLE_EXPORT_JSON=1
-CompilerEndIf
-
-CompilerIf Not Defined(MYTABLE_FORMULA,#PB_Constant)
-	#MYTABLE_FORMULA=1
-CompilerEndIf
-
+XIncludeFile "global.pbi"
 
 DeclareModule MyTable
 	
-	CompilerIf Not Defined(MYTABLE_EXPORT_XML,#PB_Constant)
-		#MYTABLE_EXPORT_XML=1
-	CompilerEndIf
-	
-	CompilerIf Not Defined(MYTABLE_EXPORT_JSON,#PB_Constant)
-		#MYTABLE_EXPORT_JSON=1
-	CompilerEndIf
-	
-	CompilerIf Not Defined(MYTABLE_FORMULA,#PB_Constant)
-		#MYTABLE_FORMULA=1
-	CompilerEndIf
 	
 	EnumerationBinary _MyTableTableFlags
 		#MYTABLE_TABLE_FLAGS_GRID
@@ -121,7 +87,7 @@ DeclareModule MyTable
 	#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME = #MYTABLE_COLUMN_FLAGS_TIME|#MYTABLE_COLUMN_FLAGS_TIME_LONG
 	#MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME = #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE|#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME
 	
-	CompilerIf #MYTABLE_FORMULA
+	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 		CompilerIf Not Defined(MYTABLE_FORMULA_QUOTE,#PB_Constant)
 			#MYTABLE_FORMULA_DQUOTE=1
 		CompilerEndIf
@@ -195,7 +161,7 @@ DeclareModule MyTable
 		SetImage(image.i)
 		GetValue.d()
 		SetValue(value.d)
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			GetFormula.s()
 			SetFormula(value.s)
 		CompilerEndIf
@@ -259,7 +225,7 @@ DeclareModule MyTable
 		SetCellTooltip(row.i,col.i,value.s)
 		GetCellValue.d(row.i,col.i)
 		SetCellValue(row.i,col.i,value.d)
-		CompilerIf #MYTABLE_FORMULA
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			GetCellFormula.s(row.i,col.i)
 			SetCellFormula(row.i,col.i,value.s)
 		CompilerEndIf

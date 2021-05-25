@@ -96,7 +96,7 @@ Declare MyTableEvtLostFocus()
 
 
 ;- Formula
-CompilerIf #MYTABLE_FORMULA
+CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 	Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
 CompilerEndIf
 
