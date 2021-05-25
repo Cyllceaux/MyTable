@@ -1557,6 +1557,7 @@ Module MyTable
 			Protected *row.strMyTableRow=0
 			Protected *cell.strMyTableCell=0
 			Protected *col.strMyTableCol=0
+			Protected *obj._strMyTableAObject=0
 			Protected listidx=-1,colidx=-1
 			Protected NewList selected.i()
 			
@@ -1651,8 +1652,13 @@ Module MyTable
 							If Not fullrowselect
 								ForEach *this\selected()
 									listidx=-1
-									*cell=Val(MapKey(*this\selected()))
-									*row=*cell\row
+									*obj=Val(MapKey(*this\selected()))
+									If *obj\type=#MYTABLE_TYPE_ROW
+										*row=*obj
+									Else
+										*cell=*obj
+										*row=*cell\row
+									EndIf
 									ForEach *row\cells()
 										If *row\cells()=*cell
 											listidx=ListIndex(*row\cells())
@@ -1660,11 +1666,16 @@ Module MyTable
 										EndIf
 									Next
 									listidx-1
-									If listidx>-1				
-										*cell=_MyTableGetOrAddCell(*row,listidx)
+									If *this\datagrid And listidx=0
+										AddElement(selected())
+										selected()=*row			
+									Else
+										If listidx>-1				
+											*cell=_MyTableGetOrAddCell(*row,listidx,#True)
+										EndIf
+										AddElement(selected())
+										selected()=*cell									
 									EndIf
-									AddElement(selected())
-									selected()=*cell									
 								Next
 								ClearMap(*this\selected())
 								ForEach selected()
@@ -1680,7 +1691,7 @@ Module MyTable
 							If Not fullrowselect						
 								SelectElement(*this\expRows(),0)
 								*row=*this\expRows()
-								*cell=_MyTableGetOrAddCell(*row,ListSize(*row\cells())-1)
+								*cell=_MyTableGetOrAddCell(*row,ListSize(*row\cells())-1,#True)
 								*this\selected(Str(*cell))=#True
 								If *this\evtCellSelect
 									*this\evtCellSelect(*cell)
@@ -1696,17 +1707,25 @@ Module MyTable
 							If Not fullrowselect
 								ForEach *this\selected()
 									listidx=-1
-									*cell=Val(MapKey(*this\selected()))
-									*row=*cell\row
+									*obj=Val(MapKey(*this\selected()))
+									If *obj\type=#MYTABLE_TYPE_ROW
+										*row=*obj
+									Else
+										*cell=*obj
+										*row=*cell\row
+									EndIf
 									ForEach *row\cells()
 										If *row\cells()=*cell
 											listidx=ListIndex(*row\cells())
 											Break
 										EndIf
 									Next
+									If *this\datagrid And listidx=-1
+										listidx+1
+									EndIf
 									listidx+1
 									If listidx<ListSize(*row\cells())									
-										*cell=_MyTableGetOrAddCell(*row,listidx)
+										*cell=_MyTableGetOrAddCell(*row,listidx,#True)
 									EndIf
 									AddElement(selected())
 									selected()=*cell
@@ -1725,7 +1744,7 @@ Module MyTable
 							If Not fullrowselect
 								SelectElement(*this\expRows(),0)
 								*row=*this\expRows()
-								*cell=_MyTableGetOrAddCell(*row,0)
+								*cell=_MyTableGetOrAddCell(*row,0,#True)
 								*this\selected(Str(*cell))=#True
 								If *this\evtCellSelect
 									*this\evtCellSelect(*cell)
@@ -1739,9 +1758,11 @@ Module MyTable
 					_MyTableClearMaps(*this)
 					If ListSize(*this\expRows())>0
 						If MapSize(*this\selected())>0
-							If fullrowselect
-								ForEach *this\selected()
-									*row=Val(MapKey(*this\selected()))
+							
+							ForEach *this\selected()
+								*obj=Val(MapKey(*this\selected()))
+								If *obj\type=#MYTABLE_TYPE_ROW
+									*row=*obj
 									listidx=-1
 									ForEach *this\expRows()
 										If *this\expRows()=*row
@@ -1756,20 +1777,10 @@ Module MyTable
 									EndIf
 									AddElement(selected())								
 									selected()=*row
-								Next
-								ClearMap(*this\selected())
-								ForEach selected()
-									*row=selected()
-									*this\selected(Str(*row))=#True
-									If *this\evtRowSelect
-										*this\evtRowSelect(*row)
-									EndIf
-								Next
-								redraw=#True
-							Else
-								ForEach *this\selected()
-									*cell=Val(MapKey(*this\selected()))
+								Else
+									*cell=*obj
 									*row=*cell\row
+									
 									listidx=-1
 									colidx=-1
 									ForEach *row\cells()
@@ -1788,21 +1799,25 @@ Module MyTable
 									If listidx>-1
 										SelectElement(*this\expRows(),listidx)
 										*row=*this\expRows()
-										*cell=_MyTableGetOrAddCell(*row,colidx)
+										*cell=_MyTableGetOrAddCell(*row,colidx,#True)
 									EndIf								
 									AddElement(selected())
 									selected()=*cell
-								Next
-								ClearMap(*this\selected())
-								ForEach selected()
-									*cell=selected()
-									*this\selected(Str(*cell))=#True
-									If *this\evtCellSelect
-										*this\evtCellSelect(*cell)
-									EndIf
-								Next
-								redraw=#True
-							EndIf
+								EndIf
+							Next
+							ClearMap(*this\selected())
+							ForEach selected()
+								*obj=selected()
+								*this\selected(Str(*obj))=#True
+								If *this\evtCellSelect And *obj\type=#MYTABLE_TYPE_CELL
+									*this\evtCellSelect(*obj)
+								EndIf
+								If *this\evtRowSelect And *obj\type=#MYTABLE_TYPE_ROW
+									*this\evtRowSelect(*obj)
+								EndIf
+							Next
+							redraw=#True
+							
 						Else
 							If fullrowselect
 								SelectElement(*this\expRows(),ListSize(*this\expRows())-1)
@@ -1815,7 +1830,7 @@ Module MyTable
 							Else
 								SelectElement(*this\expRows(),ListSize(*this\expRows())-1)
 								*row=*this\expRows()
-								*cell=_MyTableGetOrAddCell(*row,0)
+								*cell=_MyTableGetOrAddCell(*row,0,#True)
 								*this\selected(Str(*cell))=#True
 								If *this\evtCellSelect
 									*this\evtCellSelect(*cell)
@@ -1829,9 +1844,11 @@ Module MyTable
 					_MyTableClearMaps(*this)
 					If ListSize(*this\expRows())>0
 						If MapSize(*this\selected())>0
-							If fullrowselect
-								ForEach *this\selected()
-									*row=Val(MapKey(*this\selected()))
+							
+							ForEach *this\selected()
+								*obj=Val(MapKey(*this\selected()))
+								If *obj\type=#MYTABLE_TYPE_ROW
+									*row=*obj
 									listidx=-1
 									ForEach *this\expRows()
 										If *this\expRows()=*row
@@ -1846,20 +1863,10 @@ Module MyTable
 									EndIf
 									AddElement(selected())
 									selected()=*row
-								Next
-								ClearMap(*this\selected())
-								ForEach selected()
-									*row=selected()
-									*this\selected(Str(*row))=#True
-									If *this\evtRowSelect
-										*this\evtRowSelect(*row)
-									EndIf
-								Next
-								redraw=#True
-							Else
-								ForEach *this\selected()
-									*cell=Val(MapKey(*this\selected()))
+								Else
+									*cell=*obj
 									*row=*cell\row
+									
 									listidx=-1
 									colidx=-1
 									ForEach *row\cells()
@@ -1878,21 +1885,25 @@ Module MyTable
 									If listidx<ListSize(*this\expRows())
 										SelectElement(*this\expRows(),listidx)
 										*row=*this\expRows()
-										*cell=_MyTableGetOrAddCell(*row,colidx)
+										*cell=_MyTableGetOrAddCell(*row,colidx,#True)
 									EndIf								
 									AddElement(selected())
 									selected()=*cell
-								Next
-								ClearMap(*this\selected())
-								ForEach selected()
-									*cell=selected()
-									*this\selected(Str(*cell))=#True
-									If *this\evtCellSelect
-										*this\evtCellSelect(*cell)
-									EndIf
-								Next
-								redraw=#True
-							EndIf
+								EndIf
+							Next
+							ClearMap(*this\selected())
+							ForEach selected()
+								*obj=selected()
+								*this\selected(Str(*obj))=#True
+								If *this\evtCellSelect And *obj\type=#MYTABLE_TYPE_CELL
+									*this\evtCellSelect(*obj)
+								EndIf
+								If *this\evtRowSelect And *obj\type=#MYTABLE_TYPE_ROW
+									*this\evtRowSelect(*obj)
+								EndIf
+							Next
+							redraw=#True
+							
 						Else
 							If fullrowselect
 								SelectElement(*this\expRows(),0)
@@ -1905,7 +1916,7 @@ Module MyTable
 							Else
 								SelectElement(*this\expRows(),0)
 								*row=*this\expRows()
-								*cell=_MyTableGetOrAddCell(*row,0)
+								*cell=_MyTableGetOrAddCell(*row,0,#True)
 								*this\selected(Str(*cell))=#True
 								If *this\evtCellSelect
 									*this\evtCellSelect(*cell)
