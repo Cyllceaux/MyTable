@@ -80,6 +80,10 @@ Declare _MyTableClearMaps(*this.strMyTableTable)
 Declare _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 Declare _MyTable_Table_RecalcExp(*this.strMyTableTable,force.b=#False)
 Declare _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
+CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
+	Declare _MyTableDebugGetCanvas(*element._strMyTableAObject)
+	Declare.s _MyTableDebugGetName(*element._strMyTableAObject)
+CompilerEndIf
 
 ;- Events
 Declare MyTableEvtResize()

@@ -69,13 +69,15 @@ CompilerEndIf
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant)
 	DeclareModule MYTABLE_DEBUG_LEVEL
 		#MYTABLE_DEBUG_LEVEL=1
-		EndDeclareModule:Module MYTABLE_DEBUG_LEVEL:EndModule
+	EndDeclareModule
+	Module MYTABLE_DEBUG_LEVEL:EndModule
 CompilerEndIf
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG_MS_MAX,#PB_Constant)
 	DeclareModule MYTABLE_DEBUG_MS_MAX
 		#MYTABLE_DEBUG_MS_MAX=200
-		EndDeclareModule:Module MYTABLE_DEBUG_MS_MAX:EndModule
+	EndDeclareModule
+	Module MYTABLE_DEBUG_MS_MAX:EndModule
 CompilerEndIf
 
 CompilerIf Defined(MYTABLE_EXPORT_XML,#PB_Constant) 

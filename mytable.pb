@@ -45,33 +45,34 @@ Module MyTable
 		CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 			Static NewMap callcount.i()
 			Static NewMap callms.i()
-			Static NewMap callmssum.i()		
-			callms(MM#sname#MM+"_"+Str(*this\canvas))=ElapsedMilliseconds()		
+			Static NewMap callmssum.i()					
+			callms(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))=ElapsedMilliseconds()		
+			
 		CompilerEndIf
 	EndMacro
 	
 	Macro _callcountEnde(sname)
 		CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
-			Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(*this\canvas))
-			callcount(MM#sname#MM+"_"+Str(*this\canvas))+1
-			callmssum(MM#sname#MM+"_"+Str(*this\canvas))+_#sname#ms
+			Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))
+			callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))+1
+			callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))+_#sname#ms
 			
 			Protected tname.s=""
-			If *this\name=""
-				tname=Str(*this\canvas)
+			If _MyTableDebugGetName(*this)=""
+				tname=Str(_MyTableDebugGetCanvas(*this))
 			Else
-				tname=*this\name
+				tname=_MyTableDebugGetName(*this)
 			EndIf
 			
 			Protected debugline.s=LSet(tname+":",16," ")
-			debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(*this\canvas)),20," ")
+			debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))),20," ")
 			
 			
-			If _#sname#ms>#MYTABLE_DEBUG_MS_MAX
-				DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
+			If _#sname#ms>MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX
+				DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
 			EndIf
-			debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas)))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(*this\canvas))/callcount(MM#sname#MM+"_"+Str(*this\canvas)))+ "ms"
-			Debug debugline,#MYTABLE_DEBUG_LEVEL
+			debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
+			Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
 		CompilerEndIf
 	EndMacro
 	
@@ -670,6 +671,42 @@ Module MyTable
 			EndIf
 		EndIf
 	EndProcedure
+	
+	CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
+		Procedure _MyTableDebugGetCanvas(*element._strMyTableAObject)
+			Select *element\type
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*element
+					ProcedureReturn *table\canvas
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*element
+					ProcedureReturn *row\table\canvas
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*element
+					ProcedureReturn *col\table\canvas
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*element
+					ProcedureReturn *cell\table\canvas
+			EndSelect
+		EndProcedure
+		
+		Procedure.s _MyTableDebugGetName(*element._strMyTableAObject)
+			Select *element\type
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*element
+					ProcedureReturn *table\name
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*element
+					ProcedureReturn *row\table\name
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*element
+					ProcedureReturn *col\table\name
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*element
+					ProcedureReturn *cell\table\name
+			EndSelect
+		EndProcedure
+	CompilerEndIf
 	
 	Procedure _MyTableSelectCol(*col.strMyTableCol,control.b,shift.b,multiselect.b,temp.b)
 		Protected *this.strMyTableTable=*col\table
@@ -2610,8 +2647,8 @@ Module MyTable
 	
 	
 	
-
-
+	
+	
 	
 	
 	
@@ -2628,7 +2665,7 @@ Module MyTable
 			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndProcedure
-
+	
 	
 	
 	
@@ -2846,7 +2883,7 @@ Module MyTable
 		DataSectionGetterSetter(Col,Data)
 		DataSectionGetterSetter(Col,CanNull)
 		DataSectionGetterSetter(Col,Sort)
-
+		
 		
 		DataSectionSetter(Col,CustomCellEdit)
 		
