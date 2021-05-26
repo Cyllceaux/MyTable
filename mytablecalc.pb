@@ -50,10 +50,113 @@ Global MyTableRegAdd=CreateRegularExpression(#PB_Any,"[\d+\.]+ \+ [\d+\.]+")
 Global MyTableRegSub=CreateRegularExpression(#PB_Any,"[\d+\.]+ \- [\d+\.]+")
 Global MyTableRegDiv=CreateRegularExpression(#PB_Any,"[\d+\.]+ \/ [\d+\.]+")
 Global MyTableRegMod=CreateRegularExpression(#PB_Any,"[\d+\.]+ \% [\d+\.]+")
+
+Global MyTableRegEQ=CreateRegularExpression(#PB_Any,"[\d+\.]+ \= [\d+\.]+")
+Global MyTableRegNEQ=CreateRegularExpression(#PB_Any,"[\d+\.]+ (\!\=|\<\>) [\d+\.]+")
+Global MyTableRegGT=CreateRegularExpression(#PB_Any,"[\d+\.]+ \> [\d+\.]+")
+Global MyTableRegLT=CreateRegularExpression(#PB_Any,"[\d+\.]+ \< [\d+\.]+")
+Global MyTableRegGE=CreateRegularExpression(#PB_Any,"[\d+\.]+ \>\= [\d+\.]+")
+Global MyTableRegLE=CreateRegularExpression(#PB_Any,"[\d+\.]+ \<\= [\d+\.]+")
+
 Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\([\d+\.]+\)")
-;Global MyTableRegFormula=CreateRegularExpression(#PB_Any,"[\w\d]+\(.*\)")
 Global MyTableRegFormula=CreateRegularExpression(#PB_Any,"[\w\d]+\([^()]*\)")
 
+Prototype.s MyTableProtoFormulaRegex(typ.s,value.s)
+
+Structure strMyTableFormulaRegex
+	regex.i
+	method.MyTableProtoFormulaRegex
+EndStructure
+
+Global NewMap MyTableFormulaRegexMap.strMyTableFormulaRegex()
+Global NewMap MyTableFormulaRegexLogicMap.strMyTableFormulaRegex()
+
+
+Procedure.s MyTableFormulaRegexAdd(typ.s,value.s)
+	ProcedureReturn StrD(ValD(StringField(value,1," "+typ+" ")) + ValD(StringField(value,2," "+typ+" ")))
+EndProcedure
+
+Procedure.s MyTableFormulaRegexSub(typ.s,value.s)
+	ProcedureReturn StrD(ValD(StringField(value,1," "+typ+" ")) - ValD(StringField(value,2," "+typ+" ")))
+EndProcedure
+
+Procedure.s MyTableFormulaRegexMul(typ.s,value.s)
+	ProcedureReturn StrD(ValD(StringField(value,1," "+typ+" ")) * ValD(StringField(value,2," "+typ+" ")))
+EndProcedure
+
+Procedure.s MyTableFormulaRegexDiv(typ.s,value.s)
+	ProcedureReturn StrD(ValD(StringField(value,1," "+typ+" ")) / ValD(StringField(value,2," "+typ+" ")))
+EndProcedure
+
+Procedure.s MyTableFormulaRegexMod(typ.s,value.s)
+	ProcedureReturn StrD(Mod(ValD(StringField(value,1," "+typ+" ")) , ValD(StringField(value,2," "+typ+" "))))
+EndProcedure
+
+Procedure.s MyTableFormulaRegexLogic(typ.s,value.s)
+	Protected v1.s=Trim(StringField(value,1,typ))
+	Protected v2.s=Trim(StringField(value,2,typ))
+	
+	Protected vd1.d=ValD(Trim(StringField(value,1,typ)))
+	Protected vd2.d=ValD(Trim(StringField(value,2,typ)))
+	Select typ
+		Case "="
+			ProcedureReturn Str(Bool(v1=v2))
+		Case "!=","<>"
+			ProcedureReturn Str(Bool(v1<>v2))
+		Case ">"
+			ProcedureReturn Str(Bool(vd1>vd2))
+		Case ">="
+			ProcedureReturn Str(Bool(vd1>=vd2))
+		Case "<"
+			ProcedureReturn Str(Bool(vd1<vd2))
+		Case "<="
+			ProcedureReturn Str(Bool(vd1<=vd2))
+	EndSelect
+EndProcedure
+
+Macro _macroFormulaRegexMap(typ,name)
+	MyTableFormulaRegexMap(MM#typ#MM)\method=@MyTableFormulaRegex#name()
+	MyTableFormulaRegexMap(MM#typ#MM)\regex=MyTableReg#name
+EndMacro
+
+Macro _macroFormulaRegexLogicMap(typ,name)
+	MyTableFormulaRegexLogicMap(MM#typ#MM)\method=@MyTableFormulaRegexLogic()
+	MyTableFormulaRegexLogicMap(MM#typ#MM)\regex=MyTableReg#name
+EndMacro
+
+_macroFormulaRegexMap(+,Add)
+_macroFormulaRegexMap(-,Sub)
+_macroFormulaRegexMap(*,Mul)
+_macroFormulaRegexMap(/,Div)
+_macroFormulaRegexMap(%,Mod)
+
+_macroFormulaRegexLogicMap(=,EQ)
+_macroFormulaRegexLogicMap(!=,NEQ)
+_macroFormulaRegexLogicMap(<>,NEQ)
+_macroFormulaRegexLogicMap(>,GT)
+_macroFormulaRegexLogicMap(>=,GE)
+_macroFormulaRegexLogicMap(<,LT)
+_macroFormulaRegexLogicMap(<=,LE)
+
+Procedure.s _MyTableFormulaRegExReplace(Map rMap.strMyTableFormulaRegex(),typ.s,line.s)
+	Protected result.s=line
+	Protected *tfr.strMyTableFormulaRegex=rMap(typ)
+	Protected calc.b=#False
+	If *tfr
+		If ExamineRegularExpression(*tfr\regex,result)
+			While NextRegularExpressionMatch(*tfr\regex)			
+				Protected rech.s=Trim(RegularExpressionMatchString(*tfr\regex))
+				result=ReplaceString(result,rech,*tfr\method(typ,rech))			
+				calc=#True
+			Wend
+		EndIf
+	EndIf
+	If calc
+		ProcedureReturn _MyTableFormulaRegExReplace(rMap(),typ,result)
+	Else
+		ProcedureReturn result
+	EndIf
+EndProcedure
 
 Structure strMyTableRange
 	from.strMyTableRowCol
@@ -273,55 +376,44 @@ Procedure.s _MyTableFormulaMath(line.s)
 	EndIf
 	
 	If Not calc
-		If ExamineRegularExpression(MyTableRegMul,result)
-			While NextRegularExpressionMatch(MyTableRegMul)			
-				rech=RegularExpressionMatchString(MyTableRegMul)
-				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," * ")) * ValD(StringField(rech,2," * "))))
-				calc=#True
-			Wend
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"*",result)
+		If rech<>result
+			calc=#True
 		EndIf
+		result=rech
 	EndIf
 	
 	If Not calc
-		If ExamineRegularExpression(MyTableRegDiv,result)
-			While NextRegularExpressionMatch(MyTableRegDiv)			
-				rech=RegularExpressionMatchString(MyTableRegDiv)
-				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," / ")) / ValD(StringField(rech,2," / "))))
-				calc=#True
-			Wend
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"/",result)
+		If rech<>result
+			calc=#True
 		EndIf
+		result=rech
 	EndIf
 	
 	If Not calc
-		If ExamineRegularExpression(MyTableRegMod,result)
-			While NextRegularExpressionMatch(MyTableRegMod)			
-				rech=RegularExpressionMatchString(MyTableRegMod)
-				result=ReplaceString(result,rech,StrD(Mod(ValD(StringField(rech,1," % ")),ValD(StringField(rech,2," % ")))))
-				calc=#True
-			Wend
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"%",result)
+		If rech<>result
+			calc=#True
 		EndIf
+		result=rech
 	EndIf
 	
 	If Not calc
-		If ExamineRegularExpression(MyTableRegAdd,result)
-			While NextRegularExpressionMatch(MyTableRegAdd)			
-				rech=RegularExpressionMatchString(MyTableRegAdd)
-				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," + ")) + ValD(StringField(rech,2," + "))))
-				calc=#True
-			Wend
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"+",result)
+		If rech<>result
+			calc=#True
 		EndIf
+		result=rech
 	EndIf
 	
 	If Not calc
-		If ExamineRegularExpression(MyTableRegSub,result)
-			While NextRegularExpressionMatch(MyTableRegSub)			
-				rech=RegularExpressionMatchString(MyTableRegSub)
-				result=ReplaceString(result,rech,StrD(ValD(StringField(rech,1," - ")) - ValD(StringField(rech,2," - "))))
-				calc=#True
-			Wend
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"-",result)
+		If rech<>result
+			calc=#True
 		EndIf
+		result=rech		
 	EndIf
-	
 	
 	
 	If calc
@@ -412,6 +504,7 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 			line=ReplaceString(line,";"," ; ")
 			line=ReplaceString(line,"&"," & ")
 			line=ReplaceString(line,"%"," % ")
+			line=ReplaceString(line,"="," = ")
 			
 			While FindString(line,"  ")
 				line=ReplaceString(line,"  "," ")
@@ -464,6 +557,14 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 		
 		If Not error
 			If line<>""
+				ForEach MyTableFormulaRegexLogicMap()
+					line=_MyTableFormulaRegExReplace(MyTableFormulaRegexLogicMap(),MapKey(MyTableFormulaRegexLogicMap()),line)
+				Next
+			EndIf
+		EndIf	
+		
+		If Not error
+			If line<>""
 				idx=1
 				While idx
 					idx=0
@@ -477,6 +578,7 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 				Wend
 			EndIf
 		EndIf	
+		
 		
 		If error
 			If errors<>""
@@ -541,15 +643,4 @@ Procedure _MyTable_Table_SetRegisterFormula(*this.strMyTableTable,name.s,method.
 	EndIf
 EndProcedure
 
-Procedure.s _MyTable_Formula_Sum(name.s,List cells.s())
-	Protected value.d=0
-	ForEach cells()
-		value+ValD(cells())
-	Next
-	
-	ProcedureReturn StrD(value)
-EndProcedure
-
-Procedure _MyTable_InitFormula(*this.strMyTableTable)
-	*this\forms("SUM")=@_MyTable_Formula_Sum()
-EndProcedure
+XIncludeFile "mytableformula.pb"

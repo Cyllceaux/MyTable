@@ -133,7 +133,12 @@ UseModule MyTable
 	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;SUM(A4;A6))"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=HELLOWORLD(\"Silko\")"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
 	*table\SetCellFormula(frow,0,~"=RND(1;100) & \"->\" & RND(1;RND(100;200)) & \"->\" & RND(1;100)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	
+	*table\SetCellFormula(frow,0,~"=IF(2=2)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=IF(2=2;Yes;No)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=IF(2=3;Yes;No)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	*table\SetCellFormula(frow,0,~"=IF(NOT(2=3);Yes;No)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+		
+		
 	*table\AutosizeColumn(1)
 	*table\AutosizeColumn(2)
 	
