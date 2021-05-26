@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-25 12:44" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-26 08:02" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -20,39 +20,47 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="034beab2ef811cc7c931d84a6139c438"/>
+      <fingerprint md5="999af03154668b234bf5295e5acabe88"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="fc5aacf529926d35848bddb1da5fa18f"/>
+      <fingerprint md5="282f28aebc5e8710b24da346fdcaf5c0"/>
     </file>
     <file name="mytablecalc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="1f993332b69856e170888fd352449363"/>
+      <fingerprint md5="4ec744c58377a473203690a35ea23c6e"/>
     </file>
     <file name="mytablecalc.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="853db81398e04234f1aca3bc1f1d5ac6"/>
     </file>
     <file name="mytablecell.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="f061774c0ce22c7e34ecfe1f4d90e9c0"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="53920199a41f77fabe41703f316659d6"/>
     </file>
     <file name="mytablecol.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="a0f0f42594b0b817203afb4aef49cc5e"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="7aa6b199d22d18c06bb7b0d27416deaf"/>
     </file>
     <file name="mytablerow.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="779d9a0833c4e7fbab062aa38a546936"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="795bb6ffb7f181d43b919704a6d98284"/>
     </file>
     <file name="mytabletable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="b97c358ed5b95edb11a12b9625df8b6c"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="0129a2533bce0062ff8e83c637bf7126"/>
     </file>
     <file name="Test\all.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="d71eb7f5c478fb868cba59de598796da"/>
+    </file>
+    <file name="Test\customformula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="55455d7ca2d7926ee1eb6027b577769e"/>
+      <fingerprint md5="5049ea57d01d51ce8c8ecd3f30a768cc"/>
+    </file>
+    <file name="Test\fontscolors.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="46040552a9c14cb9239fd45446888479"/>
     </file>
     <file name="Test\formula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -66,16 +74,12 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="cb29be1a7d7860ab39bc359e27e8e6ae"/>
     </file>
-    <file name="Test\customformula.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="5049ea57d01d51ce8c8ecd3f30a768cc"/>
-    </file>
   </section>
   <section name="targets">
     <target name="All" enabled="0" default="1">
       <inputfile value="Test\all.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
@@ -104,6 +108,13 @@
       <inputfile value="Test\customformula.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <format exe="default" cpu="1"/>
+      <compilecount enable="0" value="1900"/>
+    </target>
+    <target name="fontscolors.pb" enabled="0" default="0">
+      <inputfile value="Test\fontscolors.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" optimizer="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>

@@ -218,7 +218,7 @@ Procedure _MyTable_Row_SetFlags(*this.strMyTableRow,flags.i)
 			*this\flags=flags
 			*this\dirty=#True
 			*this\dirty=#True
-			*this\table\dirty=#True			
+			*this\table\dirty=#True						
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -230,6 +230,7 @@ Procedure _MyTable_Row_SetSelectedbackground(*this.strMyTableRow,color.q)
 		If *this\selectedbackground<>color
 			*this\selectedbackground=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -241,6 +242,7 @@ Procedure _MyTable_Row_SetBackground(*this.strMyTableRow,color.q)
 		If *this\background<>color
 			*this\background=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -252,43 +254,12 @@ Procedure _MyTable_Row_SetBackgroundFixed(*this.strMyTableRow,color.q)
 		If *this\backgroundfixed<>color
 			*this\backgroundfixed=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_SetHeaderbackground1(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerbackground1<>color
-			*this\headerbackground1=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetHeaderbackground2(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerbackground2<>color
-			*this\headerbackground2=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetHeaderbackgroundFixed(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerbackgroundfixed<>color
-			*this\headerbackgroundfixed=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Row_SetForecolor(*this.strMyTableRow,color.q)
 	
@@ -296,21 +267,13 @@ Procedure _MyTable_Row_SetForecolor(*this.strMyTableRow,color.q)
 		If *this\forecolor<>color
 			*this\forecolor=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_SetHeaderforecolor(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerforecolor<>color
-			*this\headerforecolor=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
+
 
 Procedure _MyTable_Row_SetSelectedforecolor(*this.strMyTableRow,color.q)
 	
@@ -318,6 +281,7 @@ Procedure _MyTable_Row_SetSelectedforecolor(*this.strMyTableRow,color.q)
 		If *this\selectedforecolor<>color
 			*this\selectedforecolor=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -326,9 +290,17 @@ EndProcedure
 Procedure _MyTable_Row_SetFont(*this.strMyTableRow,font.i)
 	
 	If *this
-		If *this\font<>font And IsFont(font)
+		If *this\font<>font
 			*this\font=font
 			*this\dirty=#True
+			*this\table\dirty=#True
+			
+				ForEach *this\cells()
+					*this\cells()\dirty=#True
+					*this\cells()\textheight=0
+					*this\cells()\textwidth=0
+				Next
+			
 			_MyTable_Table_Recalc(*this\table)
 		EndIf
 	EndIf
@@ -355,26 +327,6 @@ Procedure.q _MyTable_Row_GetBackgroundFixed(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Row_GetHeaderbackground1(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\headerbackground1
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Row_GetHeaderbackground2(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\headerbackground2
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Row_GetHeaderbackgroundFixed(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\headerbackgroundfixed
-	EndIf
-EndProcedure
 
 Procedure.q _MyTable_Row_GetForecolor(*this.strMyTableRow)
 	
@@ -383,12 +335,6 @@ Procedure.q _MyTable_Row_GetForecolor(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Row_GetHeaderforecolor(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\headerforecolor
-	EndIf
-EndProcedure
 
 Procedure.q _MyTable_Row_GetSelectedforecolor(*this.strMyTableRow)
 	

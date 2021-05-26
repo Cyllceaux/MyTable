@@ -168,12 +168,8 @@ Module MyTable
 		
 		selectedbackground.q
 		background.q
-		backgroundfixed.q
-		headerbackground1.q
-		headerbackground2.q
-		headerbackgroundfixed.q
+		backgroundfixed.q		
 		forecolor.q
-		headerforecolor.q
 		selectedforecolor.q
 		font.i
 	EndStructure
@@ -312,6 +308,11 @@ Module MyTable
 		treeImageExpanded.i
 		
 		drawing.b
+		
+		headerbackground1.q
+		headerbackground2.q
+		headerbackgroundfixed.q
+		headerforecolor.q
 	EndStructure
 	
 	Structure strMyTableRowCol
@@ -1112,6 +1113,16 @@ Module MyTable
 		Protected *cell.strMyTableCell=0
 		Protected *col.strMyTableCol=0
 		Protected flags=0
+		Protected font=*this\font
+		
+		Protected selectedbackground.q=*this\selectedbackground
+		Protected background.q=*this\background
+		Protected backgroundfixed.q=*this\backgroundfixed
+		Protected forecolor.q=*this\forecolor
+		Protected selectedforecolor.q=*this\selectedforecolor
+		
+		
+		
 		
 		While ListSize(*row\cells())<ListSize(*this\cols())
 			_MyTableGetOrAddCell(*row,-1)
@@ -1129,6 +1140,93 @@ Module MyTable
 		ForEach *row\cells()
 			*cell=*row\cells()
 			*col=*cell\col
+			
+			selectedbackground=*this\selectedbackground
+			background=*this\background
+			backgroundfixed=*this\backgroundfixed
+			forecolor=*this\forecolor
+			selectedforecolor=*this\selectedforecolor
+			
+			If *row\selectedbackground
+				selectedbackground=*row\selectedbackground
+			EndIf
+			If *row\background
+				background=*row\background
+			EndIf
+			If *row\backgroundfixed
+				backgroundfixed=*row\backgroundfixed
+			EndIf
+			If *row\forecolor
+				forecolor=*row\forecolor
+			EndIf
+			If *row\selectedforecolor
+				selectedforecolor=*row\selectedforecolor
+			EndIf
+			
+			If *col\selectedbackground
+				selectedbackground=*col\selectedbackground
+			EndIf
+			If *col\background
+				background=*col\background
+			EndIf
+			If *col\backgroundfixed
+				backgroundfixed=*col\backgroundfixed
+			EndIf
+			If *col\forecolor
+				forecolor=*col\forecolor
+			EndIf
+			If *col\selectedforecolor
+				selectedforecolor=*col\selectedforecolor
+			EndIf
+			
+			If *cell\selectedbackground
+				selectedbackground=*cell\selectedbackground
+			EndIf
+			If *cell\background
+				background=*cell\background
+			EndIf
+			If *cell\backgroundfixed
+				backgroundfixed=*cell\backgroundfixed
+			EndIf
+			If *cell\forecolor
+				forecolor=*cell\forecolor
+			EndIf
+			If *cell\selectedforecolor
+				selectedforecolor=*cell\selectedforecolor
+			EndIf
+			
+			If background<>*this\background
+				DrawingMode(#PB_2DDrawing_Default)
+				Box(bx,by,*col\calcwidth,*row\calcheight,background)
+			EndIf
+			
+			
+			If *cell\font
+				If *cell\font<>font
+					font=*cell\font
+					DrawingFont(font)
+				EndIf
+			Else
+				If *row\font
+					If *row\font<>font
+						font=*row\font
+						DrawingFont(font)
+					EndIf
+				Else
+					If *col\font
+						If *col\font<>font
+							font=*col\font
+							DrawingFont(font)
+						EndIf
+					Else
+						If *this\font<>font
+							font=*this\font
+							DrawingFont(font)
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			
 			flags=*cell\flags
 			
 			If Not flags
@@ -1155,7 +1253,7 @@ Module MyTable
 			
 			Protected selected.b=#False
 			If fixed
-				Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\backgroundfixed)	
+				Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,backgroundfixed)	
 			EndIf
 			If *this\selected(Str(*row)) Or 
 			   *this\selected(Str(*cell)) Or 
@@ -1163,7 +1261,7 @@ Module MyTable
 			   *this\tempselected(Str(*row)) Or 
 			   *this\tempselected(Str(*cell)) Or 
 			   *this\tempselected(Str(*col))
-				Box(bx,by,*col\calcwidth,*row\calcheight,*this\selectedbackground)	
+				Box(bx,by,*col\calcwidth,*row\calcheight,selectedbackground)	
 				selected=#True
 			EndIf
 			*cell\startx=bx
@@ -1215,6 +1313,7 @@ Module MyTable
 			EndIf
 			
 			
+			
 			ClipOutput(bx,by,*col\calcwidth,*row\calcheight)
 			DrawingMode(#PB_2DDrawing_Transparent)			
 			
@@ -1245,9 +1344,9 @@ Module MyTable
 					DrawAlphaImage(ImageID(img),bx+MyTableW2+foi,by+valw)
 				EndIf					
 			Else
-				Protected color=*this\forecolor
+				Protected color=forecolor
 				If selected
-					color=*this\selectedforecolor
+					color=selectedforecolor
 				EndIf
 				If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
 					_MyTableDrawText(bx+*col\calcwidth/2-*cell\textwidth/2,by+valw,*cell\text,color)
@@ -1271,6 +1370,12 @@ Module MyTable
 	Procedure _MyTableDrawHeader(*col.strMyTableCol,bx.i,fixed.b)
 		Protected *this.strMyTableTable=*col\table
 		
+		If *col\font
+			DrawingFont(*col\font)
+		Else
+			DrawingFont(*col\table\font)
+		EndIf
+		
 		If *col\textwidth=0
 			*col\textwidth=_MyTableTextWidth(*col\text)
 		EndIf
@@ -1284,18 +1389,18 @@ Module MyTable
 		EndIf
 		
 		
-		Box(bx,0,*col\calcwidth,*col\calcheight,*this\headerbackground1)
+		Box(bx,0,*col\calcwidth,*col\table\headerheight,*this\headerbackground1)
 		If fixed
-			Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackgroundfixed)
+			Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackgroundfixed)
 		Else
 			If *this\selected(Str(*col)) Or *this\tempselected(Str(*col))
-				Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\selectedbackground)
+				Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\selectedbackground)
 			Else
-				Box(bx,0,*col\calcwidth-MyTableW2,*col\calcheight-MyTableH2,*this\headerbackground2)
+				Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackground2)
 			EndIf
 		EndIf
 		
-		ClipOutput(bx,0,*col\calcwidth,*col\calcheight)
+		ClipOutput(bx,0,*col\calcwidth,*col\table\headerheight)
 		DrawingMode(#PB_2DDrawing_Transparent)					
 		If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_CENTER) Or *this\datagrid
 			_MyTableDrawText(bx+(*col\calcwidth/2-(*col\textwidth+soi)/2),0,*col\text,*this\headerforecolor)
@@ -2825,12 +2930,8 @@ Module MyTable
 		DataSectionGetterSetter(gruppe,Flags)
 		DataSectionGetterSetter(gruppe,selectedbackground)
 		DataSectionGetterSetter(gruppe,background)
-		DataSectionGetterSetter(gruppe,backgroundfixed)
-		DataSectionGetterSetter(gruppe,headerbackground1)
-		DataSectionGetterSetter(gruppe,headerbackground2)
-		DataSectionGetterSetter(gruppe,headerbackgroundfixed)
+		DataSectionGetterSetter(gruppe,backgroundfixed)		
 		DataSectionGetterSetter(gruppe,forecolor)
-		DataSectionGetterSetter(gruppe,headerforecolor)
 		DataSectionGetterSetter(gruppe,selectedforecolor)
 		DataSectionGetterSetter(gruppe,font)
 	EndMacro
@@ -2838,6 +2939,10 @@ Module MyTable
 	DataSection
 		vtable_table:
 		DataSectionDefault(Table)
+		DataSectionGetterSetter(Table,headerbackground1)
+		DataSectionGetterSetter(Table,headerbackground2)
+		DataSectionGetterSetter(Table,headerbackgroundfixed)
+		DataSectionGetterSetter(Table,headerforecolor)
 		Data.i @_MyTable_Table_GetCanvas()
 		Data.i @_MyTable_Table_UnRegister()
 		Data.i @_MyTable_Table_ClearRows()
@@ -2848,9 +2953,14 @@ Module MyTable
 		Data.i @_MyTable_Table_AddColumn()
 		Data.i @_MyTable_Table_AddRow()
 		Data.i @_MyTable_Table_AutosizeCol()
+		Data.i @_MyTable_Table_AutosizeHeader()
 		Data.i @_MyTable_Table_AutosizeRow()
 		Data.i @_MyTable_Table_AddDirtyRows()
+		DataSectionGetter(Table,Row)
+		DataSectionGetter(Table,Col)
 		DataSectionGetter(Table,Cell)
+		DataSectionGetter(Table,RowCount)
+		DataSectionGetter(Table,ColCount)
 		
 		DataSectionGetterSetter(Table,CellText)
 		DataSectionGetterSetter(Table,CellTooltip)

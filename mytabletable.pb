@@ -39,6 +39,18 @@ Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_GetRow(*this.strMyTableTable,row.i)
+	If *this
+		ProcedureReturn SelectElement(*this\rows(),row)	
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_GetCol(*this.strMyTableTable,col.i)
+	If *this
+		ProcedureReturn SelectElement(*this\cols(),col)	
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_GetType(*this.strMyTableTable)
 	ProcedureReturn *this\type
 EndProcedure
@@ -79,14 +91,18 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			Protected c=ListSize(*this\cols())-1
 			Protected i=0
 			all(Str(*this.strMyTableTable))=#True
+			StartDrawing(CanvasOutput(*this\canvas))
 			_MyTable_Table_RecalcExp(*this,#True)
 			For i=0 To c
 				_MyTable_Table_AutosizeCol(*this.strMyTableTable,i)
 			Next
+			StopDrawing()
 			all(Str(*this.strMyTableTable))=#False
 		Else
 			_callcountStart(autosizecol)
-			StartDrawing(CanvasOutput(*this\canvas))
+			If all(Str(*this.strMyTableTable))=#False
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
 			DrawingFont(*this\font)
 			
 			If Not all(Str(*this.strMyTableTable))
@@ -96,6 +112,10 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			Protected w=0
 			
 			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
+			
+			Protected font=*this\font
+			
+			
 			If *col\textwidth=0
 				w=_MyTableTextWidth(*col\text)
 				*col\textwidth=w
@@ -105,6 +125,8 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			
 			
 			Protected hasimage.b=#False
+			
+			
 			ForEach *this\expRows()
 				*row=*this\expRows()
 				If *row\image
@@ -112,9 +134,38 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 				EndIf
 				
 				
+				
+				
 				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,force)
 				
+				
 				If *cell
+					If *cell\font
+						If *cell\font<>font
+							font=*cell\font
+							DrawingFont(font)
+						EndIf
+					Else
+						If *row\font
+							If *row\font<>font
+								font=*row\font
+								DrawingFont(font)
+							EndIf
+						Else
+							If *col\font
+								If *col\font<>font
+									font=*col\font
+									DrawingFont(font)
+								EndIf
+							Else
+								If *this\font<>font
+									font=*this\font
+									DrawingFont(font)
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+					
 					If *cell\textwidth=0
 						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 							*cell\textwidth=MyTableW20
@@ -158,13 +209,72 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			
 			
 			*col\calcwidth=DesktopScaledX(*col\width)
-			
-			StopDrawing()
+			If all(Str(*this.strMyTableTable))=#False
+				StopDrawing()
+			EndIf
 		EndIf
 		If Not all(Str(*this.strMyTableTable))
 			_callcountEnde(autosizecol)
 			*this\dirty=#True
 			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
+	Protected *row.strMyTableRow=0
+	
+	Static NewMap all.b()
+	
+	If *this
+		
+		If col=#PB_Ignore
+			_callcountStart(autosizeheader)
+			Protected c=ListSize(*this\cols())-1
+			Protected i=0
+			*this\headerheight=0
+			all(Str(*this.strMyTableTable))=#True
+			StartDrawing(CanvasOutput(*this\canvas))
+			For i=0 To c
+				_MyTable_Table_AutosizeHeader(*this.strMyTableTable,i)
+			Next
+			StopDrawing()
+			all(Str(*this.strMyTableTable))=#False
+		Else
+			_callcountStart(autosizecol)
+			If all(Str(*this.strMyTableTable))=#False
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
+			DrawingFont(*this\font)
+			
+			
+			
+			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
+			If *col\font
+				DrawingFont(*col\font)
+			EndIf
+			
+			*col\textwidth=_MyTableTextWidth(*col\text)		
+			*col\calcwidth=DesktopScaledX(*col\textwidth)
+			
+			
+			
+			*col\textheight=_MyTableTextHeight(*col\text)+2			
+			*col\calcheight=DesktopScaledY(*col\textheight)
+			
+			
+			
+			If *this\headerheight=<(*col\textheight)
+				*this\headerheight=*col\textheight
+			EndIf
+			If all(Str(*this.strMyTableTable))=#False
+				StopDrawing()
+			EndIf
+		EndIf
+		If Not all(Str(*this.strMyTableTable))
+			_callcountEnde(autosizeheader)
+			*this\dirty=#True
+			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndIf
 EndProcedure
@@ -186,6 +296,7 @@ Procedure _MyTable_Table_AutosizeRow(*this.strMyTableTable,row.i=#PB_Ignore)
 		Else
 			
 			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+			
 			*row\dirty=#True
 			*row\height=0
 			ForEach *row\cells()
@@ -739,6 +850,14 @@ Procedure _MyTable_Table_GetData(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
+
+Procedure _MyTable_Table_GetColCount(*this.strMyTableTable)
+	
+	If *this
+		ProcedureReturn ListSize(*this\cols())
+	EndIf
+EndProcedure
+
 Procedure.s _MyTable_Table_GetName(*this.strMyTableTable)
 	
 	If *this
@@ -941,9 +1060,21 @@ EndProcedure
 Procedure _MyTable_Table_SetFont(*this.strMyTableTable,font.i)
 	
 	If *this
-		If *this\font<>font And IsFont(font)
+		If *this\font<>font
 			*this\font=font
 			*this\dirty=#True
+			ForEach *this\cols()
+				*this\cols()\dirty=#True
+				*this\cols()\textheight=0
+				*this\cols()\textwidth=0
+			Next
+			ForEach *this\rows()
+				ForEach *this\rows()\cells()
+					*this\rows()\cells()\dirty=#True
+					*this\rows()\cells()\textheight=0
+					*this\rows()\cells()\textwidth=0
+				Next
+			Next
 			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndIf

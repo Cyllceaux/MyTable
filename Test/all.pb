@@ -1,7 +1,7 @@
 ﻿EnableExplicit
 
 #MYTABLE_DEBUG = 0
-#MYTABLE_DEBUG_LEVEL = 0
+#MYTABLE_DEBUG_LEVEL = 1
 
 DebugLevel #MYTABLE_DEBUG_LEVEL
 
@@ -413,6 +413,7 @@ UseModule MyTable
 	Next
 	*canvasTable4\SetRedraw(#True)
 	
+	_makeTimestamp(AddRow)
 
 	Define frow=0
 	*canvasFormula\SetCellFormula(frow,0,"Hello"):*canvasFormula\SetCellFormula(frow,1,"World"):frow+1
@@ -426,19 +427,18 @@ UseModule MyTable
 	*canvasFormula\SetCellFormula(frow,0,~"=\"Test: \" & (1+1)"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
 	*canvasFormula\SetCellFormula(frow,0,~"=\"Test: \" & (1.5*9.2)"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
 	*canvasFormula\SetCellFormula(frow,0,~"=A2+A3+A4+A5"):*canvasFormula\SetCellFormula(frow,1,"'"+*canvasFormula\GetCellFormula(frow,0)):frow+1
+
 	
-	*canvasFormula\AutosizeColumn(2)
-	
-	
-	_makeTimestamp(AddRow)
+	_makeTimestamp(Formula)
 	
 	*canvasTable\AutosizeColumn(#PB_Ignore)
 	*canvasTable2\AutosizeColumn(#PB_Ignore)
 	*canvasTable3\AutosizeColumn(#PB_Ignore)
 	*canvasTable4\AutosizeColumn(#PB_Ignore)
+	*canvasFormula\AutosizeColumn(2)
 	
 	_makeTimestamp(AutosizeCol)
-	
+		
 	*canvasTable2\AutosizeRow(#PB_Ignore)
 	
 	_makeTimestamp(autosizeRow)

@@ -122,24 +122,29 @@ EndProcedure
 
 Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
 	If *this
-		Protected *cell.strMyTableCell=0
-		_MyTableClearMaps(*this)
-		ForEach *this\formulaCells()
-			If *this\formulaCells()
-				*cell=Val(MapKey(*this\formulaCells()))
-				*cell\calced=#False
-			EndIf
-		Next
-		ForEach *this\formulaCells()
-			If *this\formulaCells()
-				*cell=Val(MapKey(*this\formulaCells()))
-				If Not *cell\calced
-					Protected NewList cells()
-					_MyTableFormulaCalcCell(*cell,cells())
-					FreeList(cells())
+		If MapSize(*this\formulaCells())>0
+			_callcountStart(calctable)
+			
+			Protected *cell.strMyTableCell=0
+			_MyTableClearMaps(*this)
+			ForEach *this\formulaCells()
+				If *this\formulaCells()
+					*cell=Val(MapKey(*this\formulaCells()))
+					*cell\calced=#False
 				EndIf
-			EndIf
-		Next
+			Next
+			ForEach *this\formulaCells()
+				If *this\formulaCells()
+					*cell=Val(MapKey(*this\formulaCells()))
+					If Not *cell\calced
+						Protected NewList cells()
+						_MyTableFormulaCalcCell(*cell,cells())
+						FreeList(cells())
+					EndIf
+				EndIf
+			Next
+			_callcountEnde(calctable)
+		EndIf
 	EndIf
 EndProcedure
 

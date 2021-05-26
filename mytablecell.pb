@@ -115,7 +115,7 @@ Procedure _MyTable_Cell_CellFlags(*this.strMyTableCell,flags.i)
 			*this\textwidth=0
 			*this\textheight=0
 			*this\dirty=#True
-			*this\table\dirty=#true
+			*this\table\dirty=#True
 			_MyTable_Table_Recalc(*this\table)
 		EndIf
 	EndIf
@@ -158,6 +158,7 @@ Procedure _MyTable_Cell_SetChecked(*this.strMyTableCell,checked.b)
 			*this\textheight=0
 			*this\dirty=#True				
 			*this\text=Str(checked)		
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -244,6 +245,7 @@ Procedure _MyTable_Cell_SetSelectedbackground(*this.strMyTableRow,color.q)
 		If *this\selectedbackground<>color
 			*this\selectedbackground=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -255,6 +257,7 @@ Procedure _MyTable_Cell_SetBackground(*this.strMyTableRow,color.q)
 		If *this\background<>color
 			*this\background=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -266,39 +269,7 @@ Procedure _MyTable_Cell_SetBackgroundFixed(*this.strMyTableRow,color.q)
 		If *this\backgroundfixed<>color
 			*this\backgroundfixed=color
 			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Cell_SetHeaderbackground1(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerbackground1<>color
-			*this\headerbackground1=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Cell_SetHeaderbackground2(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerbackground2<>color
-			*this\headerbackground2=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Cell_SetHeaderbackgroundFixed(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerbackgroundfixed<>color
-			*this\headerbackgroundfixed=color
-			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -310,21 +281,12 @@ Procedure _MyTable_Cell_SetForecolor(*this.strMyTableRow,color.q)
 		If *this\forecolor<>color
 			*this\forecolor=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Cell_SetHeaderforecolor(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\headerforecolor<>color
-			*this\headerforecolor=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Cell_SetSelectedforecolor(*this.strMyTableRow,color.q)
 	
@@ -332,6 +294,7 @@ Procedure _MyTable_Cell_SetSelectedforecolor(*this.strMyTableRow,color.q)
 		If *this\selectedforecolor<>color
 			*this\selectedforecolor=color
 			*this\dirty=#True
+			*this\table\dirty=#True
 			_MyTable_Table_Redraw(*this\table)
 		EndIf
 	EndIf
@@ -340,9 +303,12 @@ EndProcedure
 Procedure _MyTable_Cell_SetFont(*this.strMyTableRow,font.i)
 	
 	If *this
-		If *this\font<>font And IsFont(font)
+		If *this\font<>font
 			*this\font=font
 			*this\dirty=#True
+			*this\table\dirty=#True
+			*this\textheight=0
+			*this\textwidth=0
 			_MyTable_Table_Recalc(*this\table)
 		EndIf
 	EndIf
@@ -369,38 +335,10 @@ Procedure.q _MyTable_Cell_GetBackgroundFixed(*this.strMyTableCell)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Cell_GetHeaderbackground1(*this.strMyTableCell)
-	
-	If *this
-		ProcedureReturn *this\headerbackground1
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Cell_GetHeaderbackground2(*this.strMyTableCell)
-	
-	If *this
-		ProcedureReturn *this\headerbackground2
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Cell_GetHeaderbackgroundFixed(*this.strMyTableCell)
-	
-	If *this
-		ProcedureReturn *this\headerbackgroundfixed
-	EndIf
-EndProcedure
-
 Procedure.q _MyTable_Cell_GetForecolor(*this.strMyTableCell)
 	
 	If *this
 		ProcedureReturn *this\forecolor
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Cell_GetHeaderforecolor(*this.strMyTableCell)
-	
-	If *this
-		ProcedureReturn *this\headerforecolor
 	EndIf
 EndProcedure
 
