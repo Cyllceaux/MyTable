@@ -1772,17 +1772,18 @@ Module MyTable
 										EndIf
 									Next
 									listidx-1
-									If *this\datagrid And listidx=0
+									If *this\datagrid And listidx<=0
 										AddElement(selected())
 										selected()=*row			
 									Else
 										If listidx>-1				
 											*cell=_MyTableGetOrAddCell(*row,listidx,#True)
 											AddElement(selected())
-											selected()=*cell			
+											selected()=*cell
 										Else
+											*cell=_MyTableGetOrAddCell(*row,0,#True)
 											AddElement(selected())
-											selected()=*row
+											selected()=*cell
 										EndIf
 									EndIf
 								Next
@@ -1858,7 +1859,7 @@ Module MyTable
 						Else
 							If Not fullrowselect
 								SelectElement(*this\expRows(),0)
-								*obj=selected()
+								*obj=*this\expRows()
 								*this\selected(Str(*obj))=#True
 								If *this\evtCellSelect And *obj\type=#MYTABLE_TYPE_CELL
 									*this\evtCellSelect(*obj)

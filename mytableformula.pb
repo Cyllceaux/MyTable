@@ -70,8 +70,35 @@ Procedure.s _MyTable_Formula_Not(name.s,List cells.s())
 	ProcedureReturn Str(Bool(cells()="0"))
 EndProcedure
 
+Procedure.s _MyTable_Formula_And(name.s,List cells.s())
+	Protected ok.b=#True
+	ForEach cells()
+		ok=Bool(ok And cells()="1")
+	Next
+	ProcedureReturn Str(ok)
+EndProcedure
+
+Procedure.s _MyTable_Formula_Or(name.s,List cells.s())
+	Protected ok.b=#False
+	ForEach cells()
+		ok=Bool(ok Or cells()="1")
+	Next
+	ProcedureReturn Str(ok)
+EndProcedure
+
+Procedure.s _MyTable_Formula_XOr(name.s,List cells.s())
+	Protected ok.b=#False
+	ForEach cells()
+		ok=Bool(ok XOr cells()="1")
+	Next
+	ProcedureReturn Str(ok)
+EndProcedure
+
 Procedure _MyTable_InitFormula(*this.strMyTableTable)
 	*this\forms("SUM")=@_MyTable_Formula_Sum()
 	*this\forms("IF")=@_MyTable_Formula_If()
 	*this\forms("NOT")=@_MyTable_Formula_Not()
+	*this\forms("AND")=@_MyTable_Formula_And()
+	*this\forms("OR")=@_MyTable_Formula_Or()
+	*this\forms("XOR")=@_MyTable_Formula_XOr()
 EndProcedure

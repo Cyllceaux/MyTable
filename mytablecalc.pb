@@ -575,7 +575,7 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 			Wend
 		EndIf
 	EndIf	
-		
+	
 	FreeMap(strings())
 	FreeMap(dqstrings())
 	FreeMap(cells())
