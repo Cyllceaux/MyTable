@@ -45,11 +45,11 @@ Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
 Global MyTableRegExRange=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+\:[a-zA-Z]+\d+")
 Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
 Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
-Global MyTableRegMul=CreateRegularExpression(#PB_Any,"[\d+\.]+ \* [\d+\.]+")
-Global MyTableRegAdd=CreateRegularExpression(#PB_Any,"[\d+\.]+ \+ [\d+\.]+")
-Global MyTableRegSub=CreateRegularExpression(#PB_Any,"[\d+\.]+ \- [\d+\.]+")
-Global MyTableRegDiv=CreateRegularExpression(#PB_Any,"[\d+\.]+ \/ [\d+\.]+")
-Global MyTableRegMod=CreateRegularExpression(#PB_Any,"[\d+\.]+ \% [\d+\.]+")
+Global MyTableRegMul=CreateRegularExpression(#PB_Any,"-?[\d+\.]+ \* -?[\d+\.]+")
+Global MyTableRegAdd=CreateRegularExpression(#PB_Any,"-?[\d+\.]+ \+ -?[\d+\.]+")
+Global MyTableRegSub=CreateRegularExpression(#PB_Any,"-?[\d+\.]+ \- -?[\d+\.]+")
+Global MyTableRegDiv=CreateRegularExpression(#PB_Any,"-?[\d+\.]+ \/ -?[\d+\.]+")
+Global MyTableRegMod=CreateRegularExpression(#PB_Any,"-?[\d+\.]+ \% -?[\d+\.]+")
 
 Global MyTableRegEQ=CreateRegularExpression(#PB_Any,"[\d+\.]+ \= [\d+\.]+")
 Global MyTableRegNEQ=CreateRegularExpression(#PB_Any,"[\d+\.]+ (\!\=|\<\>) [\d+\.]+")
@@ -58,7 +58,7 @@ Global MyTableRegLT=CreateRegularExpression(#PB_Any,"[\d+\.]+ \< [\d+\.]+")
 Global MyTableRegGE=CreateRegularExpression(#PB_Any,"[\d+\.]+ \>\= [\d+\.]+")
 Global MyTableRegLE=CreateRegularExpression(#PB_Any,"[\d+\.]+ \<\= [\d+\.]+")
 
-Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\([\d+\.]+\)")
+Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\(-?[\d+\.]+\)")
 Global MyTableRegFormula=CreateRegularExpression(#PB_Any,"[\w\d]+\([^()]*\)")
 
 Prototype.s MyTableProtoFormulaRegex(typ.s,value.s)
@@ -376,7 +376,7 @@ Procedure.s _MyTableFormulaMath(line.s)
 	EndIf
 	
 	If Not calc
-		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"*",result)
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"/",result)
 		If rech<>result
 			calc=#True
 		EndIf
@@ -384,7 +384,7 @@ Procedure.s _MyTableFormulaMath(line.s)
 	EndIf
 	
 	If Not calc
-		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"/",result)
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"*",result)
 		If rech<>result
 			calc=#True
 		EndIf
@@ -400,6 +400,14 @@ Procedure.s _MyTableFormulaMath(line.s)
 	EndIf
 	
 	If Not calc
+		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"-",result)
+		If rech<>result
+			calc=#True
+		EndIf
+		result=rech		
+	EndIf
+	
+	If Not calc
 		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"+",result)
 		If rech<>result
 			calc=#True
@@ -407,13 +415,6 @@ Procedure.s _MyTableFormulaMath(line.s)
 		result=rech
 	EndIf
 	
-	If Not calc
-		rech=_MyTableFormulaRegExReplace(MyTableFormulaRegexMap(),"-",result)
-		If rech<>result
-			calc=#True
-		EndIf
-		result=rech		
-	EndIf
 	
 	
 	If calc
@@ -423,8 +424,172 @@ Procedure.s _MyTableFormulaMath(line.s)
 	EndIf
 EndProcedure
 
-Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
+Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calccells())
+	Protected error.b=#False
+	Protected line.s=formula
+	Protected errors.s=""
 	Protected *formulacell.strMyTableCell=0
+	Protected calc.b=#False
+	If Not error
+		AddElement(calccells())
+		Protected NewMap strings.s()
+		Protected NewMap dqstrings.s()
+		Protected NewMap cells.s()
+		Protected NewMap range.s()
+		Protected NewMap vcells.d()
+		
+		
+		Protected dqline.s=""
+		Protected ranges.s=""
+		
+		Protected idx=0
+		If ExamineRegularExpression(MyTableRegDQuot,line)
+			While NextRegularExpressionMatch(MyTableRegDQuot)			
+				dqline=RegularExpressionMatchString(MyTableRegDQuot)
+				dqstrings("#DQ#"+Str(Len(dqline)-2)+"#QD#")=dqline
+			Wend
+			ForEach dqstrings()
+				line=ReplaceString(line,dqstrings(),MapKey(dqstrings())+#MyTableHK)
+			Next
+		EndIf
+		idx=0
+		If ExamineRegularExpression(MyTableRegExHK,line)
+			While NextRegularExpressionMatch(MyTableRegExHK)			
+				strings("##"+Str(idx)+"##")=RegularExpressionMatchString(MyTableRegExHK)
+				idx+1
+			Wend
+		EndIf
+		
+		
+		
+		ForEach strings()
+			line=ReplaceString(line,strings(),MapKey(strings()))
+		Next
+		
+		idx=0
+		If ExamineRegularExpression(MyTableRegExRange,line)
+			While NextRegularExpressionMatch(MyTableRegExRange)			
+				range("#_"+Str(idx)+"_#")=RegularExpressionMatchString(MyTableRegExRange)
+				idx+1
+			Wend
+		EndIf
+		
+		ForEach range()
+			ranges=_MyTable_RangeString(range())
+			line=ReplaceString(line,range(),ranges)
+		Next
+		
+		idx=0
+		If ExamineRegularExpression(MyTableRegExCells,line)
+			While NextRegularExpressionMatch(MyTableRegExCells)			
+				cells("#!"+Str(idx)+"!#")=RegularExpressionMatchString(MyTableRegExCells)
+				idx+1
+			Wend
+		EndIf
+		
+		
+		line=ReplaceString(line,"+"," + ")
+		line=ReplaceString(line,"-"," - ")
+		line=ReplaceString(line,"*"," * ")
+		line=ReplaceString(line,"/"," / ")
+		line=ReplaceString(line,","," , ")
+		line=ReplaceString(line,";"," ; ")
+		line=ReplaceString(line,"&"," & ")
+		line=ReplaceString(line,"%"," % ")
+		line=ReplaceString(line,"="," = ")
+		
+		While FindString(line,"  ")
+			line=ReplaceString(line,"  "," ")
+		Wend
+		
+		
+		
+		ForEach cells()
+			line=ReplaceString(line,cells(),MapKey(cells()))		
+		Next
+		
+		
+		If Not error
+			If line<>""
+				
+				ForEach cells()					
+					*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()),calccells())
+					If *formulacell=0
+						errors="#ERROR# Cell not Found: '"+UCase(cells())+"'"
+						error=#True
+						Break
+					EndIf
+					If *formulacell = *cell Or *formulacell=-1
+						errors="#ERROR# Recursion: '"+UCase(cells())+"'"
+						error=#True
+						Break
+					EndIf
+					vcells(MapKey(cells()))=*formulacell\value
+					line=ReplaceString(line,MapKey(cells()),*formulacell\text)
+				Next
+				
+				line=_MyTableFormulaMath(line)
+				
+				line=ReplaceString(line," & ","")			
+				ForEach strings()
+					line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
+				Next	
+				ForEach dqstrings()
+					dqline=ReplaceString(MapKey(dqstrings()),"#DQ#","")
+					dqline=ReplaceString(dqline,"#QD#","")
+					dqline=LSet(~"\"",Val(dqline),#MyTableHK)
+					line=ReplaceString(line,MapKey(dqstrings()),dqline)
+				Next
+				
+				
+				
+			EndIf
+		EndIf
+	EndIf
+	
+	If Not error
+		If line<>""
+			ForEach MyTableFormulaRegexLogicMap()
+				dqline=_MyTableFormulaRegExReplace(MyTableFormulaRegexLogicMap(),MapKey(MyTableFormulaRegexLogicMap()),line)
+				If dqline<>line
+					calc=#True
+					line=dqline
+				EndIf
+			Next
+		EndIf
+	EndIf	
+	
+	If Not error
+		If line<>""
+			idx=1
+			While idx
+				idx=0
+				If ExamineRegularExpression(MyTableRegFormula,line)
+					While NextRegularExpressionMatch(MyTableRegFormula)			
+						dqline=RegularExpressionMatchString(MyTableRegFormula)
+						line=ReplaceString(line,dqline,_MyTableFormula(*cell\table,dqline))
+						idx=1
+						calc=#True
+					Wend
+				EndIf
+			Wend
+		EndIf
+	EndIf	
+		
+	FreeMap(strings())
+	FreeMap(dqstrings())
+	FreeMap(cells())
+	FreeMap(range())
+	FreeMap(vcells())
+	If calc
+		line=_MyTableFormulaCalcCellExp(*cell,line,calccells())
+	EndIf
+	
+	ProcedureReturn line
+EndProcedure
+
+Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
+	
 	Protected error.b=#False
 	Protected errors.s=""
 	
@@ -434,151 +599,18 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 				error=#True
 				errors="#ERROR# Recursion"
 			EndIf
+			
 		Next
 		If Not error
+			*cell\calced=#True
 			AddElement(calccells())
 			calccells()=*cell
-			*cell\text="#FORMULA#"
-			Protected NewMap strings.s()
-			Protected NewMap dqstrings.s()
-			Protected NewMap cells.s()
-			Protected NewMap range.s()
-			Protected NewMap vcells.d()
-			
-			Protected formula.s=*cell\formula		
-			Protected line.s=Mid(formula,2)
-			Protected dqline.s=""
-			Protected ranges.s=""
-			
-			Protected idx=0
-			If ExamineRegularExpression(MyTableRegDQuot,line)
-				While NextRegularExpressionMatch(MyTableRegDQuot)			
-					dqline=RegularExpressionMatchString(MyTableRegDQuot)
-					dqstrings("#DQ#"+Str(Len(dqline)-2)+"#QD#")=dqline
-				Wend
-				ForEach dqstrings()
-					line=ReplaceString(line,dqstrings(),MapKey(dqstrings())+#MyTableHK)
-				Next
-			EndIf
-			idx=0
-			If ExamineRegularExpression(MyTableRegExHK,line)
-				While NextRegularExpressionMatch(MyTableRegExHK)			
-					strings("##"+Str(idx)+"##")=RegularExpressionMatchString(MyTableRegExHK)
-					idx+1
-				Wend
-			EndIf
-			
-			
-			
-			ForEach strings()
-				line=ReplaceString(line,strings(),MapKey(strings()))
-			Next
-			
-			idx=0
-			If ExamineRegularExpression(MyTableRegExRange,line)
-				While NextRegularExpressionMatch(MyTableRegExRange)			
-					range("#_"+Str(idx)+"_#")=RegularExpressionMatchString(MyTableRegExRange)
-					idx+1
-				Wend
-			EndIf
-			
-			ForEach range()
-				ranges=_MyTable_RangeString(range())
-				line=ReplaceString(line,range(),ranges)
-			Next
-			
-			idx=0
-			If ExamineRegularExpression(MyTableRegExCells,line)
-				While NextRegularExpressionMatch(MyTableRegExCells)			
-					cells("#!"+Str(idx)+"!#")=RegularExpressionMatchString(MyTableRegExCells)
-					idx+1
-				Wend
-			EndIf
-			
-			
-			line=ReplaceString(line,"+"," + ")
-			line=ReplaceString(line,"-"," - ")
-			line=ReplaceString(line,"*"," * ")
-			line=ReplaceString(line,"/"," / ")
-			line=ReplaceString(line,","," , ")
-			line=ReplaceString(line,";"," ; ")
-			line=ReplaceString(line,"&"," & ")
-			line=ReplaceString(line,"%"," % ")
-			line=ReplaceString(line,"="," = ")
-			
-			While FindString(line,"  ")
-				line=ReplaceString(line,"  "," ")
-			Wend
-			
-			
-			
-			ForEach cells()
-				line=ReplaceString(line,cells(),MapKey(cells()))		
-			Next
-			
-			
-			If Not error
-				If line<>""
-					
-					ForEach cells()					
-						*formulacell=_MyTableGetOrAddFormulaCell(*cell\table,UCase(cells()),calccells())
-						If *formulacell=0
-							errors="#ERROR# Cell not Found: '"+UCase(cells())+"'"
-							error=#True
-							Break
-						EndIf
-						If *formulacell = *cell Or *formulacell=-1
-							errors="#ERROR# Recursion: '"+UCase(cells())+"'"
-							error=#True
-							Break
-						EndIf
-						vcells(MapKey(cells()))=*formulacell\value
-						line=ReplaceString(line,MapKey(cells()),*formulacell\text)
-					Next
-					
-					line=_MyTableFormulaMath(line)
-					
-					line=ReplaceString(line," & ","")			
-					ForEach strings()
-						line=ReplaceString(line,MapKey(strings()),ReplaceString(strings(),#MyTableHK,""))
-					Next	
-					ForEach dqstrings()
-						dqline=ReplaceString(MapKey(dqstrings()),"#DQ#","")
-						dqline=ReplaceString(dqline,"#QD#","")
-						dqline=LSet(~"\"",Val(dqline),#MyTableHK)
-						line=ReplaceString(line,MapKey(dqstrings()),dqline)
-					Next
-					
-					
-					
-				EndIf
-			EndIf
 		EndIf
 		
-		If Not error
-			If line<>""
-				ForEach MyTableFormulaRegexLogicMap()
-					line=_MyTableFormulaRegExReplace(MyTableFormulaRegexLogicMap(),MapKey(MyTableFormulaRegexLogicMap()),line)
-				Next
-			EndIf
-		EndIf	
+		Protected formula.s=*cell\formula		
+		Protected line.s=Mid(formula,2)
 		
-		If Not error
-			If line<>""
-				idx=1
-				While idx
-					idx=0
-					If ExamineRegularExpression(MyTableRegFormula,line)
-						While NextRegularExpressionMatch(MyTableRegFormula)			
-							dqline=RegularExpressionMatchString(MyTableRegFormula)
-							line=ReplaceString(line,dqline,_MyTableFormula(*cell\table,dqline))
-							idx=1
-						Wend
-					EndIf
-				Wend
-			EndIf
-		EndIf	
-		
+		line=_MyTableFormulaCalcCellExp(*cell,line,calccells())
 		
 		If error
 			If errors<>""
@@ -592,11 +624,7 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 		
 		*cell\formula=formula
 		
-		FreeMap(strings())
-		FreeMap(dqstrings())
-		FreeMap(cells())
-		FreeMap(range())
-		FreeMap(vcells())
+		
 		*cell\calced=#True
 	EndIf
 EndProcedure

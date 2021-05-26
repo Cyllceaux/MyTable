@@ -635,7 +635,7 @@ Module MyTable
 					
 					If selecte Or *this\rows()=*cell\row Or *this\rows()=*tr\row
 						For idx=min To max
-							Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),idx)	
+							Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),idx,#True)	
 							If temp 
 								
 								*this\tempselected(Str(*tc))=Bool(*this\tempselected(Str(*tc))=#False)
@@ -1778,17 +1778,23 @@ Module MyTable
 									Else
 										If listidx>-1				
 											*cell=_MyTableGetOrAddCell(*row,listidx,#True)
+											AddElement(selected())
+											selected()=*cell			
+										Else
+											AddElement(selected())
+											selected()=*row
 										EndIf
-										AddElement(selected())
-										selected()=*cell									
 									EndIf
 								Next
 								ClearMap(*this\selected())
 								ForEach selected()
-									*cell=selected()
-									*this\selected(Str(*cell))=#True
-									If *this\evtCellSelect
-										*this\evtCellSelect(*cell)
+									*obj=selected()
+									*this\selected(Str(*obj))=#True
+									If *this\evtCellSelect And *obj\type=#MYTABLE_TYPE_CELL
+										*this\evtCellSelect(*obj)
+									EndIf
+									If *this\evtRowSelect And *obj\type=#MYTABLE_TYPE_ROW
+										*this\evtRowSelect(*obj)
 									EndIf
 								Next
 								redraw=#True
@@ -1838,10 +1844,13 @@ Module MyTable
 								Next
 								ClearMap(*this\selected())
 								ForEach selected()
-									*cell=selected()
-									*this\selected(Str(*cell))=#True
-									If *this\evtCellSelect
-										*this\evtCellSelect(*cell)
+									*obj=selected()
+									*this\selected(Str(*obj))=#True
+									If *this\evtCellSelect And *obj\type=#MYTABLE_TYPE_CELL
+										*this\evtCellSelect(*obj)
+									EndIf
+									If *this\evtRowSelect And *obj\type=#MYTABLE_TYPE_ROW
+										*this\evtRowSelect(*obj)
 									EndIf
 								Next
 								redraw=#True
@@ -1849,11 +1858,13 @@ Module MyTable
 						Else
 							If Not fullrowselect
 								SelectElement(*this\expRows(),0)
-								*row=*this\expRows()
-								*cell=_MyTableGetOrAddCell(*row,0,#True)
-								*this\selected(Str(*cell))=#True
-								If *this\evtCellSelect
-									*this\evtCellSelect(*cell)
+								*obj=selected()
+								*this\selected(Str(*obj))=#True
+								If *this\evtCellSelect And *obj\type=#MYTABLE_TYPE_CELL
+									*this\evtCellSelect(*obj)
+								EndIf
+								If *this\evtRowSelect And *obj\type=#MYTABLE_TYPE_ROW
+									*this\evtRowSelect(*obj)
 								EndIf
 								redraw=#True
 							EndIf
@@ -2284,7 +2295,7 @@ Module MyTable
 											EndIf
 											
 										Else
-											*cell=_MyTableGetOrAddCell(*row,col)
+											*cell=_MyTableGetOrAddCell(*row,col,#True)
 											_MyTableSelectCell(*cell,control,shift,multiselect,#False)
 											
 											If rightbutton And *this\evtCellRightClick

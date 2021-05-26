@@ -114,29 +114,38 @@ UseModule MyTable
 	
 	
 	Define frow=0
-	*table\SetCellFormula(frow,0,"Hello"):*table\SetCellFormula(frow,1,"World"):frow+1
-	*table\SetCellFormula(frow,0,"=1+1"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,"=1*1"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,"=1*1+1"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,"=1*(1+1)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,"=(1+1)*1"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=A1 & \" \" & B1"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=\"Test\"\"\""):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=\"Test\"\"\"\""):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=\"Test: \" & (1+1)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=\"Test: \" & (1.5*9.2)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=A2+A3+A4+A5+A6"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=A13"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=SUM(A2:A6)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;A4;A5;A6)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;((A4+A5)*A6))"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=SUM(A2;A3;SUM(A4;A6))"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=HELLOWORLD(\"Silko\")"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=RND(1;100) & \"->\" & RND(1;RND(100;200)) & \"->\" & RND(1;100)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=IF(2=2)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=IF(2=2;Yes;No)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=IF(2=3;Yes;No)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
-	*table\SetCellFormula(frow,0,~"=IF(NOT(2=3);Yes;No)"):*table\SetCellFormula(frow,1,"'"+*table\GetCellFormula(frow,0)):frow+1
+	Define fcol=0
+	*table\SetCellFormula(frow,fcol,"Hello"):*table\SetCellFormula(frow,fcol+1,"World"):frow+1
+	*table\SetCellFormula(frow,fcol,"=1+1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,"=1*1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,"=1*1+1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,"=1*(1+1)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,"=(1+1)*1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=A1 & \" \" & B1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=\"Test\"\"\""):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=\"Test\"\"\"\""):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=\"Test: \" & (1+1)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=\"Test: \" & (1.5*9.2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=A2+A3+A4+A5+A6"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=A13"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=SUM(A2:A6)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=SUM(A2;A3;A4;A5;A6)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=SUM(A2;A3;((A4+A5)*A6))"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=SUM(A2;A3;SUM(A4;A6))"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=HELLOWORLD(\"Silko\")"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=RND(1;100) & \"->\" & RND(1;RND(100;200)) & \"->\" & RND(1;100)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=IF(2=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=IF(2=2;Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=IF(2=3;Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=IF(NOT(2=3);Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	
+	frow=0
+	fcol=2
+	*table\SetCellFormula(frow,fcol,~"=4-2+3"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=8/2*3"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=SUM(A2:A6)+5"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"-5"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=C4+4"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 		
 		
 	*table\AutosizeColumn(1)

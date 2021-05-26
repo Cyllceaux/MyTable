@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-26 09:37" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-26 12:12" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -19,8 +19,8 @@
       <fingerprint md5="06058b028ae382e538aa2d5c81232ae2"/>
     </file>
     <file name="mytable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="999af03154668b234bf5295e5acabe88"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="1ee6cfee424cdbbfc90c3054d044aadb"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -28,7 +28,7 @@
     </file>
     <file name="mytablecalc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="96ef8dcbb1d6929a07a88c5d205d7fce"/>
+      <fingerprint md5="13e0e36269770e361750244b50deef6f"/>
     </file>
     <file name="mytablecalc.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -60,7 +60,7 @@
     </file>
     <file name="Test\customformula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="806dfb9e398e594648b04e8295556f80"/>
+      <fingerprint md5="609099fba71dc75efb421137d6e7e516"/>
     </file>
     <file name="Test\fontscolors.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
