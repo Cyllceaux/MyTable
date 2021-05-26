@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-26 09:34" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-26 09:37" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -42,6 +42,10 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="7aa6b199d22d18c06bb7b0d27416deaf"/>
     </file>
+    <file name="mytableformula.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="26e535d97b945e811e08e2dc9daa9c3d"/>
+    </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="795bb6ffb7f181d43b919704a6d98284"/>
@@ -73,10 +77,6 @@
     <file name="Test\grid2.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="cb29be1a7d7860ab39bc359e27e8e6ae"/>
-    </file>
-    <file name="mytableformula.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="26e535d97b945e811e08e2dc9daa9c3d"/>
     </file>
   </section>
   <section name="targets">
