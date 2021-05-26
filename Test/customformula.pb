@@ -138,6 +138,7 @@ UseModule MyTable
 	*table\SetCellFormula(frow,fcol,~"=IF(2=2;Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=IF(2=3;Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=IF(NOT(2=3);Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=IF(Silko=Test;Yes;No)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	
 	frow=0
 	fcol=2

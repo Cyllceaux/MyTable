@@ -67,7 +67,7 @@ EndProcedure
 
 Procedure.s _MyTable_Formula_Not(name.s,List cells.s())
 	FirstElement(cells())
-	ProcedureReturn Str(Bool(cells()<>"0"))
+	ProcedureReturn Str(Bool(cells()="0"))
 EndProcedure
 
 Procedure _MyTable_InitFormula(*this.strMyTableTable)
