@@ -145,7 +145,7 @@ UseModule MyTable
 	*table\SetCellFormula(frow,fcol,~"=4-2+3"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=8/2*3"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=SUM(A2:A6)+5"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
-	*table\SetCellFormula(frow,fcol,~"-5"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellText(frow,fcol,~"-5"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellText(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=C4+4"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=AND(1=1;1=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=AND(1=1;2=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
@@ -155,6 +155,7 @@ UseModule MyTable
 	*table\SetCellFormula(frow,fcol,~"=XOR(1=1;1=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=XOR(1=2;1=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=XOR(1=1;2=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
+	*table\SetCellFormula(frow,fcol,~"=SUM(C1:C5)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 		
 		
 	*table\AutosizeColumn(1)

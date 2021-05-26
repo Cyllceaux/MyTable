@@ -581,9 +581,14 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 	FreeMap(cells())
 	FreeMap(range())
 	FreeMap(vcells())
-	If calc
-		line=_MyTableFormulaCalcCellExp(*cell,line,calccells())
+	If error
+		line=errors
+	Else
+		If calc
+			line=_MyTableFormulaCalcCellExp(*cell,line,calccells())
+		EndIf
 	EndIf
+	
 	
 	ProcedureReturn line
 EndProcedure
