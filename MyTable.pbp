@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-27 07:00" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-27 07:02" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -63,8 +63,8 @@
       <fingerprint md5="94e7db92d82d15d2be0f53b22131f93c"/>
     </file>
     <file name="Test\fontscolors.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="3a66bedf855456ac9dd0724d25c291b0"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="46040552a9c14cb9239fd45446888479"/>
     </file>
     <file name="Test\formula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>

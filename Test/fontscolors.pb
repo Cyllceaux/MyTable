@@ -60,8 +60,6 @@ UseModule MyTable
 	
 	*table\SetFont(FontID(fontT))
 	*row\SetFont(FontID(fontR)):*row\SetBackground(RGBA(240,250,240,255))
-	NewList cells.MyTableCell()
-	*row\GetCells(cells())
 	*col\SetFont(FontID(fontC)):*col\SetBackground(RGBA(240,250,250,255))
 	*cell\SetFont(FontID(fontCell)):*cell\SetBackground(RGBA(250,240,250,255))
 	*cell2\SetFont(FontID(fontCell)):*cell2\SetBackground(RGBA(250,240,250,255))
