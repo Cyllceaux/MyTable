@@ -43,6 +43,17 @@ Procedure _MyTable_Row_GetCell(*this.strMyTableRow,col.i)
 	ProcedureReturn _MyTableGetOrAddCell(*this,col)
 EndProcedure
 
+Procedure _MyTable_Row_GetCells(*this.strMyTableRow,List cells.i())
+	If *this
+		ClearList(cells())
+		_MyTableGetOrAddCell(*this,ListSize(*this\table\cols())-1)
+		ForEach *this\cells()
+			AddElement(cells())
+			cells()=*this\cells()
+		Next
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Row_GetTable(*this.strMyTableRow)
 	ProcedureReturn *this\table
 EndProcedure

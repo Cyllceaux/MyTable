@@ -92,22 +92,23 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			Protected i=0
 			all(Str(*this.strMyTableTable))=#True
 			StartDrawing(CanvasOutput(*this\canvas))
-			_MyTable_Table_RecalcExp(*this,#True)
+			_MyTable_Table_RecalcExp(*this,force)
+			
 			For i=0 To c
 				_MyTable_Table_AutosizeCol(*this.strMyTableTable,i)
 			Next
+			
 			StopDrawing()
+			
 			all(Str(*this.strMyTableTable))=#False
 		Else
 			_callcountStart(autosizecol)
 			If all(Str(*this.strMyTableTable))=#False
 				StartDrawing(CanvasOutput(*this\canvas))
+				_MyTable_Table_RecalcExp(*this,force)
 			EndIf
 			DrawingFont(*this\font)
-			
-			If Not all(Str(*this.strMyTableTable))
-				_MyTable_Table_RecalcExp(*this,#True)
-			EndIf
+		
 			
 			Protected w=0
 			
@@ -119,6 +120,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			If *col\textwidth=0
 				w=_MyTableTextWidth(*col\text)
 				*col\textwidth=w
+				*col\dirty=#True
 			Else
 				w=*col\textwidth
 			EndIf
@@ -187,6 +189,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 				EndIf
 			Next
 			*col\width=w+8
+			*col\dirty=#True
 			
 			Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
 			If col=0
@@ -211,6 +214,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			*col\calcwidth=DesktopScaledX(*col\width)
 			If all(Str(*this.strMyTableTable))=#False
 				StopDrawing()
+				
 			EndIf
 		EndIf
 		If Not all(Str(*this.strMyTableTable))
@@ -235,15 +239,18 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable,col.i=#PB_Ignore,f
 			*this\headerheight=0
 			all(Str(*this.strMyTableTable))=#True
 			StartDrawing(CanvasOutput(*this\canvas))
+			_MyTable_Table_RecalcExp(*this,force)
 			For i=0 To c
 				_MyTable_Table_AutosizeHeader(*this.strMyTableTable,i)
 			Next
 			StopDrawing()
+			
 			all(Str(*this.strMyTableTable))=#False
 		Else
 			_callcountStart(autosizecol)
 			If all(Str(*this.strMyTableTable))=#False
-				StartDrawing(CanvasOutput(*this\canvas))
+				StartDrawing(CanvasOutput(*this\canvas))		
+				_MyTable_Table_RecalcExp(*this,force)
 			EndIf
 			DrawingFont(*this\font)
 			
@@ -257,7 +264,7 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable,col.i=#PB_Ignore,f
 			*col\textwidth=_MyTableTextWidth(*col\text)		
 			*col\calcwidth=DesktopScaledX(*col\textwidth)
 			
-			
+			*col\dirty=#True
 			
 			*col\textheight=_MyTableTextHeight(*col\text)+2			
 			*col\calcheight=DesktopScaledY(*col\textheight)
@@ -269,6 +276,7 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable,col.i=#PB_Ignore,f
 			EndIf
 			If all(Str(*this.strMyTableTable))=#False
 				StopDrawing()
+				
 			EndIf
 		EndIf
 		If Not all(Str(*this.strMyTableTable))

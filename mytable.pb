@@ -3013,6 +3013,7 @@ Module MyTable
 		DataSectionGetterSetter(Row,RowHeight)
 		Data.i @_MyTable_Row_AddDirtyRows()
 		DataSectionGetter(Row,Cell)
+		DataSectionGetter(Row,Cells)
 		Data.i @_MyTable_Row_AddRow()
 		
 		;- Col

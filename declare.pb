@@ -99,8 +99,5 @@ Declare MyTableEvtEsc()
 Declare MyTableEvtLostFocus()
 
 
-;- Formula
-CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-	Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
-CompilerEndIf
+
 

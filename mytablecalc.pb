@@ -58,6 +58,10 @@ Global MyTableRegLT=CreateRegularExpression(#PB_Any,"[\w+\d+\.]+ \< [\w+\d+\.]+"
 Global MyTableRegGE=CreateRegularExpression(#PB_Any,"[\w+\d+\.]+ \>\= [\w+\d+\.]+")
 Global MyTableRegLE=CreateRegularExpression(#PB_Any,"[\w+\d+\.]+ \<\= [\w+\d+\.]+")
 
+Global MyTableRegExRC=CreateRegularExpression(#PB_Any,"R(\([-\d]*\))?C(\([-\d]*\))?")
+Global MyTableRegExC=CreateRegularExpression(#PB_Any,"C(\(([-\d]*)\))?")
+Global MyTableRegExR=CreateRegularExpression(#PB_Any,"R(\(([-\d]*)\))?")
+
 Global MyTableRegKL=CreateRegularExpression(#PB_Any,"\(-?[\d+\.]+\)")
 Global MyTableRegFormula=CreateRegularExpression(#PB_Any,"[\w\d]+\([^()]*\)")
 
@@ -180,6 +184,42 @@ Procedure.s _MyTableFormulaExt(*this.strMyTableTable,name.s,List cells.s())
 	EndIf
 EndProcedure
 
+Procedure.s RegExString(regex,line.s,group.i=0)
+	Protected result.s=""
+	If ExamineRegularExpression(regex,line)
+		While NextRegularExpressionMatch(regex)			
+			If group
+				result=RegularExpressionGroup(regex,group)
+				Break
+			Else
+				result=RegularExpressionMatchString(regex)
+			EndIf
+		Wend
+	EndIf
+	ProcedureReturn result
+EndProcedure
+
+Procedure.s _MyTableFormulaRC(*cell.strMyTableCell,dqline.s)
+	Protected result.s=""
+	Protected r.s=RegExString(MyTableRegExR,dqline,2)
+	Protected c.s=RegExString(MyTableRegExC,dqline,2)
+	Protected row.i=*cell\row\listindex
+	Protected col.i=*cell\col\listindex
+	
+	If r<>"" Or c<>""
+		If r<>""
+			row+Val(r)
+		EndIf
+		If c<>""
+			col+Val(c)
+		EndIf
+	Else
+		ProcedureReturn *cell\col\text
+	EndIf
+	Protected *formcell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*cell\table\rows(),row),col-1)
+	ProcedureReturn *formcell\col\text+Str(row+1)
+EndProcedure
+
 Procedure.s _MyTableFormula(*this.strMyTableTable,formula.s)
 	Protected result.s=formula
 	Protected dqline.s=""
@@ -223,30 +263,32 @@ Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 	EndIf
 EndProcedure
 
-Procedure _MyTableFormulaCalcTable(*this.strMyTableTable)
+Procedure _MyTableFormulaCalcTable(*this.strMyTableTable,force.b=#False)
 	If *this
-		If MapSize(*this\formulaCells())>0
-			_callcountStart(calctable)
-			
-			Protected *cell.strMyTableCell=0
-			_MyTableClearMaps(*this)
-			ForEach *this\formulaCells()
-				If *this\formulaCells()
-					*cell=Val(MapKey(*this\formulaCells()))
-					*cell\calced=#False
-				EndIf
-			Next
-			ForEach *this\formulaCells()
-				If *this\formulaCells()
-					*cell=Val(MapKey(*this\formulaCells()))
-					If Not *cell\calced
-						Protected NewList cells()
-						_MyTableFormulaCalcCell(*cell,cells())
-						FreeList(cells())
+		If (*this\dirty And *this\redraw) Or force
+			If MapSize(*this\formulaCells())>0
+				_callcountStart(calctable)
+				
+				Protected *cell.strMyTableCell=0
+				_MyTableClearMaps(*this)
+				ForEach *this\formulaCells()
+					If *this\formulaCells()
+						*cell=Val(MapKey(*this\formulaCells()))
+						*cell\calced=#False
 					EndIf
-				EndIf
-			Next
-			_callcountEnde(calctable)
+				Next
+				ForEach *this\formulaCells()
+					If *this\formulaCells()
+						*cell=Val(MapKey(*this\formulaCells()))
+						If Not *cell\calced
+							Protected NewList cells()
+							_MyTableFormulaCalcCell(*cell,cells())
+							FreeList(cells())
+						EndIf
+					EndIf
+				Next
+				_callcountEnde(calctable)
+			EndIf
 		EndIf
 	EndIf
 EndProcedure
@@ -479,6 +521,14 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 			line=ReplaceString(line,range(),ranges)
 		Next
 		
+		If ExamineRegularExpression(MyTableRegExRC,line)
+			While NextRegularExpressionMatch(MyTableRegExRC)			
+				dqline=RegularExpressionMatchString(MyTableRegExRC)
+				ranges=_MyTableFormulaRC(*cell.strMyTableCell,dqline)
+				line=ReplaceString(line,dqline,ranges,#PB_String_CaseSensitive,0,1)
+			Wend
+		EndIf
+		
 		idx=0
 		If ExamineRegularExpression(MyTableRegExCells,line)
 			While NextRegularExpressionMatch(MyTableRegExCells)			
@@ -486,6 +536,8 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 				idx+1
 			Wend
 		EndIf
+				
+		
 		
 		
 		line=ReplaceString(line,"+"," + ")
@@ -657,8 +709,10 @@ EndProcedure
 Procedure _MyTable_Table_SetCellformula(*this.strMyTableTable,row.i,col.i,formula.s)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetFormula(*cell,formula)
+		If *row
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+			_MyTable_Cell_SetFormula(*cell,formula)
+		EndIf
 	EndIf
 EndProcedure
 

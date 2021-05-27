@@ -196,6 +196,7 @@ DeclareModule MyTable
 		SetRowHeight(value.i)
 		AddDirtyRows(rows.i)
 		GetCell(col.i)
+		GetCells(List cells.MyTableCell())
 		AddRow(text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
 	EndInterface
 	

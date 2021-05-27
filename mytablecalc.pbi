@@ -35,7 +35,7 @@
 
 
 Declare _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
-Declare _MyTableFormulaCalcTable(*this.strMyTableTable)
+Declare _MyTableFormulaCalcTable(*this.strMyTableTable,force.b=#False)
 Declare _MyTableFormulaCalcCell(*cell.strMyTableCell,List cells())
 Declare _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s,List cells())
 Declare _MyTableGridColumnFromColumnName(col.s)
