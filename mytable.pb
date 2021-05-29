@@ -3035,6 +3035,9 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Table,CellFormula)
 		CompilerEndIf
+		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			DataSectionGetterSetter(Table,CellMatrix)
+		CompilerEndIf
 		DataSectionGetterSetter(Table,CellImage)
 		
 		DataSectionGetterSetter(Table,DefaultRowHeight)

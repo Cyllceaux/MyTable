@@ -57,7 +57,7 @@ CompilerIf Not Defined(MYTABLE_EXPORT_JSON,#PB_Constant)
 CompilerEndIf
 
 CompilerIf Not Defined(MYTABLE_FORMULA,#PB_Constant)
-	#MYTABLE_FORMULA=0
+	#MYTABLE_FORMULA=1
 CompilerEndIf
 
 CompilerIf Not Defined(MYTABLE_FORMULA_MATRIX,#PB_Constant)

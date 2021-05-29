@@ -261,6 +261,10 @@ DeclareModule MyTable
 			GetCellFormula.s(row.i,col.i)
 			SetCellFormula(row.i,col.i,value.s)
 		CompilerEndIf
+		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			GetCellMatrix.s(row.i,col.i)
+			SetCellMatrix(row.i,col.i,value.s)
+		CompilerEndIf
 		GetCellImage(row.i,col.i)
 		SetCellImage(row.i,col.i,value.i)
 		

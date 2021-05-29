@@ -31,7 +31,15 @@
 ; SOFTWARE.
 ;}
 
-Procedure _MyTableMatrixCalcCell(*cell.strMyTableCell)
+Global MyTableRegMatrix=CreateRegularExpression(#PB_Any,"\{[^{}]*\}")
+
+
+Procedure.s _MyTableMatrixCalcCell(*cell.strMyTableCell,matrix.s)
+	ClearList(*cell\cells())
+	Protected.s dqline,result
+	Protected c,idx
+	result=matrix
+	
 	
 EndProcedure
 
@@ -39,8 +47,8 @@ Procedure.b _MyTableFillCellMatrix(*cell.strMyTableCell,matrix.s)
 	Protected result.b=#False
 	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_MATRIX) And Left(matrix,1)="{"
 		*cell\matrix=matrix
-		*cell\table\matrixCells(Str(*cell))=#True
-		_MyTableMatrixCalcCell(*cell)
+		*cell\table\matrixCells(Str(*cell))=#True		
+		_MyTableMatrixCalcCell(*cell,matrix)
 		result=#True
 	Else
 		*cell\table\matrixCells(Str(*cell))=#False
@@ -70,5 +78,23 @@ EndProcedure
 Procedure.s _MyTable_Cell_GetMatrix(*this.strMyTableCell)
 	If *this
 		ProcedureReturn *this\matrix
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetCellMatrix(*this.strMyTableTable,row.i,col.i,matrix.s)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		If *row
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+			_MyTable_Cell_SetMatrix(*cell,matrix)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure.s _MyTable_Table_GetCellMatrix(*this.strMyTableTable,row.i,col.i)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+		ProcedureReturn _MyTable_Cell_GetMatrix(*cell)
 	EndIf
 EndProcedure

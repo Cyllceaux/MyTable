@@ -60,10 +60,10 @@ UseModule MyTable
 	
 	Global *application.MyTableApplication=MyTableCreateApplication()
 	
-	CompilerIf #MYTABLE_FORMULA
-		Define *canvasFormula1.MyTableTable=*application\GridRegister(mainWindow,canvasFormula1,hscrollFormula1,vscrollFormula1,1000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula1")
-		Define *canvasFormula2.MyTableTable=*application\GridRegister(mainWindow,canvasFormula2,hscrollFormula2,vscrollFormula2,1000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula2")
-		Define *canvasFormula3.MyTableTable=*application\GridRegister(mainWindow,canvasFormula3,hscrollFormula3,vscrollFormula3,1000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA,0,"canvasFormula3")
+	CompilerIf #MYTABLE_FORMULA Or #MYTABLE_FORMULA_MATRIX
+		Define *canvasFormula1.MyTableTable=*application\GridRegister(mainWindow,canvasFormula1,hscrollFormula1,vscrollFormula1,1000,100,#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT,0,"canvasFormula1")
+		Define *canvasFormula2.MyTableTable=*application\GridRegister(mainWindow,canvasFormula2,hscrollFormula2,vscrollFormula2,1000,100,#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT,0,"canvasFormula2")
+		Define *canvasFormula3.MyTableTable=*application\GridRegister(mainWindow,canvasFormula3,hscrollFormula3,vscrollFormula3,1000,100,#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT,0,"canvasFormula3")
 	CompilerElse
 		Define *canvasFormula1.MyTableTable=*application\GridRegister(mainWindow,canvasFormula1,hscrollFormula1,vscrollFormula1,1000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasFormula1")
 		Define *canvasFormula2.MyTableTable=*application\GridRegister(mainWindow,canvasFormula2,hscrollFormula2,vscrollFormula2,1000,100,#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,0,"canvasFormula2")
@@ -148,6 +148,19 @@ UseModule MyTable
 	BindEvent(#PB_Event_RestoreWindow,@evtResizeWindow(),mainWindow)
 	BindEvent(#PB_Event_MaximizeWindow,@evtResizeWindow(),mainWindow)
 	BindMenuEvent(menu,#MAIN_RETURN,@EvtReturn())
+	
+	
+	Define trow=0
+	Define tcol=0
+	;*canvasFormula1\SetCellMatrix(trow,tcol,"{0}"):*canvasFormula1\SetCellText(trow,tcol+1,*canvasFormula1\GetCellMatrix(trow,tcol)):trow+1
+	;*canvasFormula1\SetCellMatrix(trow,tcol,"{0;1}"):*canvasFormula1\SetCellText(trow,tcol+1,*canvasFormula1\GetCellMatrix(trow,tcol)):trow+1
+	;*canvasFormula1\SetCellMatrix(trow,tcol,"{0;1;5}"):*canvasFormula1\SetCellText(trow,tcol+1,*canvasFormula1\GetCellMatrix(trow,tcol)):trow+1
+	;*canvasFormula1\SetCellMatrix(trow,tcol,"{{0;0};1;5}"):*canvasFormula1\SetCellText(trow,tcol+1,*canvasFormula1\GetCellMatrix(trow,tcol)):trow+1
+	;*canvasFormula1\SetCellMatrix(trow,tcol,"{{0;1};1;{0;1;5}}"):*canvasFormula1\SetCellText(trow,tcol+1,*canvasFormula1\GetCellMatrix(trow,tcol)):trow+1
+	*canvasFormula1\SetCellMatrix(trow,tcol,"{{0;1;{9;1;4}};1;{0;1;5}}"):*canvasFormula1\SetCellText(trow,tcol+1,*canvasFormula1\GetCellMatrix(trow,tcol)):trow+1
+	
+	*canvasFormula1\AutosizeColumn(1)
+	*canvasFormula1\AutosizeColumn(2)
 	
 	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
 	
