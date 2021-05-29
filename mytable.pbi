@@ -201,6 +201,7 @@ DeclareModule MyTable
 	EndInterface
 	
 	Interface MyTableTable Extends _MyTableObject
+		GetApplication()
 		GetHeaderbackground1.q()
 		SetHeaderbackground1(value.q)
 		GetHeaderbackground2.q()
@@ -266,8 +267,15 @@ DeclareModule MyTable
 		CompilerEndIf
 	EndInterface
 	
+	Interface MyTableApplication
+		Register(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		RegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		GridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		GridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		Unregister()
+	EndInterface
 	
-	
+	Declare MyTableCreateApplication()
 	
 	Declare MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 	Declare MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")

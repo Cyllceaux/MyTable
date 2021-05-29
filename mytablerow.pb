@@ -306,11 +306,11 @@ Procedure _MyTable_Row_SetFont(*this.strMyTableRow,font.i)
 			*this\dirty=#True
 			*this\table\dirty=#True
 			
-				ForEach *this\cells()
-					*this\cells()\dirty=#True
-					*this\cells()\textheight=0
-					*this\cells()\textwidth=0
-				Next
+			ForEach *this\cells()
+				*this\cells()\dirty=#True
+				*this\cells()\textheight=0
+				*this\cells()\textwidth=0
+			Next
 			
 			_MyTable_Table_Recalc(*this\table)
 		EndIf

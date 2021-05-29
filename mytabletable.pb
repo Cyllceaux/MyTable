@@ -108,7 +108,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 				_MyTable_Table_RecalcExp(*this,force)
 			EndIf
 			DrawingFont(*this\font)
-		
+			
 			
 			Protected w=0
 			
@@ -698,7 +698,15 @@ Procedure _MyTable_Table_UnRegister(*this.strMyTableTable)
 			CloseWindow(*this\editorwindow)
 		EndIf
 	EndIf
-	FreeStructure(*this)
+	If *this\application
+		ForEach *this\application\tables()
+			If *this\application\tables()=*this
+				DeleteElement(*this\application\tables())
+			EndIf
+		Next
+	Else
+		FreeStructure(*this)
+	EndIf
 EndProcedure
 
 
@@ -841,6 +849,13 @@ Procedure _MyTable_Table_GetFlags(*this.strMyTableTable)
 	
 	If *this
 		ProcedureReturn *this\flags
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_GetApplication(*this.strMyTableTable)
+	
+	If *this
+		ProcedureReturn *this\application
 	EndIf
 EndProcedure
 

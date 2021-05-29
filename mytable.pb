@@ -237,6 +237,7 @@ Module MyTable
 	
 	
 	Structure strMyTableTable Extends _strMyTableAObject
+		*application.strMyTableApplication
 		name.s
 		window.i
 		canvas.i
@@ -313,6 +314,11 @@ Module MyTable
 		headerbackground2.q
 		headerbackgroundfixed.q
 		headerforecolor.q
+	EndStructure
+	
+	Structure strMyTableApplication
+		vtable.i
+		List tables.strMyTableTable()		
 	EndStructure
 	
 	Structure strMyTableRowCol
@@ -2483,8 +2489,8 @@ Module MyTable
 		ProcedureReturn result
 	EndProcedure
 	
-	Procedure _MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)
+	Procedure _MyTableGridRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		Protected *this.strMyTableTable=_MyTableRegister(*application,window,canvas,hscroll,vscroll,flags,callback,name)
 		If *this
 			_callcountStart(GridRegister)
 			*this\fixedcolumns=1
@@ -2522,10 +2528,16 @@ Module MyTable
 		ProcedureReturn *this
 	EndProcedure
 	
-	Procedure _MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
+	Procedure _MyTableRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		Protected *this.strMyTableTable
+		If *application
+			*this=AddElement(*application\tables())			
+		Else
+			*this=AllocateStructure(strMyTableTable)
+		EndIf
 		With *this
 			\vtable=?vtable_table
+			\application=*application
 			\name=name
 			\window=window
 			\canvas=canvas
@@ -2595,8 +2607,16 @@ Module MyTable
 		ProcedureReturn *this
 	EndProcedure
 	
+	Procedure MyTableCreateApplication()
+		Protected *this.strMyTableApplication=AllocateStructure(strMyTableApplication)
+		With *this
+			\vtable=?vtable_application
+		EndWith
+		ProcedureReturn *this
+	EndProcedure
+	
 	Procedure MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)
+		Protected *this.strMyTableTable=_MyTableRegister(0,window,canvas,hscroll,vscroll,flags,callback,name)
 		BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
 		_MyTableResize(*this)
 		
@@ -2604,21 +2624,21 @@ Module MyTable
 	EndProcedure
 	
 	Procedure MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableRegister(window,canvas,hscroll,vscroll,flags,callback,name)	
+		Protected *this.strMyTableTable=_MyTableRegister(0,window,canvas,hscroll,vscroll,flags,callback,name)	
 		BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
 		_MyTable_Table_Recalc(*this)
 		ProcedureReturn *this
 	EndProcedure
 	
 	Procedure MyTableGridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
+		Protected *this.strMyTableTable=_MyTableGridRegister(0,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
 		BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
 		_MyTableResize(*this)
 		ProcedureReturn *this
 	EndProcedure
 	
 	Procedure MyTableGridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableGridRegister(window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
+		Protected *this.strMyTableTable=_MyTableGridRegister(0,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
 		BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
 		_MyTable_Table_Recalc(*this)
 		ProcedureReturn *this
@@ -2912,6 +2932,7 @@ Module MyTable
 	
 	
 	
+	XIncludeFile "mytableapplication.pb"
 	XIncludeFile "mytabletable.pb"
 	XIncludeFile "mytablerow.pb"
 	XIncludeFile "mytablecol.pb"
@@ -2923,12 +2944,16 @@ Module MyTable
 		XIncludeFile "mytablecalc.pb"
 	CompilerEndIf
 	
+	Macro DataSectionMethod(gruppe,name)
+		Data.i @_MyTable_#gruppe#_#name()
+	EndMacro
+	
 	Macro DataSectionGetter(gruppe,name)
-		Data.i @_MyTable_#gruppe#_Get#name()
+		DataSectionMethod(gruppe,Get#Name)
 	EndMacro
 	
 	Macro DataSectionSetter(gruppe,name)
-		Data.i @_MyTable_#gruppe#_Set#name()
+		DataSectionMethod(gruppe,Set#Name)
 	EndMacro
 	
 	Macro DataSectionGetterSetter(gruppe,name)
@@ -2937,7 +2962,7 @@ Module MyTable
 	EndMacro
 	
 	Macro DataSectionDefault(gruppe)
-		Data.i @_MyTable_#gruppe#_Dirty()
+		DataSectionMethod(gruppe,Dirty)
 		DataSectionGetter(gruppe,Type)
 		DataSectionGetterSetter(gruppe,Flags)
 		DataSectionGetterSetter(gruppe,selectedbackground)
@@ -2949,25 +2974,35 @@ Module MyTable
 	EndMacro
 	
 	DataSection
+		;- Application
+		vtable_application:
+		DataSectionMethod(Application,Register)
+		DataSectionMethod(Application,RegisterDialog)
+		DataSectionMethod(Application,GridRegister)
+		DataSectionMethod(Application,GridRegisterDialog)
+		DataSectionMethod(Application,Unregister)
+		
+		;- Table
 		vtable_table:
 		DataSectionDefault(Table)
+		DataSectionGetter(Table,Application)
 		DataSectionGetterSetter(Table,headerbackground1)
 		DataSectionGetterSetter(Table,headerbackground2)
 		DataSectionGetterSetter(Table,headerbackgroundfixed)
 		DataSectionGetterSetter(Table,headerforecolor)
-		Data.i @_MyTable_Table_GetCanvas()
-		Data.i @_MyTable_Table_UnRegister()
-		Data.i @_MyTable_Table_ClearRows()
-		Data.i @_MyTable_Table_ClearCols()
-		Data.i @_MyTable_Table_Recalc()
-		Data.i @_MyTable_Table_Redraw()
-		Data.i @_MyTable_Table_SetRedraw()
-		Data.i @_MyTable_Table_AddColumn()
-		Data.i @_MyTable_Table_AddRow()
-		Data.i @_MyTable_Table_AutosizeCol()
-		Data.i @_MyTable_Table_AutosizeHeader()
-		Data.i @_MyTable_Table_AutosizeRow()
-		Data.i @_MyTable_Table_AddDirtyRows()
+		DataSectionGetter(Table,Canvas)
+		DataSectionMethod(Table,UnRegister)
+		DataSectionMethod(Table,ClearRows)
+		DataSectionMethod(Table,ClearCols)
+		DataSectionMethod(Table,Recalc)
+		DataSectionMethod(Table,Redraw)
+		DataSectionSetter(Table,Redraw)
+		DataSectionMethod(Table,AddColumn)
+		DataSectionMethod(Table,AddRow)
+		DataSectionMethod(Table,AutosizeCol)
+		DataSectionMethod(Table,AutosizeHeader)
+		DataSectionMethod(Table,AutosizeRow)
+		DataSectionMethod(Table,AddDirtyRows)
 		DataSectionGetter(Table,Row)
 		DataSectionGetter(Table,Col)
 		DataSectionGetter(Table,Cell)
@@ -3002,6 +3037,7 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionSetter(Table,RegisterFormula)
 		CompilerEndIf
+		
 		;- Row
 		vtable_row:
 		DataSectionDefault(Row)
@@ -3011,10 +3047,10 @@ Module MyTable
 		DataSectionGetterSetter(Row,Data)
 		DataSectionGetterSetter(Row,Image)
 		DataSectionGetterSetter(Row,RowHeight)
-		Data.i @_MyTable_Row_AddDirtyRows()
+		DataSectionMethod(Row,AddDirtyRows)
 		DataSectionGetter(Row,Cell)
 		DataSectionGetter(Row,Cells)
-		Data.i @_MyTable_Row_AddRow()
+		DataSectionMethod(Table,AddRow)
 		
 		;- Col
 		vtable_col:
