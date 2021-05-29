@@ -96,7 +96,8 @@ UseModule MyTable
 		If GetActiveGadget()=stringFormula1 Or GetActiveGadget()=stringFormula2 Or GetActiveGadget()=stringFormula3
 			Protected *cell.MyTableCell=GetGadgetData(GetActiveGadget())
 			Protected *table.MyTableTable=*cell\GetTable()
-			*cell\SetFormula(GetGadgetText(GetActiveGadget()))
+			
+			*cell\SetMatrix(GetGadgetText(GetActiveGadget()))
 			*table\Recalc()
 		EndIf
 	EndProcedure

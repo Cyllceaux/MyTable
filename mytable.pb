@@ -189,6 +189,7 @@ Module MyTable
 	EndStructure
 	
 	Structure strMyTableCell Extends strMyTableAObject
+		
 		text.s
 		value.d
 		checked.b
@@ -200,6 +201,10 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			formula.s
 			calced.b
+		CompilerEndIf
+		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			matrix.s
+			List cells.strMyTableCell()
 		CompilerEndIf
 	EndStructure
 	
@@ -262,6 +267,9 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			Map formulaCells.b()
 			Map forms.i()
+		CompilerEndIf
+		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			Map matrixCells.b()
 		CompilerEndIf
 		Map tempselected.b()
 		List expRows.i()
@@ -1457,6 +1465,14 @@ Module MyTable
 				ForEach *this\formulaCells()
 					If Not *this\formulaCells()
 						DeleteMapElement(*this\formulaCells())
+					EndIf
+				Next
+			CompilerEndIf
+			
+			CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+				ForEach *this\matrixCells()
+					If Not *this\matrixCells()
+						DeleteMapElement(*this\matrixCells())
 					EndIf
 				Next
 			CompilerEndIf
@@ -2944,6 +2960,10 @@ Module MyTable
 		XIncludeFile "mytablecalc.pb"
 	CompilerEndIf
 	
+	CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		XIncludeFile "mytablematrix.pb"
+	CompilerEndIf
+	
 	Macro DataSectionMethod(gruppe,name)
 		Data.i @_MyTable_#gruppe#_#name()
 	EndMacro
@@ -3081,6 +3101,9 @@ Module MyTable
 		DataSectionGetterSetter(Cell,Value)
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Cell,Formula)
+		CompilerEndIf
+		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			DataSectionGetterSetter(Cell,Matrix)
 		CompilerEndIf
 		DataSectionGetterSetter(Cell,Image)
 	EndDataSection

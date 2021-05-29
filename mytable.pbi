@@ -96,8 +96,25 @@ DeclareModule MyTable
 			#MYTABLE_TABLE_FLAGS_FORMULA
 		EndEnumeration
 		
-		#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA
 		Prototype.s MyTableProtoFormula(name.s,List cells.s())
+		
+	CompilerEndIf
+	
+	CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		
+		EnumerationBinary _MyTableTableFlags
+			#MYTABLE_TABLE_FLAGS_MATRIX
+		EndEnumeration
+		
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA|#MYTABLE_TABLE_FLAGS_MATRIX
+		CompilerElse
+			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
+		CompilerEndIf
+	CompilerElse
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA
+		CompilerEndIf
 	CompilerEndIf
 	
 	Prototype MyTableProtoEventRowSelected(*row)
@@ -157,8 +174,12 @@ DeclareModule MyTable
 		GetValue.d()
 		SetValue(value.d)
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			GetFormula.s()
+			GetFormula.s()			
 			SetFormula(value.s)
+		CompilerEndIf
+		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			GetMatrix.s()
+			SetMatrix(value.s)
 		CompilerEndIf
 	EndInterface
 	

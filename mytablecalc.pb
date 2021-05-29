@@ -245,11 +245,13 @@ Procedure.s _MyTableFormula(*this.strMyTableTable,formula.s)
 	ProcedureReturn result
 EndProcedure
 
-Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
+Procedure.b _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
+	Protected result.b=#False
 	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="'" And Right(formula,1)<>"'"
 		*cell\table\formulaCells(Str(*cell))=#False
 		_MyTableFillCellText(*cell,Mid(formula,2))
 		*cell\formula=formula
+		result=#True
 	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
 		*cell\formula=formula
 		*cell\table\formulaCells(Str(*cell))=#True
@@ -257,10 +259,12 @@ Procedure _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 		Protected NewList cells()
 		_MyTableFormulaCalcCell(*cell,cells())
 		FreeList(cells())
+		result=#True
 	Else
 		*cell\table\formulaCells(Str(*cell))=#False
 		_MyTableFillCellText(*cell,formula)
 	EndIf
+	ProcedureReturn result
 EndProcedure
 
 Procedure _MyTableFormulaCalcTable(*this.strMyTableTable,force.b=#False)
@@ -536,7 +540,7 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 				idx+1
 			Wend
 		EndIf
-				
+		
 		
 		
 		
