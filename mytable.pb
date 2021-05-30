@@ -989,8 +989,9 @@ Module MyTable
 							*cell\dirty=#True
 							*cell\textwidth=0					
 							*cell\textheight=0				
-							
-							CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+							CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+								_MyTableFillCellMatrix(*cell,s)
+							CompilerElseIf Defined(MYTABLE_FORMULA,#PB_Module)
 								_MyTableFillCellFormula(*cell,s)
 							CompilerElse
 								_MyTableFillCellText(*cell,s)

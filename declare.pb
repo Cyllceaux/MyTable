@@ -87,6 +87,7 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	Declare.s _MyTableDebugGetName(*element._strMyTableAObject)
 CompilerEndIf
 Declare _MyTableFormulaCalcApplication(*this.strMyTableApplication)
+Declare.b _MyTableFillCellMatrix(*cell.strMyTableCell,matrix.s)
 
 ;- Events
 Declare MyTableEvtResize()
