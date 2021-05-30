@@ -42,7 +42,15 @@ UseModule MyTable
 	Procedure SelectCell(*cell.MyTableCell)
 		CompilerIf #MYTABLE_MATRIX
 			If *cell\GetMatrix()=""
-				SetGadgetText(stringFormula,*cell\GetText())
+				CompilerIf #MYTABLE_FORMULA
+					If *cell\GetFormula()=""
+						SetGadgetText(stringFormula,*cell\GetText())
+					Else
+						SetGadgetText(stringFormula,*cell\GetFormula())
+					EndIf
+				CompilerElse
+					SetGadgetText(stringFormula,*cell\GetText())
+				CompilerEndIf
 			Else
 				SetGadgetText(stringFormula,*cell\GetMatrix())
 			EndIf
@@ -95,12 +103,14 @@ UseModule MyTable
 	
 	Define trow=0
 	Define tcol=0
-	*table\SetCellMatrix(trow,tcol,"{0}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	*table\SetCellMatrix(trow,tcol,"{0;1}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	*table\SetCellMatrix(trow,tcol,"{0;1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	*table\SetCellMatrix(trow,tcol,"{{0;0};1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	*table\SetCellMatrix(trow,tcol,"{{0;1};1;{0;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	*table\SetCellMatrix(trow,tcol,"{{0;1;{9;1;4}};1;{0;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
+	*table\SetRedraw(#False)
+	*table\SetCellMatrix(trow,tcol,"{9}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):*table\SetCellFormula(trow,tcol+2,"=MATRIXVALUE("+trow+";"+tcol+")"):trow+1
+	*table\SetCellMatrix(trow,tcol,"{9;1}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):*table\SetCellFormula(trow,tcol+2,"=MATRIXVALUE("+trow+";"+tcol+";0)"):*table\SetCellFormula(trow,tcol+3,"=MATRIXVALUE("+trow+";"+tcol+";1)"):trow+1
+	*table\SetCellMatrix(trow,tcol,"{9;1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):*table\SetCellFormula(trow,tcol+2,"=MATRIXVALUE("+trow+";"+tcol+";0)"):*table\SetCellFormula(trow,tcol+3,"=MATRIXVALUE("+trow+";"+tcol+";1)"):*table\SetCellFormula(trow,tcol+4,"=MATRIXVALUE("+trow+";"+tcol+";2)"):trow+1
+	*table\SetCellMatrix(trow,tcol,"{{9;1};1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):*table\SetCellFormula(trow,tcol+2,"=MATRIXVALUE("+trow+";"+tcol+";0;0)"):*table\SetCellFormula(trow,tcol+3,"=MATRIXVALUE("+trow+";"+tcol+";1)"):trow+1
+	*table\SetCellMatrix(trow,tcol,"{{9;1};1;{9;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):*table\SetCellFormula(trow,tcol+2,"=MATRIXVALUE("+trow+";"+tcol+";2;2)"):trow+1
+	*table\SetCellMatrix(trow,tcol,"{{9;1;{9;1;5}};1;{9;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):*table\SetCellFormula(trow,tcol+2,"=MATRIXVALUE("+trow+";"+tcol+";0;2;1)"):trow+1
+	*table\SetRedraw(#True)
 	
 	*table\AutosizeColumn(1)
 	*table\AutosizeColumn(2)

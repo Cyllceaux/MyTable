@@ -87,7 +87,8 @@ DeclareModule MyTable
 	#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME = #MYTABLE_COLUMN_FLAGS_TIME|#MYTABLE_COLUMN_FLAGS_TIME_LONG
 	#MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME = #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE|#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME
 	
-	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+	
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 		
 		EnumerationBinary _MyTableTableFlags
 			#MYTABLE_TABLE_FLAGS_FORMULA
@@ -95,7 +96,7 @@ DeclareModule MyTable
 		
 		#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA		
 		
-		Prototype.s MyTableProtoFormula(name.s,List cells.s())
+		Prototype.s MyTableProtoFormula(*this,name.s,List cells.s())
 		
 	CompilerEndIf
 	
@@ -112,6 +113,7 @@ DeclareModule MyTable
 		CompilerEndIf
 		
 	CompilerEndIf
+	
 	
 	Prototype MyTableProtoEventRowSelected(*row)
 	Prototype MyTableProtoEventCellSelected(*cell)
@@ -182,6 +184,8 @@ DeclareModule MyTable
 			SetMatrix(value.s)
 		CompilerEndIf
 	EndInterface
+	
+
 	
 	Interface MyTableCol Extends _MyTableObject
 		GetID()
@@ -292,6 +296,8 @@ DeclareModule MyTable
 			RegisterFormula(name.s,method.MyTableProtoFormula)
 		CompilerEndIf
 	EndInterface
+	
+	
 	
 	Interface MyTableApplication Extends _MyTableUAObject
 		Register(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")

@@ -31,7 +31,7 @@
 ; SOFTWARE.
 ;}
 
-Procedure.s _MyTable_Formula_Mul(name.s,List cells.s())	
+Procedure.s _MyTable_Formula_Mul(*this.strMyTableTable,name.s,List cells.s())	
 	Protected value.d=0
 	If ListSize(cells())>1
 		Protected idx=0
@@ -49,7 +49,7 @@ Procedure.s _MyTable_Formula_Mul(name.s,List cells.s())
 	
 EndProcedure
 
-Procedure.s _MyTable_Formula_Div(name.s,List cells.s())	
+Procedure.s _MyTable_Formula_Div(*this.strMyTableTable,name.s,List cells.s())	
 	Protected value.d=0
 	If ListSize(cells())>1
 		Protected idx=0
@@ -68,7 +68,7 @@ Procedure.s _MyTable_Formula_Div(name.s,List cells.s())
 EndProcedure
 
 
-Procedure.s _MyTable_Formula_Sum(name.s,List cells.s())
+Procedure.s _MyTable_Formula_Sum(*this.strMyTableTable,name.s,List cells.s())
 	Protected value.d=0
 	ForEach cells()
 		value+ValD(cells())
@@ -78,7 +78,7 @@ Procedure.s _MyTable_Formula_Sum(name.s,List cells.s())
 	
 EndProcedure
 
-Procedure.s _MyTable_Formula_Mod(name.s,List cells.s())
+Procedure.s _MyTable_Formula_Mod(*this.strMyTableTable,name.s,List cells.s())
 	Protected value.d=0
 	If ListSize(cells())=2
 		SelectElement(cells(),0)
@@ -93,7 +93,7 @@ Procedure.s _MyTable_Formula_Mod(name.s,List cells.s())
 	ProcedureReturn StrD(value)
 EndProcedure
 
-Procedure.s _MyTable_Formula_If(name.s,List cells.s())
+Procedure.s _MyTable_Formula_If(*this.strMyTableTable,name.s,List cells.s())
 	Select ListSize(cells())
 		Case 1
 			SelectElement(cells(),0)
@@ -117,12 +117,12 @@ Procedure.s _MyTable_Formula_If(name.s,List cells.s())
 	EndSelect
 EndProcedure
 
-Procedure.s _MyTable_Formula_Not(name.s,List cells.s())
+Procedure.s _MyTable_Formula_Not(*this.strMyTableTable,name.s,List cells.s())
 	FirstElement(cells())
 	ProcedureReturn Str(Bool(cells()="0"))
 EndProcedure
 
-Procedure.s _MyTable_Formula_And(name.s,List cells.s())
+Procedure.s _MyTable_Formula_And(*this.strMyTableTable,name.s,List cells.s())
 	Protected ok.b=#True
 	ForEach cells()
 		ok=Bool(ok And cells()="1")
@@ -130,7 +130,7 @@ Procedure.s _MyTable_Formula_And(name.s,List cells.s())
 	ProcedureReturn Str(ok)
 EndProcedure
 
-Procedure.s _MyTable_Formula_Or(name.s,List cells.s())
+Procedure.s _MyTable_Formula_Or(*this.strMyTableTable,name.s,List cells.s())
 	Protected ok.b=#False
 	ForEach cells()
 		ok=Bool(ok Or cells()="1")
@@ -138,13 +138,35 @@ Procedure.s _MyTable_Formula_Or(name.s,List cells.s())
 	ProcedureReturn Str(ok)
 EndProcedure
 
-Procedure.s _MyTable_Formula_XOr(name.s,List cells.s())
+Procedure.s _MyTable_Formula_XOr(*this.strMyTableTable,name.s,List cells.s())
 	Protected ok.b=#False
 	ForEach cells()
 		ok=Bool(ok XOr cells()="1")
 	Next
 	ProcedureReturn Str(ok)
 EndProcedure
+
+CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+	Procedure.s _MyTable_Formula_MatrixValue(*this.strMyTableTable,name.s,List cells.s())
+		If ListSize(cells())>1
+			Protected c=ListSize(cells())-1
+			Protected idx=0
+			SelectElement(cells(),0)
+			Protected row=Val(cells())
+			SelectElement(cells(),1)
+			Protected col=Val(cells())
+			Protected *cell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*this\rows(),row),col)
+			For idx=2 To c
+				SelectElement(cells(),idx)
+				col=Val(cells())
+				*cell=_MyTableCellGetOrAddCell(*cell,col)
+			Next
+			ProcedureReturn *cell\text
+		Else
+			ProcedureReturn "#ERROR#: Wrong Parametercount(>1) for MATRIXVALUE"
+		EndIf
+	EndProcedure
+CompilerEndIf
 
 Procedure _MyTable_InitFormula(*this.strMyTableTable)
 	*this\forms("SUM")=@_MyTable_Formula_Sum()
@@ -157,4 +179,7 @@ Procedure _MyTable_InitFormula(*this.strMyTableTable)
 	*this\forms("AND")=@_MyTable_Formula_And()
 	*this\forms("OR")=@_MyTable_Formula_Or()
 	*this\forms("XOR")=@_MyTable_Formula_XOr()
+	CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+		*this\forms("MATRIXVALUE")=@_MyTable_Formula_MatrixValue()
+	CompilerEndIf
 EndProcedure

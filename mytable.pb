@@ -1626,11 +1626,10 @@ Module MyTable
 	EndProcedure
 	
 	CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-		Procedure _MyTableCellGetOrAddCell(*cell.strMyTableCell,col.i=-1,force.b=#False)
+		Procedure _MyTableCellGetOrAddCell(*cell.strMyTableCell,col.i=-1)
 			Protected *this.strMyTableTable=*cell\table
 			Protected *row.strMyTableRow=*cell\row
 			Protected *tcell.strMyTableCell=0
-			Protected bgrid.b=Bool(*this\datagrid And Not force)
 			If col=-1
 				LastElement(*cell\cells())
 				col=ListSize(*cell\cells())
@@ -1641,7 +1640,6 @@ Module MyTable
 				*tcell\type=#MYTABLE_TYPE_CELL
 				*tcell\vtable=?vtable_cell
 			Else
-				col+bgrid
 				If col<ListSize(*this\cols())
 					While col>=ListSize(*cell\cells())
 						*tcell=_MyTableCellGetOrAddCell(*cell,-1)

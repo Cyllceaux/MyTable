@@ -67,7 +67,7 @@ Procedure _MyTableFillMatrixCell(*cell.strMyTableCell,matrix.s,Map cells.s())
 			If FindMapElement(cells(),feld)
 				feld=cells(feld)
 			EndIf
-			*tcell=_MyTableCellGetOrAddCell(*cell,idx-1,#True)
+			*tcell=_MyTableCellGetOrAddCell(*cell,idx-1)
 			_MyTableFillMatrixCell(*tcell,feld,cells())
 		Next		
 	EndIf	
@@ -110,6 +110,13 @@ Procedure.b _MyTableFillCellMatrix(*cell.strMyTableCell,matrix.s)
 			_MyTableFillCellText(*cell,matrix)
 		CompilerEndIf
 	EndIf
+	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+		If *Cell\table\application
+			_MyTableFormulaCalcApplication(*cell\table\application)
+		Else
+			_MyTableFormulaCalcTable(*cell\table,#True)
+		EndIf		
+	CompilerEndIf
 	ProcedureReturn result
 EndProcedure
 

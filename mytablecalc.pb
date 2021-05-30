@@ -178,7 +178,7 @@ Procedure.s _MyTableFormulaExt(*this.strMyTableTable,name.s,List cells.s())
 	Next
 	
 	If form
-		ProcedureReturn form(name,cells())
+		ProcedureReturn form(*this,name,cells())
 	Else
 		ProcedureReturn "#ERROR#: Unknown Method '"+name+"'"
 	EndIf
