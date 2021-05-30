@@ -110,7 +110,7 @@ DeclareModule MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_MATRIX_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
 		CompilerEndIf
-				
+		
 	CompilerEndIf
 	
 	Prototype MyTableProtoEventRowSelected(*row)
@@ -130,15 +130,19 @@ DeclareModule MyTable
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
+		#MYTABLE_TYPE_APPLICATION
 		#MYTABLE_TYPE_TABLE
 		#MYTABLE_TYPE_ROW
 		#MYTABLE_TYPE_COL
 		#MYTABLE_TYPE_CELL
 	EndEnumeration
 	
-	Interface _MyTableObject
+	Interface _MyTableUAObject
 		Dirty()
 		GetType()
+	EndInterface
+	
+	Interface _MyTableObject Extends _MyTableUAObject		
 		GetFlags()
 		SetFlags(value.i)
 		GetSelectedbackground.q()
@@ -256,6 +260,7 @@ DeclareModule MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			GetCellFormula.s(row.i,col.i)
 			SetCellFormula(row.i,col.i,value.s)
+			SetRecalc(value.b)
 		CompilerEndIf
 		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			GetCellMatrix.s(row.i,col.i)
@@ -288,12 +293,16 @@ DeclareModule MyTable
 		CompilerEndIf
 	EndInterface
 	
-	Interface MyTableApplication
+	Interface MyTableApplication Extends _MyTableUAObject
 		Register(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 		RegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 		GridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 		GridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 		Unregister()
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			Recalc()
+			SetRecalc(value.b)
+		CompilerEndIf
 	EndInterface
 	
 	Declare MyTableCreateApplication()

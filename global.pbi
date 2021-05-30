@@ -76,7 +76,7 @@ CompilerEndIf
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant) And Not Defined(MYTABLE_DEBUG_LEVEL,#PB_Module)
 	DeclareModule MYTABLE_DEBUG_LEVEL
-		#MYTABLE_DEBUG_LEVEL=1
+		#MYTABLE_DEBUG_LEVEL=0
 	EndDeclareModule
 	Module MYTABLE_DEBUG_LEVEL:EndModule
 CompilerEndIf

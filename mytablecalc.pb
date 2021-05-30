@@ -301,36 +301,48 @@ Procedure.b _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 		*cell\table\formulaCells(Str(*cell))=#False
 		_MyTableFillCellText(*cell,formula)
 	EndIf
+	
+	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+		If *Cell\table\application
+			_MyTableFormulaCalcApplication(*cell\table\application)
+		Else
+			_MyTableFormulaCalcTable(*cell\table,#True)
+		EndIf		
+	CompilerEndIf
+	
 	ProcedureReturn result
 EndProcedure
 
 Procedure _MyTableFormulaCalcTable(*this.strMyTableTable,force.b=#False)
 	If *this
-		
-		If MapSize(*this\formulaCells())>0
-			_callcountStart(calctable)
-			
-			Protected *cell.strMyTableCell=0
-			_MyTableClearMaps(*this)
-			ForEach *this\formulaCells()
-				If *this\formulaCells()
-					*cell=Val(MapKey(*this\formulaCells()))
-					*cell\calced=#False
+		If *this\recalc
+			If MapSize(*this\formulaCells())>0
+				_callcountStart(calctable)
+				
+				Protected *cell.strMyTableCell=0
+				_MyTableClearMaps(*this)
+				If force
+					ForEach *this\formulaCells()
+						If *this\formulaCells()
+							*cell=Val(MapKey(*this\formulaCells()))
+							*cell\calced=#False
+						EndIf
+					Next
 				EndIf
-			Next
-			ForEach *this\formulaCells()
-				If *this\formulaCells()
-					*cell=Val(MapKey(*this\formulaCells()))
-					If Not *cell\calced
-						Protected NewList cells()
-						_MyTableFormulaCalcCell(*cell,cells())
-						FreeList(cells())
+				ForEach *this\formulaCells()
+					If *this\formulaCells()
+						*cell=Val(MapKey(*this\formulaCells()))
+						If Not *cell\calced
+							Protected NewList cells()
+							_MyTableFormulaCalcCell(*cell,cells())
+							FreeList(cells())
+							*this\dirty=#True
+						EndIf
 					EndIf
-				EndIf
-			Next
-			_callcountEnde(calctable)
+				Next
+				_callcountEnde(calctable)
+			EndIf
 		EndIf
-		
 	EndIf
 EndProcedure
 
@@ -816,6 +828,7 @@ Procedure _MyTable_Table_SetCellformula(*this.strMyTableTable,row.i,col.i,formul
 	EndIf
 EndProcedure
 
+
 Procedure.s _MyTable_Table_GetCellFormula(*this.strMyTableTable,row.i,col.i)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
@@ -823,6 +836,7 @@ Procedure.s _MyTable_Table_GetCellFormula(*this.strMyTableTable,row.i,col.i)
 		ProcedureReturn _MyTable_Cell_GetFormula(*cell)
 	EndIf
 EndProcedure
+
 
 Procedure _MyTable_Table_SetRegisterFormula(*this.strMyTableTable,name.s,method.MyTableProtoFormula)
 	If *this

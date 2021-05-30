@@ -72,7 +72,11 @@ Module MyTable
 				DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
 			EndIf
 			debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
-			Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
+			CompilerIf Defined(MYTABLE_DEBUG_LEVEL,#PB_Module)
+				Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
+			CompilerElse
+				Debug debugline
+			CompilerEndIf
 		CompilerEndIf
 	EndMacro
 	
@@ -160,10 +164,12 @@ Module MyTable
 	StopDrawing()
 	
 	
-	
-	Structure _strMyTableAObject
+	Structure _strMyTableUAObject
 		vtable.i
 		type.i
+	EndStructure
+	
+	Structure _strMyTableAObject Extends _strMyTableUAObject
 		flags.i
 		
 		selectedbackground.q
@@ -188,7 +194,7 @@ Module MyTable
 		tooltip.s
 	EndStructure
 	
-
+	
 	Structure strMyTableCell Extends strMyTableAObject
 		
 		text.s
@@ -268,6 +274,7 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			Map formulaCells.b()
 			Map forms.i()
+			recalc.b
 		CompilerEndIf
 		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			Map matrixCells.b()
@@ -325,9 +332,10 @@ Module MyTable
 		headerforecolor.q
 	EndStructure
 	
-	Structure strMyTableApplication
-		vtable.i
+	Structure strMyTableApplication Extends _strMyTableUAObject
 		List tables.strMyTableTable()		
+		redraw.b
+		recalc.b
 	EndStructure
 	
 	Structure strMyTableRowCol
@@ -692,6 +700,9 @@ Module MyTable
 	CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 		Procedure _MyTableDebugGetCanvas(*element._strMyTableAObject)
 			Select *element\type
+				Case #MYTABLE_TYPE_APPLICATION
+					Protected *application.strMyTableApplication=*element
+					ProcedureReturn 0
 				Case #MYTABLE_TYPE_TABLE
 					Protected *table.strMyTableTable=*element
 					ProcedureReturn *table\canvas
@@ -709,6 +720,9 @@ Module MyTable
 		
 		Procedure.s _MyTableDebugGetName(*element._strMyTableAObject)
 			Select *element\type
+				Case #MYTABLE_TYPE_APPLICATION
+					Protected *application.strMyTableApplication=*element
+					ProcedureReturn "application"
 				Case #MYTABLE_TYPE_TABLE
 					Protected *table.strMyTableTable=*element
 					ProcedureReturn *table\name
@@ -889,7 +903,11 @@ Module MyTable
 		EndIf
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			If override
-				_MyTableFormulaCalcTable(*cell\table)
+				If *Cell\table\application
+					_MyTableFormulaCalcApplication(*cell\table\application)
+				Else
+					_MyTableFormulaCalcTable(*cell\table,#True)
+				EndIf
 			EndIf
 		CompilerEndIf
 	EndProcedure
@@ -935,7 +953,11 @@ Module MyTable
 		EndIf
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			If override
-				_MyTableFormulaCalcTable(*cell\table)
+				If *Cell\table\application
+					_MyTableFormulaCalcApplication(*cell\table\application)
+				Else
+					_MyTableFormulaCalcTable(*cell\table,#True)
+				EndIf
 			EndIf
 		CompilerEndIf
 	EndProcedure
@@ -1635,7 +1657,7 @@ Module MyTable
 			ProcedureReturn *tcell
 		EndProcedure
 	CompilerEndIf
-
+	
 	Procedure MyTableEvtResize()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 		If *this
@@ -2597,6 +2619,9 @@ Module MyTable
 			\vscroll=vscroll
 			\flags=flags
 			\type=#MYTABLE_TYPE_TABLE
+			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+				\recalc=#True
+			CompilerEndIf
 			
 			\sortImageAsc=MyTableDefaultImageSortAsc
 			\sortImageDesc=MyTableDefaultImageSortDesc
@@ -2663,6 +2688,9 @@ Module MyTable
 		Protected *this.strMyTableApplication=AllocateStructure(strMyTableApplication)
 		With *this
 			\vtable=?vtable_application
+			\type=#MYTABLE_TYPE_APPLICATION
+			\redraw=#True
+			\recalc=#True
 		EndWith
 		ProcedureReturn *this
 	EndProcedure
@@ -3017,9 +3045,13 @@ Module MyTable
 		DataSectionSetter(gruppe,name)
 	EndMacro
 	
-	Macro DataSectionDefault(gruppe)
+	Macro DataSectionUADefault(gruppe)
 		DataSectionMethod(gruppe,Dirty)
 		DataSectionGetter(gruppe,Type)
+	EndMacro
+	
+	Macro DataSectionDefault(gruppe)
+		DataSectionUADefault(gruppe)
 		DataSectionGetterSetter(gruppe,Flags)
 		DataSectionGetterSetter(gruppe,selectedbackground)
 		DataSectionGetterSetter(gruppe,background)
@@ -3032,11 +3064,16 @@ Module MyTable
 	DataSection
 		;- Application
 		vtable_application:
+		DataSectionUADefault(Application)
 		DataSectionMethod(Application,Register)
 		DataSectionMethod(Application,RegisterDialog)
 		DataSectionMethod(Application,GridRegister)
 		DataSectionMethod(Application,GridRegisterDialog)
 		DataSectionMethod(Application,Unregister)
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			DataSectionMethod(Application,Recalc)
+			DataSectionSetter(Application,Recalc)
+		CompilerEndIf
 		
 		;- Table
 		vtable_table:
@@ -3070,6 +3107,7 @@ Module MyTable
 		DataSectionGetterSetter(Table,CellValue)
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Table,CellFormula)
+			DataSectionSetter(Table,Recalc)
 		CompilerEndIf
 		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			DataSectionGetterSetter(Table,CellMatrix)
@@ -3109,7 +3147,7 @@ Module MyTable
 		DataSectionMethod(Row,AddDirtyRows)
 		DataSectionGetter(Row,Cell)
 		DataSectionGetter(Row,Cells)
-		DataSectionMethod(Table,AddRow)
+		DataSectionMethod(Row,AddRow)
 		
 		;- Col
 		vtable_col:

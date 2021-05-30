@@ -1,5 +1,8 @@
 ﻿EnableExplicit
 
+#MYTABLE_DEBUG=1
+
+
 XIncludeFile "..\mytable.pbi"
 
 UseModule MyTable
@@ -150,6 +153,7 @@ UseModule MyTable
 	BindMenuEvent(menu,#MAIN_RETURN,@EvtReturn())
 	
 	
+	*application\SetRecalc(#False)
 	Define trow,tcol,i,g
 	For trow=0 To 10
 		For tcol=0 To 3
@@ -163,6 +167,7 @@ UseModule MyTable
 		*canvasFormula3\SetCellFormula(trow,tcol,"=SUM(canvasFormula1!RC(-5):RC(-2))+MUL(canvasFormula2!RC(-5):RC(-2))")
 		*canvasFormula3\SetCellFormula(trow,tcol+1,"=canvasFormula1!RC(-1)+canvasFormula2!RC(-1)")
 	Next
+	*application\SetRecalc(#True)
 
 	
 	PostEvent(#PB_Event_SizeWindow,mainWindow,0)

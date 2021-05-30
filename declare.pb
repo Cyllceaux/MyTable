@@ -81,10 +81,12 @@ Declare _MyTableRegister(*application.strMyTableApplication,window,canvas,hscrol
 Declare _MyTable_Table_RecalcExp(*this.strMyTableTable,force.b=#False)
 Declare _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
 Declare _MyTable_Table_UnRegister(*this.strMyTableTable)		
+Declare _MyTable_Table_Dirty(*this.strMyTableTable)		
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	Declare _MyTableDebugGetCanvas(*element._strMyTableAObject)
 	Declare.s _MyTableDebugGetName(*element._strMyTableAObject)
 CompilerEndIf
+Declare _MyTableFormulaCalcApplication(*this.strMyTableApplication)
 
 ;- Events
 Declare MyTableEvtResize()

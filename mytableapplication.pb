@@ -31,6 +31,33 @@
 ; SOFTWARE.
 ;}
 
+Procedure _MyTableFormulaCalcApplication(*this.strMyTableApplication)
+	If *this
+		If *this\recalc
+			_callcountStart(CalcApplication)
+			*this\redraw=#False
+			Protected idx
+			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+				ForEach *this\tables()
+					ForEach *this\tables()\formulaCells()
+						If *this\tables()\formulaCells()
+							Protected *cell.strMyTableCell=Val(MapKey(*this\tables()\formulaCells()))
+							*cell\calced=#False
+						EndIf
+					Next	
+				Next
+			CompilerEndIf
+			For idx=1 To ListSize(*this\tables())		
+				_MyTable_Table_Recalc(SelectElement(*this\tables(),idx-1))
+			Next
+			*this\redraw=#True
+			For idx=1 To ListSize(*this\tables())					
+				_MyTable_Table_Redraw(SelectElement(*this\tables(),idx-1))
+			Next
+			_callcountEnde(CalcApplication)
+		EndIf
+	EndIf
+EndProcedure
 
 Procedure _MyTable_Application_Register(*application.strMyTableApplication,window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 	Protected *this.strMyTableTable=_MyTableRegister(*application,window,canvas,hscroll,vscroll,flags,callback,name)
@@ -67,5 +94,27 @@ Procedure _MyTable_Application_Unregister(*this.strMyTableApplication)
 			_MyTable_Table_Unregister(*this\tables())
 		Wend
 		FreeStructure(*this)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_Recalc(*this.strMyTableApplication)		
+	_MyTableFormulaCalcApplication(*this)
+EndProcedure
+
+Procedure _MyTable_Application_GetType(*this.strMyTableApplication)		
+	ProcedureReturn *this\type
+EndProcedure
+
+Procedure _MyTable_Application_Dirty(*this.strMyTableApplication)		
+	ForEach *this\tables()
+		_MyTable_Table_Dirty(*this\tables())
+	Next
+EndProcedure
+
+Procedure _MyTable_Application_SetRecalc(*this.strMyTableApplication,recalc.b)
+	
+	If *this
+		*this\recalc=recalc
+		_MyTable_Application_Recalc(*this)
 	EndIf
 EndProcedure

@@ -33,6 +33,9 @@
 
 Global MyTableRegMatrix=CreateRegularExpression(#PB_Any,"\{[^{}]*\}")
 
+Procedure.s _MyTableFillMatrixCell(*cell.strMyTableCell,matrix.s,Map cells.s())
+	
+EndProcedure
 
 Procedure.s _MyTableMatrixCalcCell(*cell.strMyTableCell,matrix.s)
 	ClearList(*cell\cells())
@@ -50,7 +53,7 @@ Procedure.s _MyTableMatrixCalcCell(*cell.strMyTableCell,matrix.s)
 			Wend
 		EndIf
 	Wend
-	
+	_MyTableFillMatrixCell(*cell,result,cells())
 	ClearMap(cells())
 EndProcedure
 

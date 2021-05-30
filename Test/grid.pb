@@ -1,6 +1,7 @@
 ﻿EnableExplicit
 
 #MYTABLE_FORMULA = 0
+#MYTABLE_MATRIX = 0
 
 XIncludeFile "..\mytable.pbi"
 

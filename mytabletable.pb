@@ -329,7 +329,9 @@ Procedure _MyTable_Table_Recalc(*this.strMyTableTable)
 	If *this
 		*this\dirty=#True
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			_MyTableFormulaCalcTable(*this)
+			If *this\recalc
+				_MyTableFormulaCalcTable(*this)
+			EndIf
 		CompilerEndIf
 		_MyTable_Table_RecalcExp(*this)
 	EndIf
@@ -576,7 +578,11 @@ EndProcedure
 Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 	If *this
 		With *this
-			If \redraw And \dirty And Not \drawing
+			Protected redraw.b=Bool(\redraw And \dirty And Not \drawing)
+			If *this\application
+				redraw=Bool(redraw And *this\application\redraw)
+			EndIf
+			If redraw
 				\drawing=#True
 				_MyTableClearMaps(*this)
 				_callcountStart(redraw)
@@ -904,6 +910,17 @@ Procedure _MyTable_Table_SetRedraw(*this.strMyTableTable,redraw.b)
 		_MyTable_Table_Recalc(*this)
 	EndIf
 EndProcedure
+
+CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+	Procedure _MyTable_Table_SetRecalc(*this.strMyTableTable,recalc.b)
+		
+		If *this
+			*this\recalc=recalc
+			*this\dirty=#True
+			_MyTable_Table_Recalc(*this)
+		EndIf
+	EndProcedure
+CompilerEndIf
 
 Procedure _MyTable_Table_SetFlags(*this.strMyTableTable,flags.i)
 	

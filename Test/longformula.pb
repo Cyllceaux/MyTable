@@ -93,7 +93,7 @@ UseModule MyTable
 	
 	Define frow=0
 	Define fcol=0
-	*table\SetRedraw(#False)
+	*table\SetRecalc(#False)
 	
 	For frow=0 To 100
 		*table\SetCellFormula(frow,0,"1")
@@ -102,7 +102,7 @@ UseModule MyTable
 		Next
 	Next
 	
-	*table\SetRedraw(#True)
+	*table\SetRecalc(#True)
 	
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow

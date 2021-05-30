@@ -115,6 +115,7 @@ UseModule MyTable
 	
 	Define frow=0
 	Define fcol=0
+	*table\SetRecalc(#False)
 	*table\SetCellFormula(frow,fcol,"Hello"):*table\SetCellFormula(frow,fcol+1,"World"):frow+1
 	*table\SetCellFormula(frow,fcol,"=1+1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,"=1*1"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
@@ -157,7 +158,8 @@ UseModule MyTable
 	*table\SetCellFormula(frow,fcol,~"=XOR(1=1;2=2)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 	*table\SetCellFormula(frow,fcol,~"=SUM(C1:C5)"):*table\SetCellFormula(frow,fcol+1,"'"+*table\GetCellFormula(frow,fcol)):frow+1
 		
-		
+	
+	*table\SetRecalc(#True)
 	*table\AutosizeColumn(1)
 	*table\AutosizeColumn(2)
 	
