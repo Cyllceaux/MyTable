@@ -7,12 +7,12 @@
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-05-30 17:54" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-05-30 18:22" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="31a43ff9463ba7404aa0ba74304402cc"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="41ea50543a0ae926bd2fb14de5a6f767"/>
     </file>
     <file name="global.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -20,7 +20,7 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="0e152fe9eba2921d6183c20bf3540d69"/>
+      <fingerprint md5="d1bd6039682255a2716633f2cc6567ba"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -67,8 +67,8 @@
       <fingerprint md5="66ebb7522d56d6156cd1dc9ee972e98d"/>
     </file>
     <file name="Test\customformula.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="7d233d57abddfe3d939a6a21d73618b4"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="fa7b7a1dffb1e56a1caa3f3b1ea51119"/>
     </file>
     <file name="Test\fontscolors.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -77,6 +77,10 @@
     <file name="Test\formula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="d1908e0df0921394a7c90ad2d537114f"/>
+    </file>
+    <file name="Test\formulaMatix.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="d63b0ed5da212e755ff9426b5ef2ed23"/>
     </file>
     <file name="Test\grid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -91,12 +95,8 @@
       <fingerprint md5="acdbd8cca3814562b9aa1ada7d15d094"/>
     </file>
     <file name="Test\multiformulatable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="3dfadeba730a2b0c7308b4990c5412f3"/>
-    </file>
-    <file name="Test\formulaMatix.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="d63b0ed5da212e755ff9426b5ef2ed23"/>
+      <fingerprint md5="b823d97d83a2cc19ef2d694b7518aa37"/>
     </file>
   </section>
   <section name="targets">

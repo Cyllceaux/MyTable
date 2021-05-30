@@ -1,7 +1,5 @@
 ﻿EnableExplicit
 
-#MYTABLE_DEBUG=1
-
 
 XIncludeFile "..\mytable.pbi"
 
