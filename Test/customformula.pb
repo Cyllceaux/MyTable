@@ -21,7 +21,7 @@ UseModule MyTable
 	Global vscrollFormula=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,100,#PB_ScrollBar_Vertical)              
 	CloseGadgetList()
 	
-	Procedure.s FakeFormula(name.s,List cells.s())
+	Procedure.s FakeFormula(*this.MyTableTable,name.s,List cells.s())
 		FirstElement(cells())
 		ProcedureReturn "Hello World: "+cells()
 	EndProcedure
