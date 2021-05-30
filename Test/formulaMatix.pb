@@ -93,19 +93,19 @@ UseModule MyTable
 	Define *table.MyTableTable=*application\GridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,1000,100,#MYTABLE_TABLE_FLAGS_GRID_FORMULA_MATRIX_DEFAULT)
 	*table\SetEventCellSelected(@SelectCell())
 	
-		Define trow=0
+	Define trow=0
 	Define tcol=0
-	;*table\SetCellMatrix(trow,tcol,"{0}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	;*table\SetCellMatrix(trow,tcol,"{0;1}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	;*table\SetCellMatrix(trow,tcol,"{0;1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	;*table\SetCellMatrix(trow,tcol,"{{0;0};1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
-	;*table\SetCellMatrix(trow,tcol,"{{0;1};1;{0;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
+	*table\SetCellMatrix(trow,tcol,"{0}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
+	*table\SetCellMatrix(trow,tcol,"{0;1}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
+	*table\SetCellMatrix(trow,tcol,"{0;1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
+	*table\SetCellMatrix(trow,tcol,"{{0;0};1;5}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
+	*table\SetCellMatrix(trow,tcol,"{{0;1};1;{0;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
 	*table\SetCellMatrix(trow,tcol,"{{0;1;{9;1;4}};1;{0;1;5}}"):*table\SetCellText(trow,tcol+1,*table\GetCellMatrix(trow,tcol)):trow+1
 	
 	*table\AutosizeColumn(1)
 	*table\AutosizeColumn(2)
 	
-
+	
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	

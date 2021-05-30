@@ -33,8 +33,44 @@
 
 Global MyTableRegMatrix=CreateRegularExpression(#PB_Any,"\{[^{}]*\}")
 
-Procedure.s _MyTableFillMatrixCell(*cell.strMyTableCell,matrix.s,Map cells.s())
-	
+Procedure.s _MyTableMatrixText(*cell.strMyTableCell)
+	Protected result.s=""
+	If ListSize(*cell\cells())>0
+		result="{"
+		ForEach *cell\cells()
+			If result<>"{"
+				result+";"
+			EndIf
+			result+_MyTableMatrixText(*cell\cells())
+		Next
+		result+"}"
+	Else
+		result=*cell\text
+	EndIf
+	ProcedureReturn result
+EndProcedure
+
+Procedure _MyTableFillMatrixCell(*cell.strMyTableCell,matrix.s,Map cells.s())
+	Protected line.s=matrix
+	Protected idx,c
+	Protected feld.s=""
+	Protected *tcell.strMyTableCell=*cell
+	If Left(matrix,1)="{"
+		line=Mid(line,2,Len(line)-2)
+	EndIf
+	c=CountString(line,";")+1
+	If c=1
+		*cell\text=line
+	Else
+		For idx=1 To c
+			feld=Trim(StringField(line,idx,";"))
+			If FindMapElement(cells(),feld)
+				feld=cells(feld)
+			EndIf
+			*tcell=_MyTableCellGetOrAddCell(*cell,idx-1,#True)
+			_MyTableFillMatrixCell(*tcell,feld,cells())
+		Next		
+	EndIf	
 EndProcedure
 
 Procedure.s _MyTableMatrixCalcCell(*cell.strMyTableCell,matrix.s)
@@ -54,6 +90,7 @@ Procedure.s _MyTableMatrixCalcCell(*cell.strMyTableCell,matrix.s)
 		EndIf
 	Wend
 	_MyTableFillMatrixCell(*cell,result,cells())
+	*cell\text=_MyTableMatrixText(*cell)
 	ClearMap(cells())
 EndProcedure
 

@@ -708,6 +708,7 @@ Procedure _MyTable_Table_UnRegister(*this.strMyTableTable)
 		ForEach *this\application\tables()
 			If *this\application\tables()=*this
 				DeleteElement(*this\application\tables())
+				Break
 			EndIf
 		Next
 	Else

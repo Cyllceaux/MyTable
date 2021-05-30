@@ -1644,7 +1644,7 @@ Module MyTable
 				col+bgrid
 				If col<ListSize(*this\cols())
 					While col>=ListSize(*cell\cells())
-						*tcell=_MyTableCellGetOrAddCell(*row,-1)
+						*tcell=_MyTableCellGetOrAddCell(*cell,-1)
 					Wend
 					If Not *tcell
 						*tcell=SelectElement(*cell\cells(),col)
