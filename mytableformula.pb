@@ -31,12 +31,64 @@
 ; SOFTWARE.
 ;}
 
+Procedure.s _MyTable_Formula_Mul(name.s,List cells.s())	
+	Protected value.d=0
+	If ListSize(cells())>1
+		Protected idx=0
+		FirstElement(cells())
+		value=ValD(cells())
+		For idx=2 To ListSize(cells())
+			SelectElement(cells(),idx-1)
+			value*ValD(cells())
+		Next		
+	Else
+		ProcedureReturn "#ERROR#: Wrong Parametercount(>1) for MUL"
+	EndIf
+	
+	ProcedureReturn StrD(value)
+	
+EndProcedure
+
+Procedure.s _MyTable_Formula_Div(name.s,List cells.s())	
+	Protected value.d=0
+	If ListSize(cells())>1
+		Protected idx=0
+		FirstElement(cells())
+		value=ValD(cells())
+		For idx=2 To ListSize(cells())
+			SelectElement(cells(),idx-1)
+			value/ValD(cells())
+		Next		
+	Else
+		ProcedureReturn "#ERROR#: Wrong Parametercount(>1) for DIV"
+	EndIf
+	
+	ProcedureReturn StrD(value)
+	
+EndProcedure
+
 
 Procedure.s _MyTable_Formula_Sum(name.s,List cells.s())
 	Protected value.d=0
 	ForEach cells()
 		value+ValD(cells())
 	Next
+	
+	ProcedureReturn StrD(value)
+	
+EndProcedure
+
+Procedure.s _MyTable_Formula_Mod(name.s,List cells.s())
+	Protected value.d=0
+	If ListSize(cells())=2
+		SelectElement(cells(),0)
+		Protected v1.d=ValD(cells())
+		SelectElement(cells(),1)
+		Protected v2.d=ValD(cells())
+		value=Mod(v1,v2)
+	Else
+		ProcedureReturn "#ERROR#: Wrong Parametercount(2) for MOD"
+	EndIf
 	
 	ProcedureReturn StrD(value)
 EndProcedure
@@ -96,6 +148,10 @@ EndProcedure
 
 Procedure _MyTable_InitFormula(*this.strMyTableTable)
 	*this\forms("SUM")=@_MyTable_Formula_Sum()
+	*this\forms("MOD")=@_MyTable_Formula_Mod()
+	*this\forms("DIV")=@_MyTable_Formula_Div()
+	*this\forms("MUL")=@_MyTable_Formula_Mul()
+	
 	*this\forms("IF")=@_MyTable_Formula_If()
 	*this\forms("NOT")=@_MyTable_Formula_Not()
 	*this\forms("AND")=@_MyTable_Formula_And()

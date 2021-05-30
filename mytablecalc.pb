@@ -216,8 +216,12 @@ Procedure.s _MyTableFormulaRC(*cell.strMyTableCell,dqline.s)
 	Else
 		ProcedureReturn *cell\col\text
 	EndIf
-	Protected *formcell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*cell\table\rows(),row),col-1)
-	ProcedureReturn *formcell\col\text+Str(row+1)
+	If row<0 Or col<1
+		ProcedureReturn "#ERROR#: Unknown Cell (row/col) ("+row+"/"+col+")" 
+	Else
+		Protected *formcell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*cell\table\rows(),row),col-1)
+		ProcedureReturn *formcell\col\text+Str(row+1)
+	EndIf
 EndProcedure
 
 Procedure.s _MyTableFormula(*this.strMyTableTable,formula.s)
@@ -269,31 +273,31 @@ EndProcedure
 
 Procedure _MyTableFormulaCalcTable(*this.strMyTableTable,force.b=#False)
 	If *this
-		If (*this\dirty And *this\redraw) Or force
-			If MapSize(*this\formulaCells())>0
-				_callcountStart(calctable)
-				
-				Protected *cell.strMyTableCell=0
-				_MyTableClearMaps(*this)
-				ForEach *this\formulaCells()
-					If *this\formulaCells()
-						*cell=Val(MapKey(*this\formulaCells()))
-						*cell\calced=#False
+		
+		If MapSize(*this\formulaCells())>0
+			_callcountStart(calctable)
+			
+			Protected *cell.strMyTableCell=0
+			_MyTableClearMaps(*this)
+			ForEach *this\formulaCells()
+				If *this\formulaCells()
+					*cell=Val(MapKey(*this\formulaCells()))
+					*cell\calced=#False
+				EndIf
+			Next
+			ForEach *this\formulaCells()
+				If *this\formulaCells()
+					*cell=Val(MapKey(*this\formulaCells()))
+					If Not *cell\calced
+						Protected NewList cells()
+						_MyTableFormulaCalcCell(*cell,cells())
+						FreeList(cells())
 					EndIf
-				Next
-				ForEach *this\formulaCells()
-					If *this\formulaCells()
-						*cell=Val(MapKey(*this\formulaCells()))
-						If Not *cell\calced
-							Protected NewList cells()
-							_MyTableFormulaCalcCell(*cell,cells())
-							FreeList(cells())
-						EndIf
-					EndIf
-				Next
-				_callcountEnde(calctable)
-			EndIf
+				EndIf
+			Next
+			_callcountEnde(calctable)
 		EndIf
+		
 	EndIf
 EndProcedure
 
@@ -498,72 +502,94 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 				line=ReplaceString(line,dqstrings(),MapKey(dqstrings())+#MyTableHK)
 			Next
 		EndIf
-		idx=0
-		If ExamineRegularExpression(MyTableRegExHK,line)
-			While NextRegularExpressionMatch(MyTableRegExHK)			
-				strings("##"+Str(idx)+"##")=RegularExpressionMatchString(MyTableRegExHK)
-				idx+1
+		
+		
+		If Not error
+			idx=0
+			If ExamineRegularExpression(MyTableRegExHK,line)
+				While NextRegularExpressionMatch(MyTableRegExHK)			
+					strings("##"+Str(idx)+"##")=RegularExpressionMatchString(MyTableRegExHK)
+					idx+1
+				Wend
+			EndIf
+			
+			
+			ForEach strings()
+				line=ReplaceString(line,strings(),MapKey(strings()))
+			Next
+		EndIf
+		
+		If Not error
+			idx=1
+			While idx
+				idx=0
+				If ExamineRegularExpression(MyTableRegExRC,line)
+					While NextRegularExpressionMatch(MyTableRegExRC)			
+						dqline=RegularExpressionMatchString(MyTableRegExRC)
+						ranges=_MyTableFormulaRC(*cell.strMyTableCell,dqline)
+						If Left(ranges,1)<>"#"					
+							line=ReplaceString(line,dqline,ranges,#PB_String_CaseSensitive,0,1)
+							idx=1
+						Else
+							error=#True
+							errors=ranges
+							Break
+						EndIf					
+					Wend
+				EndIf
 			Wend
+		EndIf
+		
+		If Not error
+			idx=0
+			If ExamineRegularExpression(MyTableRegExRange,line)
+				While NextRegularExpressionMatch(MyTableRegExRange)			
+					range("#_"+Str(idx)+"_#")=RegularExpressionMatchString(MyTableRegExRange)
+					idx+1
+				Wend
+			EndIf
+			
+			
+			ForEach range()
+				ranges=_MyTable_RangeString(range())
+				line=ReplaceString(line,range(),ranges)
+			Next
 		EndIf
 		
 		
 		
-		ForEach strings()
-			line=ReplaceString(line,strings(),MapKey(strings()))
-		Next
-		
-		idx=0
-		If ExamineRegularExpression(MyTableRegExRange,line)
-			While NextRegularExpressionMatch(MyTableRegExRange)			
-				range("#_"+Str(idx)+"_#")=RegularExpressionMatchString(MyTableRegExRange)
-				idx+1
-			Wend
-		EndIf
-		
-		ForEach range()
-			ranges=_MyTable_RangeString(range())
-			line=ReplaceString(line,range(),ranges)
-		Next
-		
-		If ExamineRegularExpression(MyTableRegExRC,line)
-			While NextRegularExpressionMatch(MyTableRegExRC)			
-				dqline=RegularExpressionMatchString(MyTableRegExRC)
-				ranges=_MyTableFormulaRC(*cell.strMyTableCell,dqline)
-				line=ReplaceString(line,dqline,ranges,#PB_String_CaseSensitive,0,1)
-			Wend
-		EndIf
-		
-		idx=0
-		If ExamineRegularExpression(MyTableRegExCells,line)
-			While NextRegularExpressionMatch(MyTableRegExCells)			
-				cells("#!"+Str(idx)+"!#")=RegularExpressionMatchString(MyTableRegExCells)
-				idx+1
-			Wend
+		If Not error
+			idx=0
+			If ExamineRegularExpression(MyTableRegExCells,line)
+				While NextRegularExpressionMatch(MyTableRegExCells)			
+					cells("#!"+Str(idx)+"!#")=RegularExpressionMatchString(MyTableRegExCells)
+					idx+1
+				Wend
+			EndIf
 		EndIf
 		
 		
-		
-		
-		line=ReplaceString(line,"+"," + ")
-		line=ReplaceString(line,"-"," - ")
-		line=ReplaceString(line,"*"," * ")
-		line=ReplaceString(line,"/"," / ")
-		line=ReplaceString(line,","," , ")
-		line=ReplaceString(line,";"," ; ")
-		line=ReplaceString(line,"&"," & ")
-		line=ReplaceString(line,"%"," % ")
-		line=ReplaceString(line,"="," = ")
-		
-		While FindString(line,"  ")
-			line=ReplaceString(line,"  "," ")
-		Wend
-		
-		
-		
-		ForEach cells()
-			line=ReplaceString(line,cells(),MapKey(cells()))		
-		Next
-		
+		If Not error
+			line=ReplaceString(line,"+"," + ")
+			line=ReplaceString(line,"-"," - ")
+			line=ReplaceString(line,"*"," * ")
+			line=ReplaceString(line,"/"," / ")
+			line=ReplaceString(line,","," , ")
+			line=ReplaceString(line,";"," ; ")
+			line=ReplaceString(line,"&"," & ")
+			line=ReplaceString(line,"%"," % ")
+			line=ReplaceString(line,"="," = ")
+			
+			While FindString(line,"  ")
+				line=ReplaceString(line,"  "," ")
+			Wend
+			
+			
+			
+			ForEach cells()
+				line=ReplaceString(line,cells(),MapKey(cells()))		
+			Next
+		EndIf
 		
 		If Not error
 			If line<>""
@@ -637,6 +663,7 @@ Procedure.s _MyTableFormulaCalcCellExp(*cell.strMyTableCell,formula.s,List calcc
 	FreeMap(cells())
 	FreeMap(range())
 	FreeMap(vcells())
+	
 	If error
 		line=errors
 	Else
@@ -672,6 +699,10 @@ Procedure _MyTableFormulaCalcCell(*cell.strMyTableCell,List calccells())
 		Protected line.s=Mid(formula,2)
 		
 		line=_MyTableFormulaCalcCellExp(*cell,line,calccells())
+		If Left(line,7)="#ERROR#"
+			error=#True
+			errors=line
+		EndIf
 		
 		If error
 			If errors<>""
@@ -696,7 +727,7 @@ Procedure _MyTable_Cell_SetFormula(*this.strMyTableCell,formula.s)
 			*this\formula=formula
 			*this\textwidth=0
 			*this\textheight=0
-			*this\dirty=#True
+			*this\dirty=#True			
 			_MyTableFillCellFormula(*this,formula)
 			_MyTable_Table_Redraw(*this\table)
 		EndIf

@@ -929,6 +929,8 @@ Module MyTable
 			ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
 				*cell\checked=*cell\value
 				*cell\text=Str(value)
+			Else
+				*cell\text=StrD(value)
 			EndIf
 		EndIf
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)

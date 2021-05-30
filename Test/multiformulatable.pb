@@ -150,6 +150,16 @@ UseModule MyTable
 	BindMenuEvent(menu,#MAIN_RETURN,@EvtReturn())
 	
 	
+	Define trow,tcol,i,g
+	For trow=0 To 10
+		For tcol=0 To 3
+			*canvasFormula1\SetCellValue(trow,tcol,Random(100,1))
+			*canvasFormula2\SetCellValue(trow,tcol,Random(1000,1)/100)
+		Next	
+		tcol+1
+		*canvasFormula1\SetCellFormula(trow,tcol,"=SUM(RC(-5):RC(-2))")
+		*canvasFormula2\SetCellFormula(trow,tcol,"=MUL(RC(-5):RC(-2))")
+	Next
 
 	
 	PostEvent(#PB_Event_SizeWindow,mainWindow,0)
