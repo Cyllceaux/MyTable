@@ -41,8 +41,8 @@ CompilerElse
 	#MyTableHK="'"
 CompilerEndIf
 
-Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+")
-Global MyTableRegExRange=CreateRegularExpression(#PB_Any,"[a-zA-Z]+\d+\:[a-zA-Z]+\d+")
+Global MyTableRegExCells=CreateRegularExpression(#PB_Any,"([\w\d]+\!)?[a-zA-Z]+\d+")
+Global MyTableRegExRange=CreateRegularExpression(#PB_Any,"([\w\d]+\!)?[a-zA-Z]+\d+\:[a-zA-Z]+\d+")
 Global MyTableRegExRow=CreateRegularExpression(#PB_Any,"\d+")
 Global MyTableRegExCol=CreateRegularExpression(#PB_Any,"[a-zA-Z]+")
 Global MyTableRegMul=CreateRegularExpression(#PB_Any,"-?[\d+\.]+ \* -?[\d+\.]+")
@@ -58,7 +58,7 @@ Global MyTableRegLT=CreateRegularExpression(#PB_Any,"[\w+\d+\.]+ \< [\w+\d+\.]+"
 Global MyTableRegGE=CreateRegularExpression(#PB_Any,"[\w+\d+\.]+ \>\= [\w+\d+\.]+")
 Global MyTableRegLE=CreateRegularExpression(#PB_Any,"[\w+\d+\.]+ \<\= [\w+\d+\.]+")
 
-Global MyTableRegExRC=CreateRegularExpression(#PB_Any,"R(\([-\d]*\))?C(\([-\d]*\))?")
+Global MyTableRegExRC=CreateRegularExpression(#PB_Any,"([\w\d]+\!)?R(\([-\d]*\))?C(\([-\d]*\))?")
 Global MyTableRegExC=CreateRegularExpression(#PB_Any,"C(\(([-\d]*)\))?")
 Global MyTableRegExR=CreateRegularExpression(#PB_Any,"R(\(([-\d]*)\))?")
 
@@ -201,10 +201,34 @@ EndProcedure
 
 Procedure.s _MyTableFormulaRC(*cell.strMyTableCell,dqline.s)
 	Protected result.s=""
-	Protected r.s=RegExString(MyTableRegExR,dqline,2)
-	Protected c.s=RegExString(MyTableRegExC,dqline,2)
+	Protected table.s=""
 	Protected row.i=*cell\row\listindex
 	Protected col.i=*cell\col\listindex
+	Protected *formcell.strMyTableCell=*cell
+	
+	If FindString(dqline,"!")
+		table=StringField(dqline,1,"!")
+		dqline=Mid(dqline,Len(table)+2)
+	EndIf
+	Protected r.s=RegExString(MyTableRegExR,dqline,2)
+	Protected c.s=RegExString(MyTableRegExC,dqline,2)
+	
+	If table<>"" And LCase(table)<>LCase(*cell\table\name)
+		If *cell\table\application
+			ForEach *cell\table\application\tables()
+				Protected *this.strMyTableTable=*cell\table\application\tables()
+				If LCase(table)=LCase(*this\name)
+					*formcell=_MyTableGetOrAddCell(SelectElement(*this\rows(),row),col,#True)
+					Break
+				EndIf
+			Next
+			If *cell=*formcell
+				ProcedureReturn "#ERROR#: Unknown Table '"+table+"'" 
+			EndIf
+		Else
+			ProcedureReturn "#ERROR#: Unknown Table '"+table+"'" 
+		EndIf
+	EndIf
 	
 	If r<>"" Or c<>""
 		If r<>""
@@ -213,14 +237,23 @@ Procedure.s _MyTableFormulaRC(*cell.strMyTableCell,dqline.s)
 		If c<>""
 			col+Val(c)
 		EndIf
-	Else
-		ProcedureReturn *cell\col\text
+	Else		
+		If table<>""
+			ProcedureReturn table+"!"+*formcell\col\text+Str(row+1)
+		Else
+			ProcedureReturn *formcell\col\text+Str(row+1)
+		EndIf
 	EndIf
+	
 	If row<0 Or col<1
 		ProcedureReturn "#ERROR#: Unknown Cell (row/col) ("+row+"/"+col+")" 
 	Else
-		Protected *formcell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*cell\table\rows(),row),col-1)
-		ProcedureReturn *formcell\col\text+Str(row+1)
+		*formcell=_MyTableGetOrAddCell(SelectElement(*formcell\table\rows(),row),col-1)
+		If table<>""
+			ProcedureReturn table+"!"+*formcell\col\text+Str(row+1)
+		Else
+			ProcedureReturn *formcell\col\text+Str(row+1)
+		EndIf
 	EndIf
 EndProcedure
 
@@ -305,7 +338,11 @@ EndProcedure
 Procedure.s _MyTable_RangeString(range.s)
 	Protected result.s=""
 	If range<>""
-		
+		Protected table.s=""
+		If FindString(range,"!")
+			table=StringField(range,1,"!")
+			range=Mid(range,Len(table)+2)
+		EndIf
 		Protected row.s=""
 		Protected col.s=""
 		If ExamineRegularExpression(MyTableRegExRow,StringField(range,1,":"))
@@ -343,6 +380,9 @@ Procedure.s _MyTable_RangeString(range.s)
 				If result<>""
 					result+"; "
 				EndIf
+				If table<>""
+					result+table+"!"
+				EndIf
 				result+_MyTableGridColumnName(g+1)+Str(i+1)
 			Next
 		Next
@@ -379,6 +419,11 @@ Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s,List calccell
 	If cell<>""
 		Protected row.s=""
 		Protected col.s=""
+		Protected table.s=""
+		If FindString(cell,"!")
+			table=StringField(cell,1,"!")
+			cell=Mid(cell,Len(table)+2)
+		EndIf
 		If ExamineRegularExpression(MyTableRegExRow,cell)
 			While NextRegularExpressionMatch(MyTableRegExRow)			
 				row=RegularExpressionMatchString(MyTableRegExRow)
@@ -389,11 +434,31 @@ Procedure _MyTableGetOrAddFormulaCell(*this.strMyTableTable,cell.s,List calccell
 				col=RegularExpressionMatchString(MyTableRegExCol)
 			Wend
 		EndIf
+		
 	EndIf
+	
 	If row<>"" And col<>""
 		Protected *rc.strMyTableRowCol=AllocateStructure(strMyTableRowCol)
 		*rc\row=Val(row)-1
 		*rc\col=_MyTableGridColumnFromColumnName(col)
+		If table<>"" And LCase(table)<>LCase(*this\name)
+			If *this\application
+				Protected *table.strMyTableTable=0
+				ForEach *this\application\tables()
+					If LCase(table)=LCase(*this\application\tables()\name)						
+						*table=*this\application\tables()
+						Break
+					EndIf
+				Next
+				If *this=*table Or *table=0
+					ProcedureReturn -1
+				Else
+					*this=*table
+				EndIf
+			Else
+				ProcedureReturn -1
+			EndIf
+		EndIf
 		*cell=_MyTableGetOrAddCell(SelectElement(*this\rows(),*rc\row),*rc\col)		
 		If *cell
 			ForEach calccells()

@@ -155,10 +155,13 @@ UseModule MyTable
 		For tcol=0 To 3
 			*canvasFormula1\SetCellValue(trow,tcol,Random(100,1))
 			*canvasFormula2\SetCellValue(trow,tcol,Random(1000,1)/100)
+			*canvasFormula3\SetCellFormula(trow,tcol,"=canvasFormula1!RC+canvasFormula2!RC")
 		Next	
 		tcol+1
 		*canvasFormula1\SetCellFormula(trow,tcol,"=SUM(RC(-5):RC(-2))")
-		*canvasFormula2\SetCellFormula(trow,tcol,"=MUL(RC(-5):RC(-2))")
+		*canvasFormula2\SetCellFormula(trow,tcol,"=MUL(RC(-5):RC(-2))")		
+		*canvasFormula3\SetCellFormula(trow,tcol,"=SUM(canvasFormula1!RC(-5):RC(-2))+MUL(canvasFormula2!RC(-5):RC(-2))")
+		*canvasFormula3\SetCellFormula(trow,tcol+1,"=canvasFormula1!RC(-1)+canvasFormula2!RC(-1)")
 	Next
 
 	
