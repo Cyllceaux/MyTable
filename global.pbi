@@ -60,8 +60,12 @@ CompilerIf Not Defined(MYTABLE_FORMULA,#PB_Constant)
 	#MYTABLE_FORMULA=1
 CompilerEndIf
 
-CompilerIf Not Defined(MYTABLE_FORMULA_MATRIX,#PB_Constant)
-	#MYTABLE_FORMULA_MATRIX=1
+CompilerIf Not Defined(MYTABLE_MATRIX,#PB_Constant)
+	#MYTABLE_MATRIX=1
+CompilerEndIf
+
+CompilerIf Not Defined(MYTABLE_FORMULA_QUOTE,#PB_Constant)
+	#MYTABLE_FORMULA_QUOTE=1
 CompilerEndIf
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Constant) 
@@ -108,8 +112,21 @@ CompilerIf Defined(MYTABLE_FORMULA_QUOTE,#PB_Constant)
 	CompilerEndIf
 CompilerEndIf
 
-CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Constant) 
-	CompilerIf #MYTABLE_FORMULA_MATRIX
-		DeclareModule MYTABLE_FORMULA_MATRIX:EndDeclareModule:Module MYTABLE_FORMULA_MATRIX:EndModule
+CompilerIf Defined(MYTABLE_MATRIX,#PB_Constant) 
+	CompilerIf #MYTABLE_MATRIX
+		DeclareModule MYTABLE_MATRIX:EndDeclareModule:Module MYTABLE_MATRIX:EndModule
 	CompilerEndIf
 CompilerEndIf
+
+
+Debug "Debug: "+#MYTABLE_DEBUG,2
+Debug "Debug Level: "+#MYTABLE_DEBUG_LEVEL,2
+Debug "Debug MS: "+#MYTABLE_DEBUG_MS_MAX,2
+Debug "",2
+Debug "Formula: "+#MYTABLE_FORMULA,2
+Debug "Formula Quote: "+#MYTABLE_FORMULA_QUOTE,2
+Debug "Matrix: "+#MYTABLE_MATRIX,2
+Debug "",2
+Debug "Export XML: "+#MYTABLE_EXPORT_JSON,2
+Debug "Export JSON: "+#MYTABLE_EXPORT_XML,2
+	

@@ -88,33 +88,29 @@ DeclareModule MyTable
 	#MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME = #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE|#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME
 	
 	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-		CompilerIf Not Defined(MYTABLE_FORMULA_QUOTE,#PB_Constant)
-			#MYTABLE_FORMULA_DQUOTE=1
-		CompilerEndIf
 		
 		EnumerationBinary _MyTableTableFlags
 			#MYTABLE_TABLE_FLAGS_FORMULA
 		EndEnumeration
 		
+		#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA		
+		
 		Prototype.s MyTableProtoFormula(name.s,List cells.s())
 		
 	CompilerEndIf
 	
-	CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+	CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 		
 		EnumerationBinary _MyTableTableFlags
 			#MYTABLE_TABLE_FLAGS_MATRIX
 		EndEnumeration
 		
+		#MYTABLE_TABLE_FLAGS_GRID_MATRIX_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
+		
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA|#MYTABLE_TABLE_FLAGS_MATRIX
-		CompilerElse
-			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
+			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_MATRIX_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
 		CompilerEndIf
-	CompilerElse
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA
-		CompilerEndIf
+				
 	CompilerEndIf
 	
 	Prototype MyTableProtoEventRowSelected(*row)
@@ -177,7 +173,7 @@ DeclareModule MyTable
 			GetFormula.s()			
 			SetFormula(value.s)
 		CompilerEndIf
-		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			GetMatrix.s()
 			SetMatrix(value.s)
 		CompilerEndIf
@@ -261,7 +257,7 @@ DeclareModule MyTable
 			GetCellFormula.s(row.i,col.i)
 			SetCellFormula(row.i,col.i,value.s)
 		CompilerEndIf
-		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			GetCellMatrix.s(row.i,col.i)
 			SetCellMatrix(row.i,col.i,value.s)
 		CompilerEndIf

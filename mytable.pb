@@ -188,6 +188,7 @@ Module MyTable
 		tooltip.s
 	EndStructure
 	
+
 	Structure strMyTableCell Extends strMyTableAObject
 		
 		text.s
@@ -202,7 +203,7 @@ Module MyTable
 			formula.s
 			calced.b
 		CompilerEndIf
-		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			matrix.s
 			List cells.strMyTableCell()
 		CompilerEndIf
@@ -268,7 +269,7 @@ Module MyTable
 			Map formulaCells.b()
 			Map forms.i()
 		CompilerEndIf
-		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			Map matrixCells.b()
 		CompilerEndIf
 		Map tempselected.b()
@@ -1469,7 +1470,7 @@ Module MyTable
 				Next
 			CompilerEndIf
 			
-			CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+			CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 				ForEach *this\matrixCells()
 					If Not *this\matrixCells()
 						DeleteMapElement(*this\matrixCells())
@@ -1600,6 +1601,39 @@ Module MyTable
 		ProcedureReturn *cell
 	EndProcedure
 	
+	CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+		Procedure _MyTableCellGetOrAddCell(*cell.strMyTableCell,col.i=-1,force.b=#False)
+			Protected *this.strMyTableTable=*cell\table
+			Protected *row.strMyTableRow=*cell\row
+			Protected *tcell.strMyTableCell=0
+			Protected bgrid.b=Bool(*this\datagrid And Not force)
+			If col=-1
+				LastElement(*cell\cells())
+				col=ListSize(*cell\cells())
+				*tcell=AddElement(*cell\cells())
+				*tcell\row=*row
+				*tcell\table=*this
+				*tcell\col=*cell\col
+				*tcell\type=#MYTABLE_TYPE_CELL
+				*tcell\vtable=?vtable_cell
+			Else
+				col+bgrid
+				If col<ListSize(*this\cols())
+					While col>=ListSize(*cell\cells())
+						*tcell=_MyTableCellGetOrAddCell(*row,-1)
+					Wend
+					If Not *tcell
+						*tcell=SelectElement(*cell\cells(),col)
+						If *tcell=0
+							ProcedureReturn _MyTableCellGetOrAddCell(*cell,-1)
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			ProcedureReturn *tcell
+		EndProcedure
+	CompilerEndIf
+
 	Procedure MyTableEvtResize()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 		If *this
@@ -2960,7 +2994,7 @@ Module MyTable
 		XIncludeFile "mytablecalc.pb"
 	CompilerEndIf
 	
-	CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+	CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 		XIncludeFile "mytablematrix.pb"
 	CompilerEndIf
 	
@@ -3035,7 +3069,7 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Table,CellFormula)
 		CompilerEndIf
-		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			DataSectionGetterSetter(Table,CellMatrix)
 		CompilerEndIf
 		DataSectionGetterSetter(Table,CellImage)
@@ -3105,7 +3139,7 @@ Module MyTable
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Cell,Formula)
 		CompilerEndIf
-		CompilerIf Defined(MYTABLE_FORMULA_MATRIX,#PB_Module)
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			DataSectionGetterSetter(Cell,Matrix)
 		CompilerEndIf
 		DataSectionGetterSetter(Cell,Image)

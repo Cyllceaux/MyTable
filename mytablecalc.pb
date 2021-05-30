@@ -31,7 +31,7 @@
 ; SOFTWARE.
 ;}
 
-CompilerIf #MYTABLE_FORMULA_DQUOTE
+CompilerIf Defined(MYTABLE_FORMULA_DQUOTE,#PB_Constant)
 	Global MyTableRegExHK=CreateRegularExpression(#PB_Any,~"\".*?\"")
 	Global MyTableRegDQuot=CreateRegularExpression(#PB_Any,~"[\"]{3,}")
 	#MyTableHK=#DQUOTE$

@@ -39,8 +39,19 @@ Procedure.s _MyTableMatrixCalcCell(*cell.strMyTableCell,matrix.s)
 	Protected.s dqline,result
 	Protected c,idx
 	result=matrix
+	Protected NewMap cells.s()
+	idx=0
+	While CountString(result,"{")>1
+		If ExamineRegularExpression(MyTableRegMatrix,result)
+			While NextRegularExpressionMatch(MyTableRegMatrix)
+				cells("#"+idx+"#")=RegularExpressionMatchString(MyTableRegMatrix)
+				result=ReplaceString(result,cells("#"+idx+"#"),"#"+idx+"#")
+				idx+1
+			Wend
+		EndIf
+	Wend
 	
-	
+	ClearMap(cells())
 EndProcedure
 
 Procedure.b _MyTableFillCellMatrix(*cell.strMyTableCell,matrix.s)
