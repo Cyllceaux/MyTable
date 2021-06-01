@@ -459,15 +459,24 @@ Procedure _MyTable_Row_Delete(*this.strMyTableRow)
 	Else
 		ForEach *this\table\rows()
 			If *this\table\rows()=*this
-				DeleteElement(*this\table\rows())
+				CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+					ForEach *this\cells()
+						*this\table\formulaCells(Str(*this\cells()))=#False
+					Next
+				CompilerEndIf
+				CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+					ForEach *this\cells()
+						*this\table\matrixCells(Str(*this\cells()))=#False
+					Next
+				CompilerEndIf
+				DeleteElement(*this\table\rows())				
 			Else
 				*this\table\rows()\listindex=idx
 				idx+1
 				If *this\table\datagrid
 					Protected *cell.strMyTableCell=FirstElement(*this\table\rows()\cells())
 					_MytableClearCell(*cell)
-					*cell\text=Str(idx)
-					
+					*cell\text=Str(idx)					
 				EndIf
 			EndIf
 		Next

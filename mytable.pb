@@ -879,6 +879,7 @@ Module MyTable
 			*cell\table\matrixCells(Str(*cell))=#False
 			ClearList(*cell\cells())		
 		CompilerEndIf
+		
 		*cell\text=""
 		*cell\value=0
 		*cell\textheight=0
