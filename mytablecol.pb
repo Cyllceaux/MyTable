@@ -311,6 +311,30 @@ Procedure _MyTable_Col_Dirty(*this.strMyTableCol)
 	*this\dirty=#True
 EndProcedure
 
+Procedure _MyTable_Col_Delete(*this.strMyTableCol)
+	Protected idx=0
+	If *this\table\datagrid And *this\listindex>0
+		
+		ForEach *this\table\cols()
+			If *this\table\cols()=*this
+				DeleteElement(*this\table\cols())
+				ForEach *this\table\rows()
+					If ListSize(*this\table\rows()\cells())>idx					
+						_MyTableClearCell(SelectElement(*this\table\rows()\cells(),idx))
+						DeleteElement(*this\table\rows()\cells(),idx)
+					EndIf
+				Next
+			Else
+				*this\table\cols()\listindex=idx
+				*this\table\cols()\text=_MyTableGridColumnName(idx)
+				idx+1
+			EndIf
+		Next
+		*this\table\dirty=#True
+		_MyTable_Table_Recalc(*this\table)
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Col_SetWidth(*this.strMyTableCol,width.i)
 	
 	If *this
@@ -344,7 +368,7 @@ EndProcedure
 Procedure _MyTable_Col_SetData(*this.strMyTableCol,*data)
 	
 	If *this
-				
+		
 		*this\data=*data		
 	EndIf
 EndProcedure
@@ -352,7 +376,7 @@ EndProcedure
 Procedure _MyTable_Col_SetCanNull(*this.strMyTableCol,canNull.b)
 	
 	If *this
-				
+		
 		*this\canNull=canNull		
 	EndIf
 EndProcedure

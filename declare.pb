@@ -60,8 +60,10 @@ Declare _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 Declare _MyTable_Row_AddDirtyRows(*this.strMyTableRow,rows.i)
 Declare _MyTable_Row_GetTable(*this.strMyTableRow)
 MacroGetterSetter(Row,RowHeight,i)
+Declare _MyTable_Row_Delete(*this.strMyTableRow)
 
-Declare _MyTable_Col_GetTable(*this.strMyTableCell)
+Declare _MyTable_Col_GetTable(*this.strMyTableCol)
+Declare _MyTable_Col_Delete(*this.strMyTableCol)
 
 Declare _MyTable_Cell_GetTable(*this.strMyTableCell)
 Declare _MyTable_Cell_GetRow(*this.strMyTableCell)

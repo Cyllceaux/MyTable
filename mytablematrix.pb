@@ -97,6 +97,7 @@ EndProcedure
 Procedure.b _MyTableFillCellMatrix(*cell.strMyTableCell,matrix.s)
 	Protected result.b=#False
 	If Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_MATRIX) And Left(matrix,1)="{"
+		_MyTableClearCell(*cell)
 		*cell\matrix=matrix
 		*cell\table\matrixCells(Str(*cell))=#True		
 		_MyTableMatrixCalcCell(*cell,matrix)

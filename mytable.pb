@@ -217,6 +217,7 @@ Module MyTable
 	
 	Structure strMyTableRow Extends strMyTableAObject
 		listindex.q
+		*parent.strMyTableRow
 		List cells.strMyTableCell()
 		List rows.strMyTableRow()
 		id.q	
@@ -330,6 +331,7 @@ Module MyTable
 		headerbackground2.q
 		headerbackgroundfixed.q
 		headerforecolor.q
+		batch.b
 	EndStructure
 	
 	Structure strMyTableApplication Extends _strMyTableUAObject
@@ -864,20 +866,38 @@ Module MyTable
 		EndIf
 	EndProcedure
 	
+	
+	Procedure _MyTableClearCell(*cell.strMyTableCell)
+		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			*cell\formula=""
+			*cell\calced=#True
+			*cell\table\formulaCells(Str(*cell))=#False
+		CompilerEndIf
+		
+		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)			
+			*cell\matrix=""
+			*cell\table\matrixCells(Str(*cell))=#False
+			ClearList(*cell\cells())		
+		CompilerEndIf
+		*cell\text=""
+		*cell\value=0
+		*cell\textheight=0
+		*cell\textwidth=0
+	EndProcedure
+	
 	Procedure _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
 		Protected flags=*cell\flags
 		If Not flags
 			flags=*cell\col\flags
 		EndIf
 		
+		If override
+			_MyTableClearCell(*cell)
+		EndIf
+		
 		*cell\text=text	
 		
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			If override
-				*cell\formula=""
-				*cell\calced=#True
-			EndIf
-		CompilerEndIf
+		
 		If text=""
 			*cell\col\canNull=#True
 		EndIf
@@ -923,13 +943,12 @@ Module MyTable
 			format=*cell\col\format
 		EndIf
 		
+		If override
+			_MyTableClearCell(*cell)
+		EndIf
+		
 		*cell\value=value
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			If override
-				*cell\formula=""
-				*cell\calced=#True
-			EndIf
-		CompilerEndIf
+		
 		If value=0 And Not *cell\col\canNull
 			*cell\text=""
 			*cell\checked=*cell\value
@@ -1745,6 +1764,7 @@ Module MyTable
 			Protected *obj._strMyTableAObject=0
 			Protected listidx=-1,colidx=-1
 			Protected NewList selected.i()
+			Protected old.s=""
 			
 			Select GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
 					CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
@@ -1755,7 +1775,6 @@ Module MyTable
 								ForEach *this\selected()
 									*cell=Val(MapKey(*this\selected()))
 									_MyTableEditCell(*cell,"=")
-									
 									Break
 								Next
 							EndIf
@@ -1769,12 +1788,38 @@ Module MyTable
 						ForEach *this\selected()
 							*cell=Val(MapKey(*this\selected()))
 							_MyTableEditCell(*cell)
-							
 							Break
 						Next
 					EndIf
-					
-					
+				Case #PB_Shortcut_Delete	
+					_MyTableClearMaps(*this)
+					If *this\datagrid
+						*this\batch=#True
+						ForEach *this\selected()
+							*obj=Val(MapKey(*this\selected()))
+							Select *obj\type
+								Case #MYTABLE_TYPE_CELL
+									*cell=*obj
+									old=*cell\text
+									_MyTableClearCell(*cell)
+									If *this\evtCellChangedText								
+										*this\evtCellChangedText(*cell,old)
+									EndIf
+									recalc=#True								
+								Case #MYTABLE_TYPE_ROW
+									*row=*obj
+									_MyTable_Row_Delete(*row)
+									recalc=#True
+								Case #MYTABLE_TYPE_COL
+									
+									*col=*obj
+									_MyTable_Col_Delete(*col)
+									recalc=#True
+									
+							EndSelect
+						Next
+						*this\batch=#False
+					EndIf
 				Case #PB_Shortcut_Multiply
 					If hierarchical And fullrowselect
 						_MyTableClearMaps(*this)
@@ -3095,6 +3140,8 @@ Module MyTable
 		DataSectionMethod(Table,AutosizeHeader)
 		DataSectionMethod(Table,AutosizeRow)
 		DataSectionMethod(Table,AddDirtyRows)
+		DataSectionMethod(Table,DeleteRow)
+		DataSectionMethod(Table,DeleteCol)
 		DataSectionGetter(Table,Row)
 		DataSectionGetter(Table,Col)
 		DataSectionGetter(Table,Cell)
@@ -3147,6 +3194,7 @@ Module MyTable
 		DataSectionGetter(Row,Cell)
 		DataSectionGetter(Row,Cells)
 		DataSectionMethod(Row,AddRow)
+		DataSectionMethod(Row,Delete)
 		
 		;- Col
 		vtable_col:
@@ -3160,6 +3208,7 @@ Module MyTable
 		DataSectionGetterSetter(Col,Data)
 		DataSectionGetterSetter(Col,CanNull)
 		DataSectionGetterSetter(Col,Sort)
+		DataSectionMethod(Col,Delete)
 		
 		
 		DataSectionSetter(Col,CustomCellEdit)

@@ -290,6 +290,9 @@ Procedure.b _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 		*cell\formula=formula
 		result=#True
 	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
+		
+		_MyTableClearCell(*cell)
+		
 		*cell\formula=formula
 		*cell\table\formulaCells(Str(*cell))=#True
 		*cell\calced=#False

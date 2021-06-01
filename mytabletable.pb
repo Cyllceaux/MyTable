@@ -327,13 +327,15 @@ EndProcedure
 
 Procedure _MyTable_Table_Recalc(*this.strMyTableTable)		
 	If *this
-		*this\dirty=#True
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			If *this\recalc
-				_MyTableFormulaCalcTable(*this)
-			EndIf
-		CompilerEndIf
-		_MyTable_Table_RecalcExp(*this)
+		If Not *this\batch
+			*this\dirty=#True
+			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+				If *this\recalc
+					_MyTableFormulaCalcTable(*this)
+				EndIf
+			CompilerEndIf
+			_MyTable_Table_RecalcExp(*this)
+		EndIf
 	EndIf
 EndProcedure
 
@@ -485,203 +487,219 @@ Procedure _MyTable_Table_ClearCols(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_DeleteCol(*this.strMyTableTable,col.i)
+	If *this
+		_MyTable_Col_Delete(SelectElement(*this\cols(),col))
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_DeleteRow(*this.strMyTableTable,row.i)
+	If *this
+		_MyTable_Col_Delete(SelectElement(*this\rows(),row))
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_RecalcExp(*this.strMyTableTable,force.b=#False)
 	If *this
-		If (*this\dirty And *this\redraw) Or force
-			_MyTableClearMaps(*this)
-			_callcountStart(recalc)
-			With *this
-				Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
-				Protected allrowcount.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT)
-				Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
-				Protected callback.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
-				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
-				
-				Protected *lastCol.strMyTableCol=0
-				Protected w=0
-				Protected idx=0
-				ForEach \cols()
-					Protected *col.strMyTableCol=\cols()
-					*lastCol=*col
-					If *col\dirty
-						*col\calcheight=DesktopScaledY(\headerheight)
-						*col\calcwidth=DesktopScaledX(*col\width)
-						*col\dirty=#False						
+		If Not *this\batch
+			If (*this\dirty And *this\redraw) Or force
+				_MyTableClearMaps(*this)
+				_callcountStart(recalc)
+				With *this
+					Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
+					Protected allrowcount.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT)
+					Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
+					Protected callback.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
+					Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
+					
+					Protected *lastCol.strMyTableCol=0
+					Protected w=0
+					Protected idx=0
+					ForEach \cols()
+						Protected *col.strMyTableCol=\cols()
+						*lastCol=*col
+						If *col\dirty
+							*col\calcheight=DesktopScaledY(\headerheight)
+							*col\calcwidth=DesktopScaledX(*col\width)
+							*col\dirty=#False						
+						EndIf
+						w+*col\calcwidth					
+					Next			
+					
+					ClearList(*this\expRows())
+					*this\expheight=0
+					
+					ForEach \rows()
+						Protected *row.strMyTableRow=\rows()
+						AddElement(*this\expRows()):*this\expRows()=*row		
+						If *row\dirty
+							*row\calcheight=DesktopScaledY(*row\height)
+							*row\calcwidth=w
+							If Not callback
+								*row\dirty=#False
+							EndIf
+						EndIf
+						If *row\expanded And hierarchical
+							_MyTableRecalcExp(*row,w)
+						EndIf
+						*this\expheight+*row\calcheight
+					Next
+					
+					If w>\lastw
+						SetGadgetAttribute(\hscroll,#PB_ScrollBar_Maximum,w-\lastw)				
 					EndIf
-					w+*col\calcwidth					
-				Next			
-				
-				ClearList(*this\expRows())
-				*this\expheight=0
-				
-				ForEach \rows()
-					Protected *row.strMyTableRow=\rows()
-					AddElement(*this\expRows()):*this\expRows()=*row		
-					If *row\dirty
-						*row\calcheight=DesktopScaledY(*row\height)
-						*row\calcwidth=w
-						If Not callback
-							*row\dirty=#False
+					\bhs=Bool(w>\lastw)
+					HideGadget(\hscroll,Bool(w<=\lastw))	
+					If Not \bhs
+						SetGadgetState(\hscroll,0)
+					EndIf
+					
+					Protected h=ListSize(\expRows())
+					If Not allrowcount					
+						If \bhs
+							h-(GadgetHeight(\canvas)-GadgetHeight(\hscroll))/\rowheight
+						Else
+							h-GadgetHeight(\canvas)/\rowheight
 						EndIf
 					EndIf
-					If *row\expanded And hierarchical
-						_MyTableRecalcExp(*row,w)
+					
+					If Not noheader
+						h+1
 					EndIf
-					*this\expheight+*row\calcheight
-				Next
-				
-				If w>\lastw
-					SetGadgetAttribute(\hscroll,#PB_ScrollBar_Maximum,w-\lastw)				
-				EndIf
-				\bhs=Bool(w>\lastw)
-				HideGadget(\hscroll,Bool(w<=\lastw))	
-				If Not \bhs
-					SetGadgetState(\hscroll,0)
-				EndIf
-				
-				Protected h=ListSize(\expRows())
-				If Not allrowcount					
-					If \bhs
-						h-(GadgetHeight(\canvas)-GadgetHeight(\hscroll))/\rowheight
-					Else
-						h-GadgetHeight(\canvas)/\rowheight
+					
+					
+					\bvs=Bool(h>0)
+					HideGadget(\vscroll,Bool(h<=0))	
+					SetGadgetAttribute(\vscroll,#PB_ScrollBar_Maximum,h)
+					
+					
+					If laststretch And *col 
+						*col\calcheight=DesktopScaledY(\headerheight)
+						*col\calcwidth=DesktopScaledX(GadgetWidth(\canvas))
+						If \bvs
+							*col\calcwidth-DesktopScaledX(GadgetWidth(\vscroll))	
+						EndIf
+						*col\dirty=#True
 					EndIf
-				EndIf
-				
-				If Not noheader
-					h+1
-				EndIf
-				
-				
-				\bvs=Bool(h>0)
-				HideGadget(\vscroll,Bool(h<=0))	
-				SetGadgetAttribute(\vscroll,#PB_ScrollBar_Maximum,h)
-				
-				
-				If laststretch And *col 
-					*col\calcheight=DesktopScaledY(\headerheight)
-					*col\calcwidth=DesktopScaledX(GadgetWidth(\canvas))
-					If \bvs
-						*col\calcwidth-DesktopScaledX(GadgetWidth(\vscroll))	
-					EndIf
-					*col\dirty=#True
-				EndIf
-				
-				
-			EndWith
-			_callcountEnde(recalc)
-			_MyTable_Table_Redraw(*this)
+					
+					
+				EndWith
+				_callcountEnde(recalc)
+				_MyTable_Table_Redraw(*this)
+			EndIf
 		EndIf
 	EndIf
 EndProcedure
 
 Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 	If *this
-		With *this
-			Protected redraw.b=Bool(\redraw And \dirty And Not \drawing)
-			If *this\application
-				redraw=Bool(redraw And *this\application\redraw)
-			EndIf
-			If redraw
-				\drawing=#True
-				_MyTableClearMaps(*this)
-				_callcountStart(redraw)
-				
-				Protected grid.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_GRID)
-				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
-				Protected checkboxes.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
-				Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
-				Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
-				Protected fullrowselect.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
-				Protected idx=0
-				
-				Protected w=GadgetWidth(\canvas)
-				Protected h=GadgetHeight(\canvas)
-				
-				Protected *row.strMyTableRow=0
-				
-				If \bhs
-					h-GadgetHeight(\hscroll)
+		If Not *this\batch
+			With *this
+				Protected redraw.b=Bool(\redraw And \dirty And Not \drawing)
+				If *this\application
+					redraw=Bool(redraw And *this\application\redraw)
 				EndIf
-				
-				If \bvs
-					w-GadgetWidth(\vscroll)
-				EndIf
-				
-				w=DesktopScaledX(w)
-				h=DesktopScaledY(h)
-				
-				
-				
-				StartDrawing(CanvasOutput(\canvas))
-				DrawingMode(#PB_2DDrawing_AlphaClip)
-				DrawingFont(\font)
-				
-				Box(0,0,OutputWidth(),OutputHeight(),\background)
-				
-				Protected bx=-GetGadgetState(\hscroll)
-				Protected by=0
-				
-				Protected firstcol.b=#True
-				
-				If Not noheader
-					ForEach \cols()
-						Protected *col.strMyTableCol=\cols()
+				If redraw
+					\drawing=#True
+					_MyTableClearMaps(*this)
+					_callcountStart(redraw)
+					
+					Protected grid.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_GRID)
+					Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
+					Protected checkboxes.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
+					Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
+					Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
+					Protected fullrowselect.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
+					Protected idx=0
+					
+					Protected w=GadgetWidth(\canvas)
+					Protected h=GadgetHeight(\canvas)
+					
+					Protected *row.strMyTableRow=0
+					
+					If \bhs
+						h-GadgetHeight(\hscroll)
+					EndIf
+					
+					If \bvs
+						w-GadgetWidth(\vscroll)
+					EndIf
+					
+					w=DesktopScaledX(w)
+					h=DesktopScaledY(h)
+					
+					
+					
+					StartDrawing(CanvasOutput(\canvas))
+					DrawingMode(#PB_2DDrawing_AlphaClip)
+					DrawingFont(\font)
+					
+					Box(0,0,OutputWidth(),OutputHeight(),\background)
+					
+					Protected bx=-GetGadgetState(\hscroll)
+					Protected by=0
+					
+					Protected firstcol.b=#True
+					
+					If Not noheader
+						ForEach \cols()
+							Protected *col.strMyTableCol=\cols()
+							
+							bx+_MyTableDrawHeader(*col,bx,#False)
+							firstcol=#False
+							If bx>=w
+								Break
+							EndIf
+						Next
 						
-						bx+_MyTableDrawHeader(*col,bx,#False)
-						firstcol=#False
-						If bx>=w
+						If *this\fixedcolumns>0
+							bx=0
+							firstcol=#True
+							For idx=1 To *this\fixedcolumns
+								*col=SelectElement(\cols(),idx-1)
+								bx+_MyTableDrawHeader(*col,bx,#True)
+								firstcol=#False
+							Next
+						EndIf
+						
+						by=DesktopScaledY(\headerheight)
+					EndIf
+					
+					
+					Protected c=ListSize(\expRows())-1
+					Protected i=0
+					
+					For i=GetGadgetState(\vscroll) To c
+						SelectElement(\expRows(),i)				
+						*row=\expRows()
+						bx=-GetGadgetState(\hscroll)
+						by+_MyTableDrawRow(*row,w,bx,by,#False,fullrowselect,grid,hierarchical,checkboxes)
+						If by>=h
 							Break
 						EndIf
 					Next
 					
 					If *this\fixedcolumns>0
-						bx=0
-						firstcol=#True
-						For idx=1 To *this\fixedcolumns
-							*col=SelectElement(\cols(),idx-1)
-							bx+_MyTableDrawHeader(*col,bx,#True)
-							firstcol=#False
+						by=DesktopScaledY(\headerheight)
+						For i=GetGadgetState(\vscroll) To c
+							SelectElement(\expRows(),i)				
+							*row=\expRows()
+							by+_MyTableDrawRow(*row,w,0,by,#True,fullrowselect,grid,hierarchical,checkboxes)
+							If by>=h
+								Break
+							EndIf
 						Next
 					EndIf
 					
-					by=DesktopScaledY(\headerheight)
-				EndIf
-				
-				
-				Protected c=ListSize(\expRows())-1
-				Protected i=0
-				
-				For i=GetGadgetState(\vscroll) To c
-					SelectElement(\expRows(),i)				
-					*row=\expRows()
-					bx=-GetGadgetState(\hscroll)
-					by+_MyTableDrawRow(*row,w,bx,by,#False,fullrowselect,grid,hierarchical,checkboxes)
-					If by>=h
-						Break
-					EndIf
-				Next
-				
-				If *this\fixedcolumns>0
-					by=DesktopScaledY(\headerheight)
-					For i=GetGadgetState(\vscroll) To c
-						SelectElement(\expRows(),i)				
-						*row=\expRows()
-						by+_MyTableDrawRow(*row,w,0,by,#True,fullrowselect,grid,hierarchical,checkboxes)
-						If by>=h
-							Break
-						EndIf
-					Next
-				EndIf
-				
-				
-				
-				StopDrawing()
-				\drawing=#False
-				_callcountEnde(redraw)
-				\dirty=#False
-			EndIf			
-		EndWith
+					
+					
+					StopDrawing()
+					\drawing=#False
+					_callcountEnde(redraw)
+					\dirty=#False
+				EndIf			
+			EndWith
+		EndIf
 	EndIf
 EndProcedure
 

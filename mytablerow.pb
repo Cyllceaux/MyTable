@@ -374,6 +374,7 @@ Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",id.q=#PB_Igno
 		With *row
 			\vtable=?vtable_row
 			\height=*this\table\rowheight
+			\parent=*this
 			\brow=#True
 			\checked=checked
 			\expanded=expanded
@@ -442,4 +443,35 @@ EndProcedure
 
 Procedure _MyTable_Row_Dirty(*this.strMyTableRow)
 	*this\dirty=#True
+EndProcedure
+
+Procedure _MyTable_Row_Delete(*this.strMyTableRow)
+	Protected idx=0
+	If *this\parent
+		ForEach *this\rows()
+			If *this\rows()=*this
+				DeleteElement(*this\rows())
+			Else
+				*this\rows()\listindex=idx
+				idx+1
+			EndIf
+		Next
+	Else
+		ForEach *this\table\rows()
+			If *this\table\rows()=*this
+				DeleteElement(*this\table\rows())
+			Else
+				*this\table\rows()\listindex=idx
+				idx+1
+				If *this\table\datagrid
+					Protected *cell.strMyTableCell=FirstElement(*this\table\rows()\cells())
+					_MytableClearCell(*cell)
+					*cell\text=Str(idx)
+					
+				EndIf
+			EndIf
+		Next
+	EndIf
+	*this\table\dirty=#True
+	_MyTable_Table_Recalc(*this\table)
 EndProcedure

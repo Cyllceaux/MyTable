@@ -204,6 +204,7 @@ DeclareModule MyTable
 		SetCanNull(cannull.i)
 		GetSort()
 		SetSort(image.i)
+		Delete()
 		
 		SetCustomCellEdit(event.MyTableProtoEventCustomEditCell,event.MyTableProtoEventCancelCustomEditCell)
 	EndInterface
@@ -223,6 +224,7 @@ DeclareModule MyTable
 		GetCell(col.i)
 		GetCells(List cells.MyTableCell())
 		AddRow(text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
+		Delete()
 	EndInterface
 	
 	Interface MyTableTable Extends _MyTableObject
@@ -248,6 +250,8 @@ DeclareModule MyTable
 		AutosizeHeader(col.i=#PB_Ignore)
 		AutosizeRow(row.i=#PB_Ignore)
 		AddDirtyRows(rows.i)
+		DeleteRow(row.i)
+		DeleteCol(col.i)
 		GetRow(row.i)
 		GetCol(col.i)
 		GetCell(row.i,col.i)
