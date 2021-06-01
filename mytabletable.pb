@@ -450,9 +450,11 @@ Procedure _MyTable_Table_AddColumn(*this.strMyTableTable,text.s,width.i,flags.i=
 			\table=*this
 			*this\lastColid+1
 			\id=*this\lastColid
-			If *this\datagrid And text=""
-				\text=_MyTableGridColumnName(ListSize(*this\cols()))
-			EndIf
+			CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+				If *this\datagrid And text=""
+					\text=_MyTableGridColumnName(ListSize(*this\cols()))
+				EndIf
+			CompilerEndIf
 		EndWith
 		*this\colsById(Str(*col\id))=*col
 		*this\dirty=#True

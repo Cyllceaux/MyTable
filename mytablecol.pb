@@ -326,7 +326,11 @@ Procedure _MyTable_Col_Delete(*this.strMyTableCol)
 				Next
 			Else
 				*this\table\cols()\listindex=idx
-				*this\table\cols()\text=_MyTableGridColumnName(idx)
+				CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+					If *this\table\datagrid
+						*this\table\cols()\text=_MyTableGridColumnName(idx)
+					EndIf
+				CompilerEndIf
 				idx+1
 			EndIf
 		Next

@@ -271,15 +271,20 @@ Module MyTable
 		bvs.b
 		bhs.b
 		Map selected.b()
+		
 		datagrid.b
+		
+		
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			Map formulaCells.b()
 			Map forms.i()
 			recalc.b
 		CompilerEndIf
+		
 		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 			Map matrixCells.b()
 		CompilerEndIf
+		
 		Map tempselected.b()
 		List expRows.i()
 		expheight.i
@@ -392,9 +397,11 @@ Module MyTable
 				Protected c=ListSize(*this\cols())-1
 				Protected idx=0
 				Protected start=0
-				If *this\datagrid
-					start=1
-				EndIf
+				CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+					If *this\datagrid
+						start=1
+					EndIf
+				CompilerEndIf
 				ForEach *this\rows()
 					*row=*this\rows()
 					Protected *exportrow.strMyTableExportRow=AddElement(*result\rows())
@@ -1794,33 +1801,35 @@ Module MyTable
 					EndIf
 				Case #PB_Shortcut_Delete	
 					_MyTableClearMaps(*this)
-					If *this\datagrid
-						*this\batch=#True
-						ForEach *this\selected()
-							*obj=Val(MapKey(*this\selected()))
-							Select *obj\type
-								Case #MYTABLE_TYPE_CELL
-									*cell=*obj
-									old=*cell\text
-									_MyTableClearCell(*cell)
-									If *this\evtCellChangedText								
-										*this\evtCellChangedText(*cell,old)
-									EndIf
-									recalc=#True								
-								Case #MYTABLE_TYPE_ROW
-									*row=*obj
-									_MyTable_Row_Delete(*row)
-									recalc=#True
-								Case #MYTABLE_TYPE_COL
-									
-									*col=*obj
-									_MyTable_Col_Delete(*col)
-									recalc=#True
-									
-							EndSelect
-						Next
-						*this\batch=#False
-					EndIf
+					CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+						If *this\datagrid
+							*this\batch=#True
+							ForEach *this\selected()
+								*obj=Val(MapKey(*this\selected()))
+								Select *obj\type
+									Case #MYTABLE_TYPE_CELL
+										*cell=*obj
+										old=*cell\text
+										_MyTableClearCell(*cell)
+										If *this\evtCellChangedText								
+											*this\evtCellChangedText(*cell,old)
+										EndIf
+										recalc=#True								
+									Case #MYTABLE_TYPE_ROW
+										*row=*obj
+										_MyTable_Row_Delete(*row)
+										recalc=#True
+									Case #MYTABLE_TYPE_COL
+										
+										*col=*obj
+										_MyTable_Col_Delete(*col)
+										recalc=#True
+										
+								EndSelect
+							Next
+							*this\batch=#False
+						EndIf
+					CompilerEndIf
 				Case #PB_Shortcut_Multiply
 					If hierarchical And fullrowselect
 						_MyTableClearMaps(*this)
@@ -2591,61 +2600,64 @@ Module MyTable
 		EndIf
 	EndProcedure
 	
-	Procedure.s _MyTableGridColumnName(col.i)
-		Protected ac=Asc("A")
-		Protected result.s=""	
-		While col > 0
-			Protected ic = col % 26
-			If ic = 0
-				result + "Z"
-				col = (col / 26) - 1
-			Else
-				result + Chr(ac+(ic-1))
-				col = col / 26
-			EndIf
-		Wend
-		
-		ProcedureReturn result
-	EndProcedure
-	
-	Procedure _MyTableGridRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableRegister(*application,window,canvas,hscroll,vscroll,flags,callback,name)
-		If *this
-			_callcountStart(GridRegister)
-			*this\fixedcolumns=1
-			*this\backgroundfixed=*this\headerbackground1
-			*this\headerbackgroundfixed=*this\headerbackground2
-			*this\datagrid=#True
-			
-			Protected redraw.b=*this\redraw
-			Protected idx
-			*this\redraw=#False
-			_MyTable_Table_AddColumn(*this," ",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
-			For idx=1 To cols
-				_MyTable_Table_AddColumn(*this,_MyTableGridColumnName(idx),100)
-			Next
-			
-			_MyTable_Table_AddDirtyRows(*this,rows)
-			For idx=1 To rows
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*this\rows(),idx-1))
-				*cell\text=Str(idx)
-			Next
-			
-			
-			_callcountEnde(GridRegister)
-			
-			_MyTable_Table_AutosizeColExp(*this,0,#True)
-			*this\redraw=redraw
-			
-			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-				If Bool(flags & #MYTABLE_TABLE_FLAGS_FORMULA)
-					_MyTable_InitFormula(*this)
+	CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+		Procedure.s _MyTableGridColumnName(col.i)
+			Protected ac=Asc("A")
+			Protected result.s=""	
+			While col > 0
+				Protected ic = col % 26
+				If ic = 0
+					result + "Z"
+					col = (col / 26) - 1
+				Else
+					result + Chr(ac+(ic-1))
+					col = col / 26
 				EndIf
-			CompilerEndIf
+			Wend
 			
-		EndIf
-		ProcedureReturn *this
-	EndProcedure
+			ProcedureReturn result
+		EndProcedure
+		
+		
+		Procedure _MyTableGridRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows,cols,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+			Protected *this.strMyTableTable=_MyTableRegister(*application,window,canvas,hscroll,vscroll,flags,callback,name)
+			If *this
+				_callcountStart(GridRegister)
+				*this\fixedcolumns=1
+				*this\backgroundfixed=*this\headerbackground1
+				*this\headerbackgroundfixed=*this\headerbackground2
+				*this\datagrid=#True
+				
+				Protected redraw.b=*this\redraw
+				Protected idx
+				*this\redraw=#False
+				_MyTable_Table_AddColumn(*this," ",100,#MYTABLE_COLUMN_FLAGS_RIGHT|#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE|#MYTABLE_COLUMN_FLAGS_NO_EDITABLE|#MYTABLE_COLUMN_FLAGS_INTEGER)
+				For idx=1 To cols
+					_MyTable_Table_AddColumn(*this,_MyTableGridColumnName(idx),100)
+				Next
+				
+				_MyTable_Table_AddDirtyRows(*this,rows)
+				For idx=1 To rows
+					Protected *cell.strMyTableCell=_MyTableGetOrAddCell(SelectElement(*this\rows(),idx-1))
+					*cell\text=Str(idx)
+				Next
+				
+				
+				_callcountEnde(GridRegister)
+				
+				_MyTable_Table_AutosizeColExp(*this,0,#True)
+				*this\redraw=redraw
+				
+				CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+					If Bool(flags & #MYTABLE_TABLE_FLAGS_FORMULA)
+						_MyTable_InitFormula(*this)
+					EndIf
+				CompilerEndIf
+				
+			EndIf
+			ProcedureReturn *this
+		EndProcedure
+	CompilerEndIf
 	
 	Procedure _MyTableRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
 		Protected *this.strMyTableTable
@@ -2755,21 +2767,22 @@ Module MyTable
 		ProcedureReturn *this
 	EndProcedure
 	
-	Procedure MyTableGridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableGridRegister(0,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
-		BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
-		_MyTableResize(*this)
-		ProcedureReturn *this
-	EndProcedure
-	
-	Procedure MyTableGridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableGridRegister(0,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
-		BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
-		_MyTable_Table_Recalc(*this)
-		ProcedureReturn *this
-	EndProcedure
-	
-	
+	CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+		Procedure MyTableGridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+			Protected *this.strMyTableTable=_MyTableGridRegister(0,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
+			BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
+			_MyTableResize(*this)
+			ProcedureReturn *this
+		EndProcedure
+		
+		Procedure MyTableGridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+			Protected *this.strMyTableTable=_MyTableGridRegister(0,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
+			BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
+			_MyTable_Table_Recalc(*this)
+			ProcedureReturn *this
+		EndProcedure
+		
+	CompilerEndIf
 	
 	
 	
@@ -2914,22 +2927,18 @@ Module MyTable
 				DeleteElement(*this\rows()\cells())
 				*this\rows()\dirty=#True
 			Next
-			If *this\datagrid
-				Protected idx=0
-				For idx=2 To ListSize(*this\cols())
-					*col=SelectElement(*this\cols(),idx-1)
-					*col\text=_MyTableGridColumnName(idx-1)
-				Next
-			EndIf
+			CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+				If *this\datagrid
+					Protected idx=0
+					For idx=2 To ListSize(*this\cols())
+						*col=SelectElement(*this\cols(),idx-1)
+						*col\text=_MyTableGridColumnName(idx-1)
+					Next
+				EndIf
+			CompilerEndIf
 			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndProcedure
-	
-	
-	
-	
-	
-	
 	
 	
 	Procedure MyTableRemoveRow(canvas,row.i)
@@ -2945,11 +2954,6 @@ Module MyTable
 			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndProcedure
-	
-	
-	
-	
-	
 	
 	
 	Procedure MyTableExportCSV(canvas,filename.s,sep.s=";",header.b=#True,fieldquote.s="'",linebreak.s=#CRLF$,encode=#PB_UTF8)
@@ -3112,8 +3116,10 @@ Module MyTable
 		DataSectionUADefault(Application)
 		DataSectionMethod(Application,Register)
 		DataSectionMethod(Application,RegisterDialog)
-		DataSectionMethod(Application,GridRegister)
-		DataSectionMethod(Application,GridRegisterDialog)
+		CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+			DataSectionMethod(Application,GridRegister)
+			DataSectionMethod(Application,GridRegisterDialog)
+		CompilerEndIf
 		DataSectionMethod(Application,Unregister)
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionMethod(Application,Recalc)

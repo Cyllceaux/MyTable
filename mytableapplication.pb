@@ -74,19 +74,21 @@ Procedure _MyTable_Application_RegisterDialog(*application.strMyTableApplication
 	ProcedureReturn *this
 EndProcedure
 
-Procedure _MyTable_Application_GridRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	Protected *this.strMyTableTable=_MyTableGridRegister(*application,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
-	BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
-	_MyTableResize(*this)
-	ProcedureReturn *this
-EndProcedure
-
-Procedure _MyTable_Application_GridRegisterDialog(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	Protected *this.strMyTableTable=_MyTableGridRegister(*application,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
-	BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
-	_MyTable_Table_Recalc(*this)
-	ProcedureReturn *this
-EndProcedure
+CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+	Procedure _MyTable_Application_GridRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		Protected *this.strMyTableTable=_MyTableGridRegister(*application,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
+		BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
+		_MyTableResize(*this)
+		ProcedureReturn *this
+	EndProcedure
+	
+	Procedure _MyTable_Application_GridRegisterDialog(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
+		Protected *this.strMyTableTable=_MyTableGridRegister(*application,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
+		BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
+		_MyTable_Table_Recalc(*this)
+		ProcedureReturn *this
+	EndProcedure
+CompilerEndIf
 
 Procedure _MyTable_Application_Unregister(*this.strMyTableApplication)
 	If *this
