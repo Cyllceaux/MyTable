@@ -90,7 +90,7 @@ UseModule MyTable
 	
 	
 	
-	Define *table.MyTableTable=MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,10000,100)
+	Define *table.MyTableTable=MyTableGridRegister(mainWindow,canvasFormula,hscrollFormula,vscrollFormula,1000,20)
 	*table\SetEventCellSelected(@SelectCell())
 	
 	Define frow=0

@@ -342,6 +342,7 @@ Module MyTable
 		headerbackground2.q
 		headerbackgroundfixed.q
 		headerforecolor.q
+		headerbackgroundmarked.q
 		batch.b
 	EndStructure
 	
@@ -1185,6 +1186,7 @@ Module MyTable
 		Protected *this.strMyTableTable=*row\table
 		Protected *cell.strMyTableCell=0
 		Protected *col.strMyTableCol=0
+		Protected *obj._strMyTableAObject=0
 		Protected flags=0
 		Protected font=*this\font
 		
@@ -1194,7 +1196,36 @@ Module MyTable
 		Protected forecolor.q=*this\forecolor
 		Protected selectedforecolor.q=*this\selectedforecolor
 		
+		Protected marked.b=#False
 		
+		If *this\datagrid
+			ForEach *this\selected()
+				If *this\selected()
+					*obj=Val(MapKey(*this\selected()))
+					If *obj\type=#MYTABLE_TYPE_CELL
+						*cell=*obj
+						If *cell\row=*row
+							marked=#True
+							Break
+						EndIf						
+					EndIf
+				EndIf
+			Next
+			If Not marked
+				ForEach *this\tempselected()
+					If *this\tempselected()
+						*obj=Val(MapKey(*this\tempselected()))
+						If *obj\type=#MYTABLE_TYPE_CELL
+							*cell=*obj
+							If *cell\row=*row
+								marked=#True
+								Break
+							EndIf						
+						EndIf
+					EndIf
+				Next
+			EndIf
+		EndIf
 		
 		
 		While ListSize(*row\cells())<ListSize(*this\cols())
@@ -1216,7 +1247,7 @@ Module MyTable
 			
 			selectedbackground=*this\selectedbackground
 			background=*this\background
-			backgroundfixed=*this\backgroundfixed
+			backgroundfixed=*this\backgroundfixed			
 			forecolor=*this\forecolor
 			selectedforecolor=*this\selectedforecolor
 			
@@ -1326,7 +1357,18 @@ Module MyTable
 			
 			Protected selected.b=#False
 			If fixed
-				Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,backgroundfixed)	
+				If *this\datagrid
+					If marked
+						Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackgroundmarked)
+					Else
+						Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground2)
+					EndIf
+					DrawingMode(#PB_2DDrawing_Outlined)	
+					Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackgroundfixed)					
+					DrawingMode(#PB_2DDrawing_Default)	
+				Else			
+					Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,backgroundfixed)	
+				EndIf
 			EndIf
 			If *this\selected(Str(*row)) Or 
 			   *this\selected(Str(*cell)) Or 
@@ -1342,8 +1384,12 @@ Module MyTable
 			
 			DrawingMode(#PB_2DDrawing_Outlined)	
 			If grid
-				If *cell\border = #MYTABLE_BORDER_DEFAULT
-					Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground2)
+				If *cell\border = #MYTABLE_BORDER_DEFAULT					
+					If *this\datagrid And fixed
+						Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground1)
+					Else
+						Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground2)
+					EndIf
 				ElseIf *cell\border				
 					DrawingMode(#PB_2DDrawing_Default)	
 					Protected borderwidth.i=0
@@ -1442,7 +1488,7 @@ Module MyTable
 			
 			
 			If Bool(flags & #MYTABLE_COLUMN_FLAGS_IMAGE)
-				If IsImage(*cell\image)
+				If *cell\image And IsImage(*cell\image)
 					If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
 						DrawAlphaImage(ImageID(*cell\image),bx+MyTableW2+*col\calcwidth/2-*cell\textwidth/2,by+valw)
 					ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
@@ -1467,17 +1513,22 @@ Module MyTable
 					DrawAlphaImage(ImageID(img),bx+MyTableW2+foi,by+valw)
 				EndIf					
 			Else
-				Protected color=forecolor
-				If selected
-					color=selectedforecolor
+				If *cell\text<>""
+					Protected color=forecolor
+					If selected
+						color=selectedforecolor
+					EndIf
+					If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
+						_MyTableDrawText(bx+*col\calcwidth/2-*cell\textwidth/2,by+valw,*cell\text,color)
+					ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
+						If fixed And *this\datagrid
+							color=*this\headerforecolor
+						EndIf
+						_MyTableDrawText(bx+*col\calcwidth-*cell\textwidth-MyTableW4,by+valw,*cell\text,color)
+					Else
+						_MyTableDrawText(bx+MyTableW2+foi+coi+cob,by+valw,*cell\text,color)
+					EndIf				
 				EndIf
-				If Bool(flags & #MYTABLE_COLUMN_FLAGS_CENTER)
-					_MyTableDrawText(bx+*col\calcwidth/2-*cell\textwidth/2,by+valw,*cell\text,color)
-				ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_RIGHT)
-					_MyTableDrawText(bx+*col\calcwidth-*cell\textwidth-MyTableW4,by+valw,*cell\text,color)
-				Else
-					_MyTableDrawText(bx+MyTableW2+foi+coi+cob,by+valw,*cell\text,color)
-				EndIf					
 			EndIf
 			DrawingMode(#PB_2DDrawing_AlphaClip)
 			UnclipOutput()					
@@ -1492,6 +1543,9 @@ Module MyTable
 	
 	Procedure _MyTableDrawHeader(*col.strMyTableCol,bx.i,fixed.b)
 		Protected *this.strMyTableTable=*col\table
+		Protected *obj._strMyTableAObject=0
+		Protected *cell.strMyTableCell=0
+		Protected marked.b=#False
 		
 		If *col\font
 			DrawingFont(*col\font)
@@ -1511,15 +1565,52 @@ Module MyTable
 			soi=MyTableW20
 		EndIf
 		
+		If *this\datagrid
+			ForEach *this\selected()
+				If *this\selected()
+					*obj=Val(MapKey(*this\selected()))
+					If *obj\type=#MYTABLE_TYPE_CELL
+						*cell=*obj
+						If *cell\col=*col
+							marked=#True
+							Break
+						EndIf						
+					EndIf
+				EndIf
+			Next
+			If Not marked
+				ForEach *this\tempselected()
+					If *this\tempselected()
+						*obj=Val(MapKey(*this\tempselected()))
+						If *obj\type=#MYTABLE_TYPE_CELL
+							*cell=*obj
+							If *cell\col=*col
+								marked=#True
+								Break
+							EndIf						
+						EndIf
+					EndIf
+				Next
+			EndIf
+		EndIf
+		
 		
 		Box(bx,0,*col\calcwidth,*col\table\headerheight,*this\headerbackground1)
 		If fixed
-			Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackgroundfixed)
+			If marked
+				Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackgroundmarked)
+			Else
+				Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackgroundfixed)
+			EndIf
 		Else
 			If *this\selected(Str(*col)) Or *this\tempselected(Str(*col))
 				Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\selectedbackground)
 			Else
-				Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackground2)
+				If marked
+					Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackgroundmarked)
+				Else
+					Box(bx,0,*col\calcwidth-MyTableW2,*col\table\headerheight-MyTableH2,*this\headerbackground2)
+				EndIf
 			EndIf
 		EndIf
 		
@@ -1930,6 +2021,7 @@ Module MyTable
 									*this\selected(Str(_MyTableGetOrAddCell(*this\rows(),i)))=#True
 								Next
 							Next	
+							*this\dirty=#True
 							redraw=#True
 						EndIf
 					CompilerEndIf	
@@ -2495,8 +2587,19 @@ Module MyTable
 					Protected row=*rowcol\row
 					Protected col=*rowcol\col
 					
-					
-					If col>-1 And row<cc And col<ListSize(*this\cols())
+					If *this\datagrid And row=-1 And col=0
+						ClearMap(*this\selected())
+						Protected i,c
+						c=ListSize(*this\cols())
+						ForEach *this\rows()
+							For i=0 To c
+								*this\selected(Str(_MyTableGetOrAddCell(*this\rows(),i)))=#True
+							Next
+						Next	
+						*this\dirty=#True
+						redraw=#True
+						
+					ElseIf col>-1 And row<cc And col<ListSize(*this\cols())
 						*col=SelectElement(*this\cols(),col)
 						Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
 						If col=0 And (checkboxes Or hierarchical) And row>-1
@@ -2842,6 +2945,7 @@ Module MyTable
 			\headerbackground1=RGBA(200,200,200,255)
 			\headerbackground2=RGBA(150,150,150,255)
 			\headerbackgroundfixed=RGBA(200,150,150,255)
+			\headerbackgroundmarked=RGBA(100,50,50,255)
 			\forecolor=RGBA(0,0,0,255)
 			\headerforecolor=RGBA(240,240,240,255)
 			\selectedforecolor=RGBA(240,240,240,255)
@@ -2852,6 +2956,7 @@ Module MyTable
 			
 			\menu=CreatePopupMenu(#PB_Any)
 			
+			\datagrid=#False
 			
 			
 			SetGadgetData(canvas,*this)
@@ -3268,6 +3373,7 @@ Module MyTable
 		DataSectionGetterSetter(Table,headerbackground2)
 		DataSectionGetterSetter(Table,headerbackgroundfixed)
 		DataSectionGetterSetter(Table,headerforecolor)
+		DataSectionGetterSetter(Table,headerbackgroundmarked)
 		DataSectionGetter(Table,Canvas)
 		DataSectionMethod(Table,UnRegister)
 		DataSectionMethod(Table,ClearRows)

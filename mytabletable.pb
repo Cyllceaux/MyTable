@@ -1068,6 +1068,17 @@ Procedure _MyTable_Table_SetBackgroundFixed(*this.strMyTableTable,color.q)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_SetHeaderBackgroundMarked(*this.strMyTableTable,color.q)
+	
+	If *this
+		If *this\headerbackgroundmarked<>color
+			*this\headerbackgroundmarked=color
+			*this\dirty=#True
+			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_SetHeaderbackground1(*this.strMyTableTable,color.q)
 	
 	If *this
@@ -1196,6 +1207,13 @@ Procedure.q _MyTable_Table_GetHeaderbackgroundFixed(*this.strMyTableTable)
 	
 	If *this
 		ProcedureReturn *this\headerbackgroundfixed
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_Table_GetHeaderbackgroundMarked(*this.strMyTableTable)
+	
+	If *this
+		ProcedureReturn *this\headerbackgroundmarked
 	EndIf
 EndProcedure
 
