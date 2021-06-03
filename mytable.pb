@@ -620,7 +620,7 @@ Module MyTable
 		ClearMap(*this\tempselected())
 		
 		
-		If Not temp
+		If Not temp And Not shift
 			*this\lastcell=*cell
 		EndIf
 		If shift And multiselect
