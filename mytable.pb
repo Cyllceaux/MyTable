@@ -1565,14 +1565,14 @@ Module MyTable
 	Procedure _MyTableClearMaps(*this.strMyTableTable)
 		If *this
 			ForEach *this\selected()
-				If Not *this\selected()
+				If *this\selected()=#False
 					DeleteMapElement(*this\selected())
 				EndIf
 			Next
 			
 			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 				ForEach *this\formulaCells()
-					If Not *this\formulaCells()
+					If *this\formulaCells()=#False
 						DeleteMapElement(*this\formulaCells())
 					EndIf
 				Next
@@ -1580,7 +1580,7 @@ Module MyTable
 			
 			CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
 				ForEach *this\matrixCells()
-					If Not *this\matrixCells()
+					If *this\matrixCells()=#False
 						DeleteMapElement(*this\matrixCells())
 					EndIf
 				Next
@@ -1827,7 +1827,7 @@ Module MyTable
 			Protected *cell.strMyTableCell=0
 			Protected *col.strMyTableCol=0
 			Protected *obj._strMyTableAObject=0
-			Protected listidx=-1,colidx=-1
+			Protected listidx=-1,colidx=-1,idx=0
 			Protected NewList selected.i()
 			Protected old.s=""
 			
@@ -1856,6 +1856,83 @@ Module MyTable
 							Break
 						Next
 					EndIf
+				Case #PB_Shortcut_C
+					_MyTableClearMaps(*this)
+					CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+						If control
+							If MapSize(*this\selected())>0
+								Protected clip.s=""
+								ForEach *this\selected()
+									If *this\selected()
+										*obj=Val(MapKey(*this\selected()))
+										Select *obj\type
+											Case #MYTABLE_TYPE_CELL
+												*cell=*obj
+												clip+*cell\text
+												clip+#CRLF$
+											Case #MYTABLE_TYPE_ROW
+												*row=*obj
+												idx=0
+												ForEach *row\cells()
+													If idx>0
+														clip+";"
+													EndIf
+													clip+#DQUOTE$+*row\cells()\text+#DQUOTE$
+													idx+1
+												Next
+												clip+#CRLF$
+										EndSelect
+									EndIf
+								Next
+								If clip<>""
+									ClearClipboard()
+									SetClipboardText(clip)
+								EndIf
+							EndIf
+						EndIf
+						
+					CompilerEndIf	
+				Case #PB_Shortcut_V
+					_MyTableClearMaps(*this)
+					CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+						If control
+							If MapSize(*this\selected())=1
+								ForEach *this\selected()
+									If *this\selected()
+										*obj=Val(MapKey(*this\selected()))
+										clip=StringField(GetClipboardText(),1,#CRLF$)
+										If clip<>""
+											If *obj\type=#MYTABLE_TYPE_CELL
+												*cell=*obj
+												CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+													_MyTable_Cell_SetMatrix(*cell,clip)
+												CompilerElseIf Defined(MYTABLE_FORMULA,#PB_Module)
+													_MyTable_Cell_SetFormula(*cell,clip)
+												CompilerElse
+													_MyTable_Cell_SetText(*cell,clip)
+												CompilerEndIf
+											EndIf
+										EndIf
+									EndIf
+								Next
+							EndIf
+						EndIf
+					CompilerEndIf	
+				Case #PB_Shortcut_A
+					_MyTableClearMaps(*this)
+					CompilerIf Defined(MYTABLE_GRID,#PB_Module)
+						If control
+							ClearMap(*this\selected())
+							Protected i,c
+							c=ListSize(*this\cols())
+							ForEach *this\rows()
+								For i=0 To c
+									*this\selected(Str(_MyTableGetOrAddCell(*this\rows(),i)))=#True
+								Next
+							Next	
+							redraw=#True
+						EndIf
+					CompilerEndIf	
 				Case #PB_Shortcut_Delete	
 					_MyTableClearMaps(*this)
 					CompilerIf Defined(MYTABLE_GRID,#PB_Module)

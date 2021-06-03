@@ -289,7 +289,7 @@ Procedure.b _MyTableFillCellFormula(*cell.strMyTableCell,formula.s)
 		_MyTableFillCellText(*cell,Mid(formula,2))
 		*cell\formula=formula
 		result=#True
-	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="="
+	ElseIf Bool(*cell\table\flags & #MYTABLE_TABLE_FLAGS_FORMULA) And Left(formula,1)="=" And CountString(formula,#CR$)=0 And CountString(formula,#LF$)=0
 		
 		_MyTableClearCell(*cell)
 		

@@ -74,8 +74,12 @@ MacroGetterSetter(Cell,Value,d)
 MacroGetterSetter(Cell,Image,i)
 Declare _MyTable_Cell_SetBorder(*this.strMyTableCell,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
 Declare _MyTable_Cell_SetBorderStyle(*this.strMyTableCell,border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)
-
-
+CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
+	MacroGetterSetter(Cell,Matrix,s)
+CompilerEndIf
+CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+	MacroGetterSetter(Cell,Formula,s)
+CompilerEndIf
 ;- Intern
 Declare _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1,force.b=#False)
