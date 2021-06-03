@@ -104,6 +104,66 @@ Procedure _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Cell_SetBorder(*this.strMyTableCell,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
+	If *this
+		*this\border=border
+		ClearMap(*this\borderstyle())
+		If width<>#PB_Ignore Or color<>#PB_Ignore
+			*this\border=#MYTABLE_BORDER_ALL
+		EndIf
+		If *this\border<>#MYTABLE_BORDER_DEFAULT
+			If Bool(*this\border & #MYTABLE_BORDER_TOP)
+				*this\borderstyle(Str(#MYTABLE_BORDER_TOP))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_TOP))\color=color
+			EndIf
+			If Bool(*this\border & #MYTABLE_BORDER_LEFT)
+				*this\borderstyle(Str(#MYTABLE_BORDER_LEFT))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_LEFT))\color=color
+			EndIf
+			If Bool(*this\border & #MYTABLE_BORDER_BOTTOM)
+				*this\borderstyle(Str(#MYTABLE_BORDER_BOTTOM))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_BOTTOM))\color=color
+			EndIf
+			If Bool(*this\border & #MYTABLE_BORDER_RIGHT)
+				*this\borderstyle(Str(#MYTABLE_BORDER_RIGHT))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_RIGHT))\color=color
+			EndIf					
+		EndIf
+		*this\dirty=#True
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_SetBorderStyle(*this.strMyTableCell,border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)
+	If *this
+		*this\dirty=#True
+		*this\table\dirty=#True
+		If border<>#MYTABLE_BORDER_DEFAULT
+			If *this\border=#MYTABLE_BORDER_DEFAULT
+				*this\border=#MYTABLE_BORDER_ALL
+			EndIf
+			If Bool(border & #MYTABLE_BORDER_TOP)
+				*this\borderstyle(Str(#MYTABLE_BORDER_TOP))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_TOP))\color=color
+			EndIf
+			If Bool(border & #MYTABLE_BORDER_LEFT)
+				*this\borderstyle(Str(#MYTABLE_BORDER_LEFT))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_LEFT))\color=color
+			EndIf
+			If Bool(border & #MYTABLE_BORDER_BOTTOM)
+				*this\borderstyle(Str(#MYTABLE_BORDER_BOTTOM))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_BOTTOM))\color=color
+			EndIf
+			If Bool(border & #MYTABLE_BORDER_RIGHT)
+				*this\borderstyle(Str(#MYTABLE_BORDER_RIGHT))\width=width
+				*this\borderstyle(Str(#MYTABLE_BORDER_RIGHT))\color=color
+			EndIf					
+		EndIf
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Cell_CellFlags(*this.strMyTableCell,flags.i)
 	If *this
 		If *this\flags<>flags		

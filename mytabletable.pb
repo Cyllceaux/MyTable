@@ -769,6 +769,22 @@ Procedure _MyTable_Table_SetCellText(*this.strMyTableTable,row.i,col.i,text.s)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_SetCellBorder(*this.strMyTableTable,row.i,col.i,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+		_MyTable_Cell_SetBorder(*cell,border,width,color)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetCellBorderStyle(*this.strMyTableTable,row.i,col.i,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
+	If *this
+		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
+		_MyTable_Cell_SetBorderStyle(*cell,border,width,color)
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_SetCellImage(*this.strMyTableTable,row.i,col.i,image.i)
 	If *this
 		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)

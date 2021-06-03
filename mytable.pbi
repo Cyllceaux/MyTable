@@ -88,7 +88,7 @@ DeclareModule MyTable
 	#MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME = #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE|#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME
 	
 	
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 		
 		EnumerationBinary _MyTableTableFlags
 			#MYTABLE_TABLE_FLAGS_FORMULA
@@ -161,6 +161,17 @@ DeclareModule MyTable
 		SetFont(value.i)
 	EndInterface
 	
+	EnumerationBinary  _mytable_border
+		#MYTABLE_BORDER_NONE
+		#MYTABLE_BORDER_TOP
+		#MYTABLE_BORDER_RIGHT
+		#MYTABLE_BORDER_BOTTOM
+		#MYTABLE_BORDER_LEFT
+	EndEnumeration
+	
+	#MYTABLE_BORDER_ALL=#MYTABLE_BORDER_TOP|#MYTABLE_BORDER_RIGHT|#MYTABLE_BORDER_BOTTOM|#MYTABLE_BORDER_LEFT
+	#MYTABLE_BORDER_DEFAULT=#PB_Ignore
+	
 	Interface MyTableCell Extends _MyTableObject
 		GetTable()
 		GetRow()
@@ -175,6 +186,8 @@ DeclareModule MyTable
 		SetImage(image.i)
 		GetValue.d()
 		SetValue(value.d)
+		SetBorder(border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
+		SetBorderStyle(border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)		
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			GetFormula.s()			
 			SetFormula(value.s)
@@ -185,7 +198,7 @@ DeclareModule MyTable
 		CompilerEndIf
 	EndInterface
 	
-
+	
 	
 	Interface MyTableCol Extends _MyTableObject
 		GetID()
@@ -265,6 +278,8 @@ DeclareModule MyTable
 		SetCellTooltip(row.i,col.i,value.s)
 		GetCellValue.d(row.i,col.i)
 		SetCellValue(row.i,col.i,value.d)
+		SetCellBorder(row.i,col.i,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
+		SetCellBorderStyle(row.i,col.i,border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)	
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			GetCellFormula.s(row.i,col.i)
 			SetCellFormula(row.i,col.i,value.s)

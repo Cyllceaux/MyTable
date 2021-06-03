@@ -194,6 +194,10 @@ Module MyTable
 		tooltip.s
 	EndStructure
 	
+	Structure strMyTableCellBorder
+		width.i
+		color.q
+	EndStructure
 	
 	Structure strMyTableCell Extends strMyTableAObject
 		
@@ -213,6 +217,8 @@ Module MyTable
 			matrix.s
 			List cells.strMyTableCell()
 		CompilerEndIf
+		border.i
+		Map borderstyle.strMyTableCellBorder()
 	EndStructure
 	
 	Structure strMyTableRow Extends strMyTableAObject
@@ -1336,7 +1342,57 @@ Module MyTable
 			
 			DrawingMode(#PB_2DDrawing_Outlined)	
 			If grid
-				Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground2)
+				If *cell\border = #MYTABLE_BORDER_DEFAULT
+					Box(bx,by,*col\calcwidth-MyTableW1,*row\calcheight,*this\headerbackground2)
+				ElseIf *cell\border				
+					DrawingMode(#PB_2DDrawing_Default)	
+					Protected borderwidth.i=0
+					Protected bordercolor.q=0
+					If Bool(*cell\border & #MYTABLE_BORDER_TOP)
+						borderwidth=*cell\borderstyle(Str(#MYTABLE_BORDER_TOP))\width
+						If borderwidth=#PB_Ignore
+							borderwidth=1
+						EndIf
+						bordercolor=*cell\borderstyle(Str(#MYTABLE_BORDER_TOP))\color
+						If bordercolor=#PB_Ignore
+							bordercolor=*this\headerbackground2
+						EndIf
+						Box(bx,by,*col\calcwidth-MyTableW1,borderwidth,bordercolor)
+					EndIf
+					If Bool(*cell\border & #MYTABLE_BORDER_LEFT)
+						borderwidth=*cell\borderstyle(Str(#MYTABLE_BORDER_LEFT))\width
+						If borderwidth=#PB_Ignore
+							borderwidth=1
+						EndIf
+						bordercolor=*cell\borderstyle(Str(#MYTABLE_BORDER_LEFT))\color
+						If bordercolor=#PB_Ignore
+							bordercolor=*this\headerbackground2
+						EndIf
+						Box(bx,by,borderwidth,*row\calcheight,bordercolor)
+					EndIf
+					If Bool(*cell\border & #MYTABLE_BORDER_BOTTOM)
+						borderwidth=*cell\borderstyle(Str(#MYTABLE_BORDER_BOTTOM))\width
+						If borderwidth=#PB_Ignore
+							borderwidth=1
+						EndIf
+						bordercolor=*cell\borderstyle(Str(#MYTABLE_BORDER_BOTTOM))\color
+						If bordercolor=#PB_Ignore
+							bordercolor=*this\headerbackground2
+						EndIf
+						Box(bx,by+*row\calcheight-borderwidth,*col\calcwidth-MyTableW1,borderwidth,bordercolor)
+					EndIf
+					If Bool(*cell\border & #MYTABLE_BORDER_RIGHT)
+						borderwidth=*cell\borderstyle(Str(#MYTABLE_BORDER_RIGHT))\width
+						If borderwidth=#PB_Ignore
+							borderwidth=1
+						EndIf
+						bordercolor=*cell\borderstyle(Str(#MYTABLE_BORDER_RIGHT))\color
+						If bordercolor=#PB_Ignore
+							bordercolor=*this\headerbackground2
+						EndIf
+						Box(bx+*col\calcwidth-borderwidth,by,borderwidth,*row\calcheight,bordercolor)
+					EndIf					
+				EndIf
 			EndIf
 			
 			Protected foi.i=0
@@ -1636,6 +1692,7 @@ Module MyTable
 			*cell\type=#MYTABLE_TYPE_CELL
 			*cell\col=SelectElement(*this\cols(),col)
 			*cell\vtable=?vtable_cell
+			*cell\border=#MYTABLE_BORDER_DEFAULT
 		Else
 			col+bgrid
 			If col<ListSize(*this\cols())
@@ -3158,6 +3215,8 @@ Module MyTable
 		DataSectionGetterSetter(Table,CellText)
 		DataSectionGetterSetter(Table,CellTooltip)
 		DataSectionGetterSetter(Table,CellValue)
+		DataSectionSetter(Table,CellBorder)
+		DataSectionSetter(Table,CellBorderStyle)
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Table,CellFormula)
 			DataSectionSetter(Table,Recalc)
@@ -3231,6 +3290,8 @@ Module MyTable
 		DataSectionGetterSetter(Cell,Data)
 		DataSectionGetterSetter(Cell,Image)
 		DataSectionGetterSetter(Cell,Value)
+		DataSectionSetter(Cell,Border)
+		DataSectionSetter(Cell,BorderStyle)
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
 			DataSectionGetterSetter(Cell,Formula)
 		CompilerEndIf

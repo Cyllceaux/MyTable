@@ -72,7 +72,8 @@ MacroGetterSetter(Cell,Text,s)
 MacroGetterSetter(Cell,Tooltip,s)
 MacroGetterSetter(Cell,Value,d)
 MacroGetterSetter(Cell,Image,i)
-
+Declare _MyTable_Cell_SetBorder(*this.strMyTableCell,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
+Declare _MyTable_Cell_SetBorderStyle(*this.strMyTableCell,border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)
 
 
 ;- Intern
