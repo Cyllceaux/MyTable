@@ -3,6 +3,7 @@
 #MYTABLE_FORMULA = 0
 #MYTABLE_MATRIX = 0
 
+XIncludeFile "default.pb"
 XIncludeFile "..\mytable.pbi"
 
 

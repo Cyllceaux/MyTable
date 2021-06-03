@@ -3,6 +3,7 @@
 
 #MYTABLE_GRID = 0
 
+XIncludeFile "default.pb"
 XIncludeFile "..\mytable.pbi"
 
 

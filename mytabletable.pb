@@ -140,51 +140,52 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 				
 				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,force)
 				
-				
-				If *cell
-					If *cell\font
-						If *cell\font<>font
-							font=*cell\font
-							DrawingFont(font)
-						EndIf
-					Else
-						If *row\font
-							If *row\font<>font
-								font=*row\font
+				If *cell\text<>""
+					If *cell
+						If *cell\font
+							If *cell\font<>font
+								font=*cell\font
 								DrawingFont(font)
 							EndIf
 						Else
-							If *col\font
-								If *col\font<>font
-									font=*col\font
+							If *row\font
+								If *row\font<>font
+									font=*row\font
 									DrawingFont(font)
 								EndIf
 							Else
-								If *this\font<>font
-									font=*this\font
-									DrawingFont(font)
+								If *col\font
+									If *col\font<>font
+										font=*col\font
+										DrawingFont(font)
+									EndIf
+								Else
+									If *this\font<>font
+										font=*this\font
+										DrawingFont(font)
+									EndIf
 								EndIf
 							EndIf
 						EndIf
-					EndIf
-					
-					If *cell\textwidth=0
-						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-							*cell\textwidth=MyTableW20
-						Else
-							*cell\textwidth=_MyTableTextWidth(*cell\text)
+						
+						If *cell\textwidth=0
+							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+								*cell\textwidth=MyTableW20
+							Else
+								*cell\textwidth=_MyTableTextWidth(*cell\text)
+							EndIf
 						EndIf
-					EndIf
-					If *cell\textheight=0
-						If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-							*cell\textheight=MyTableW20
-						Else
-							*cell\textheight=_MyTableTextHeight(*cell\text)
+						If *cell\textheight=0
+							If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+								*cell\textheight=MyTableW20
+							Else
+								*cell\textheight=_MyTableTextHeight(*cell\text)
+							EndIf
 						EndIf
-					EndIf
-					Protected dux=DesktopUnscaledX(*cell\textwidth)
-					If dux>w
-						w=dux
+						Protected dux=DesktopUnscaledX(*cell\textwidth)
+						If dux>w
+							w=dux
+						EndIf
 					EndIf
 				EndIf
 			Next
@@ -369,7 +370,7 @@ Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_
 		
 		LastElement(*this\rows())
 		*row=AddElement(*this\rows())
-		
+
 		With *row
 			*row\listindex=ListIndex(*this\rows())
 			\vtable=?vtable_row
@@ -381,7 +382,7 @@ Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_
 			\image=image
 			\type=#MYTABLE_TYPE_ROW
 			\tooltip=tooltip
-			If IsImage(image)				
+			If image And IsImage(image)				
 				\sclaedimage=CopyImage(image,#PB_Any)
 				ResizeImage(\sclaedimage,MyTableW16,MyTableH16)
 			EndIf
@@ -396,9 +397,9 @@ Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_
 			\table=*this
 			
 			
-			Protected i=0
 			
 			If text<>""
+			Protected i=0
 				Protected c=CountString(text,sep)+1
 				If c=1
 					*cell=_MyTableGetOrAddCell(*row,0)

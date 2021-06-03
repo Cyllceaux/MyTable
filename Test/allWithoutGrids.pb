@@ -1,6 +1,6 @@
 ﻿EnableExplicit
 
-#MYTABLE_DEBUG = 1
+#MYTABLE_DEBUG = 0
 #MYTABLE_DEBUG_LEVEL = 0
 
 DebugLevel #MYTABLE_DEBUG_LEVEL
@@ -10,6 +10,7 @@ DebugLevel #MYTABLE_DEBUG_LEVEL
 
 UsePNGImageDecoder()
 
+XIncludeFile "default.pb"
 XIncludeFile "..\mytable.pbi"
 
 UseModule MyTable
@@ -204,23 +205,7 @@ UseModule MyTable
 	BindEvent(#PB_Event_RestoreWindow,@evtResizeWindow(),mainWindow)
 	BindEvent(#PB_Event_MaximizeWindow,@evtResizeWindow(),mainWindow)
 	
-	
-	
-	Macro DQ
-		"
-	EndMacro
-	
-	Macro _makeTimestamp(name)
-		CompilerIf #PB_Compiler_Debugger 
-			CompilerIf #MYTABLE_DEBUG
-				Debug "",#MYTABLE_DEBUG_LEVEL
-				Debug "------------------"+DQ#name#DQ+"------Dauer: "+Str(ElapsedMilliseconds()-timestamp)+"ms -----------------------------------------------",#MYTABLE_DEBUG_LEVEL
-				timestamp=ElapsedMilliseconds()
-				Debug "",#MYTABLE_DEBUG_LEVEL
-				
-			CompilerEndIf
-		CompilerEndIf
-	EndMacro
+
 	
 	Define timestamp=ElapsedMilliseconds()
 	
@@ -342,7 +327,7 @@ UseModule MyTable
 	_makeTimestamp(AddRow Table2)
 	
 	For i=1 To 10000
-		*canvasTable4\AddRow(Str(i)+"|firma "+Str(i)+"|Vorname "+Str(i)+#CRLF$+"|Nachname "+Str(i)+"|"+FormatDate("%dd.%mm.%yyyy",AddDate(Date(1980,1,1,0,0,0),#PB_Date_Day,i))+"|012345678-"+Str(i)+"|test"+Str(i)+"@test.de")
+		*row=*canvasTable4\AddRow(Str(i)+"|firma "+Str(i)+"|Vorname "+Str(i)+#CRLF$+"|Nachname "+Str(i)+"|"+FormatDate("%dd.%mm.%yyyy",AddDate(Date(1980,1,1,0,0,0),#PB_Date_Day,i))+"|012345678-"+Str(i)+"|test"+Str(i)+"@test.de")
 		If i % 9=0
 			*canvasTable4\SetRowHeight(i-1,50)
 		EndIf

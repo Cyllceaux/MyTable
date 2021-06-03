@@ -1,7 +1,7 @@
 ﻿EnableExplicit
 
 
-
+XIncludeFile "default.pb"
 XIncludeFile "..\mytable.pbi"
 
 

@@ -7,6 +7,7 @@ DebugLevel #MYTABLE_DEBUG_LEVEL
 
 UsePNGImageDecoder()
 
+XIncludeFile "default.pb"
 XIncludeFile "..\mytable.pbi"
 
 UseModule MyTable
@@ -270,22 +271,6 @@ UseModule MyTable
 	BindEvent(#PB_Event_MaximizeWindow,@evtResizeWindow(),mainWindow)
 	BindMenuEvent(menu,#MAIN_RETURN,@EvtReturn())
 	
-	
-	
-	Macro DQ
-		"
-	EndMacro
-	
-	Macro _makeTimestamp(name)
-		CompilerIf #PB_Compiler_Debugger 
-			CompilerIf #MYTABLE_DEBUG_LEVEL=1
-				Debug "",1
-				Debug "------------------"+DQ#name#DQ+"------Dauer: "+Str(ElapsedMilliseconds()-timestamp)+"ms -----------------------------------------------",1
-				timestamp=ElapsedMilliseconds()
-				Debug "",1
-			CompilerEndIf
-		CompilerEndIf
-	EndMacro
 	
 	Define timestamp=ElapsedMilliseconds()
 	
