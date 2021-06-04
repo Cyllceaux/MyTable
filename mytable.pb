@@ -64,7 +64,7 @@ Module MyTable
 				tname=_MyTableDebugGetName(*this)
 			EndIf
 			
-			Protected debugline.s=LSet(tname+":",16," ")
+			Protected debugline.s=LSet(tname+":",20," ")
 			debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))),20," ")
 			
 			
@@ -1684,6 +1684,7 @@ Module MyTable
 	EndProcedure
 	
 	Procedure _MyTableClearMaps(*this.strMyTableTable)
+		_callcountStart(clearmaps)
 		If *this
 			ForEach *this\selected()
 				If *this\selected()=#False
@@ -1707,6 +1708,7 @@ Module MyTable
 				Next
 			CompilerEndIf
 		EndIf		
+		_callcountEnde(clearmaps)
 	EndProcedure
 	
 	
