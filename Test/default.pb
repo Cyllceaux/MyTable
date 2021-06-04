@@ -15,3 +15,5 @@ Macro _makeTimestamp(name)
 		CompilerEndIf
 	CompilerEndIf
 EndMacro
+
+Define timestamp=ElapsedMilliseconds()

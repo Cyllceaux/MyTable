@@ -671,12 +671,12 @@ Module MyTable
 						selecte=Bool(selecte=#False)
 						ende=Bool(selecte=#False)
 					EndIf
+	
 					
 					If selecte Or *this\rows()=*cell\row Or *this\rows()=*tr\row
 						For idx=min To max
 							Protected *tc.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),idx,#True)	
-							If temp 
-								
+							If temp
 								*this\tempselected(Str(*tc))=Bool(*this\tempselected(Str(*tc))=#False)
 							Else
 								*this\selected(Str(*tc))=#True
@@ -922,21 +922,28 @@ Module MyTable
 			format=*cell\col\format
 		EndIf
 		
-		If Bool(flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
-			*cell\value=ParseDate(format,*cell\text)
-		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
-			*cell\value=Val(*cell\text)
-		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
-			*cell\value=ValD(*cell\text)
-		ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-			*cell\value=Bool(*cell\text="1" Or 
-			                 LCase(*cell\text)="x" Or 
-			                 LCase(*cell\text)="#true" Or
-			                 LCase(*cell\text)="true" Or
-			                 LCase(*cell\text)="yes")
+		If *cell\text=""
+			*cell\value=0
 			*cell\checked=*cell\value
+		Else
+			If Bool(flags & #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME)
+				*cell\value=ParseDate(format,*cell\text)
+			ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_INTEGER)
+				*cell\value=Val(*cell\text)
+			ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_DOUBLE)
+				*cell\value=ValD(*cell\text)
+			ElseIf Bool(flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
+				*cell\value=Bool(*cell\text="1" Or 
+				                 LCase(*cell\text)="x" Or 
+				                 LCase(*cell\text)="#true" Or
+				                 LCase(*cell\text)="true" Or
+				                 LCase(*cell\text)="yes")
+				*cell\checked=*cell\value
+			EndIf
 		EndIf
+		
 		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
+			*cell\calced=#True
 			If override
 				If *Cell\table\application
 					_MyTableFormulaCalcApplication(*cell\table\application)
@@ -2468,7 +2475,7 @@ Module MyTable
 					*row=SelectElement(*this\rows(),*rowcol\row)
 					*cell=SelectElement(*row\cells(),*rowcol\col)
 					If *cell<>*this\lastcell
-						_MyTableSelectCell(*cell,#False,#True,multiselect,#True)
+						_MyTableSelectCell(*cell,#False,#True,multiselect,*this\datagrid)
 						*this\dirty=#True
 						_MyTable_Table_Redraw(*this)
 					EndIf

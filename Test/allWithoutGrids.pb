@@ -207,7 +207,7 @@ UseModule MyTable
 	
 
 	
-	Define timestamp=ElapsedMilliseconds()
+	
 	
 	Define *canvasTable.MyTableTable=MyTableRegister(mainWindow,canvasTable,hscrollTable,vscrollTable,#MYTABLE_TABLE_FLAGS_DEFAULT,0,"canvasTable")
 	Define *canvasTable2.MyTableTable=MyTableRegister(mainWindow,canvasTable2,hscrollTable2,vscrollTable2,#MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT|#MYTABLE_TABLE_FLAGS_LAST_STRETCH|#MYTABLE_TABLE_FLAGS_GRID,0,"canvasTable2")
