@@ -399,19 +399,21 @@ Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",id.q=#PB_Igno
 			\table=*this\table
 			
 			
-			Protected i=0
+			
 			
 			If text<>""
-				Protected c=CountString(text,sep)+1
-				If c=1
-					*cell=_MyTableGetOrAddCell(*row,0)
-					_MyTableFillCellText(*cell,text)
-				Else
-					For i=1 To c
+				Protected i=0
+				Protected Dim result.s(ListSize(*row\table\cols()))
+				Protected c= _MyTableStringField(text,result(),sep)
+				If c
+					For i=1 To c					
 						*cell=_MyTableGetOrAddCell(*row,i-1)
-						_MyTableFillCellText(*cell,StringField(text,i,sep))
+						If *cell
+							_MyTableFillCellText(*cell,result(i-1))							
+						EndIf
 					Next
 				EndIf
+				FreeArray(result())
 			EndIf
 		EndWith
 		*this\table\rowsById(Str(*row\id))=*row

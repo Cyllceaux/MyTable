@@ -1,6 +1,6 @@
 ﻿EnableExplicit
 
-#MYTABLE_DEBUG = 0
+#MYTABLE_DEBUG = 1
 #MYTABLE_DEBUG_LEVEL = 0
 
 DebugLevel #MYTABLE_DEBUG_LEVEL

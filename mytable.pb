@@ -378,6 +378,23 @@ Module MyTable
 		XIncludeFile "mytablecalc.pbi"
 	CompilerEndIf
 	
+	Procedure _MyTableStringField(text.s,Array result.s(1),separator.s="|") 
+		Protected idx=0
+		If separator=""
+			result(0)=text		
+			idx=1
+		ElseIf text<>"" 
+			
+			Protected c=CountString(text,separator)+1
+			For idx=1 To c
+				result(idx-1)=StringField(text,idx,separator)
+			Next
+			
+		EndIf
+		ProcedureReturn idx
+		
+	EndProcedure 
+	
 	
 	Procedure _MyTableEditSetPos(Gadget, Position)
 		CompilerSelect #PB_Compiler_OS
@@ -671,7 +688,7 @@ Module MyTable
 						selecte=Bool(selecte=#False)
 						ende=Bool(selecte=#False)
 					EndIf
-	
+					
 					
 					If selecte Or *this\rows()=*cell\row Or *this\rows()=*tr\row
 						For idx=min To max
@@ -1141,23 +1158,29 @@ Module MyTable
 	EndProcedure
 	
 	Procedure _MyTableTextHeight(text.s)
-		ProcedureReturn TextHeight(text) * (CountString(text,#CRLF$)+1)
+		Protected result.i=1
+		If text<>""
+			result=TextHeight(text) * (CountString(text,#CRLF$)+1)
+		EndIf
+		ProcedureReturn result
 	EndProcedure
 	
 	Procedure _MyTableTextWidth(text.s)
-		Protected result.i=0
-		Protected c=CountString(text,#CRLF$)		
-		If c>0
-			c+1
-			Protected idx=0
-			For idx=1 To c
-				Protected v=TextWidth(StringField(text,idx,#CRLF$))
-				If v>result
-					result=v
-				EndIf
-			Next
-		Else
-			result=TextWidth(text)
+		Protected result.i=1
+		If text<>""
+			Protected c=CountString(text,#CRLF$)		
+			If c>0
+				c+1
+				Protected idx=0
+				For idx=1 To c
+					Protected v=TextWidth(StringField(text,idx,#CRLF$))
+					If v>result
+						result=v
+					EndIf
+				Next
+			Else
+				result=TextWidth(text)
+			EndIf
 		EndIf
 		ProcedureReturn result
 	EndProcedure

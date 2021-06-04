@@ -107,7 +107,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 				StartDrawing(CanvasOutput(*this\canvas))
 				_MyTable_Table_RecalcExp(*this,force)
 			EndIf
-			DrawingFont(*this\font)
+			
 			
 			
 			Protected w=0
@@ -115,6 +115,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
 			
 			Protected font=*this\font
+			DrawingFont(font)
 			
 			
 			If *col\textwidth=0
@@ -222,7 +223,7 @@ Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,f
 		If Not all(Str(*this.strMyTableTable))
 			_callcountEnde(autosizecol)
 			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndIf
 EndProcedure
@@ -401,16 +402,17 @@ Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_
 			
 			If text<>""
 				Protected i=0
-				Protected c=CountString(text,sep)+1
-				If c=1
-					*cell=_MyTableGetOrAddCell(*row,0)
-					_MyTableFillCellText(*cell,text)
-				Else
-					For i=1 To c
+				Protected Dim result.s(ListSize(*row\table\cols()))
+				Protected c= _MyTableStringField(text,result(),sep)
+				If c
+					For i=1 To c					
 						*cell=_MyTableGetOrAddCell(*row,i-1)
-						_MyTableFillCellText(*cell,StringField(text,i,sep))
+						If *cell
+							_MyTableFillCellText(*cell,result(i-1))							
+						EndIf
 					Next
 				EndIf
+				FreeArray(result())
 			EndIf
 		EndWith
 		*this\rowsById(Str(*row\id))=*row
