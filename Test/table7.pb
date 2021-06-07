@@ -22,7 +22,7 @@ UseModule MyTable
 	*tablestyle\SetFrontColor(RGBA(10,10,10,255))
 	*tablestyle\SetForeColor(RGBA(210,210,210,255))
 	*tablestyle\SetBorderColor(RGBA(210,210,210,255))
-	
+	*tablestyle\SetSelectedForeColor(RGBA(20,20,20,255))
 	
 	#Rows=100
 	#Cols=10

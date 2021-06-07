@@ -23,7 +23,9 @@ Module MyTable
 		border.strMyTableStyleBorder
 		forecolor.q
 		selectedcolor.q
+		selectedforecolor.q
 		elementselectedcolor.q
+		elementselectedforecolor.q
 	EndStructure
 	
 	Structure strMyTableObject Extends strMyTableVTable
@@ -131,6 +133,14 @@ Module MyTable
 		*lastcell.strMyTableCell
 		*lastrow.strMyTableRow
 		*lastcol.strMyTableCol
+		
+		callbackCellChangedChecked.MyTableProtoCallbackCellChangedChecked
+		callbackCellChangedText.MyTableProtoCallbackCellChangedText
+		callbackCellChangedValue.MyTableProtoCallbackCellChangedValue
+		callbackCellSelected.MyTableProtoCallbackCellSelected
+		callbackRowChangedChecked.MyTableProtoCallbackRowChangedChecked
+		callbackRowChangedExpanded.MyTableProtoCallbackRowChangedExpanded
+		callbackProtoRowSelected.MyTableProtoCallbackRowSelected
 	EndStructure
 	
 	Structure strMyTableApplication Extends strMyTableObject
@@ -170,6 +180,7 @@ Module MyTable
 			\frontcolor=RGBA(230,230,230,255)
 			\forecolor=RGBA(50,50,50,255)
 			\selectedcolor=RGBA(230,230,250,255)
+			\selectedforecolor=RGBA(20,20,20,255)
 			\border\bordercolor=RGBA(50,50,50,255)
 			\border\selectedbordercolor=RGBA(200,200,250,255)
 		EndWith
@@ -567,7 +578,7 @@ Module MyTable
 				*this\dirty=#True
 				_MyTable_Table_Predraw(*this)
 			Else
-				If Not multiselect Or (Not shift And Not control)
+				If Not multiselect Or (Not shift And Not control) And *rc\col>0 And *rc\row>-1
 					ClearMap(*this\selectedCells())
 					ClearMap(*this\selectedRows())
 					ClearMap(*this\selectedCols())
@@ -601,7 +612,7 @@ Module MyTable
 		*this\md=#False
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
-			If *rc\col>-1 And *rc\row>-1
+			If *rc\col>-1 And *rc\row>-1 And Not *rc\exp And Not *rc\check
 				If multiselect
 					ForEach *this\tempselectedCells()
 						*this\selectedCells(MapKey(*this\tempselectedCells()))=*this\tempselectedCells()
@@ -612,16 +623,13 @@ Module MyTable
 					ForEach *this\tempselectedRows()
 						*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()
 					Next
-				Else
-					ClearMap(*this\selectedCells())
-					ClearMap(*this\selectedCols())
-					ClearMap(*this\selectedRows())
+					_MyTableSelect(*this,*rc,#False)	
 				EndIf
 				ClearMap(*this\tempselectedCells())
 				ClearMap(*this\tempselectedRows())
 				ClearMap(*this\tempselectedCols())
 				
-				_MyTableSelect(*this,*rc,#False)	
+				
 				_MyTable_Table_Redraw(*this)
 			EndIf
 			FreeStructure(*rc)
@@ -935,6 +943,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(gruppe,SelectedColor)
 		_MyTableDataSectionSetterGetter(gruppe,BorderColor)
 		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderColor)
+		_MyTableDataSectionSetterGetter(gruppe,SelectedForeColor)
 		
 		_MyTableDataSectionMethode(gruppe,Free)
 		_MyTableDataSectionMethode(gruppe,Delete)
@@ -955,11 +964,12 @@ Module MyTable
 		_MyTableDataSectionCellStyleDefault(Style)
 		_MyTableDataSectionSetterGetter(Style,ElementSelectedColor)
 		_MyTableDataSectionSetterGetter(Style,ElementSelectedBorderColor)
+		_MyTableDataSectionSetterGetter(Style,ElementSelectedForeColor)
 		
 		vtable_style_col:;- Style Col
 		_MyTableDataSectionCellStyleDefault(Style)
 		_MyTableDataSectionSetterGetter(Style,ElementSelectedColor)
-		_MyTableDataSectionSetterGetter(Style,ElementSelectedBorderColor)
+		_MyTableDataSectionSetterGetter(Style,ElementSelectedForeColor)
 		
 		vtable_style_table:;- Style Table
 		_MyTableDataSectionStyleDefault(Style)
@@ -1004,8 +1014,17 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,Recalc)
 		_MyTableDataSectionMethode(Table,Free)
 		
+		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedChecked)
+		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedText)
+		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedValue)
+		_MyTableDataSectionMethode(Table,RegisterCallbackCellSelected)
+		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedChecked)
+		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedExpanded)
+		_MyTableDataSectionMethode(Table,RegisterCallbackProtoRowSelected)
+		
 		vtable_row:;- Row
 		_MyTableDataSectionDefault(Row)
+		_MyTableDataSectionGetter(Row,Parent)
 		_MyTableDataSectionSetterGetter(Row,Expanded)
 		_MyTableDataSectionSetterGetter(Row,Image)
 		_MyTableDataSectionSetterGetter(Row,Checked)
@@ -1029,6 +1048,7 @@ Module MyTable
 		
 		vtable_cell:;- Cell
 		_MyTableDataSectionDefault(Cell)
+		_MyTableDataSectionGetter(Cell,Parent)
 		_MyTableDataSectionSetterGetter(Cell,Text)
 		_MyTableDataSectionSetterGetter(Cell,Value)
 		_MyTableDataSectionSetterGetter(Cell,Image)

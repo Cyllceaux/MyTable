@@ -4,6 +4,12 @@
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Cell_GetParent(*this.strMyTableCell)
+	If *this
+		ProcedureReturn *this\parent
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Cell_GetFlags(*this.strMyTableCell)
 	If *this
 		ProcedureReturn *this\flags

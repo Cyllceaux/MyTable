@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 337
+	#MYTABLE_VERSION = 396
 	#MYTABLE_VERSION_DATE = 20210607
 	
 	Enumeration _mytable_type
@@ -21,6 +21,7 @@
 		SetSelectedColor(value.q):GetSelectedColor.q()
 		SetBorderColor(value.q):GetBorderColor.q()
 		SetSelectedBorderColor(value.q):GetSelectedBorderColor.q()
+		SetSelectedForeColor(value.q):GetSelectedForeColor.q()
 		Free()
 		Delete()
 	EndInterface
@@ -37,7 +38,7 @@
 		#MYTABLE_STYLE_HALIGN_RIGHT
 	EndEnumeration
 	
-	Interface MyTableStyleCell Extends MYTableStyleObject
+	Interface MyTableStyleCell Extends MYTableStyleObject		
 		SetHAlign(value.i):GetHAlign()
 		SetVAlign(value.i):GetVAlign()		
 	EndInterface
@@ -45,11 +46,13 @@
 	Interface MyTableStyleCol Extends MYTableStyleCell
 		SetElementSelectedColor(value.q):GetElementSelectedColor.q()
 		SetElementSelectedBorderColor(value.q):GetElementSelectedBorderColor.q()
+		SetElementSelectedForeColor(value.q):GetElementSelectedForeColor.q()
 	EndInterface
 	
 	Interface MyTableStyleRow Extends MyTableStyleCell
 		SetElementSelectedColor(value.q):GetElementSelectedColor.q()
 		SetElementSelectedBorderColor(value.q):GetElementSelectedBorderColor.q()
+		SetElementSelectedForeColor(value.q):GetElementSelectedForeColor.q()
 	EndInterface
 	
 	Interface MyTableStyleTable Extends MYTableStyleObject
@@ -74,6 +77,7 @@
 	EndEnumeration
 	
 	Interface MyTableCell Extends MyTableObject
+		GetParent()
 		SetText(value.s):GetText.s()
 		SetValue(value.d):GetValue.d()
 		SetImage(value.i):GetImage.i()
@@ -100,6 +104,7 @@
 	EndInterface
 	
 	Interface MyTableRow Extends MyTableObject
+		GetParent()
 		SetExpanded(value.b):GetExpanded.b()
 		SetImage(value.i):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
@@ -122,6 +127,15 @@
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_BORDER
+	
+	Prototype MyTableProtoCallbackCellChangedChecked(*cell.MyTableCell)
+	Prototype MyTableProtoCallbackCellChangedText(*cell.MyTableCell,old.s)
+	Prototype MyTableProtoCallbackCellChangedValue(*cell.MyTableCell,old.d)
+	Prototype MyTableProtoCallbackCellSelected(*cell.MyTableCell)
+	Prototype MyTableProtoCallbackRowChangedChecked(*row.MyTableRow)
+	Prototype MyTableProtoCallbackRowChangedExpanded(*row.MyTableRow)
+	Prototype MyTableProtoCallbackRowSelected(*row.MyTableRow)
+	
 	
 	Interface MyTableTable Extends MyTableObject
 		SetName(value.s):GetName.s()
@@ -146,6 +160,14 @@
 		Redraw()
 		Recalc()
 		Free()
+		
+		RegisterCallbackCellChangedChecked(callback.MyTableProtoCallbackCellChangedChecked)
+		RegisterCallbackCellChangedText(callback.MyTableProtoCallbackCellChangedText)
+		RegisterCallbackCellChangedValue(callback.MyTableProtoCallbackCellChangedValue)
+		RegisterCallbackCellSelected(callback.MyTableProtoCallbackCellSelected)
+		RegisterCallbackRowChangedChecked(callback.MyTableProtoCallbackRowChangedChecked)
+		RegisterCallbackRowChangedExpanded(callback.MyTableProtoCallbackRowChangedExpanded)
+		RegisterCallbackProtoRowSelected(callback.MyTableProtoCallbackRowSelected)
 	EndInterface
 	
 	Interface MyTableApplication Extends MyTableObject

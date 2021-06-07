@@ -271,6 +271,14 @@ Procedure.q _MyTable_GetSelectedColor(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Procedure.q _MyTable_GetSelectedForeColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this,selectedforecolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_GetBorderColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
@@ -391,10 +399,12 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	Protected bx=-scrollx
 	Protected idx
 	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
-	Protected checkboxes.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+	Protected checkboxes.b=#False
 	Protected border.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_BORDER)
 	Protected selected.b=#False
 	For idx=1 To cols
+		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+		
 		DrawingMode(#PB_2DDrawing_Default)			
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
 		
@@ -461,7 +471,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			EndIf
 			
 		EndIf
-		
+		checkboxes=#False
 		checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
 		
 		If idx=1
@@ -529,7 +539,11 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
 		If *cell\text<>""
 			DrawingMode(#PB_2DDrawing_Transparent)	
-			DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+			If selected
+				DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell))
+			Else
+				DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+			EndIf
 		EndIf
 		If border
 			DrawingMode(#PB_2DDrawing_Outlined)
@@ -983,3 +997,46 @@ Procedure _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackCellChangedChecked(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedChecked)
+	If *this
+		*this\CallbackCellChangedChecked=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackCellChangedText(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedText)
+	If *this
+		*this\CallbackCellChangedText=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackCellChangedValue(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedValue)
+	If *this
+		*this\CallbackCellChangedValue=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackCellSelected(*this.strMyTableTable,callback.MyTableProtoCallbackCellSelected)
+	If *this
+		*this\CallbackCellSelected=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackRowChangedChecked(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedChecked)
+	If *this
+		*this\CallbackRowChangedChecked=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackRowChangedExpanded(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedExpanded)
+	If *this
+		*this\CallbackRowChangedExpanded=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackProtoRowSelected(*this.strMyTableTable,callback.MyTableProtoCallbackRowSelected)
+	If *this
+		*this\CallbackProtoRowSelected=callback
+	EndIf
+EndProcedure
+

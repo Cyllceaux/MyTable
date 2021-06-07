@@ -167,10 +167,26 @@ Procedure.q _MyTable_Style_GetSelectedColor(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Procedure.q _MyTable_Style_GetSelectedForeColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this\obj,selectedforecolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_Style_GetElementSelectedColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
 		_MyTableStyleGet(*this\obj,elementselectedcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_Style_GetElementSelectedForeColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this\obj,elementselectedforecolor)
 		ProcedureReturn result
 	EndIf
 EndProcedure
@@ -249,9 +265,21 @@ Procedure _MyTable_Style_SetSelectedColor(*this.strMyTableStyleObject,value.q)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Style_SetSelectedForeColor(*this.strMyTableStyleObject,value.q)
+	If *this
+		_MyTableStyleSet(selectedforecolor)
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Style_SetElementSelectedColor(*this.strMyTableStyleObject,value.q)
 	If *this
 		_MyTableStyleSet(elementselectedcolor)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Style_SetElementSelectedForeColor(*this.strMyTableStyleObject,value.q)
+	If *this
+		_MyTableStyleSet(elementselectedforecolor)
 	EndIf
 EndProcedure
 
