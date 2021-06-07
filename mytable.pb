@@ -122,6 +122,9 @@ Module MyTable
 		Map selectedCells.b()
 		Map selectedRows.b()
 		Map selectedCols.b()
+		Map tempselectedCells.b()
+		Map tempselectedRows.b()
+		Map tempselectedCols.b()
 		selectall.b
 		
 		md.b
@@ -142,6 +145,8 @@ Module MyTable
 		col.i
 		bottom.b
 		right.b
+		exp.b
+		check.b
 	EndStructure
 	
 	XIncludeFile "declare.pb"
@@ -245,6 +250,10 @@ Module MyTable
 	EndProcedure
 	
 	Procedure _MyTableGetRowCol(*this.strMyTableTable)
+		Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+		Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+		
+		Protected *row.strMyTableRow=0
 		Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 		Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 		Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
@@ -291,7 +300,7 @@ Module MyTable
 		
 		If *rc\row=-2	
 			ForEach *this\expRows()
-				Protected *row.strMyTableRow=*this\expRows()
+				*row=*this\expRows()
 				If my>(vsc+*row\calcheight-MyTableH2) And my<(vsc+*row\calcheight+MyTableH2)
 					*rc\row=ListIndex(*this\expRows())
 					*rc\bottom=#True
@@ -303,6 +312,30 @@ Module MyTable
 					vsc+*row\calcheight
 				EndIf
 			Next
+		EndIf
+		
+		If *rc\row>-1 And *rc\col=0
+			If hierarchical Or checkboxes
+				Protected ex=*row\level*MyTableW20
+				If mx>ex
+					ex=mx-ex
+					If hierarchical And checkboxes
+						If ex<MyTableW20
+							*rc\exp=#True
+						ElseIf ex<(MyTableW20*2)
+							*rc\check=#True
+						EndIf
+					ElseIf hierarchical
+						If ex<MyTableW20
+							*rc\exp=#True
+						EndIf
+					ElseIf checkboxes
+						If ex<MyTableW20
+							*rc\check=#True
+						EndIf
+					EndIf
+				EndIf
+			EndIf
 		EndIf
 		
 		ProcedureReturn *rc
@@ -339,8 +372,151 @@ Module MyTable
 		EndIf
 	EndProcedure
 	
+	Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
+		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+		
+		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
+		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+		Protected rf,rt,cf,ct,r,c
+		
+		Protected *cell.strMyTableCell=0
+		Protected *col.strMyTableCol=0
+		Protected *row.strMyTableRow=0
+		
+		
+		If *rc\row=-1 And *rc\col>-1
+			*col=SelectElement(*this\cols(),*rc\col)
+			Select *col\sort
+				Case #MYTABLE_COL_SORT_NONE
+					_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_ASC)
+				Case #MYTABLE_COL_SORT_ASC
+					_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_DESC)
+				Case #MYTABLE_COL_SORT_DESC
+					_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_NONE)
+			EndSelect		
+			*this\md=#False
+		Else
+			If fullrow
+				If *rc\row>-1 And *rc\col>-1
+					SelectElement(*this\expRows(),*rc\row)
+					*row=*this\expRows()
+					
+					If multiselect And 
+					   (shift Or *this\md) And 
+					   *row<>*this\lastrow And
+					   *this\lastrow<>0 And 
+					   *row\level=*this\lastrow\level And 
+					   *row\parent=*this\lastrow\parent
+						
+						rf=-1
+						rt=-1
+						ForEach *this\expRows()
+							If *this\expRows()=*row
+								rf=ListIndex(*this\expRows())
+							EndIf
+							If *this\expRows()=*this\lastrow
+								rt=ListIndex(*this\expRows())
+							EndIf
+							If rf>-1 And rt>-1
+								Break
+							EndIf
+						Next
+						If rf>-1 And rt>-1
+							If rt<rf
+								Swap rt,rf									
+							EndIf
+							For r=rf To rt
+								SelectElement(*this\expRows(),r)
+								*row=*this\expRows()
+								If temp
+									*this\tempselectedRows(Str(*row))=#True
+								Else
+									*this\selectedRows(Str(*row))=#True
+								EndIf
+							Next
+						EndIf
+					Else
+						If temp
+							*this\tempselectedRows(Str(*row))=#True
+						Else
+							*this\lastrow=*row
+							*this\selectedRows(Str(*row))=#True
+						EndIf
+					EndIf
+					*this\dirty=#True
+				EndIf
+			Else
+				If *rc\row>-1 And *rc\col>-1
+					SelectElement(*this\expRows(),*rc\row)
+					*row=*this\expRows()
+					*cell=_MyTableGetOrAddCell(*row,*rc\col)
+					If multiselect And 
+					   (shift Or *this\md) And 
+					   *cell<>*this\lastcell And 
+					   *this\lastcell<>0 And 
+					   *cell\row\level=*this\lastcell\row\level And
+					   *cell\row\parent=*this\lastcell\row\parent
+						
+						cf=*cell\col\listindex
+						ct=*this\lastcell\col\listindex
+						rf=-1
+						rt=-1
+						ForEach *this\expRows()
+							If *this\expRows()=*cell\row
+								rf=ListIndex(*this\expRows())
+							EndIf
+							If *this\expRows()=*this\lastcell\row
+								rt=ListIndex(*this\expRows())
+							EndIf
+							If rf>-1 And rt>-1
+								Break
+							EndIf								
+						Next
+						If rf>-1 And rt>-1
+							If rt<rf
+								Swap rt,rf									
+							EndIf
+							If ct<cf
+								Swap ct,cf									
+							EndIf
+							For r=rf To rt
+								SelectElement(*this\expRows(),r)
+								*row=*this\expRows()
+								For c=cf To ct
+									*cell=_MyTableGetOrAddCell(*row,c)									
+									If temp
+										*this\tempselectedCells(Str(*cell))=#True
+									Else
+										*this\selectedCells(Str(*cell))=#True
+									EndIf
+								Next
+							Next								
+						EndIf
+					Else
+						
+						If temp
+							*this\tempselectedCells(Str(*cell))=#True
+						Else
+							*this\lastcell=*cell
+							*this\selectedCells(Str(*cell))=#True
+						EndIf
+					EndIf
+					
+				EndIf
+			EndIf
+		EndIf
+		*this\dirty=#True
+	EndProcedure
+	
 	Procedure _MyTableEvtCanvasMouseMove()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+		
+		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
+		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
+		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+		
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 			
@@ -352,6 +528,15 @@ Module MyTable
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
 			Else
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_Default)
+				
+				If *this\md And multiselect
+					ClearMap(*this\tempselectedCells())
+					ClearMap(*this\tempselectedRows())
+					ClearMap(*this\tempselectedCols())
+					_MyTableSelect(*this,*rc,#True)
+					*this\dirty=#True
+					_MyTable_Table_Redraw(*this)
+				EndIf				
 			EndIf
 			
 			FreeStructure(*rc)
@@ -360,130 +545,46 @@ Module MyTable
 	
 	Procedure _MyTableEvtCanvasMouseLeftDown()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+		Protected *row.strMyTableRow=0
+		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
-		Protected rf,rt,cf,ct,r,c
 		
 		*this\md=#True
-		If Not multiselect Or (Not shift And Not control)
-			ClearMap(*this\selectedCells())
-			ClearMap(*this\selectedRows())
-			ClearMap(*this\selectedCols())
-			*this\selectall=#False
-			*this\lastcell=0
-			*this\lastrow=0
-			*this\lastcol=0
-		EndIf
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
-			Protected *cell.strMyTableCell=0
-			Protected *col.strMyTableCol=0
-			Protected *row.strMyTableRow=0
 			
-			If *rc\row=-1 And *rc\col>-1
-				*col=SelectElement(*this\cols(),*rc\col)
-				Select *col\sort
-					Case #MYTABLE_COL_SORT_NONE
-						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_ASC)
-					Case #MYTABLE_COL_SORT_ASC
-						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_DESC)
-					Case #MYTABLE_COL_SORT_DESC
-						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_NONE)
-				EndSelect			
+			If *rc\check
+				SelectElement(*this\expRows(),*rc\row)
+				*row=*this\expRows()
+				*row\checked=Bool(Not *row\checked)
+				*this\dirty=#True
+			ElseIf *rc\exp
+				SelectElement(*this\expRows(),*rc\row)
+				*row=*this\expRows()
+				*row\expanded=Bool(Not *row\expanded)
+				*this\dirty=#True
+				_MyTable_Table_Predraw(*this)
 			Else
-				If fullrow
-					If *rc\row>-1 And *rc\col>-1
-						SelectElement(*this\expRows(),*rc\row)
-						*row=*this\expRows()
-						
-						If multiselect And 
-						   shift And 
-						   *row<>*this\lastrow And
-						   *this\lastrow<>0 And 
-						   *row\level=*this\lastrow\level And 
-						   *row\parent=*this\lastrow\parent
-							
-							rf=-1
-							rt=-1
-							ForEach *this\expRows()
-								If *this\expRows()=*row
-									rf=ListIndex(*this\expRows())
-								EndIf
-								If *this\expRows()=*this\lastrow
-									rt=ListIndex(*this\expRows())
-								EndIf
-								If rf>-1 And rt>-1
-									Break
-								EndIf
-							Next
-							If rf>-1 And rt>-1
-								If rt<rf
-									Swap rt,rf									
-								EndIf
-								For r=rf To rt
-									SelectElement(*this\expRows(),r)
-									*row=*this\expRows()
-									*this\selectedRows(Str(*row))=#True
-								Next
-							EndIf
-						Else
-							*this\lastrow=*row
-							*this\selectedRows(Str(*row))=#True
-						EndIf
-						*this\dirty=#True
-					EndIf
-				Else
-					If *rc\row>-1 And *rc\col>-1
-						SelectElement(*this\expRows(),*rc\row)
-						*row=*this\expRows()
-						*cell=_MyTableGetOrAddCell(*row,*rc\col)
-						If multiselect And 
-						   shift And 
-						   *cell<>*this\lastcell And 
-						   *this\lastcell<>0 And 
-						   *cell\row\level=*this\lastcell\row\level And
-						   *cell\row\parent=*this\lastcell\row\parent
-							
-							cf=*cell\col\listindex
-							ct=*this\lastcell\col\listindex
-							rf=-1
-							rt=-1
-							ForEach *this\expRows()
-								If *this\expRows()=*cell\row
-									rf=ListIndex(*this\expRows())
-								EndIf
-								If *this\expRows()=*this\lastcell\row
-									rt=ListIndex(*this\expRows())
-								EndIf
-								If rf>-1 And rt>-1
-									Break
-								EndIf								
-							Next
-							If rf>-1 And rt>-1
-								If rt<rf
-									Swap rt,rf									
-								EndIf
-								If ct<cf
-									Swap ct,cf									
-								EndIf
-								For r=rf To rt
-									SelectElement(*this\expRows(),r)
-									*row=*this\expRows()
-									For c=cf To ct
-										*cell=_MyTableGetOrAddCell(*row,c)
-										*this\selectedCells(Str(*cell))=#True
-									Next
-								Next								
-							EndIf
-						Else
-							*this\lastcell=*cell
-							*this\selectedCells(Str(*cell))=#True
-						EndIf
-						*this\dirty=#True						
-					EndIf
+				If Not multiselect Or (Not shift And Not control)
+					ClearMap(*this\selectedCells())
+					ClearMap(*this\selectedRows())
+					ClearMap(*this\selectedCols())
+					*this\selectall=#False
+					*this\lastcell=0
+					*this\lastrow=0
+					*this\lastcol=0
 				EndIf
+				If control
+					*this\lastcell=0
+					*this\lastrow=0
+					*this\lastcol=0
+				EndIf
+				ClearMap(*this\tempselectedCells())
+				ClearMap(*this\tempselectedRows())
+				ClearMap(*this\tempselectedCols())
+				_MyTableSelect(*this,*rc,#False)				
 			EndIf
 			
 			FreeStructure(*rc)
@@ -493,10 +594,36 @@ Module MyTable
 	
 	Procedure _MyTableEvtCanvasMouseLeftUp()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
+		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)	
+		
 		*this\md=#False
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
-			
+			If *rc\col>-1 And *rc\row>-1
+				If multiselect
+					ForEach *this\tempselectedCells()
+						*this\selectedCells(MapKey(*this\tempselectedCells()))=*this\tempselectedCells()
+					Next
+					ForEach *this\tempselectedCols()
+						*this\selectedCols(MapKey(*this\tempselectedCols()))=*this\tempselectedCols()
+					Next			
+					ForEach *this\tempselectedRows()
+						*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()
+					Next
+				Else
+					ClearMap(*this\selectedCells())
+					ClearMap(*this\selectedCols())
+					ClearMap(*this\selectedRows())
+				EndIf
+				ClearMap(*this\tempselectedCells())
+				ClearMap(*this\tempselectedRows())
+				ClearMap(*this\tempselectedCols())
+				
+				_MyTableSelect(*this,*rc,#False)	
+				_MyTable_Table_Redraw(*this)
+			EndIf
 			FreeStructure(*rc)
 		EndIf
 	EndProcedure

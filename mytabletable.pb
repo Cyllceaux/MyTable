@@ -395,12 +395,16 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	Protected border.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_BORDER)
 	Protected selected.b=#False
 	For idx=1 To cols
-		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
 		DrawingMode(#PB_2DDrawing_Default)			
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
 		
+		
+		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
 		selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
 		selected=Bool(selected Or *this\table\selectedcells(Str(*cell)))
+		selected=Bool(selected Or *this\table\tempselectedrows(Str(*this)))
+		selected=Bool(selected Or *this\table\tempselectedcols(Str(*cell\col)))
+		selected=Bool(selected Or *this\table\tempselectedcells(Str(*cell)))
 		
 		If *cell\dirty 
 			If *cell\text<>""
