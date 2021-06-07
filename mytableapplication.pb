@@ -1,122 +1,160 @@
-﻿;/ ===========================
-;/ =   mytableapplication.pb =
-;/ ===========================
-;/
-;/ [ PB V5.7x / 64Bit / all OS / DPI ]
-;/
-;/ © 2021 Cyllceaux (06/2021)
-;/
-
-
-;{ ===== MIT License =====
-;
-; Copyright (c) 2021 Silko Pillasch
-;
-; Permission is hereby granted, free of charge, to any person obtaining a copy
-; of this software and associated documentation files (the "Software"), to deal
-; in the Software without restriction, including without limitation the rights
-; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-; copies of the Software, and to permit persons to whom the Software is
-; furnished to do so, subject to the following conditions:
-; 
-; The above copyright notice and this permission notice shall be included in all
-; copies or substantial portions of the Software.
-;
-; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-; SOFTWARE.
-;}
-
-Procedure _MyTableFormulaCalcApplication(*this.strMyTableApplication)
+﻿Procedure _MyTable_Application_GetType(*this.strMyTableApplication)
 	If *this
-		If *this\recalc
-			_callcountStart(CalcApplication)
-			*this\redraw=#False
-			Protected idx
-			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-				ForEach *this\tables()
-					ForEach *this\tables()\formulaCells()
-						If *this\tables()\formulaCells()
-							Protected *cell.strMyTableCell=Val(MapKey(*this\tables()\formulaCells()))
-							*cell\calced=#False
-						EndIf
-					Next	
-				Next
-			CompilerEndIf
-			For idx=1 To ListSize(*this\tables())		
-				_MyTable_Table_Recalc(SelectElement(*this\tables(),idx-1))
-			Next
-			*this\redraw=#True
-			For idx=1 To ListSize(*this\tables())					
-				_MyTable_Table_Redraw(SelectElement(*this\tables(),idx-1))
-			Next
-			_callcountEnde(CalcApplication)
+		ProcedureReturn *this\type
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_GetFlags(*this.strMyTableApplication)
+	If *this
+		ProcedureReturn *this\flags
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetFlags(*this.strMyTableApplication,value.i)
+	If *this
+		*this\flags=value
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
+	ForEach *this\tables()
+		If LCase(*this\tables()\name)=LCase(name)
+			ProcedureReturn #True
+		EndIf
+	Next
+	ProcedureReturn #False
+EndProcedure
+
+Procedure _MyTable_Application_AddTable(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)
+	If *this
+		*this\lastindex+1
+		Protected *table.strMyTableTable=AddElement(*this\tables())
+		_MyTableInitTable(*this,*table,window,canvas,vscroll,hscroll,flags)
+		Protected nname.s=_MyTableCleanName(name)
+		
+		If nname=""
+			While _MyTable_Application_HasName(*this,"Table"+*this\lastindex)
+				*this\lastindex+1
+			Wend
+			*table\name="Table"+*this\lastindex
+		Else
+			If _MyTable_Application_HasName(*this,nname)
+				While _MyTable_Application_HasName(*this,"Table"+*this\lastindex)
+					*this\lastindex+1
+				Wend
+				*table\name="Table"+*this\lastindex
+			Else
+				*table\name=nname
+			EndIf
+		EndIf
+		ProcedureReturn *table
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_GetData(*this.strMyTableApplication)
+	If *this
+		ProcedureReturn *this\data
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetData(*this.strMyTableApplication,*value)
+	If *this
+		*this\data=*value
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_Redraw(*this.strMyTableApplication)
+	If *this
+		ForEach *this\tables()
+			*this\tables()\dirty=#True
+			_MyTable_Table_Redraw(*this\tables())
+		Next
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Application_GetRedraw(*this.strMyTableApplication)
+	If *this
+		ProcedureReturn *this\redraw
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetRedraw(*this.strMyTableApplication,value.b)
+	If *this
+		*this\redraw=value
+		If value
+			_MyTable_Application_Redraw(*this)
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Application_Register(*application.strMyTableApplication,window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	Protected *this.strMyTableTable=_MyTableRegister(*application,window,canvas,hscroll,vscroll,flags,callback,name)
-	BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
-	_MyTableResize(*this)
-	
-	ProcedureReturn *this
-EndProcedure
-
-Procedure _MyTable_Application_RegisterDialog(*application.strMyTableApplication,window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	Protected *this.strMyTableTable=_MyTableRegister(*application,window,canvas,hscroll,vscroll,flags,callback,name)	
-	BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
-	_MyTable_Table_Recalc(*this)
-	ProcedureReturn *this
-EndProcedure
-
-CompilerIf Defined(MYTABLE_GRID,#PB_Module)
-	Procedure _MyTable_Application_GridRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableGridRegister(*application,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)
-		BindGadgetEvent(canvas,@MyTableEvtResize(),#PB_EventType_Resize)
-		_MyTableResize(*this)
-		ProcedureReturn *this
-	EndProcedure
-	
-	Procedure _MyTable_Application_GridRegisterDialog(*application.strMyTableApplication,window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Protected *this.strMyTableTable=_MyTableGridRegister(*application,window,canvas,hscroll,vscroll,rows,cols,flags,callback,name)	
-		BindGadgetEvent(canvas,@MyTableEvtDialogResize(),#PB_EventType_Resize)
-		_MyTable_Table_Recalc(*this)
-		ProcedureReturn *this
-	EndProcedure
-CompilerEndIf
-
-Procedure _MyTable_Application_Unregister(*this.strMyTableApplication)
+Procedure _MyTable_Application_Recalc(*this.strMyTableApplication)
 	If *this
-		While ListSize(*this\tables())>0
-			_MyTable_Table_Unregister(*this\tables())
-		Wend
+		ForEach *this\tables()
+			*this\tables()\dirty=#True
+			_MyTable_Table_Recalc(*this\tables())
+		Next
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Application_GetRecalc(*this.strMyTableApplication)
+	If *this
+		ProcedureReturn *this\recalc
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetRecalc(*this.strMyTableApplication,value.b)
+	If *this
+		*this\recalc=value
+		If value
+			_MyTable_Application_Recalc(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_ClearTables(*this.strMyTableApplication)
+	If *this
+		ClearList(*this\tables())
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_GetDirty(*this.strMyTableApplication)
+	If *this
+		ProcedureReturn *this\dirty
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetDirty(*this.strMyTableApplication,value.b)
+	If *this
+		*this\dirty=value
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_GetStyle(*this.strMyTableApplication)
+	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+	_MyTableInitStyleObject(*style,*this)
+	ProcedureReturn *style
+EndProcedure
+
+Procedure _MyTable_Application_Free(*this.strMyTableApplication)
+	If *this
 		FreeStructure(*this)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Application_Recalc(*this.strMyTableApplication)		
-	_MyTableFormulaCalcApplication(*this)
-EndProcedure
-
-Procedure _MyTable_Application_GetType(*this.strMyTableApplication)		
-	ProcedureReturn *this\type
-EndProcedure
-
-Procedure _MyTable_Application_Dirty(*this.strMyTableApplication)		
-	ForEach *this\tables()
-		_MyTable_Table_Dirty(*this\tables())
-	Next
-EndProcedure
-
-Procedure _MyTable_Application_SetRecalc(*this.strMyTableApplication,recalc.b)
-	
+Procedure.b _MyTable_Application_GetSelected(*this.strMyTableApplication)
 	If *this
-		*this\recalc=recalc
-		_MyTable_Application_Recalc(*this)
+		Protected result.b=#True
+		ForEach *this\tables()
+			result=Bool(result And _MyTable_Table_GetSelected(*this\tables()))
+		Next
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetSelected(*this.strMyTableApplication,value.b)
+	If *this
+		ForEach *this\tables()
+			_MyTable_Table_SetSelected(*this\tables(),value)
+		Next
 	EndIf
 EndProcedure

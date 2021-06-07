@@ -1,347 +1,168 @@
-﻿;/ ===========================
-;/ =   mytable.pbi           =
-;/ ===========================
-;/
-;/ [ PB V5.7x / 64Bit / all OS / DPI ]
-;/
-;/ © 2021 Cyllceaux (06/2021)
-;/
-
-
-;{ ===== MIT License =====
-;
-; Copyright (c) 2021 Silko Pillasch
-;
-; Permission is hereby granted, free of charge, to any person obtaining a copy
-; of this software and associated documentation files (the "Software"), to deal
-; in the Software without restriction, including without limitation the rights
-; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-; copies of the Software, and to permit persons to whom the Software is
-; furnished to do so, subject to the following conditions:
-; 
-; The above copyright notice and this permission notice shall be included in all
-; copies or substantial portions of the Software.
-;
-; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-; SOFTWARE.
-;}
-
-XIncludeFile "global.pbi"
-
-DeclareModule MyTable
+﻿DeclareModule MyTable
 	
-	
-	EnumerationBinary _MyTableTableFlags
-		#MYTABLE_TABLE_FLAGS_GRID
-		#MYTABLE_TABLE_FLAGS_HIERARCHICAL
-		#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW
-		#MYTABLE_TABLE_FLAGS_LAST_STRETCH
-		#MYTABLE_TABLE_FLAGS_NO_HEADER
-		#MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT	
-		#MYTABLE_TABLE_FLAGS_CHECKBOX
-		#MYTABLE_TABLE_FLAGS_STOP_DRAWING
-		#MYTABLE_TABLE_FLAGS_MULTISELECT
-		#MYTABLE_TABLE_FLAGS_CALLBACK
-		#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE	
-		#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE	
-		#MYTABLE_TABLE_FLAGS_SORTABLE
-		#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT
-		#MYTABLE_TABLE_FLAGS_EDITABLE	
-		#MYTABLE_TABLE_FLAGS_READONLY
-	EndEnumeration
-	
-	#MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE|#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE
-	#MYTABLE_TABLE_FLAGS_GRID_DEFAULT=#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT|#MYTABLE_TABLE_FLAGS_EDITABLE|#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_ROW_RESIZEABLE|#MYTABLE_TABLE_FLAGS_COL_RESIZEABLE
-	
-	
-	EnumerationBinary _MyTableColumnFlags
-		#MYTABLE_COLUMN_FLAGS_LEFT
-		#MYTABLE_COLUMN_FLAGS_RIGHT
-		#MYTABLE_COLUMN_FLAGS_CENTER
-		#MYTABLE_COLUMN_FLAGS_TEXT
-		#MYTABLE_COLUMN_FLAGS_INTEGER
-		#MYTABLE_COLUMN_FLAGS_DATE
-		#MYTABLE_COLUMN_FLAGS_DATE_TIME
-		#MYTABLE_COLUMN_FLAGS_TIME
-		#MYTABLE_COLUMN_FLAGS_TIME_LONG
-		#MYTABLE_COLUMN_FLAGS_DOUBLE
-		#MYTABLE_COLUMN_FLAGS_BOOLEAN
-		#MYTABLE_COLUMN_FLAGS_EDITABLE
-		#MYTABLE_COLUMN_FLAGS_NO_EDITABLE
-		#MYTABLE_COLUMN_FLAGS_IMAGE
-		#MYTABLE_COLUMN_FLAGS_TOP
-		#MYTABLE_COLUMN_FLAGS_MIDDLE
-		#MYTABLE_COLUMN_FLAGS_BOTTOM
-		#MYTABLE_COLUMN_FLAGS_RESIZEABLE
-		#MYTABLE_COLUMN_FLAGS_SORTABLE
-		#MYTABLE_COLUMN_FLAGS_NO_RESIZEABLE
-	EndEnumeration
-	
-	#MYTABLE_COLUMN_FLAGS_DEFAULT = #MYTABLE_COLUMN_FLAGS_LEFT|#MYTABLE_COLUMN_FLAGS_TEXT
-	#MYTABLE_COLUMN_FLAGS_DEFAULT_DATE = #MYTABLE_COLUMN_FLAGS_DATE|#MYTABLE_COLUMN_FLAGS_DATE_TIME
-	#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME = #MYTABLE_COLUMN_FLAGS_TIME|#MYTABLE_COLUMN_FLAGS_TIME_LONG
-	#MYTABLE_COLUMN_FLAGS_DEFAULT_DATE_TIME = #MYTABLE_COLUMN_FLAGS_DEFAULT_DATE|#MYTABLE_COLUMN_FLAGS_DEFAULT_TIME
-	
-	
-	CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-		
-		EnumerationBinary _MyTableTableFlags
-			#MYTABLE_TABLE_FLAGS_FORMULA
-		EndEnumeration
-		
-		#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_FORMULA		
-		
-		Prototype.s MyTableProtoFormula(*this,name.s,List cells.s())
-		
-	CompilerEndIf
-	
-	CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-		
-		EnumerationBinary _MyTableTableFlags
-			#MYTABLE_TABLE_FLAGS_MATRIX
-		EndEnumeration
-		
-		#MYTABLE_TABLE_FLAGS_GRID_MATRIX_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
-		
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			#MYTABLE_TABLE_FLAGS_GRID_FORMULA_MATRIX_DEFAULT=#MYTABLE_TABLE_FLAGS_GRID_FORMULA_DEFAULT|#MYTABLE_TABLE_FLAGS_MATRIX
-		CompilerEndIf
-		
-	CompilerEndIf
-	
-	
-	Prototype MyTableProtoEventRowSelected(*row)
-	Prototype MyTableProtoEventCellSelected(*cell)
-	Prototype MyTableProtoEventRowChecked(*row)
-	Prototype MyTableProtoEventRowRightClick(*row)
-	Prototype MyTableProtoEventColRightClick(*col)
-	Prototype MyTableProtoEventCellChecked(*cell)
-	Prototype MyTableProtoEventCellRightClick(*cell)
-	Prototype MyTableProtoEventCellChangedText(*cell,old.s)
-	Prototype MyTableProtoEventCellChangedValue(*cell,old.d)
-	Prototype MyTableProtoEventCallback(*row)
-	Prototype MyTableProtoEventCancelCustomEditCell(*cell)
-	Prototype MyTableProtoEventCustomEditCell(*cell,x,y,w,h)
-	
-	
+	#MYTABLE_VERSION = 280
+	#MYTABLE_VERSION_DATE = 20210607
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
-		#MYTABLE_TYPE_APPLICATION
-		#MYTABLE_TYPE_TABLE
+		#MYTABLE_TYPE_CELL
 		#MYTABLE_TYPE_ROW
 		#MYTABLE_TYPE_COL
-		#MYTABLE_TYPE_CELL
+		#MYTABLE_TYPE_TABLE
+		#MYTABLE_TYPE_APPLICATION
+		#MYTABLE_TYPE_STYLE
 	EndEnumeration
 	
-	Interface _MyTableUAObject
-		Dirty()
+	Interface MyTableStyleObject
+		SetFont(value.i):GetFont()
+		SetBackColor(value.q):GetBackColor.q()
+		SetFrontColor(value.q):GetFrontColor.q()
+		SetForeColor(value.q):GetForeColor.q()
+		SetSelectedColor(value.q):GetSelectedColor.q()
+		SetBorderColor(value.q):GetBorderColor.q()
+		SetSelectedBorderColor(value.q):GetSelectedBorderColor.q()
+		Free()
+		Delete()
+	EndInterface
+	
+	Enumeration _mytable_style_valign
+		#MYTABLE_STYLE_VALIGN_TOP
+		#MYTABLE_STYLE_VALIGN_MIDDLE
+		#MYTABLE_STYLE_VALIGN_BOTTOM
+	EndEnumeration
+	
+	Enumeration _mytable_style_halign
+		#MYTABLE_STYLE_HALIGN_LEFT
+		#MYTABLE_STYLE_HALIGN_CENTER
+		#MYTABLE_STYLE_HALIGN_RIGHT
+	EndEnumeration
+	
+	Interface MyTableStyleCell Extends MYTableStyleObject
+		SetHAlign(value.i):GetHAlign()
+		SetVAlign(value.i):GetVAlign()		
+	EndInterface
+	
+	Interface MyTableStyleCol Extends MYTableStyleCell
+		SetElementSelectedColor(value.q):GetElementSelectedColor.q()
+		SetElementSelectedBorderColor(value.q):GetElementSelectedBorderColor.q()
+	EndInterface
+	
+	Interface MyTableStyleRow Extends MyTableStyleCell
+		SetElementSelectedColor(value.q):GetElementSelectedColor.q()
+		SetElementSelectedBorderColor(value.q):GetElementSelectedBorderColor.q()
+	EndInterface
+	
+	Interface MyTableStyleTable Extends MYTableStyleObject
+		
+	EndInterface
+	
+	Interface MyTableStyleApplication Extends MYTableStyleObject
+		
+	EndInterface
+	
+	Interface MyTableObject
 		GetType()
+		GetStyle()
+		SetFlags(value.i):GetFlags()
+		SetData(*value):GetData()
+		SetDirty(value.b):GetDirty.b()
+		SetSelected(value.b):GetSelected.b()
 	EndInterface
 	
-	Interface _MyTableObject Extends _MyTableUAObject		
-		GetFlags()
-		SetFlags(value.i)
-		GetSelectedbackground.q()
-		SetSelectedbackground(value.q)
-		GetBackground.q()
-		SetBackground(value.q)
-		GetBackgroundfixed.q()
-		SetBackgroundfixed(value.q)		
-		GetForecolor.q()
-		SetForecolor(value.q)
-		GetSelectedforecolor.q()
-		SetSelectedforecolor(value.q)
-		GetFont.i()
-		SetFont(value.i)
-	EndInterface
-	
-	EnumerationBinary  _mytable_border
-		#MYTABLE_BORDER_NONE
-		#MYTABLE_BORDER_TOP
-		#MYTABLE_BORDER_RIGHT
-		#MYTABLE_BORDER_BOTTOM
-		#MYTABLE_BORDER_LEFT
+	EnumerationBinary _mytable_cell	
+		#MYTABLE_CELL_FLAGS_CHECKBOXES
 	EndEnumeration
 	
-	#MYTABLE_BORDER_ALL=#MYTABLE_BORDER_TOP|#MYTABLE_BORDER_RIGHT|#MYTABLE_BORDER_BOTTOM|#MYTABLE_BORDER_LEFT
-	#MYTABLE_BORDER_DEFAULT=#PB_Ignore
-	
-	Interface MyTableCell Extends _MyTableObject
-		GetTable()
-		GetRow()
-		GetColumn()
-		GetText.s()
-		SetText(value.s)
-		GetTooltip.s()
-		SetTooltip(value.s)
-		GetData()
-		SetData(*value)
-		GetImage()
-		SetImage(image.i)
-		GetValue.d()
-		SetValue(value.d)
-		SetBorder(border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
-		SetBorderStyle(border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)		
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			GetFormula.s()			
-			SetFormula(value.s)
-		CompilerEndIf
-		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-			GetMatrix.s()
-			SetMatrix(value.s)
-		CompilerEndIf
+	Interface MyTableCell Extends MyTableObject
+		SetText(value.s):GetText.s()
+		SetValue(value.d):GetValue.d()
+		SetImage(value.i):GetImage.i()
+		SetChecked(value.b):GetChecked.b()		
 	EndInterface
 	
+	EnumerationBinary _mytable_col
+		#MYTABLE_COL_FLAGS_CHECKBOXES
+	EndEnumeration
 	
+	Enumeration _mytable_col_sort
+		#MYTABLE_COL_SORT_NONE
+		#MYTABLE_COL_SORT_ASC
+		#MYTABLE_COL_SORT_DESC
+	EndEnumeration
 	
-	Interface MyTableCol Extends _MyTableObject
-		GetID()
-		GetTable()
-		GetText.s()
-		SetText(value.s)
-		GetTooltip.s()
-		SetTooltip(value.s)
-		GetFormat.s()
-		SetFormat(value.s)
-		GetImage()
-		SetImage(image.i)
-		GetData()
-		SetData(*value)
-		GetCanNull.b()
-		SetCanNull(cannull.i)
-		GetSort()
-		SetSort(image.i)
-		Delete()
+	Interface MyTableCol Extends MyTableObject
+		SetText(value.s):GetText.s()
+		SetImage(value.i):GetImage.i()
+		SetWidth(value.i):GetWidth.i()
+		SetSort(value.i):GetSort.i()
 		
-		SetCustomCellEdit(event.MyTableProtoEventCustomEditCell,event.MyTableProtoEventCancelCustomEditCell)
-	EndInterface
-	
-	Interface MyTableRow Extends _MyTableObject
-		GetID()
-		GetTable()
-		GetTooltip.s()
-		SetTooltip(value.s)
-		GetData()
-		SetData(*value)
-		GetImage()
-		SetImage(image.i)
-		GetRowHeight()
-		SetRowHeight(value.i)
-		AddDirtyRows(rows.i)
-		GetCell(col.i)
-		GetCells(List cells.MyTableCell())
-		AddRow(text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
 		Delete()
 	EndInterface
 	
-	Interface MyTableTable Extends _MyTableObject
-		GetApplication()
-		GetHeaderbackground1.q()
-		SetHeaderbackground1(value.q)
-		GetHeaderbackground2.q()
-		SetHeaderbackground2(value.q)
-		GetHeaderbackgroundFixed.q()
-		SetHeaderbackgroundFixed(value.q)
-		GetHeaderforecolor.q()
-		SetHeaderforecolor(value.q)
-		GetHeaderbackgroundMarked.q()
-		SetHeaderbackgroundMarked(value.q)
-		GetCanvas()
-		UnRegister()
-		ClearRows()
-		ClearColumns()
-		Recalc()
-		Redraw()
-		SetRedraw(redraw.b)
-		AddColumn(text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0,tooltip.s="")
-		AddRow(text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
-		AutosizeColumn(col.i=#PB_Ignore)
-		AutosizeHeader(col.i=#PB_Ignore)
-		AutosizeRow(row.i=#PB_Ignore)
-		AddDirtyRows(rows.i)
+	Interface MyTableRow Extends MyTableObject
+		SetExpanded(value.b):GetExpanded.b()
+		SetImage(value.i):GetImage.i()
+		SetChecked(value.b):GetChecked.b()
+		
+		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
 		DeleteRow(row.i)
-		DeleteCol(col.i)
 		GetRow(row.i)
+		RowCount()
+		GetCell(col.i)
+		Delete()
+	EndInterface
+	
+	EnumerationBinary _mytable_table
+		#MYTABLE_TABLE_FLAGS_HIERARCHICAL
+		#MYTABLE_TABLE_FLAGS_CHECKBOXES
+		#MYTABLE_TABLE_FLAGS_FULLROWSELECT
+		#MYTABLE_TABLE_FLAGS_MULTISELECT
+		#MYTABLE_TABLE_FLAGS_BORDER
+		#MYTABLE_TABLE_FLAGS_NO_HEADER
+	EndEnumeration
+	
+	#MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_BORDER
+	
+	Interface MyTableTable Extends MyTableObject
+		SetName(value.s):GetName.s()
+		SetTitle(value.s):GetTitle.s()
+		SetRedraw(value.b):GetRedraw.b()
+		SetRecalc(value.b):GetRecalc.b()
+		SetHeaderHeight(value.i):GetHeaderHeight.i()
+		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
+		
+		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
+		DeleteRow(row.i)
+		GetRow(row.i)
+		RowCount()
+		AddCol(text.s,width.i,image.i=0,flags.i=0)
+		DeleteCol(col.i)
 		GetCol(col.i)
+		ColCount()
 		GetCell(row.i,col.i)
-		
-		GetRowCount()
-		GetColCount()
-		
-		GetCellText.s(row.i,col.i)
-		SetCellText(row.i,col.i,value.s)
-		GetCellTooltip.s(row.i,col.i)
-		SetCellTooltip(row.i,col.i,value.s)
-		GetCellValue.d(row.i,col.i)
-		SetCellValue(row.i,col.i,value.d)
-		SetCellBorder(row.i,col.i,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
-		SetCellBorderStyle(row.i,col.i,border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)	
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			GetCellFormula.s(row.i,col.i)
-			SetCellFormula(row.i,col.i,value.s)
-			SetRecalc(value.b)
-		CompilerEndIf
-		CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-			GetCellMatrix.s(row.i,col.i)
-			SetCellMatrix(row.i,col.i,value.s)
-		CompilerEndIf
-		GetCellImage(row.i,col.i)
-		SetCellImage(row.i,col.i,value.i)
-		
-		GetDefaultRowHeight()
-		SetDefaultRowHeight(value.i)
-		GetRowHeight()
-		SetRowHeight(row.i,value.i)
-		GetFixedColumns()
-		SetFixedColumns(value.i)
-		
-		SetEventRowSelected(event.MyTableProtoEventRowSelected)
-		SetEventCellSelected(event.MyTableProtoEventCellSelected)
-		SetEventRowChecked(event.MyTableProtoEventRowChecked)
-		SetEventRowRightClick(event.MyTableProtoEventRowRightClick)
-		SetEventColRightClick(event.MyTableProtoEventColRightClick)
-		SetEventCellChecked(event.MyTableProtoEventCellChecked)
-		SetEventCellRightClick(event.MyTableProtoEventCellRightClick)
-		SetEventCellChangedText(event.MyTableProtoEventCellChangedText)
-		SetEventCellChangedValue(event.MyTableProtoEventCellChangedValue)
-		SetEventCallback(event.MyTableProtoEventCallback)
-		
-		SetCustomCellEdit(col.i,event.MyTableProtoEventCustomEditCell,event.MyTableProtoEventCancelCustomEditCell)
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			RegisterFormula(name.s,method.MyTableProtoFormula)
-		CompilerEndIf
+		Delete()
+		ClearRows()
+		ClearCols()
+		Redraw()
+		Recalc()
+		Free()
 	EndInterface
 	
-	
-	
-	Interface MyTableApplication Extends _MyTableUAObject
-		Register(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		RegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		CompilerIf Defined(MYTABLE_GRID,#PB_Module)
-			GridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-			GridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		CompilerEndIf
-		Unregister()
-		CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-			Recalc()
-			SetRecalc(value.b)
-		CompilerEndIf
+	Interface MyTableApplication Extends MyTableObject
+		SetRedraw(value.b):GetRedraw.b()
+		SetRecalc(value.b):GetRecalc.b()
+		
+		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)	
+		ClearTables()
+		Redraw()
+		Recalc()
+		Free()
 	EndInterface
 	
-	Declare MyTableCreateApplication()
+	Declare MyTableCreateApplication(flags.i=0)	
+	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)	
 	
-	Declare MyTableRegister(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	Declare MyTableRegisterDialog(window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	CompilerIf Defined(MYTABLE_GRID,#PB_Module)
-		Declare MyTableGridRegister(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-		Declare MyTableGridRegisterDialog(window,canvas,hscroll,vscroll,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_GRID_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-	CompilerEndIf
 EndDeclareModule
 
+XIncludeFile "global.pb"
 XIncludeFile "mytable.pb"

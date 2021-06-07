@@ -1,1254 +1,981 @@
-﻿;/ ===========================
-;/ =   mytabletable.pb       =
-;/ ===========================
-;/
-;/ [ PB V5.7x / 64Bit / all OS / DPI ]
-;/
-;/ © 2021 Cyllceaux (06/2021)
-;/
+﻿Global MyTableW1=DesktopScaledX(1)
+Global MyTableW2=DesktopScaledX(2)
+Global MyTableW4=DesktopScaledX(4)
+Global MyTableW7=DesktopScaledX(7)
+Global MyTableW8=DesktopScaledX(8)
+Global MyTableW10=DesktopScaledX(10)
+Global MyTableW12=DesktopScaledX(12)
+Global MyTableW14=DesktopScaledX(14)
+Global MyTableW16=DesktopScaledX(16)
+Global MyTableW20=DesktopScaledX(20)
+Global MyTableH1=DesktopScaledY(1)
+Global MyTableH2=DesktopScaledY(2)
+Global MyTableH4=DesktopScaledY(4)
+Global MyTableH6=DesktopScaledY(6)
+Global MyTableH7=DesktopScaledY(7)
+Global MyTableH8=DesktopScaledY(8)
+Global MyTableH10=DesktopScaledY(10)
+Global MyTableH12=DesktopScaledY(12)
+Global MyTableH14=DesktopScaledY(14)
+Global MyTableH16=DesktopScaledY(16)
+
+Global MyTableDefaultImageSortAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageSortDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global MyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
 
 
-;{ ===== MIT License =====
-;
-; Copyright (c) 2021 Silko Pillasch
-;
-; Permission is hereby granted, free of charge, to any person obtaining a copy
-; of this software and associated documentation files (the "Software"), to deal
-; in the Software without restriction, including without limitation the rights
-; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-; copies of the Software, and to permit persons to whom the Software is
-; furnished to do so, subject to the following conditions:
-; 
-; The above copyright notice and this permission notice shall be included in all
-; copies or substantial portions of the Software.
-;
-; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-; SOFTWARE.
-;}
+StartDrawing(ImageOutput(MyTableDefaultImageSortAsc))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH2,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH2,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+StopDrawing()
 
+StartDrawing(ImageOutput(MyTableDefaultImageSortDesc))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH14,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH14,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+StopDrawing()
 
-Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		ProcedureReturn _MyTableGetOrAddCell(*this\rows(),col)			
-	EndIf
-EndProcedure
+StartDrawing(ImageOutput(MyTableDefaultImagePlus))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
+LineXY(MyTableW7,MyTableH4,MyTableW7,MyTableH10,RGBA(0,0,0,255))
+StopDrawing()
 
-Procedure _MyTable_Table_GetRow(*this.strMyTableTable,row.i)
-	If *this
-		ProcedureReturn SelectElement(*this\rows(),row)	
-	EndIf
-EndProcedure
+StartDrawing(ImageOutput(MyTableDefaultImageMinus))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
+StopDrawing()
 
-Procedure _MyTable_Table_GetCol(*this.strMyTableTable,col.i)
-	If *this
-		ProcedureReturn SelectElement(*this\cols(),col)	
-	EndIf
-EndProcedure
+StartDrawing(ImageOutput(MyTableDefaultImageCheckBox))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(MyTableDefaultImageCheckBoxChecked))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH4,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH12,MyTableW12,MyTableH4,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(MyTableDefaultImagePlusArrow))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW8,MyTableH4,MyTableW12,MyTableH8,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH12,MyTableW12,MyTableH8,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(MyTableDefaultImageMinusArrow))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(0,0,0,255))
+StopDrawing()
 
 Procedure _MyTable_Table_GetType(*this.strMyTableTable)
-	ProcedureReturn *this\type
-EndProcedure
-
-Procedure _MyTable_Table_GetCanvas(*this.strMyTableTable)
-	ProcedureReturn *this\canvas
-EndProcedure
-
-Procedure.s _MyTable_Table_GetTooltip(*this.strMyTableTable,row.i,col.i)
 	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)		
-		ProcedureReturn _MyTable_Cell_GetTooltip(*cell)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetCellTooltip(*this.strMyTableTable,row.i,col.i,tooltip.s)		
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetTooltip(*cell,Tooltip)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_AutosizeCol(*this.strMyTableTable,col.i=#PB_Ignore)
-	_MyTable_Table_AutosizeColExp(*this,col)
-EndProcedure
-
-Procedure _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
-	Protected *row.strMyTableRow=0
-	
-	Static NewMap all.b()
-	
-	If *this
-		
-		If col=#PB_Ignore
-			_callcountStart(autosizecol)
-			Protected c=ListSize(*this\cols())-1
-			Protected i=0
-			all(Str(*this.strMyTableTable))=#True
-			StartDrawing(CanvasOutput(*this\canvas))
-			_MyTable_Table_RecalcExp(*this,force)
-			
-			For i=0 To c
-				_MyTable_Table_AutosizeCol(*this.strMyTableTable,i)
-			Next
-			
-			StopDrawing()
-			
-			all(Str(*this.strMyTableTable))=#False
-		Else
-			_callcountStart(autosizecol)
-			If all(Str(*this.strMyTableTable))=#False
-				StartDrawing(CanvasOutput(*this\canvas))
-				_MyTable_Table_RecalcExp(*this,force)
-			EndIf
-			
-			
-			
-			Protected w=0
-			
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
-			
-			Protected font=*this\font
-			DrawingFont(font)
-			
-			
-			If *col\textwidth=0
-				w=_MyTableTextWidth(*col\text)
-				*col\textwidth=w
-				*col\dirty=#True
-			Else
-				w=*col\textwidth
-			EndIf
-			
-			
-			Protected hasimage.b=#False
-			
-			
-			ForEach *this\expRows()
-				*row=*this\expRows()
-				If *row\image
-					hasimage=#True
-				EndIf
-				
-				
-				
-				If col<ListSize(*row\cells())
-					Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,force)
-					
-					If *cell\text<>""
-						If *cell
-							If *cell\font
-								If *cell\font<>font
-									font=*cell\font
-									DrawingFont(font)
-								EndIf
-							Else
-								If *row\font
-									If *row\font<>font
-										font=*row\font
-										DrawingFont(font)
-									EndIf
-								Else
-									If *col\font
-										If *col\font<>font
-											font=*col\font
-											DrawingFont(font)
-										EndIf
-									Else
-										If *this\font<>font
-											font=*this\font
-											DrawingFont(font)
-										EndIf
-									EndIf
-								EndIf
-							EndIf
-							
-							If *cell\textwidth=0
-								If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-									*cell\textwidth=MyTableW20
-								Else
-									*cell\textwidth=_MyTableTextWidth(*cell\text)
-								EndIf
-							EndIf
-							If *cell\textheight=0
-								If Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_BOOLEAN)
-									*cell\textheight=MyTableW20
-								Else
-									*cell\textheight=_MyTableTextHeight(*cell\text)
-								EndIf
-							EndIf
-							Protected dux=DesktopUnscaledX(*cell\textwidth)
-							If dux>w
-								w=dux
-							EndIf
-						EndIf
-					EndIf
-				EndIf
-			Next
-			*col\width=w+8
-			*col\dirty=#True
-			
-			Protected sortable.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE) Or Bool(*col\flags & #MYTABLE_COLUMN_FLAGS_SORTABLE))
-			If col=0
-				Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
-				Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
-				
-				If hasimage
-					*col\width+20				
-				EndIf
-				If hierarchical
-					*col\width+20				
-				EndIf
-				If checkboxes
-					*col\width+20				
-				EndIf
-			EndIf
-			If sortable
-				*col\width+20				
-			EndIf
-			
-			
-			*col\calcwidth=DesktopScaledX(*col\width)
-			If all(Str(*this.strMyTableTable))=#False
-				StopDrawing()
-				
-			EndIf
-		EndIf
-		If Not all(Str(*this.strMyTableTable))
-			_callcountEnde(autosizecol)
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
-	Protected *row.strMyTableRow=0
-	
-	Static NewMap all.b()
-	
-	If *this
-		
-		If col=#PB_Ignore
-			_callcountStart(autosizeheader)
-			Protected c=ListSize(*this\cols())-1
-			Protected i=0
-			*this\headerheight=0
-			all(Str(*this.strMyTableTable))=#True
-			StartDrawing(CanvasOutput(*this\canvas))
-			_MyTable_Table_RecalcExp(*this,force)
-			For i=0 To c
-				_MyTable_Table_AutosizeHeader(*this.strMyTableTable,i)
-			Next
-			StopDrawing()
-			
-			all(Str(*this.strMyTableTable))=#False
-		Else
-			_callcountStart(autosizecol)
-			If all(Str(*this.strMyTableTable))=#False
-				StartDrawing(CanvasOutput(*this\canvas))		
-				_MyTable_Table_RecalcExp(*this,force)
-			EndIf
-			DrawingFont(*this\font)
-			
-			
-			
-			Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
-			If *col\font
-				DrawingFont(*col\font)
-			EndIf
-			
-			*col\textwidth=_MyTableTextWidth(*col\text)		
-			*col\calcwidth=DesktopScaledX(*col\textwidth)
-			
-			*col\dirty=#True
-			
-			*col\textheight=_MyTableTextHeight(*col\text)+2			
-			*col\calcheight=DesktopScaledY(*col\textheight)
-			
-			
-			
-			If *this\headerheight=<(*col\textheight)
-				*this\headerheight=*col\textheight
-			EndIf
-			If all(Str(*this.strMyTableTable))=#False
-				StopDrawing()
-				
-			EndIf
-		EndIf
-		If Not all(Str(*this.strMyTableTable))
-			_callcountEnde(autosizeheader)
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_AutosizeRow(*this.strMyTableTable,row.i=#PB_Ignore)
-	Static NewMap all.b()
-	
-	If *this
-		
-		If row=#PB_Ignore
-			_callcountStart(autosizerow)
-			Protected c=ListSize(*this\rows())-1
-			Protected i=0
-			all(Str(*this.strMyTableTable))=#True
-			For i=0 To c
-				_MyTable_Table_AutosizeRow(*this.strMyTableTable,i)
-			Next
-			all(Str(*this.strMyTableTable))=#False
-		Else
-			
-			Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-			
-			*row\dirty=#True
-			*row\height=0
-			ForEach *row\cells()
-				If DesktopUnscaledY(*row\cells()\textheight)>*row\height
-					*row\height=DesktopUnscaledY(*row\cells()\textheight)
-				EndIf
-			Next
-			*row\height+4
-			*row\calcheight=DesktopScaledY(*row\height)
-			
-			
-		EndIf
-		If Not all(Str(*this.strMyTableTable))
-			_callcountEnde(autosizerow)
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_Recalc(*this.strMyTableTable)		
-	If *this
-		If Not *this\batch
-			*this\dirty=#True
-			CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-				If *this\recalc
-					_MyTableFormulaCalcTable(*this)
-				EndIf
-			CompilerEndIf
-			_MyTable_Table_RecalcExp(*this)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
-	If *this
-		_callcountStart(addtabledirtyrows)
-		Protected i=0
-		Protected *row.strMyTableRow=0
-		
-		LastElement(*this\rows())
-		For i=1 To rows
-			*row=AddElement(*this\rows())
-			*row\listindex=ListIndex(*this\rows())
-			_MyTableAddDirtyRow(*this,*row)				
-		Next
-		
-		*this\dirty=#True
-		_callcountEnde(addtabledirtyrows)
-		_MyTable_Table_Recalc(*this)
-	EndIf	
-EndProcedure
-
-
-
-Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
-	If *this
-		Protected *row.strMyTableRow=0
-		Protected *cell.strMyTableCell=0
-		Protected *col.strMyTableCol=0
-		
-		
-		LastElement(*this\rows())
-		*row=AddElement(*this\rows())
-		
-		With *row
-			*row\listindex=ListIndex(*this\rows())
-			\vtable=?vtable_row
-			\height=*this\rowheight
-			\brow=#True
-			\checked=checked
-			\expanded=expanded
-			\data=*data
-			\image=image
-			\type=#MYTABLE_TYPE_ROW
-			\tooltip=tooltip
-			If image And IsImage(image)				
-				\sclaedimage=CopyImage(image,#PB_Any)
-				ResizeImage(\sclaedimage,MyTableW16,MyTableH16)
-			EndIf
-			If id=#PB_Ignore Or id<=*this\lastRowid
-				*this\lastRowid+1
-				\id=*this\lastRowid
-			Else
-				\id=id
-				*this\lastRowid=id
-			EndIf
-			\dirty=#True
-			\table=*this
-			
-			
-			
-			If text<>""
-				Protected i=0
-				Protected Dim result.s(ListSize(*row\table\cols()))
-				Protected c= _MyTableStringField(text,result(),sep)
-				If c
-					For i=1 To c					
-						*cell=_MyTableGetOrAddCell(*row,i-1)
-						If *cell
-							_MyTableFillCellText(*cell,result(i-1))							
-						EndIf
-					Next
-				EndIf
-				FreeArray(result())
-			EndIf
-		EndWith
-		*this\rowsById(Str(*row\id))=*row
-		*this\dirty=#True
-		_MyTable_Table_Recalc(*this)
-		ProcedureReturn *row
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_AddColumn(*this.strMyTableTable,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0,tooltip.s="")
-	If *this
-		_callcountStart(addcol)
-		LastElement(*this\cols())
-		Protected *col.strMyTableCol=AddElement(*this\cols())
-		With *col
-			\vtable=?vtable_col
-			\text=text
-			\width=width
-			\flags=flags
-			\image=image
-			\data=*data
-			\sort=sort
-			\dirty=#True
-			\tooltip=tooltip
-			\type=#MYTABLE_TYPE_COL
-			\listindex=ListIndex(*this\cols())
-			If Bool(flags & #MYTABLE_COLUMN_FLAGS_DATE)
-				\format="%dd.%mm.%yyyy"
-			EndIf
-			If Bool(flags & #MYTABLE_COLUMN_FLAGS_DATE_TIME)
-				\format="%dd.%mm.%yyyy %hh:%ii:%ss"
-			EndIf
-			If Bool(flags & #MYTABLE_COLUMN_FLAGS_TIME)
-				\format="%hh:%ii"
-			EndIf
-			If Bool(flags & #MYTABLE_COLUMN_FLAGS_TIME_LONG)
-				\format="%hh:%ii:%ss"
-			EndIf
-			\table=*this
-			*this\lastColid+1
-			\id=*this\lastColid
-			CompilerIf Defined(MYTABLE_GRID,#PB_Module)
-				If *this\datagrid And text=""
-					\text=_MyTableGridColumnName(ListSize(*this\cols()))
-				EndIf
-			CompilerEndIf
-		EndWith
-		*this\colsById(Str(*col\id))=*col
-		*this\dirty=#True
-		_callcountEnde(addcol)
-		_MyTable_Table_Recalc(*this)			
-		ProcedureReturn *col
-	EndIf
-	
-EndProcedure
-
-Procedure _MyTable_Table_ClearRows(*this.strMyTableTable)
-	If *this
-		ClearList(*this\rows())
-		ClearMap(*this\rowsById())
-		*this\dirty=#True
-		*this\lastRowid=0
-		_MyTable_Table_Recalc(*this)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_ClearCols(*this.strMyTableTable)
-	If *this
-		ClearList(*this\cols())
-		ClearMap(*this\colsById())
-		*this\dirty=#True
-		*this\lastColid=0
-		ForEach *this\rows()
-			ClearList(*this\rows()\cells())
-			*this\rows()\dirty=#True
-		Next
-		_MyTable_Table_Recalc(*this)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_DeleteCol(*this.strMyTableTable,col.i)
-	If *this
-		_MyTable_Col_Delete(SelectElement(*this\cols(),col))
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_DeleteRow(*this.strMyTableTable,row.i)
-	If *this
-		_MyTable_Col_Delete(SelectElement(*this\rows(),row))
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RecalcExp(*this.strMyTableTable,force.b=#False)
-	If *this
-		If Not *this\batch
-			If (*this\dirty And *this\redraw) Or force
-				_MyTableClearMaps(*this)
-				_callcountStart(recalc)
-				With *this
-					Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
-					Protected allrowcount.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_ALL_ROW_COUNT)
-					Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
-					Protected callback.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
-					Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
-					
-					Protected *lastCol.strMyTableCol=0
-					Protected w=0
-					Protected idx=0
-					ForEach \cols()
-						Protected *col.strMyTableCol=\cols()
-						*lastCol=*col
-						If *col\dirty
-							*col\calcheight=DesktopScaledY(\headerheight)
-							*col\calcwidth=DesktopScaledX(*col\width)
-							*col\dirty=#False						
-						EndIf
-						w+*col\calcwidth					
-					Next			
-					
-					ClearList(*this\expRows())
-					*this\expheight=0
-					
-					ForEach \rows()
-						Protected *row.strMyTableRow=\rows()
-						AddElement(*this\expRows()):*this\expRows()=*row		
-						If *row\dirty
-							*row\calcheight=DesktopScaledY(*row\height)
-							*row\calcwidth=w
-							If Not callback
-								*row\dirty=#False
-							EndIf
-						EndIf
-						If *row\expanded And hierarchical
-							_MyTableRecalcExp(*row,w)
-						EndIf
-						*this\expheight+*row\calcheight
-					Next
-					
-					If w>\lastw
-						SetGadgetAttribute(\hscroll,#PB_ScrollBar_Maximum,w-\lastw)				
-					EndIf
-					\bhs=Bool(w>\lastw)
-					HideGadget(\hscroll,Bool(w<=\lastw))	
-					If Not \bhs
-						SetGadgetState(\hscroll,0)
-					EndIf
-					
-					Protected h=ListSize(\expRows())
-					If Not allrowcount					
-						If \bhs
-							h-(GadgetHeight(\canvas)-GadgetHeight(\hscroll))/\rowheight
-						Else
-							h-GadgetHeight(\canvas)/\rowheight
-						EndIf
-					EndIf
-					
-					If Not noheader
-						h+1
-					EndIf
-					
-					
-					\bvs=Bool(h>0)
-					HideGadget(\vscroll,Bool(h<=0))	
-					SetGadgetAttribute(\vscroll,#PB_ScrollBar_Maximum,h)
-					
-					
-					If laststretch And *col 
-						*col\calcheight=DesktopScaledY(\headerheight)
-						*col\calcwidth=DesktopScaledX(GadgetWidth(\canvas))
-						If \bvs
-							*col\calcwidth-DesktopScaledX(GadgetWidth(\vscroll))	
-						EndIf
-						*col\dirty=#True
-					EndIf
-					
-					
-				EndWith
-				_callcountEnde(recalc)
-				_MyTable_Table_Redraw(*this)
-			EndIf
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
-	If *this
-		If Not *this\batch
-			With *this
-				Protected redraw.b=Bool(\redraw And \dirty And Not \drawing)
-				If *this\application
-					redraw=Bool(redraw And *this\application\redraw)
-				EndIf
-				If redraw
-					\drawing=#True
-					_MyTableClearMaps(*this)
-					_callcountStart(redraw)
-					
-					Protected grid.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_GRID)
-					Protected hierarchical.b=Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL) Or Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ARROW))
-					Protected checkboxes.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_CHECKBOX)
-					Protected laststretch.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_LAST_STRETCH)
-					Protected noheader.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER)
-					Protected fullrowselect.b=Bool(\flags & #MYTABLE_TABLE_FLAGS_FULL_ROW_SELECT Or ListSize(*this\cols())=1)
-					Protected idx=0
-					
-					Protected w=GadgetWidth(\canvas)
-					Protected h=GadgetHeight(\canvas)
-					
-					Protected *row.strMyTableRow=0
-					
-					If \bhs
-						h-GadgetHeight(\hscroll)
-					EndIf
-					
-					If \bvs
-						w-GadgetWidth(\vscroll)
-					EndIf
-					
-					w=DesktopScaledX(w)
-					h=DesktopScaledY(h)
-					
-					
-					
-					StartDrawing(CanvasOutput(\canvas))
-					DrawingMode(#PB_2DDrawing_AlphaClip)
-					DrawingFont(\font)
-					
-					Box(0,0,OutputWidth(),OutputHeight(),\background)
-					
-					Protected bx=-GetGadgetState(\hscroll)
-					Protected by=0
-					
-					Protected firstcol.b=#True
-					
-					If Not noheader
-						ForEach \cols()
-							Protected *col.strMyTableCol=\cols()
-							
-							bx+_MyTableDrawHeader(*col,bx,#False)
-							firstcol=#False
-							If bx>=w
-								Break
-							EndIf
-						Next
-						
-						If *this\fixedcolumns>0
-							bx=0
-							firstcol=#True
-							For idx=1 To *this\fixedcolumns
-								*col=SelectElement(\cols(),idx-1)
-								bx+_MyTableDrawHeader(*col,bx,#True)
-								firstcol=#False
-							Next
-						EndIf
-						
-						by=DesktopScaledY(\headerheight)
-					EndIf
-					
-					
-					Protected c=ListSize(\expRows())-1
-					Protected i=0
-					
-					For i=GetGadgetState(\vscroll) To c
-						SelectElement(\expRows(),i)				
-						*row=\expRows()
-						bx=-GetGadgetState(\hscroll)
-						by+_MyTableDrawRow(*row,w,bx,by,#False,fullrowselect,grid,hierarchical,checkboxes)
-						If by>=h
-							Break
-						EndIf
-					Next
-					
-					If *this\fixedcolumns>0
-						by=DesktopScaledY(\headerheight)
-						For i=GetGadgetState(\vscroll) To c
-							SelectElement(\expRows(),i)				
-							*row=\expRows()
-							by+_MyTableDrawRow(*row,w,0,by,#True,fullrowselect,grid,hierarchical,checkboxes)
-							If by>=h
-								Break
-							EndIf
-						Next
-					EndIf
-					
-					
-					
-					StopDrawing()
-					\drawing=#False
-					_callcountEnde(redraw)
-					\dirty=#False
-				EndIf			
-			EndWith
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_UnRegister(*this.strMyTableTable)		
-	If *this
-		With *this
-			UnbindGadgetEvent(\canvas,@MyTableEvtResize(),#PB_EventType_Resize)
-			UnbindGadgetEvent(\hscroll,@MyTableEvtScroll())
-			UnbindGadgetEvent(\vscroll,@MyTableEvtScroll())
-			
-			UnbindGadgetEvent(\canvas,@MyTableEvtMouseDown(),#PB_EventType_MouseWheel)
-			UnbindGadgetEvent(\canvas,@MyTableEvtMouseDown(),#PB_EventType_LeftClick)
-			UnbindGadgetEvent(\canvas,@MyTableEvtDouble(),#PB_EventType_LeftDoubleClick)
-			UnbindGadgetEvent(\canvas,@MyTableEvtKeyDown(),#PB_EventType_KeyDown)
-		EndWith
-		If IsGadget(*this\editorgadget)
-			FreeGadget(*this\editorgadget)
-		EndIf
-		If IsWindow(*this\editorwindow)
-			CloseWindow(*this\editorwindow)
-		EndIf
-	EndIf
-	If *this\application
-		ForEach *this\application\tables()
-			If *this\application\tables()=*this
-				DeleteElement(*this\application\tables())
-				Break
-			EndIf
-		Next
-	Else
-		FreeStructure(*this)
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_Table_SetCellValue(*this.strMyTableTable,row.i,col.i,value.d)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetValue(*cell,Value)
-	EndIf
-EndProcedure
-
-Procedure.d _MyTable_Table_GetCellValue(*this.strMyTableTable,row.i,col.i)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		ProcedureReturn _MyTable_Cell_GetValue(*cell)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_GetCellImage(*this.strMyTableTable,row.i,col.i)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		ProcedureReturn _MyTable_Cell_GetImage(*cell)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetCellText(*this.strMyTableTable,row.i,col.i,text.s)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetText(*cell,text)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetCellBorder(*this.strMyTableTable,row.i,col.i,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetBorder(*cell,border,width,color)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetCellBorderStyle(*this.strMyTableTable,row.i,col.i,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetBorderStyle(*cell,border,width,color)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetCellImage(*this.strMyTableTable,row.i,col.i,image.i)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		_MyTable_Cell_SetImage(*cell,image)
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Table_GetCellText(*this.strMyTableTable,row.i,col.i)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		ProcedureReturn _MyTable_Cell_GetText(*cell)
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Table_GetCellTooltip(*this.strMyTableTable,row.i,col.i)
-	If *this
-		Protected *row.strMyTableRow=SelectElement(*this\rows(),row)
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),col)
-		ProcedureReturn _MyTable_Cell_GetText(*cell)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventCellSelected(*this.strMyTableTable,event.MyTableProtoEventCellSelected)		
-	If *this
-		*this\evtCellSelect=event
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_Table_SetEventRowSelected(*this.strMyTableTable,event.MyTableProtoEventRowSelected)
-	
-	If *this
-		*this\evtRowSelect=event
-	EndIf
-EndProcedure
-
-
-
-Procedure _MyTable_Table_SetEventRowChecked(*this.strMyTableTable,event.MyTableProtoEventRowChecked)
-	
-	If *this
-		*this\evtRowChecked=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventRowRightClick(*this.strMyTableTable,event.MyTableProtoEventRowRightClick)
-	
-	If *this
-		*this\evtRowRightClick=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventColRightClick(*this.strMyTableTable,event.MyTableProtoEventColRightClick)
-	
-	If *this
-		*this\evtColRightClick=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventCellChecked(*this.strMyTableTable,event.MyTableProtoEventCellChecked)
-	
-	If *this
-		*this\evtCellChecked=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventCellRightClick(*this.strMyTableTable,event.MyTableProtoEventCellRightClick)
-	
-	If *this
-		*this\evtCellRightClick=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventCellChangedText(*this.strMyTableTable,event.MyTableProtoEventCellChangedText)
-	
-	If *this
-		*this\evtCellChangedText=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventCellChangedValue(*this.strMyTableTable,event.MyTableProtoEventCellChangedValue)
-	
-	If *this
-		*this\evtCellChangedValue=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetEventCallback(*this.strMyTableTable,event.MyTableProtoEventCallback)
-	
-	If *this
-		*this\evtCallback=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_GetRowCount(*this.strMyTableTable)
-	
-	If *this
-		ProcedureReturn ListSize(*this\expRows())
+		ProcedureReturn *this\type
 	EndIf
 EndProcedure
 
 Procedure _MyTable_Table_GetFlags(*this.strMyTableTable)
-	
 	If *this
 		ProcedureReturn *this\flags
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetApplication(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_SetFlags(*this.strMyTableTable,value.i)
 	If *this
-		ProcedureReturn *this\application
+		*this\flags=value
+		*this\dirty=#True
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetDefaultRowHeight(*this.strMyTableTable)
-	
+Procedure.s _MyTable_Table_GetTitle(*this.strMyTableTable)
 	If *this
-		ProcedureReturn *this\rowheight
+		ProcedureReturn *this\title
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetData(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_SetTitle(*this.strMyTableTable,value.s)
 	If *this
-		ProcedureReturn *this\data
+		*this\title=value
 	EndIf
 EndProcedure
 
-
-Procedure _MyTable_Table_GetColCount(*this.strMyTableTable)
-	
-	If *this
-		ProcedureReturn ListSize(*this\cols())
-	EndIf
-EndProcedure
 
 Procedure.s _MyTable_Table_GetName(*this.strMyTableTable)
-	
 	If *this
 		ProcedureReturn *this\name
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetFixedColumns(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_SetName(*this.strMyTableTable,value.s)
 	If *this
-		ProcedureReturn *this\fixedcolumns
+		Protected nname.s=_MyTableCleanName(value)
+		If *this\application
+			If nname<>*this\name
+				If nname=""
+					While _MyTable_Application_HasName(*this\application,"Table"+*this\application\lastindex)
+						*this\application\lastindex+1
+					Wend
+					*this\name="Table"+*this\application\lastindex
+				Else
+					If Not _MyTable_Application_HasName(*this\application,nname)
+						*this\name=nname
+					EndIf
+				EndIf
+			EndIf
+		Else
+			*this\name=nname
+		EndIf
 	EndIf
 EndProcedure
 
 
-Procedure _MyTable_Table_SetRedraw(*this.strMyTableTable,redraw.b)
-	
+Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",image.i=0,flags.i=0)
 	If *this
-		*this\redraw=redraw
+		Protected *row.strMyTableRow=AddElement(*this\rows())
+		_MyTableInitRow(*this\application,*this,0,*row,text,sep,image,flags)
 		*this\dirty=#True
-		_MyTable_Table_Recalc(*this)
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+		ProcedureReturn *row
 	EndIf
 EndProcedure
 
-CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-	Procedure _MyTable_Table_SetRecalc(*this.strMyTableTable,recalc.b)
+Procedure _MyTable_Table_AddCol(*this.strMyTableTable,text.s,width.i,image.i=0,flags.i=0)
+	If *this
+		Protected *col.strMyTableCol=AddElement(*this\cols())
+		_MyTableInitCol(*this\application,*this,*col,text,width,image,flags)
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+		ProcedureReturn *col
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_Delete(*this.strMyTableTable)
+	If *this
+		If IsGadget(*this\canvas)				
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtResize(),#PB_EventType_Resize)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasScroll(),#PB_EventType_MouseWheel)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseMove(),#PB_EventType_MouseMove)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftDown(),#PB_EventType_LeftButtonDown)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LeftButtonUp)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftDouble(),#PB_EventType_LeftDoubleClick)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightDown(),#PB_EventType_RightButtonDown)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightUp(),#PB_EventType_RightButtonUp)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightDouble(),#PB_EventType_RightDoubleClick)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
+		EndIf
+		If IsGadget(*this\vscroll)
+			UnbindGadgetEvent(*this\vscroll,@_MyTableEvtScroll())
+		EndIf
+		If IsGadget(*this\hscroll)
+			UnbindGadgetEvent(*this\hscroll,@_MyTableEvtScroll())
+		EndIf
 		
-		If *this
-			*this\recalc=recalc
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this)
-		EndIf
-	EndProcedure
-CompilerEndIf
-
-Procedure _MyTable_Table_SetFlags(*this.strMyTableTable,flags.i)
-	
-	If *this
-		If *this\flags<>flags And Not *this\datagrid
-			*this\flags=flags
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetName(*this.strMyTableTable,name.s)
-	
-	If *this
-		If *this\name<>name
-			*this\name=name
-		EndIf
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_Table_SetDefaultRowHeight(*this.strMyTableTable,rowheight.i)
-	
-	If *this
-		Protected old=*this\rowheight
-		If *this\rowheight<>rowheight
-			*this\rowheight=rowheight
-			*this\dirty=#True
-			ForEach *this\rows()
-				*this\rows()\dirty=#True
-				If *this\rows()\height<=old
-					*this\rows()\height=rowheight
+		If *this\application
+			Protected idx=0
+			ForEach *this\application\tables()
+				If *this\application\tables()=*this
+					DeleteElement(*this\application\tables())
+				Else
+					*this\application\tables()\listindex=idx
+					idx+1
 				EndIf
 			Next
-			_MyTable_Table_Recalc(*this)
+		Else
+			FreeStructure(*this)
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_SetRowHeight(*this.strMyTableTable,row.i,rowheight.i)
-	
+Procedure _MyTable_Table_Free(*this.strMyTableTable)
+	_MyTable_Table_Delete(*this)
+EndProcedure
+
+Procedure _MyTable_Table_GetData(*this.strMyTableTable)
 	If *this
-		_MyTable_Row_SetRowHeight(SelectElement(*this\rows(),row),rowheight)
+		ProcedureReturn *this\data
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetRowHeight(*this.strMyTableTable,row.i)
-	
+Procedure _MyTable_Table_SetData(*this.strMyTableTable,*value)
 	If *this
-		ProcedureReturn _MyTable_Row_GetRowHeight(SelectElement(*this\rows(),row))
+		*this\data=*value
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_SetData(*this.strMyTableTable,*data)
-	
+Procedure _MyTable_Table_ClearRows(*this.strMyTableTable,*value)
 	If *this
-		*this\data=*data
+		ClearList(*this\rows())
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_SetFixedColumns(*this.strMyTableTable,columns.i)
-	
+Procedure _MyTable_Table_ClearCols(*this.strMyTableTable,*value)
 	If *this
-		*this\fixedcolumns=columns
+		ClearList(*this\cols())
+		ForEach *this\rows()
+			ClearList(*this\rows()\cells())
+		Next
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_SetCustomCellEdit(*this.strMyTableTable,col.i,evtCustomEditCell.MyTableProtoEventCustomEditCell,evtCancelCustomEditCell.MyTableProtoEventCancelCustomEditCell)
+Procedure.q _MyTable_GetBackColor(*this.strMyTableStyleObject)
 	If *this
-		Protected *col.strMyTableCol=SelectElement(*this\cols(),col)
-		*col\evtCustomEditCell=evtCustomEditCell
-		*col\evtCancelCustomEditCell=evtCancelCustomEditCell
+		Protected result.q=0
+		_MyTableStyleGetRow(*this,backcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_GetFrontColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGetRow(*this,frontcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_GetForeColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGetRow(*this,forecolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_GetSelectedColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this,selectedcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_GetBorderColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGetRow(*this,border\bordercolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_GetSelectedBorderColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this,border\selectedbordercolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_GetVAlign(*this.strMyTableStyleObject)
+	If *this
+		Protected result.i=0
+		_MyTableStyleGetRow(*this,valign)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_GetHAlign(*this.strMyTableStyleObject)
+	If *this
+		Protected result.i=0
+		_MyTableStyleGetCol(*this,halign)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height.i,scrollx.i,scrolly.i)
+	Protected bx=-scrollx
+	ForEach *this\cols()
+		Protected *col.strMyTableCol=*this\cols()
+		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
 		
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetSelectedbackground(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\selectedbackground<>color
-			*this\selectedbackground=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		If *col\dirty
+			*col\calcwidth=DesktopScaledX(*col\width)
+			
+			*col\textwidth=_MyTableTextWidth(*col\text)
+			*col\textheight=_MyTableTextHeight(*col\text)
+			
+			*col\dirty=#False
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetBackground(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\background<>color
-			*this\background=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		Protected addx=DesktopScaledX(2)
+		Protected addy=0
+		Protected valign=_MyTable_GetVAlign(*col)
+		Protected halign=_MyTable_GetHAlign(*col)
+		
+		
+		
+		DrawingMode(#PB_2DDrawing_Default)
+		BackColor(_MyTable_GetBackColor(*col))
+		FrontColor(_MyTable_GetFrontColor(*col))
+		ClipOutput(bx,0,*col\calcwidth,*this\calcheaderheight)
+		Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBackColor(*col))
+		
+		If *col\image\orig And IsImage(*col\image\orig)
+			addx+DesktopScaledX(2)
+			If Not *col\image\sized
+				*col\image\sized=CopyImage(*col\image\orig,#PB_Any)
+				ResizeImage(*col\image\sized,*this\calcheaderheight-MyTableW8,*this\calcheaderheight-MyTableH8)
+			EndIf
+			DrawingMode(#PB_2DDrawing_AlphaClip)
+			DrawImage(ImageID(*col\image\sized),bx+addx,addy+MyTableW4)
+			DrawingMode(#PB_2DDrawing_Default)
+			addx+*this\calcheaderheight
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetBackgroundFixed(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\backgroundfixed<>color
-			*this\backgroundfixed=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		If halign=#MYTABLE_STYLE_HALIGN_CENTER
+			If *col\sort
+				addx+(*col\calcwidth /2- addx - MyTableW20)-*col\textwidth/2
+			Else
+				addx+(*col\calcwidth /2- addx)-*col\textwidth/2
+			EndIf
+		ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
+			addx+*col\calcwidth - *col\textwidth - MyTableW8 - addx
+			If *col\sort
+				addx - MyTableW20
+			EndIf
+		Else
+			addx+DesktopScaledX(2)
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetHeaderBackgroundMarked(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\headerbackgroundmarked<>color
-			*this\headerbackgroundmarked=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
+			addy+*this\calcheaderheight/2 - *col\textheight/2
+		ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
+			addy+*this\calcheaderheight-*col\textheight-MyTableH1			
+		Else
+			addy+DesktopScaledY(1)
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetHeaderbackground1(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\headerbackground1<>color
-			*this\headerbackground1=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		DrawingMode(#PB_2DDrawing_AlphaClip)
+		Select *col\sort
+			Case #MYTABLE_COL_SORT_ASC
+				DrawImage(ImageID(MyTableDefaultImageSortAsc),bx+*col\calcwidth-MyTableW20,0)
+			Case #MYTABLE_COL_SORT_DESC
+				DrawImage(ImageID(MyTableDefaultImageSortDesc),bx+*col\calcwidth-MyTableW20,0)
+		EndSelect
+		
+		DrawingMode(#PB_2DDrawing_Default)
+		DrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
+		DrawingMode(#PB_2DDrawing_Outlined)
+		Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBorderColor(*col))
+		UnclipOutput()
+		bx+*col\calcwidth
+		If bx>=width
+			Break
 		EndIf
-	EndIf
+	Next
+	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
-Procedure _MyTable_Table_SetHeaderbackground2(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\headerbackground2<>color
-			*this\headerbackground2=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i)
+	Protected bx=-scrollx
+	Protected idx
+	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+	Protected checkboxes.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+	Protected border.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_BORDER)
+	Protected selected.b=#False
+	For idx=1 To cols
+		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
+		DrawingMode(#PB_2DDrawing_Default)			
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
+		
+		selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
+		selected=Bool(selected Or *this\table\selectedcells(Str(*cell)))
+		
+		If *cell\dirty 
+			If *cell\text<>""
+				*cell\textheight=_MyTableTextHeight(*cell\text)
+				*cell\textwidth=_MyTableTextWidth(*cell\text)
+			Else
+				*cell\textheight=0
+				*cell\textwidth=0
+			EndIf
+			*cell\dirty=#False
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetHeaderbackgroundFixed(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\headerbackgroundfixed<>color
-			*this\headerbackgroundfixed=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		Protected *col.strMyTableCol=*cell\col
+		
+		
+		If selected
+			Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedColor(*cell))
+		Else
+			Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetForecolor(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\forecolor<>color
-			*this\forecolor=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		
+		Protected addx=DesktopScaledX(2)
+		Protected addy=0
+		Protected valign=_MyTable_GetVAlign(*cell)
+		Protected halign=_MyTable_GetHAlign(*cell)
+		
+		If hierarchical
+			If idx=1
+				addx+*this\level*MyTableW20
+				DrawingMode(#PB_2DDrawing_AlphaClip)
+				If ListSize(*this\rows())>0
+					If *this\expanded
+						DrawImage(ImageID(MyTableDefaultImageMinusArrow),bx+addx,by)
+					Else
+						DrawImage(ImageID(MyTableDefaultImagePlusArrow),bx+addx,by)
+					EndIf
+				EndIf
+				DrawingMode(#PB_2DDrawing_Default)
+				addx+MyTableW20
+			EndIf
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetHeaderforecolor(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\headerforecolor<>color
-			*this\headerforecolor=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		If checkboxes
+			If idx=1
+				DrawingMode(#PB_2DDrawing_AlphaClip)				
+				If *this\checked
+					DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+				Else
+					DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+				EndIf				
+				DrawingMode(#PB_2DDrawing_Default)
+				addx+MyTableW20
+				
+			EndIf
+			
 		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetSelectedforecolor(*this.strMyTableTable,color.q)
-	
-	If *this
-		If *this\selectedforecolor<>color
-			*this\selectedforecolor=color
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+		
+		checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
+		
+		If idx=1
+			If *this\image\orig And IsImage(*this\image\orig)
+				addx+DesktopScaledX(2)
+				If Not *this\image\sized
+					*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
+					ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+				EndIf
+				DrawingMode(#PB_2DDrawing_AlphaClip)
+				DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
+				DrawingMode(#PB_2DDrawing_Default)
+				addx+*this\calcheight
+			EndIf
 		EndIf
-	EndIf
+		
+		If *cell\image\orig And IsImage(*cell\image\orig)
+			addx+DesktopScaledX(2)
+			If Not *cell\image\sized
+				*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
+				ResizeImage(*cell\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+			EndIf
+			DrawingMode(#PB_2DDrawing_AlphaClip)
+			DrawImage(ImageID(*cell\image\sized),bx+addx,by+addy+MyTableW4)
+			DrawingMode(#PB_2DDrawing_Default)
+			addx+*this\calcheight
+		EndIf
+		
+		If halign=#MYTABLE_STYLE_HALIGN_CENTER
+			If checkboxes And idx>1
+				addx+(*col\calcwidth-addx - MyTableW20)/2-*cell\textwidth/2
+			Else
+				addx+(*col\calcwidth-addx)/2-*cell\textwidth/2
+			EndIf
+		ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
+			addx+*col\calcwidth - *cell\textwidth - MyTableW8 -addx
+			If checkboxes And idx>1
+				addx-MyTableW20
+			EndIf
+		Else
+			addx+DesktopScaledX(2)
+		EndIf
+		
+		If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
+			addy+*this\calcheight/2 - *cell\textheight/2
+		ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
+			addy+*this\calcheight-*cell\textheight-MyTableH1
+		Else
+			addy+DesktopScaledY(1)
+		EndIf
+		
+		If checkboxes
+			If idx>1
+				DrawingMode(#PB_2DDrawing_AlphaClip)
+				If *cell\checked
+					DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+				Else
+					DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+				EndIf
+				DrawingMode(#PB_2DDrawing_Default)
+				addx+MyTableW20
+			EndIf			
+		EndIf
+		
+		ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
+		If *cell\text<>""
+			DrawingMode(#PB_2DDrawing_Transparent)	
+			DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+		EndIf
+		If border
+			DrawingMode(#PB_2DDrawing_Outlined)
+			If selected
+				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBorderColor(*cell))
+			Else
+				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBorderColor(*cell))
+			EndIf
+		EndIf
+		UnclipOutput()
+		bx+*col\calcwidth
+		If bx>=width
+			Break
+		EndIf
+	Next
+	ProcedureReturn *this\calcheight
 EndProcedure
 
-Procedure _MyTable_Table_SetFont(*this.strMyTableTable,font.i)
-	
-	If *this
-		If *this\font<>font
-			*this\font=font
-			*this\dirty=#True
-			ForEach *this\cols()
-				*this\cols()\dirty=#True
-				*this\cols()\textheight=0
-				*this\cols()\textwidth=0
+Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
+	If *this And *this\canvas
+		_MyTable_Table_ClearMaps(*this)
+		Protected redraw.b=Bool(*this\dirty And *this\redraw)
+		Protected header.b=Bool(Not (*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
+		If *this\application
+			redraw=Bool(redraw And *this\application\redraw)
+		EndIf
+		If redraw
+			_callcountStart(Redraw)
+			If IsImage(*this\canvas)
+				StartDrawing(ImageOutput(*this\canvas))
+			EndIf
+			If IsGadget(*this\canvas)
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
+			
+			Protected font.i=*this\style\font
+			Protected backcolor.q=_MyTable_GetBackColor(*this)
+			Protected frontcolor.q=_MyTable_GetFrontColor(*this)
+			
+			Protected height=OutputHeight()
+			Protected width=OutputWidth()
+			
+			Protected scrollx.i=*this\hscroll
+			Protected scrolly.i=*this\vscroll
+			If IsGadget(scrollx)
+				scrollx=GetGadgetState(scrollx)
+			EndIf
+			If IsGadget(scrolly)
+				scrolly=GetGadgetState(scrolly)
+			EndIf
+			
+			scrollx=DesktopScaledX(scrollx)
+			scrolly=DesktopScaledY(scrolly)
+			
+			If Not font 
+				If *this\application
+					font=*this\application\style\font
+					If Not font
+						font=GetGadgetFont(#PB_Default)
+						*this\application\style\font=font
+					EndIf
+				Else
+					font=GetGadgetFont(#PB_Default)
+					*this\style\font=font
+				EndIf
+			EndIf
+			
+			DrawingFont(font)
+			BackColor(backcolor)
+			FrontColor(frontcolor)
+			If backcolor<>frontcolor
+				DrawingMode(#PB_2DDrawing_Gradient)
+				LinearGradient(0,0,width,height)
+			EndIf
+			Box(0,0,width,height)
+			
+			Protected by=-scrolly
+			If header
+				by+*this\calcheaderheight
+			EndIf
+			Protected c=ListSize(*this\cols())
+			ForEach *this\expRows()
+				Protected *row.strMyTableRow=*this\expRows()
+				If by+*row\calcheight>0
+					_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly)
+				EndIf
+				by+*row\calcheight
+				If by>height
+					Break
+				EndIf
 			Next
+			
+			If header
+				_MyTable_Table_Draw_Header(*this,font,width,height,scrollx,scrolly)
+			EndIf
+			
+			If IsGadget(*this\vscroll)
+				BackColor(backcolor)
+				FrontColor(frontcolor)
+				DrawingMode(#PB_2DDrawing_Default)
+				Box(width-GadgetWidth(*this\vscroll),height-GadgetHeight(*this\hscroll),GadgetWidth(*this\vscroll),GadgetHeight(*this\hscroll))
+			EndIf
+			*this\dirty=#False
+			StopDrawing()
+			_callcountEnde(Redraw)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow)
+	Protected result.i=0
+	ForEach *row\rows()
+		AddElement(*this\expRows())
+		*this\expRows()=*row\rows()
+		result+*this\rows()\height
+		If *row\rows()\expanded And ListSize(*row\rows()\rows())>0
+			result+_MyTable_Table_PredrawSub(*this,*row\rows())
+		EndIf
+	Next
+	ProcedureReturn result
+EndProcedure
+
+Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
+	If *this
+		If *this\redraw And *this\dirty
+			_callcountStart(Predraw)
+			ClearList(*this\expRows())
+			Protected h=0
+			Protected w=0
+			Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+			Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
+			If header
+				h+*this\headerheight
+			EndIf
 			ForEach *this\rows()
-				ForEach *this\rows()\cells()
-					*this\rows()\cells()\dirty=#True
-					*this\rows()\cells()\textheight=0
-					*this\rows()\cells()\textwidth=0
-				Next
+				AddElement(*this\expRows())
+				*this\expRows()=*this\rows()
+				h+*this\rows()\height
+				If hierarchical
+					If *this\rows()\expanded And ListSize(*this\rows()\rows())>0
+						h+_MyTable_Table_PredrawSub(*this,*this\rows())
+					EndIf
+				EndIf
 			Next
+			
+			Protected cw=0
+			Protected ch=0
+			
+			If IsGadget(*this\canvas)
+				cw=GadgetWidth(*this\canvas)
+				ch=GadgetHeight(*this\canvas)
+			EndIf
+			If IsImage(*this\canvas)
+				cw=ImageWidth(*this\canvas)
+				ch=ImageHeight(*this\canvas)
+			EndIf
+			
+			
+			Protected cs.i=0
+			ForEach *this\cols()
+				If *this\cols()\stretched
+					cs+1
+				Else
+					w+*this\cols()\width
+				EndIf
+			Next
+			
+			
+			
+			w-cw
+			h-ch
+			
+			If IsGadget(*this\hscroll)
+				If h>0
+					w+GadgetWidth(*this\vscroll)
+					ResizeGadget(*this\hscroll,#PB_Ignore,#PB_Ignore,cw-GadgetWidth(*this\vscroll),#PB_Ignore)
+				ElseIf h=0
+					ResizeGadget(*this\hscroll,#PB_Ignore,#PB_Ignore,cw,#PB_Ignore)
+				Else
+					ResizeGadget(*this\hscroll,#PB_Ignore,#PB_Ignore,cw-GadgetWidth(*this\vscroll),#PB_Ignore)
+				EndIf
+				
+				If cs>0
+					Protected cc=Abs(w)/cs
+					Protected dcc=DesktopScaledX(cc)
+					If cc>0
+						ForEach *this\cols()
+							If *this\cols()\stretched
+								*this\cols()\width=cc
+								*this\cols()\calcwidth=dcc
+							EndIf
+						Next
+					Else
+						ForEach *this\cols()
+							If *this\cols()\stretched
+								*this\cols()\width=0
+								*this\cols()\calcwidth=0
+							EndIf
+						Next
+					EndIf
+				EndIf
+				
+				If w<0
+					w=0
+				EndIf
+				
+				If w>0
+					HideGadget(*this\hscroll,#False)					
+					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,w)
+				Else
+					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,0)
+					HideGadget(*this\hscroll,#True)
+					SetGadgetState(*this\hscroll,0)
+				EndIf
+			Else
+				w-*this\hscroll
+			EndIf
+			
+			If IsGadget(*this\vscroll)
+				If w>0					
+					h+GadgetHeight(*this\hscroll)		
+					ResizeGadget(*this\vscroll,#PB_Ignore,#PB_Ignore,#PB_Ignore,ch-GadgetHeight(*this\hscroll))
+				ElseIf w=0
+					ResizeGadget(*this\vscroll,#PB_Ignore,#PB_Ignore,#PB_Ignore,ch)
+				Else
+					ResizeGadget(*this\vscroll,#PB_Ignore,#PB_Ignore,#PB_Ignore,ch-GadgetHeight(*this\hscroll))
+				EndIf
+				
+				If h>0
+					HideGadget(*this\vscroll,#False)
+					SetGadgetAttribute(*this\vscroll,#PB_ScrollBar_Maximum,h)
+				Else
+					SetGadgetAttribute(*this\vscroll,#PB_ScrollBar_Maximum,0)
+					HideGadget(*this\vscroll,#True)
+					SetGadgetState(*this\vscroll,0)
+				EndIf
+			Else
+				h-*this\vscroll
+			EndIf
+			
+			_callcountEnde(Predraw)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Table_GetRedraw(*this.strMyTableTable)
+	If *this
+		ProcedureReturn *this\redraw
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetRedraw(*this.strMyTableTable,value.b)
+	If *this
+		*this\redraw=value
+		*this\dirty=#True
+		If value
+			_MyTable_Table_Predraw(*this)
+			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_Recalc(*this.strMyTableTable)
+	If *this
+		Protected recalc.b=*this\recalc
+		If *this\application
+			recalc=Bool(recalc And *this\application\recalc)
+		EndIf
+		If recalc
+			_callcountStart(Recalc)
+			
+			
+			_callcountEnde(Recalc)
+		EndIf
+		
+		_MyTable_Table_Redraw(*this)
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Table_GetRecalc(*this.strMyTableTable)
+	If *this
+		ProcedureReturn *this\recalc
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetRecalc(*this.strMyTableTable,value.b)
+	If *this
+		*this\recalc=value
+		If value
 			_MyTable_Table_Recalc(*this)
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetSelectedbackground(*this.strMyTableTable)
-	
+Procedure.b _MyTable_Table_GetDirty(*this.strMyTableTable)
 	If *this
-		ProcedureReturn *this\selectedbackground
+		ProcedureReturn *this\dirty
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetBackground(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_GetHeaderHeight(*this.strMyTableTable)
 	If *this
-		ProcedureReturn *this\background
+		ProcedureReturn *this\headerheight
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetBackgroundFixed(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_GetDefaultRowHeight(*this.strMyTableTable)
 	If *this
-		ProcedureReturn *this\backgroundfixed
+		ProcedureReturn *this\defaultrowheight
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetHeaderbackground1(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_SetHeaderHeight(*this.strMyTableTable,value.i)
 	If *this
-		ProcedureReturn *this\headerbackground1
+		*this\headerheight=value
+		*this\calcheaderheight=DesktopScaledY(*this\headerheight)
+		*this\dirty=#True
+		ForEach *this\cols()
+			*this\cols()\dirty=#True
+			If IsImage(*this\cols()\image\sized)
+				FreeImage(*this\cols()\image\sized)
+			EndIf
+			*this\cols()\image\sized=0
+		Next
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetHeaderbackground2(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_SetDefaultRowHeight(*this.strMyTableTable,value.i)
 	If *this
-		ProcedureReturn *this\headerbackground2
+		Protected old.i=*this\defaultrowheight
+		*this\defaultrowheight=value
+		*this\calcdefaultrowheight=DesktopScaledY(*this\defaultrowheight)
+		*this\dirty=#True
+		ForEach *this\rows()
+			*this\rows()\dirty=#True
+			If IsImage(*this\rows()\image\sized)
+				FreeImage(*this\rows()\image\sized)
+			EndIf
+			*this\rows()\image\sized=0
+			If *this\rows()\height=old
+				*this\rows()\height=value
+				*this\rows()\calcheight=*this\calcdefaultrowheight
+			EndIf
+		Next
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetHeaderbackgroundFixed(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_SetDirty(*this.strMyTableTable,value.b)
 	If *this
-		ProcedureReturn *this\headerbackgroundfixed
+		*this\dirty=value
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetHeaderbackgroundMarked(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_DeleteRow(*this.strMyTableTable,idx.i)
 	If *this
-		ProcedureReturn *this\headerbackgroundmarked
+		If ListSize(*this\rows())>idx
+			_MyTable_Row_Delete(SelectElement(*this\rows(),idx))
+		EndIf
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetForecolor(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_DeleteCol(*this.strMyTableTable,idx.i)
 	If *this
-		ProcedureReturn *this\forecolor
+		If ListSize(*this\cols())>idx
+			_MyTable_Col_Delete(SelectElement(*this\cols(),idx))
+		EndIf
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetHeaderforecolor(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_GetRow(*this.strMyTableTable,row.i)
 	If *this
-		ProcedureReturn *this\headerforecolor
+		If ListSize(*this\rows())>row
+			ProcedureReturn SelectElement(*this\rows(),row)
+		EndIf
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Table_GetSelectedforecolor(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_GetCol(*this.strMyTableTable,col.i)
 	If *this
-		ProcedureReturn *this\selectedforecolor
+		If ListSize(*this\cols())>col
+			ProcedureReturn SelectElement(*this\cols(),col)
+		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetFont(*this.strMyTableTable)
-	
+Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	If *this
-		ProcedureReturn *this\font
+		If ListSize(*this\cols())>col And ListSize(*this\rows())>row
+			ProcedureReturn _MyTableGetOrAddCell(SelectElement(*this\rows(),row),col)
+		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_Dirty(*this.strMyTableTable)
-	*this\dirty=#True
+Procedure _MyTable_Table_GetStyle(*this.strMyTableTable)
+	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+	_MyTableInitStyleObject(*style,*this)
+	ProcedureReturn *style
+EndProcedure
+
+Procedure _MyTable_Table_RowCount(*this.strMyTableTable)
+	If *this
+		ProcedureReturn ListSize(*this\rows())
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_ColCount(*this.strMyTableTable)
+	If *this
+		ProcedureReturn ListSize(*this\cols())
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_ClearMaps(*this.strMyTableTable)
+	If *this
+		If *this\selectall
+			ClearMap(*this\selectedcells())
+			ClearMap(*this\selectedrows())
+			ClearMap(*this\selectedcols())
+		Else
+			ForEach *this\selectedcells()
+				If Not *this\selectedcells()
+					DeleteMapElement(*this\selectedcells())
+				EndIf
+			Next
+			ForEach *this\selectedrows()
+				If Not *this\selectedrows()
+					DeleteMapElement(*this\selectedrows())
+				EndIf
+			Next
+			ForEach *this\selectedcols()
+				If Not *this\selectedcols()
+					DeleteMapElement(*this\selectedcols())
+				EndIf
+			Next
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Table_GetSelected(*this.strMyTableTable)
+	If *this
+		ProcedureReturn *this\selectall
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
+	If *this
+		*this\selectall=value
+		*this\dirty=#True
+		_MyTable_Table_Redraw(*this)
+	EndIf
 EndProcedure

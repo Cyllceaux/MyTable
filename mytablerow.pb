@@ -1,218 +1,6 @@
-﻿;/ ===========================
-;/ =   mytablerow.pb       =
-;/ ===========================
-;/
-;/ [ PB V5.7x / 64Bit / all OS / DPI ]
-;/
-;/ © 2021 Cyllceaux (06/2021)
-;/
-
-
-;{ ===== MIT License =====
-;
-; Copyright (c) 2021 Silko Pillasch
-;
-; Permission is hereby granted, free of charge, to any person obtaining a copy
-; of this software and associated documentation files (the "Software"), to deal
-; in the Software without restriction, including without limitation the rights
-; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-; copies of the Software, and to permit persons to whom the Software is
-; furnished to do so, subject to the following conditions:
-; 
-; The above copyright notice and this permission notice shall be included in all
-; copies or substantial portions of the Software.
-;
-; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-; SOFTWARE.
-;}
-
-Procedure _MyTable_Row_GetID(*this.strMyTableRow)
-	ProcedureReturn *this\id
-EndProcedure
-
-Procedure _MyTable_Row_GetType(*this.strMyTableRow)
-	ProcedureReturn *this\type
-EndProcedure
-
-Procedure _MyTable_Row_GetCell(*this.strMyTableRow,col.i)
-	ProcedureReturn _MyTableGetOrAddCell(*this,col)
-EndProcedure
-
-Procedure _MyTable_Row_GetCells(*this.strMyTableRow,List cells.i())
+﻿Procedure _MyTable_Row_GetType(*this.strMyTableRow)
 	If *this
-		ClearList(cells())
-		_MyTableGetOrAddCell(*this,ListSize(*this\table\cols())-1)
-		ForEach *this\cells()
-			AddElement(cells())
-			cells()=*this\cells()
-		Next
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetTable(*this.strMyTableRow)
-	ProcedureReturn *this\table
-EndProcedure
-
-Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,rows.i)
-	If *this
-		_callcountStart(addrowdirtyrows)
-		Protected i=0
-		Protected *row.strMyTableRow=0
-		
-		
-		LastElement(*this\rows())
-		For i=1 To rows
-			*row=AddElement(*this\rows())					
-			_MyTableAddDirtyRow(*this,*row)
-			*this\level=*this\level+1
-			*row\listindex=ListIndex(*this\rows())
-		Next
-		
-		*this\dirty=#True
-		_callcountEnde(addrowdirtyrows)
-		_MyTable_Table_Recalc(*this\table)
-	EndIf	
-EndProcedure
-
-Procedure _MyTable_Row_SetImage(*this.strMyTableRow,image.i)
-	
-	If *this
-		
-		If *this\image<>image
-			*this\image=image
-			*this\dirty=#True
-			*this\dirty=#True
-			If IsImage(*this\sclaedimage)
-				FreeImage(*this\sclaedimage)				
-			EndIf
-			If IsImage(image)				
-				*this\sclaedimage=CopyImage(image,#PB_Any)
-				ResizeImage(*this\sclaedimage,MyTableW16,MyTableH16)
-			EndIf
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetData(*this.strMyTableRow,*data)
-	
-	If *this
-		
-		*this\data=*data		
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetTooltip(*this.strMyTableRow,tooltip.s)
-	
-	If *this
-		
-		*this\tooltip=tooltip		
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_Row_SetDirty(*this.strMyTableRow)
-	
-	If *this
-		
-		*this\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetChecked(*this.strMyTableRow,checked.b)
-	
-	If *this
-		
-		If *this\checked<>checked
-			*this\checked=checked
-			*this\dirty=#True
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetExpanded(*this.strMyTableRow,expanded.b)
-	
-	If *this
-		
-		If *this\expanded<>expanded
-			*this\expanded=expanded
-			*this\dirty=#True
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetHeight(*this.strMyTableRow,height.i)
-	
-	If *this
-		
-		
-		If *this\height<>height
-			*this\height=height
-			*this\dirty=#True
-			*this\dirty=#True
-			_MyTable_Table_Recalc(*this\table)
-		EndIf
-		
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetImage(*this.strMyTableRow)
-	
-	If *this
-		
-		ProcedureReturn *this\image
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetData(*this.strMyTableRow)
-	
-	If *this
-		
-		ProcedureReturn *this\data
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Row_GetTooltip(*this.strMyTableRow)
-	
-	If *this
-		
-		ProcedureReturn *this\tooltip
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetHeight(*this.strMyTableRow)
-	
-	If *this
-		
-		ProcedureReturn *this\height
-	EndIf
-EndProcedure
-
-
-
-Procedure.b _MyTable_Row_GetChecked(*this.strMyTableRow)
-	
-	If *this
-		
-		ProcedureReturn *this\checked
-	EndIf
-EndProcedure
-
-Procedure.b _MyTable_Row_GetExpanded(*this.strMyTableRow)
-	
-	If *this
-		
-		ProcedureReturn *this\expanded
+		ProcedureReturn *this\type
 	EndIf
 EndProcedure
 
@@ -222,267 +10,170 @@ Procedure _MyTable_Row_GetFlags(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_SetFlags(*this.strMyTableRow,flags.i)
+Procedure _MyTable_Row_SetFlags(*this.strMyTableRow,value.i)
 	If *this
-		
-		If *this\flags<>flags
-			*this\flags=flags
-			*this\dirty=#True
-			*this\dirty=#True
-			*this\table\dirty=#True						
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetSelectedbackground(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\selectedbackground<>color
-			*this\selectedbackground=color
-			*this\dirty=#True
-			*this\table\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetBackground(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\background<>color
-			*this\background=color
-			*this\dirty=#True
-			*this\table\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetBackgroundFixed(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\backgroundfixed<>color
-			*this\backgroundfixed=color
-			*this\dirty=#True
-			*this\table\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_Row_SetForecolor(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\forecolor<>color
-			*this\forecolor=color
-			*this\dirty=#True
-			*this\table\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-
-
-Procedure _MyTable_Row_SetSelectedforecolor(*this.strMyTableRow,color.q)
-	
-	If *this
-		If *this\selectedforecolor<>color
-			*this\selectedforecolor=color
-			*this\dirty=#True
-			*this\table\dirty=#True
-			_MyTable_Table_Redraw(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetFont(*this.strMyTableRow,font.i)
-	
-	If *this
-		If *this\font<>font
-			*this\font=font
-			*this\dirty=#True
-			*this\table\dirty=#True
-			
-			ForEach *this\cells()
-				*this\cells()\dirty=#True
-				*this\cells()\textheight=0
-				*this\cells()\textwidth=0
-			Next
-			
-			_MyTable_Table_Recalc(*this\table)
-		EndIf
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Row_GetSelectedbackground(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\selectedbackground
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Row_GetBackground(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\background
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Row_GetBackgroundFixed(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\backgroundfixed
-	EndIf
-EndProcedure
-
-
-Procedure.q _MyTable_Row_GetForecolor(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\forecolor
-	EndIf
-EndProcedure
-
-
-Procedure.q _MyTable_Row_GetSelectedforecolor(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\selectedforecolor
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetFont(*this.strMyTableRow)
-	
-	If *this
-		ProcedureReturn *this\font
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
-	If *this
-		Protected *row.strMyTableRow=0
-		Protected *cell.strMyTableCell=0
-		Protected *col.strMyTableCol=0
-		
-		
-		LastElement(*this\rows())
-		*row=AddElement(*this\rows())
-		
-		With *row
-			\vtable=?vtable_row
-			\height=*this\table\rowheight
-			\parent=*this
-			\brow=#True
-			\checked=checked
-			\expanded=expanded
-			\data=*data
-			\image=image
-			\type=#MYTABLE_TYPE_ROW
-			\tooltip=tooltip
-			\level=*this\level+1
-			*row\listindex=ListIndex(*this\rows())
-			If IsImage(image)				
-				\sclaedimage=CopyImage(image,#PB_Any)
-				ResizeImage(\sclaedimage,MyTableW16,MyTableH16)
-			EndIf
-			If id=#PB_Ignore Or id<=*this\table\lastRowid
-				*this\table\lastRowid+1
-				\id=*this\table\lastRowid
-			Else
-				\id=id
-				*this\table\lastRowid=id
-			EndIf
-			\dirty=#True
-			\table=*this\table
-			
-			
-			
-			
-			If text<>""
-				Protected i=0
-				Protected Dim result.s(ListSize(*row\table\cols()))
-				Protected c= _MyTableStringField(text,result(),sep)
-				If c
-					For i=1 To c					
-						*cell=_MyTableGetOrAddCell(*row,i-1)
-						If *cell
-							_MyTableFillCellText(*cell,result(i-1))							
-						EndIf
-					Next
-				EndIf
-				FreeArray(result())
-			EndIf
-		EndWith
-		*this\table\rowsById(Str(*row\id))=*row
+		*this\flags=value
+		*this\table\dirty=#True
 		*this\dirty=#True
-		_MyTable_Table_Recalc(*this\table)
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",image.i=0,flags.i=0)
+	If *this
+		Protected *row.strMyTableRow=AddElement(*this\rows())
+		_MyTableInitRow(*this\table\application,*this\table,*this,*row,text,sep,image,flags)
+		*this\table\dirty=#True
+		*this\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
 		ProcedureReturn *row
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_GetRowHeight(*this.strMyTableRow)
-	
+Procedure _MyTable_Row_Delete(*this.strMyTableRow)
 	If *this
-		ProcedureReturn *this\height
+		Protected idx=0
+		Protected *table.strMyTableTable=*this\table
+		ForEach *this\table\rows()
+			If *this\table\rows()=*this
+				DeleteElement(*this\table\rows())
+			Else
+				*this\table\rows()\listindex=idx
+				idx+1
+			EndIf
+		Next
+		*table\dirty=#True
+		_MyTable_Table_Redraw(*table)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_SetRowHeight(*this.strMyTableRow,rowheight.i)
-	
+Procedure _MyTable_Row_DeleteRow(*this.strMyTableRow,idx.i)
 	If *this
-		Protected old=*this\height
-		If *this\height<>rowheight
-			*this\height=rowheight
+		If ListSize(*this\rows())>idx
 			*this\dirty=#True
-			*this\table\dirty=#True
-			_MyTable_Table_Recalc(*this\table)
+			_MyTable_Row_Delete(SelectElement(*this\rows(),idx))
 		EndIf
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_Dirty(*this.strMyTableRow)
-	*this\dirty=#True
+Procedure _MyTable_Row_GetData(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\data
+	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_Delete(*this.strMyTableRow)
-	Protected idx=0
-	If *this\parent
-		ForEach *this\rows()
-			If *this\rows()=*this
-				DeleteElement(*this\rows())
-			Else
-				*this\rows()\listindex=idx
-				idx+1
-			EndIf
-		Next
-	Else
-		ForEach *this\table\rows()
-			If *this\table\rows()=*this
-				CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-					ForEach *this\cells()
-						*this\table\formulaCells(Str(*this\cells()))=#False
-					Next
-				CompilerEndIf
-				CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-					ForEach *this\cells()
-						*this\table\matrixCells(Str(*this\cells()))=#False
-					Next
-				CompilerEndIf
-				DeleteElement(*this\table\rows())				
-			Else
-				*this\table\rows()\listindex=idx
-				idx+1
-				If *this\table\datagrid
-					Protected *cell.strMyTableCell=FirstElement(*this\table\rows()\cells())
-					_MytableClearCell(*cell)
-					*cell\text=Str(idx)					
-				EndIf
-			EndIf
-		Next
+Procedure _MyTable_Row_SetData(*this.strMyTableRow,*value)
+	If *this
+		*this\data=*value
 	EndIf
-	*this\table\dirty=#True
-	_MyTable_Table_Recalc(*this\table)
+EndProcedure
+
+Procedure _MyTable_Row_GetDirty(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\dirty
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_SetDirty(*this.strMyTableRow,value.b)
+	If *this
+		*this\dirty=value
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetRow(*this.strMyTableRow,row.i)
+	If *this
+		If ListSize(*this\rows())>row
+			ProcedureReturn SelectElement(*this\rows(),row)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetCell(*this.strMyTableRow,col.i)
+	If *this
+		If ListSize(*this\table\cols())>col
+			ProcedureReturn _MyTableGetOrAddCell(*this,col)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Row_GetExpanded(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\expanded
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_SetExpanded(*this.strMyTableRow,value.b)
+	If *this
+		*this\expanded=value
+		*this\dirty=#True
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetImage(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\image\orig
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_RowCount(*this.strMyTableRow)
+	If *this
+		ProcedureReturn ListSize(*this\rows())
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_SetImage(*this.strMyTableRow,value.i)
+	If *this
+		*this\image\orig=value
+		If IsImage(*this\image\sized)
+			FreeImage(*this\image\sized)
+			*this\image\sized=0
+		EndIf
+		*this\dirty=#True
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetStyle(*this.strMyTableRow)
+	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+	_MyTableInitStyleObject(*style,*this)
+	ProcedureReturn *style
+EndProcedure
+
+Procedure.b _MyTable_Row_GetChecked(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\checked
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_SetChecked(*this.strMyTableRow,value.b)
+	If *this
+		*this\checked=value
+		*this\table\dirty=#True
+		*this\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure.b _MyTable_Row_GetSelected(*this.strMyTableRow)
+	If *this
+		Protected result.b=#False
+		result=Bool(result Or *this\table\selectedrows(Str(*this)))
+		result=Bool(result Or *this\table\selectall)
+		
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_SetSelected(*this.strMyTableRow,value.b)
+	If *this
+		*this\table\selectedrows(Str(*this))=value
+		*this\table\dirty=#True
+		*this\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
 EndProcedure

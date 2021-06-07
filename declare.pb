@@ -1,119 +1,178 @@
-﻿;/ ===========================
-;/ =   declare.pb            =
-;/ ===========================
-;/
-;/ [ PB V5.7x / 64Bit / all OS / DPI ]
-;/
-;/ © 2021 Cyllceaux (06/2021)
-;/
+﻿;- Global
+Declare _MyTableInitStyleTable(*style.strMyTableStyle)
+Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
+                                *this.strMyTableObject)
+Declare _MyTableInitApplication(*application.strMyTableApplication,
+                                flags.i)
+Declare _MyTableInitTable(*application.strMyTableApplication,
+                          *table.strMyTableTable,
+                          window.i,
+                          canvas.i,
+                          vscroll.i,
+                          hscroll.i,
+                          flags.i)
+Declare _MyTableInitRow(*application.strMyTableApplication,
+                        *table.strMyTableTable,
+                        *parent.strMyTableRow,
+                        *row.strMyTableRow,
+                        text.s,
+                        sep.s,
+                        image.i,
+                        flags.i)
+Declare _MyTableInitCol(*application.strMyTableApplication,
+                        *table.strMyTableTable,
+                        *col.strMyTableCol,
+                        text.s,
+                        width.i,
+                        image.i,
+                        flags.i)
+Declare _MyTableInitCell(*application.strMyTableApplication,
+                         *table.strMyTableTable,
+                         *row.strMyTableRow,
+                         *col.strMyTableCol,
+                         *parent.strMyTableCell,
+                         *cell.strMyTableCell,
+                         flags.i)
 
+Declare.s _MyTableCleanName(name.s)
+Declare _MyTableTextHeight(text.s)
+Declare _MyTableTextWidth(text.s)
+Declare _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
 
-;{ ===== MIT License =====
-;
-; Copyright (c) 2021 Silko Pillasch
-;
-; Permission is hereby granted, free of charge, to any person obtaining a copy
-; of this software and associated documentation files (the "Software"), to deal
-; in the Software without restriction, including without limitation the rights
-; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-; copies of the Software, and to permit persons to whom the Software is
-; furnished to do so, subject to the following conditions:
-; 
-; The above copyright notice and this permission notice shall be included in all
-; copies or substantial portions of the Software.
-;
-; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-; SOFTWARE.
-;}
+;- Application
+Declare.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
+Declare _MyTable_Application_Redraw(*this.strMyTableApplication)
 
-Macro MacroGetter(gruppe,name,typ)
-	Declare.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)	
-EndMacro
-
-Macro MacroSetter(gruppe,name,typ)	
-	Declare _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
-EndMacro
-
-Macro MacroGetterSetter(gruppe,name,typ)
-	MacroGetter(gruppe,name,typ)
-	MacroSetter(gruppe,name,typ)	
-EndMacro
-
-;- Interface
-Declare _MyTable_Table_ClearRows(*this.strMyTableTable)
-Declare _MyTable_Table_ClearCols(*this.strMyTableTable)
-Declare _MyTable_Table_AddColumn(*this.strMyTableTable,text.s,width.i,flags.i=#MYTABLE_COLUMN_FLAGS_DEFAULT,image.i=0,*data=0,sort.i=0,tooltip.s="")
-Declare _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",id.q=#PB_Ignore,image.i=0,*data=0,checked.b=#False,expanded.b=#False,tooltip.s="")
+;- Tables
 Declare _MyTable_Table_Redraw(*this.strMyTableTable)
+Declare _MyTable_Table_Predraw(*this.strMyTableTable)
 Declare _MyTable_Table_Recalc(*this.strMyTableTable)
-Declare _MyTable_Table_AutosizeRow(*this.strMyTableTable,row.i=#PB_Ignore)
-Declare _MyTable_Table_AutosizeCol(*this.strMyTableTable,col.i=#PB_Ignore)
+Declare _MyTable_Table_ClearMaps(*this.strMyTableTable)
+Declare.b _MyTable_Table_GetSelected(*this.strMyTableTable)
+Declare _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 
-Declare _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
+Declare _MyTableEvtResize()
+Declare _MyTableEvtCanvasKeyDown()
+Declare _MyTableEvtCanvasMouseMove()
+Declare _MyTableEvtCanvasMouseLeftDown()
+Declare _MyTableEvtCanvasMouseLeftUp()
+Declare _MyTableEvtCanvasMouseLeftDouble()
+Declare _MyTableEvtCanvasMouseRightDown()
+Declare _MyTableEvtCanvasMouseRightUp()
+Declare _MyTableEvtCanvasMouseRightDouble()
+Declare _MyTableEvtCanvasScroll()
+Declare _MyTableEvtScroll()
 
-
-Declare _MyTable_Row_AddDirtyRows(*this.strMyTableRow,rows.i)
-Declare _MyTable_Row_GetTable(*this.strMyTableRow)
-MacroGetterSetter(Row,RowHeight,i)
+;- Rows
 Declare _MyTable_Row_Delete(*this.strMyTableRow)
 
-Declare _MyTable_Col_GetTable(*this.strMyTableCol)
+;-Cols
 Declare _MyTable_Col_Delete(*this.strMyTableCol)
+Declare _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 
-Declare _MyTable_Cell_GetTable(*this.strMyTableCell)
-Declare _MyTable_Cell_GetRow(*this.strMyTableCell)
-Declare _MyTable_Cell_GetCol(*this.strMyTableCell)
-MacroGetterSetter(Cell,Text,s)
-MacroGetterSetter(Cell,Tooltip,s)
-MacroGetterSetter(Cell,Value,d)
-MacroGetterSetter(Cell,Image,i)
-Declare _MyTable_Cell_SetBorder(*this.strMyTableCell,border.i=#MYTABLE_BORDER_DEFAULT,width.i=#PB_Ignore,color.q=#PB_Ignore)
-Declare _MyTable_Cell_SetBorderStyle(*this.strMyTableCell,border.i,width.i=#PB_Ignore,color.q=#PB_Ignore)
-CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-	MacroGetterSetter(Cell,Matrix,s)
-CompilerEndIf
-CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-	MacroGetterSetter(Cell,Formula,s)
-CompilerEndIf
-;- Intern
-Declare _MyTableFillCellText(*cell.strMyTableCell,text.s,override.b=#True)
-Declare _MyTableGetOrAddCell(*row.strMyTableRow,col.i=-1,force.b=#False)
-Declare _MyTableClearMaps(*this.strMyTableTable)
-Declare _MyTableRegister(*application.strMyTableApplication,window,canvas,hscroll,vscroll,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT,callback.MyTableProtoEventCallback=0,name.s="")
-Declare _MyTable_Table_RecalcExp(*this.strMyTableTable,force.b=#False)
-Declare _MyTable_Table_AutosizeColExp(*this.strMyTableTable,col.i=#PB_Ignore,force.b=#True)
-Declare _MyTable_Table_UnRegister(*this.strMyTableTable)		
-Declare _MyTable_Table_Dirty(*this.strMyTableTable)		
+;- Styled
+Declare _MyTable_Style_Redraw(*this.strMyTableStyleObject)
+
+;- Macros
+
+Macro MM
+	"
+EndMacro
+
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
-	Declare _MyTableDebugGetCanvas(*element._strMyTableAObject)
-	Declare.s _MyTableDebugGetName(*element._strMyTableAObject)
+	Procedure.s _MyTableDebugGetName(*this.strMyTableVTable)
+		Select *this\type
+			Case #MYTABLE_TYPE_CELL
+				Protected *cell.strMyTableCell=*this
+				ProcedureReturn *cell\table\name
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*this
+				ProcedureReturn *row\table\name
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*this
+				ProcedureReturn *col\table\name
+			Case #MYTABLE_TYPE_TABLE
+				Protected *table.strMyTableTable=*this
+				ProcedureReturn *table\name
+			Case #MYTABLE_TYPE_APPLICATION
+				ProcedureReturn ""
+			Case #MYTABLE_TYPE_STYLE
+				Protected *style.strMyTableStyleObject=*this
+				ProcedureReturn _MyTableDebugGetName(*style\obj)
+		EndSelect
+	EndProcedure
+	
+	Procedure _MyTableDebugGetCanvas(*this.strMyTableVTable)
+		Select *this\type
+			Case #MYTABLE_TYPE_CELL
+				Protected *cell.strMyTableCell=*this
+				ProcedureReturn *cell\table\canvas
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*this
+				ProcedureReturn *row\table\canvas
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*this
+				ProcedureReturn *col\table\canvas
+			Case #MYTABLE_TYPE_TABLE
+				Protected *table.strMyTableTable=*this
+				ProcedureReturn *table\canvas
+			Case #MYTABLE_TYPE_APPLICATION
+				ProcedureReturn 0
+			Case #MYTABLE_TYPE_STYLE
+				Protected *style.strMyTableStyleObject=*this
+				ProcedureReturn _MyTableDebugGetCanvas(*style\obj)
+		EndSelect
+	EndProcedure
 CompilerEndIf
-CompilerIf Defined(MYTABLE_FORMULA,#PB_Module)
-	Declare _MyTableFormulaCalcApplication(*this.strMyTableApplication)
+
+
+CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
+	Macro _callcountStart(sname)
+		Static NewMap callcount.i()
+		Static NewMap callms.i()
+		Static NewMap callmssum.i()					
+		callms(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))=ElapsedMilliseconds()		
+		
+		
+	EndMacro
+	
+	Macro _callcountEnde(sname)
+		
+		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))
+		callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))+1
+		callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))+_#sname#ms
+		
+		Protected tname.s=""
+		If _MyTableDebugGetName(*this)=""
+			tname=Str(_MyTableDebugGetCanvas(*this))
+		Else
+			tname=_MyTableDebugGetName(*this)
+		EndIf
+		
+		Protected debugline.s=LSet(tname+":",16," ")
+		debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))),20," ")
+		
+		CompilerIf Defined(MYTABLE_DEBUG_MS_MAX,#PB_Module)
+			If _#sname#ms>MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX
+				DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
+			EndIf
+		CompilerEndIf
+		debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
+		CompilerIf Defined(MYTABLE_DEBUG_LEVEL,#PB_Module)
+			Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
+		CompilerElse
+			Debug debugline
+		CompilerEndIf
+	EndMacro
+CompilerElse
+	Macro _callcountStart(sname):EndMacro
+	Macro _callcountEnde(sname):EndMacro
 CompilerEndIf
-CompilerIf Defined(MYTABLE_MATRIX,#PB_Module)
-	Declare.b _MyTableFillCellMatrix(*cell.strMyTableCell,matrix.s)
-CompilerEndIf
 
-
-;- Events
-Declare MyTableEvtResize()
-Declare MyTableEvtDialogResize()
-Declare MyTableEvtScroll()
-Declare MyTableEvtMouseDown()
-Declare MyTableEvtMouseUp()
-Declare MyTableEvtMouseMove()
-Declare MyTableEvtDouble()
-Declare MyTableEvtKeyDown()
-Declare MyTableEvtReturn()
-Declare MyTableEvtEsc()
-Declare MyTableEvtLostFocus()
-
-
-
-
+;- Includes
+XIncludeFile "mytablestyle.pb"
+XIncludeFile "mytableapplication.pb"
+XIncludeFile "mytabletable.pb"
+XIncludeFile "mytablerow.pb"
+XIncludeFile "mytablecol.pb"
+XIncludeFile "mytablecell.pb"
