@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 6.00 Alpha 1 (Windows - x64)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.73 LTS (Windows - x64)">
   <section name="config">
     <options closefiles="1" openmode="0" name="MyTable"/>
   </section>
   <section name="data">
     <explorer view="..\..\Civ\V2\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-03 20:35" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-05 06:55" user="silko" host="AQUALAD"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -15,12 +15,12 @@
       <fingerprint md5="e94976f7deaaefeb2dca1e2eb7d55d38"/>
     </file>
     <file name="global.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="3159b35f770b045808349877480cef78"/>
     </file>
     <file name="mytable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="9be4e8ffd6d6da89ca43e5390275e847"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="72d21b04bc4b8ce556eae0b5e182e7a4"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -31,7 +31,7 @@
       <fingerprint md5="9ca54bf3dff0303c860068858f4edbe2"/>
     </file>
     <file name="mytablecalc.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="981d488b4d136bc8d0e4c09a76cbeae0"/>
     </file>
     <file name="mytablecalc.pbi">
@@ -47,43 +47,47 @@
       <fingerprint md5="c0ecff579ea52c9810047da19a1578ec"/>
     </file>
     <file name="mytableformula.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="5ea0ad469911a34dfd18054cb2943013"/>
     </file>
     <file name="mytablematrix.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="51ea07311721f3b0dc7dd007fcc92aff"/>
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="71d3e9a6faa2720559b229ad732d252b"/>
+      <fingerprint md5="adc3a83ebe7277f1098a85a1eee0edec"/>
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="e9f94c1fe38eb6d4a7296bde050749c5"/>
+      <fingerprint md5="e359d2c3d7f22a8b0b07d779cd1e3fa7"/>
     </file>
     <file name="Test\all.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="e4fd0aec93d76bbbecf8eff97f0f22ba"/>
+      <fingerprint md5="2dbfe04c9d0d4439e5b91761228e0ac3"/>
     </file>
     <file name="Test\allWithoutGrids.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="2ca46beeeb918359e11bd65c4f105eb7"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="bfce228af4e2b126766ac1bea89a643a"/>
     </file>
     <file name="Test\customformula.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="0788e2c0b9bc09fd71e8273c6b312255"/>
+    </file>
+    <file name="Test\default.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="d8ff679acb6c0ee14feaf212a809b392"/>
     </file>
     <file name="Test\fontscolors.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="db2b7577f05d403975984b98ca5bdb71"/>
     </file>
     <file name="Test\formula.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="55c1330c329b5734692241f8c77cc4a2"/>
     </file>
     <file name="Test\formulaMatix.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="c108fbf10bdec2a2a905ee24952a7cd4"/>
     </file>
     <file name="Test\grid.pb">
@@ -102,79 +106,75 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="52f6fc231e1ed8c7787e3920ccbaa268"/>
     </file>
-    <file name="Test\default.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="d938c15a81b8463f7b5ea4a57af849c1"/>
-    </file>
   </section>
   <section name="targets">
     <target name="All" enabled="0" default="0">
       <inputfile value="Test\all.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
-    <target name="Formula" enabled="0" default="0">
+    <target name="Formula" enabled="0" default="1">
       <inputfile value="Test\formula.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="grid" enabled="0" default="0">
       <inputfile value="Test\grid.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="grid2" enabled="0" default="0">
       <inputfile value="Test\grid2.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="CustomFormula" enabled="0" default="0">
       <inputfile value="Test\customformula.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="fontscolors.pb" enabled="0" default="0">
       <inputfile value="Test\fontscolors.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="Long Formula" enabled="0" default="0">
       <inputfile value="Test\longformula.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="Matrix Formula" enabled="0" default="0">
       <inputfile value="Test\formulaMatix.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
     <target name="Multi Formula" enabled="0" default="0">
       <inputfile value="Test\multiformulatable.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
-    <target name="All Without Grids" enabled="0" default="1">
+    <target name="All Without Grids" enabled="0" default="0">
       <inputfile value="Test\allWithoutGrids.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
       <compilecount enable="0" value="1900"/>
     </target>
