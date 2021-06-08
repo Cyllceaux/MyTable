@@ -36,12 +36,12 @@ Macro AssertNotEmpty(value1)
 EndMacro
 
 CompilerIf #MYTABLE_UPDATE_VERSION And #PB_Compiler_Debugger
-	Procedure updateVersion()
-		Protected file=OpenFile(#PB_Any,"..\mytable.pbi")
+	Procedure updateVersion(pfad.s)
+		Protected file=OpenFile(#PB_Any,pfad)
 		If file
 			Protected inhalt.s=ReadString(file,#PB_File_IgnoreEOL,Lof(file))
-			Protected regexversion=CreateRegularExpression(#PB_Any,"#MYTABLE_VERSION\s*=\s*(\d+)")
-			Protected regexversiondate=CreateRegularExpression(#PB_Any,"#MYTABLE_VERSION_DATE\s*=\s*(\d+)")
+			Protected regexversion=CreateRegularExpression(#PB_Any,"VERSION\s*=\s*(\d+)")
+			Protected regexversiondate=CreateRegularExpression(#PB_Any,"VERSION_DATE\s*=\s*(\d+)")
 			If ExamineRegularExpression(regexversion,inhalt)
 				While NextRegularExpressionMatch(regexversion)
 					Protected line.s=RegularExpressionMatchString(regexversion)
@@ -61,12 +61,13 @@ CompilerIf #MYTABLE_UPDATE_VERSION And #PB_Compiler_Debugger
 			FreeRegularExpression(regexversion)
 			FreeRegularExpression(regexversiondate)
 			CloseFile(file)
-			file=CreateFile(#PB_Any,"..\mytable.pbi")
+			file=CreateFile(#PB_Any,pfad)
 			WriteString(file,inhalt)
 			CloseFile(file)
 		EndIf
 	EndProcedure
-	updateVersion()
+	updateVersion("..\mytable.pbi")
+	updateVersion("..\README.md")
 CompilerEndIf
 
 DataSection
