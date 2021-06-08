@@ -39,12 +39,34 @@ EndProcedure
 
 Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",image.i=0,flags.i=0)
 	If *this
-		Protected *row.strMyTableRow=AddElement(*this\rows())
+		If Not *this\rows
+			*this\rows=AllocateStructure(strMyTableRowList)
+		EndIf
+		Protected *row.strMyTableRow=AddElement(*this\rows\rows())
 		_MyTableInitRow(*this\table\application,*this\table,*this,*row,text,sep,image,flags)
 		*this\table\dirty=#True
 		*this\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
 		ProcedureReturn *row
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,text.s,rows.i)
+	If *this
+		Protected idx
+		_callcountStart(row_adddirtyrows)
+		If Not *this\rows
+			*this\rows=AllocateStructure(strMyTableRowList)
+		EndIf
+		LastElement(*this\rows\rows())
+		For idx=1 To rows
+			Protected *row.strMyTableRow=AddElement(*this\rows\rows())
+			_MyTableInitRow(*this\table\application,*this\table,*this,*row,"","",0,0)
+			*this\dirty=#True
+		Next
+		_callcountEnde(row_adddirtyrows)
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)		
 	EndIf
 EndProcedure
 
@@ -67,9 +89,11 @@ EndProcedure
 
 Procedure _MyTable_Row_DeleteRow(*this.strMyTableRow,idx.i)
 	If *this
-		If ListSize(*this\rows())>idx
-			*this\dirty=#True
-			_MyTable_Row_Delete(SelectElement(*this\rows(),idx))
+		If *this\rows
+			If ListSize(*this\rows\rows())>idx
+				*this\dirty=#True
+				_MyTable_Row_Delete(SelectElement(*this\rows\rows(),idx))
+			EndIf
 		EndIf
 	EndIf
 EndProcedure
@@ -115,9 +139,11 @@ EndProcedure
 
 Procedure _MyTable_Row_GetRow(*this.strMyTableRow,row.i)
 	If *this
-		If ListSize(*this\rows())>row
-			ProcedureReturn SelectElement(*this\rows(),row)
+		If *this\rows
+		If ListSize(*this\rows\rows())>row
+			ProcedureReturn SelectElement(*this\rows\rows(),row)
 		EndIf
+	EndIf
 	EndIf
 EndProcedure
 
@@ -152,7 +178,9 @@ EndProcedure
 
 Procedure _MyTable_Row_RowCount(*this.strMyTableRow)
 	If *this
-		ProcedureReturn ListSize(*this\rows())
+		If *this\rows
+			ProcedureReturn ListSize(*this\rows\rows())
+		EndIf
 	EndIf
 EndProcedure
 

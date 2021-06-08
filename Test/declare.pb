@@ -7,10 +7,10 @@ UsePNGImageDecoder()
 
 XIncludeFile "..\mytable.pbi"
 
-Define rowImage=CatchImage(#PB_Any,?Briefcase_png_start)
-Define rowImageSub=CatchImage(#PB_Any,?Lock_png_start)
-Define rowImageSub2=CatchImage(#PB_Any,?Attach_png_start)
-Define Dim images(10)
+Global rowImage=CatchImage(#PB_Any,?Briefcase_png_start)
+Global rowImageSub=CatchImage(#PB_Any,?Lock_png_start)
+Global rowImageSub2=CatchImage(#PB_Any,?Attach_png_start)
+Global Dim images(10)
 
 images(0)=CatchImage(#PB_Any,?Alarm_png_start)
 images(1)=CatchImage(#PB_Any,?Android_png_start)

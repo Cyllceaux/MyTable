@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 421
+	#MYTABLE_VERSION = 464
 	#MYTABLE_VERSION_DATE = 20210608
 	
 	Enumeration _mytable_type
@@ -119,6 +119,7 @@
 		SetImage(value.i):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
 		
+		AddDirtyRows(rows.i)
 		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
 		DeleteRow(row.i)
 		GetRow(row.i)
@@ -134,20 +135,24 @@
 		#MYTABLE_TABLE_FLAGS_MULTISELECT
 		#MYTABLE_TABLE_FLAGS_BORDER
 		#MYTABLE_TABLE_FLAGS_NO_HEADER
+		#MYTABLE_TABLE_FLAGS_CALLBACK
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_BORDER
 	
-	Prototype MyTableProtoCallbackCellChangedChecked(*cell.MyTableCell)
-	Prototype MyTableProtoCallbackCellChangedUnChecked(*cell.MyTableCell)
-	Prototype MyTableProtoCallbackCellChangedText(*cell.MyTableCell,old.s)
-	Prototype MyTableProtoCallbackCellChangedValue(*cell.MyTableCell,old.d)
-	Prototype MyTableProtoCallbackCellSelected(*cell.MyTableCell)
-	Prototype MyTableProtoCallbackRowChangedChecked(*row.MyTableRow)
-	Prototype MyTableProtoCallbackRowChangedUnChecked(*row.MyTableRow)
-	Prototype MyTableProtoCallbackRowChangedExpanded(*row.MyTableRow)
-	Prototype MyTableProtoCallbackRowChangedCollapsed(*row.MyTableRow)
-	Prototype MyTableProtoCallbackRowSelected(*row.MyTableRow)
+	Prototype MyTableProtoEventCellChangedChecked(*cell.MyTableCell)
+	Prototype MyTableProtoEventCellChangedUnChecked(*cell.MyTableCell)
+	Prototype MyTableProtoEventCellChangedText(*cell.MyTableCell,old.s)
+	Prototype MyTableProtoEventCellChangedValue(*cell.MyTableCell,old.d)
+	Prototype MyTableProtoEventCellSelected(*cell.MyTableCell)
+	Prototype MyTableProtoEventRowChangedChecked(*row.MyTableRow)
+	Prototype MyTableProtoEventRowChangedUnChecked(*row.MyTableRow)
+	Prototype MyTableProtoEventRowChangedExpanded(*row.MyTableRow)
+	Prototype MyTableProtoEventRowChangedCollapsed(*row.MyTableRow)
+	Prototype MyTableProtoEventRowSelected(*row.MyTableRow)
+	
+	
+	Prototype MyTableProtoCallback(*row.MyTableRow)
 	
 	
 	Interface MyTableTable Extends MyTableObject
@@ -159,6 +164,7 @@
 		SetHeaderHeight(value.i):GetHeaderHeight.i()
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
 		
+		AddDirtyRows(rows.i)
 		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
 		DeleteRow(row.i)
 		GetRow(row.i)
@@ -175,16 +181,18 @@
 		Recalc()
 		Free()
 		
-		RegisterCallbackCellChangedChecked(callback.MyTableProtoCallbackCellChangedChecked)
-		RegisterCallbackCellChangedUnChecked(callback.MyTableProtoCallbackCellChangedUnChecked)
-		RegisterCallbackCellChangedText(callback.MyTableProtoCallbackCellChangedText)
-		RegisterCallbackCellChangedValue(callback.MyTableProtoCallbackCellChangedValue)
-		RegisterCallbackCellSelected(callback.MyTableProtoCallbackCellSelected)
-		RegisterCallbackRowChangedChecked(callback.MyTableProtoCallbackRowChangedChecked)
-		RegisterCallbackRowChangedUnChecked(callback.MyTableProtoCallbackRowChangedUnChecked)
-		RegisterCallbackRowChangedExpanded(callback.MyTableProtoCallbackRowChangedExpanded)
-		RegisterCallbackRowChangedCollapsed(callback.MyTableProtoCallbackRowChangedCollapsed)
-		RegisterCallbackRowSelected(callback.MyTableProtoCallbackRowSelected)
+		RegisterEventCellChangedChecked(callback.MyTableProtoEventCellChangedChecked)
+		RegisterEventCellChangedUnChecked(callback.MyTableProtoEventCellChangedUnChecked)
+		RegisterEventCellChangedText(callback.MyTableProtoEventCellChangedText)
+		RegisterEventCellChangedValue(callback.MyTableProtoEventCellChangedValue)
+		RegisterEventCellSelected(callback.MyTableProtoEventCellSelected)
+		RegisterEventRowChangedChecked(callback.MyTableProtoEventRowChangedChecked)
+		RegisterEventRowChangedUnChecked(callback.MyTableProtoEventRowChangedUnChecked)
+		RegisterEventRowChangedExpanded(callback.MyTableProtoEventRowChangedExpanded)
+		RegisterEventRowChangedCollapsed(callback.MyTableProtoEventRowChangedCollapsed)
+		RegisterEventRowSelected(callback.MyTableProtoEventRowSelected)
+		
+		RegisterCallback(callback.MyTableProtoCallback)
 	EndInterface
 	
 	Interface MyTableApplication Extends MyTableObject

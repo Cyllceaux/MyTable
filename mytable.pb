@@ -44,7 +44,6 @@ Module MyTable
 		sized.i
 	EndStructure
 	
-	
 	Structure strMyTableCell Extends strMyTableObject
 		*parent.strMyTableCell
 		*col.strMyTableCol
@@ -55,7 +54,7 @@ Module MyTable
 		text.s
 		value.d
 		checked.b
-		List cells.strMyTableCell()
+		*cells.strMyTableCellList
 		image.strMyTableImage
 		
 		textwidth.i
@@ -84,8 +83,8 @@ Module MyTable
 	Structure strMyTableRow Extends strMyTableObject
 		*table.strMyTableTable
 		*application.strMyTableApplication
-		List cells.strMyTableCell()
-		List rows.strMyTableRow()
+		*cells.strMyTableCellList
+		*rows.strMyTableRowList
 		level.i
 		*parent.strMyTableRow
 		listindex.i
@@ -109,6 +108,8 @@ Module MyTable
 		title.s
 		redraw.b
 		recalc.b
+		
+		drawing.b
 		
 		window.i
 		canvas.i
@@ -134,16 +135,17 @@ Module MyTable
 		*lastrow.strMyTableRow
 		*lastcol.strMyTableCol
 		
-		callbackCellChangedChecked.MyTableProtoCallbackCellChangedChecked
-		callbackCellChangedUnChecked.MyTableProtoCallbackCellChangedUnChecked
-		callbackCellChangedText.MyTableProtoCallbackCellChangedText
-		callbackCellChangedValue.MyTableProtoCallbackCellChangedValue
-		callbackCellSelected.MyTableProtoCallbackCellSelected
-		callbackRowChangedChecked.MyTableProtoCallbackRowChangedChecked
-		callbackRowChangedUnChecked.MyTableProtoCallbackRowChangedUnChecked
-		callbackRowChangedExpanded.MyTableProtoCallbackRowChangedExpanded
-		callbackRowChangedCollapsed.MyTableProtoCallbackRowChangedCollapsed
-		callbackRowSelected.MyTableProtoCallbackRowSelected
+		eventCellChangedChecked.MyTableProtoEventCellChangedChecked
+		eventCellChangedUnChecked.MyTableProtoEventCellChangedUnChecked
+		eventCellChangedText.MyTableProtoEventCellChangedText
+		eventCellChangedValue.MyTableProtoEventCellChangedValue
+		eventCellSelected.MyTableProtoEventCellSelected
+		eventRowChangedChecked.MyTableProtoEventRowChangedChecked
+		eventRowChangedUnChecked.MyTableProtoEventRowChangedUnChecked
+		eventRowChangedExpanded.MyTableProtoEventRowChangedExpanded
+		eventRowChangedCollapsed.MyTableProtoEventRowChangedCollapsed
+		eventRowSelected.MyTableProtoEventRowSelected
+		callback.MyTableProtoCallback
 	EndStructure
 	
 	Structure strMyTableApplication Extends strMyTableObject
@@ -160,6 +162,14 @@ Module MyTable
 		right.b
 		exp.b
 		check.b
+	EndStructure
+	
+	Structure strMyTableCellList
+		List cells.strMyTableCell()
+	EndStructure
+	
+	Structure strMyTableRowList
+		List rows.strMyTableRow()
 	EndStructure
 	
 	XIncludeFile "declare.pb"
@@ -447,8 +457,8 @@ Module MyTable
 									*this\tempselectedRows(Str(*row))=#True
 								Else									
 									If Not *this\selectedRows(Str(*row))
-										If *this\callbackRowSelected
-											*this\callbackRowSelected(*row)
+										If *this\eventRowSelected
+											*this\eventRowSelected(*row)
 										EndIf
 									EndIf
 									*this\selectedRows(Str(*row))=#True
@@ -461,8 +471,8 @@ Module MyTable
 						Else
 							*this\lastrow=*row							
 							If Not *this\selectedRows(Str(*row))
-								If *this\callbackRowSelected
-									*this\callbackRowSelected(*row)
+								If *this\eventRowSelected
+									*this\eventRowSelected(*row)
 								EndIf
 							EndIf
 							*this\selectedRows(Str(*row))=#True
@@ -513,8 +523,8 @@ Module MyTable
 										*this\tempselectedCells(Str(*cell))=#True
 									Else										
 										If Not *this\selectedCells(Str(*cell))
-											If *this\callbackCellSelected
-												*this\callbackCellSelected(*cell)
+											If *this\eventCellSelected
+												*this\eventCellSelected(*cell)
 											EndIf
 										EndIf
 										*this\selectedCells(Str(*cell))=#True
@@ -529,8 +539,8 @@ Module MyTable
 						Else
 							*this\lastcell=*cell
 							If Not *this\selectedCells(Str(*cell))
-								If *this\callbackCellSelected
-									*this\callbackCellSelected(*cell)
+								If *this\eventCellSelected
+									*this\eventCellSelected(*cell)
 								EndIf
 							EndIf
 							*this\selectedCells(Str(*cell))=#True
@@ -595,12 +605,12 @@ Module MyTable
 				*row\checked=Bool(Not *row\checked)
 				*this\dirty=#True
 				If *row\checked			
-					If *this\callbackRowChangedChecked
-						*this\callbackRowChangedChecked(*row)
+					If *this\eventRowChangedChecked
+						*this\eventRowChangedChecked(*row)
 					EndIf
 				Else
-					If *this\callbackRowChangedUnChecked
-						*this\callbackRowChangedUnChecked(*row)
+					If *this\eventRowChangedUnChecked
+						*this\eventRowChangedUnChecked(*row)
 					EndIf
 				EndIf
 			ElseIf *rc\exp
@@ -609,12 +619,12 @@ Module MyTable
 				*row\expanded=Bool(Not *row\expanded)
 				*this\dirty=#True
 				If *row\expanded
-					If *this\callbackRowChangedExpanded
-						*this\callbackRowChangedExpanded(*row)
+					If *this\eventRowChangedExpanded
+						*this\eventRowChangedExpanded(*row)
 					EndIf
 				Else
-					If *this\callbackRowChangedCollapsed
-						*this\callbackRowChangedCollapsed(*row)
+					If *this\eventRowChangedCollapsed
+						*this\eventRowChangedCollapsed(*row)
 					EndIf
 				EndIf
 				_MyTable_Table_Predraw(*this)
@@ -818,7 +828,7 @@ Module MyTable
 			EndIf
 			If *parent
 				\level=*parent\level+1
-				\listindex=ListSize(*parent\rows())-1
+				\listindex=ListSize(*parent\rows\rows())-1
 			Else
 				\listindex=ListSize(*table\rows())-1
 			EndIf
@@ -884,9 +894,9 @@ Module MyTable
 			\style\valign=#MYTABLE_STYLE_VALIGN_TOP
 			\style\halign=#MYTABLE_STYLE_HALIGN_LEFT
 			If *parent
-				\listindex=ListSize(*parent\cells())-1
+				\listindex=ListSize(*parent\cells\cells())-1
 			Else
-				\listindex=ListSize(*row\cells())-1
+				\listindex=ListSize(*row\cells\cells())-1
 			EndIf
 		EndWith
 		
@@ -915,15 +925,18 @@ Module MyTable
 			If ListSize(*row\table\cols())>idx
 				Protected *col.strMyTableCol=SelectElement(*row\table\cols(),idx)
 				Protected *cell.strMyTableCell=0
-				While ListSize(*row\cells())<=idx
-					LastElement(*row\cells())
-					*cell=AddElement(*row\cells())
+				If Not *row\cells
+					*row\cells=AllocateStructure(strMyTableCellList)
+				EndIf
+				While ListSize(*row\cells\cells())<=idx
+					LastElement(*row\cells\cells())
+					*cell=AddElement(*row\cells\cells())
 					_MyTableInitCell(*row\table\application,*row\table,*row,*col,0,*cell,0)
 				Wend
 				If *cell
 					ProcedureReturn *cell
 				Else
-					ProcedureReturn SelectElement(*row\cells(),idx)
+					ProcedureReturn SelectElement(*row\cells\cells(),idx)
 				EndIf
 			EndIf
 		EndIf
@@ -1040,6 +1053,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,HeaderHeight)
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
 		
+		_MyTableDataSectionMethode(Table,AddDirtyRows)
 		_MyTableDataSectionMethode(Table,AddRow)
 		_MyTableDataSectionMethode(Table,DeleteRow)
 		_MyTableDataSectionGetter(Table,Row)
@@ -1056,16 +1070,18 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,Recalc)
 		_MyTableDataSectionMethode(Table,Free)
 		
-		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedChecked)
-		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedUnChecked)
-		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedText)
-		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedValue)
-		_MyTableDataSectionMethode(Table,RegisterCallbackCellSelected)
-		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedChecked)
-		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedUnChecked)
-		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedExpanded)
-		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedCollapsed)
-		_MyTableDataSectionMethode(Table,RegisterCallbackRowSelected)
+		_MyTableDataSectionMethode(Table,RegisterEventCellChangedChecked)
+		_MyTableDataSectionMethode(Table,RegisterEventCellChangedUnChecked)
+		_MyTableDataSectionMethode(Table,RegisterEventCellChangedText)
+		_MyTableDataSectionMethode(Table,RegisterEventCellChangedValue)
+		_MyTableDataSectionMethode(Table,RegisterEventCellSelected)
+		_MyTableDataSectionMethode(Table,RegisterEventRowChangedChecked)
+		_MyTableDataSectionMethode(Table,RegisterEventRowChangedUnChecked)
+		_MyTableDataSectionMethode(Table,RegisterEventRowChangedExpanded)
+		_MyTableDataSectionMethode(Table,RegisterEventRowChangedCollapsed)
+		_MyTableDataSectionMethode(Table,RegisterEventRowSelected)
+		
+		_MyTableDataSectionMethode(Table,RegisterCallback)
 		
 		vtable_row:;- Row
 		_MyTableDataSectionDefault(Row)
@@ -1077,6 +1093,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Row,Image)
 		_MyTableDataSectionSetterGetter(Row,Checked)
 		
+		_MyTableDataSectionMethode(Row,AddDirtyRows)
 		_MyTableDataSectionMethode(Row,AddRow)
 		_MyTableDataSectionMethode(Row,DeleteRow)
 		_MyTableDataSectionGetter(Row,Row)

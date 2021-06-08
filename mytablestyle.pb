@@ -135,10 +135,12 @@ Macro _MyTableStyleSet(name)
 	Select *this\obj\type
 		Case #MYTABLE_TYPE_ROW
 			Protected *row.strMyTableRow=*this\obj
-			ForEach *row\cells()
-				*row\cells()\style\name=value
-				*row\cells()\dirty=#True
-			Next
+			If *row\cells
+				ForEach *row\cells\cells()
+					*row\cells\cells()\style\name=value
+					*row\cells\cells()\dirty=#True
+				Next
+			EndIf
 	EndSelect
 	_MyTable_Style_Redraw(*this)
 EndMacro

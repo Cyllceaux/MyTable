@@ -153,6 +153,22 @@ Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",image.i=0
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
+	If *this
+		_callcountStart(table_adddirtyrows)
+		Protected idx
+		LastElement(*this\rows())
+		For idx=1 To rows
+			Protected *row.strMyTableRow=AddElement(*this\rows())
+			_MyTableInitRow(*this\application,*this,0,*row,"","",0,0)
+			*this\dirty=#True
+		Next
+		_callcountEnde(table_adddirtyrows)
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_AddCol(*this.strMyTableTable,text.s,width.i,image.i=0,flags.i=0)
 	If *this
 		Protected *col.strMyTableCol=AddElement(*this\cols())
@@ -229,9 +245,12 @@ EndProcedure
 
 Procedure _MyTable_Table_ClearCols(*this.strMyTableTable,*value)
 	If *this
-		ClearList(*this\cols())
+		ClearList(*this\cols())				
 		ForEach *this\rows()
-			ClearList(*this\rows()\cells())
+			If *this\rows()\cells				
+				FreeStructure(*this\rows()\cells)
+				*this\rows()\cells=0
+			EndIf
 		Next
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
@@ -399,11 +418,17 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 EndProcedure
 
 Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i)
+	
+	
 	Protected bx=-scrollx
 	Protected idx
 	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
 	Protected checkboxes.b=#False
 	Protected border.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_BORDER)
+	Protected callback.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
+	If callback And *this\dirty And *this\table\callback
+		*this\table\callback(*this)
+	EndIf
 	Protected selected.b=#False
 	For idx=1 To cols
 		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
@@ -448,11 +473,13 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				If idx=1
 					addx+*this\level*MyTableW20
 					DrawingMode(#PB_2DDrawing_AlphaClip)
-					If ListSize(*this\rows())>0
-						If *this\expanded
-							DrawImage(ImageID(MyTableDefaultImageMinusArrow),bx+addx,by)
-						Else
-							DrawImage(ImageID(MyTableDefaultImagePlusArrow),bx+addx,by)
+					If *this\rows
+						If ListSize(*this\rows\rows())>0
+							If *this\expanded
+								DrawImage(ImageID(MyTableDefaultImageMinusArrow),bx+addx,by)
+							Else
+								DrawImage(ImageID(MyTableDefaultImagePlusArrow),bx+addx,by)
+							EndIf
 						EndIf
 					EndIf
 					DrawingMode(#PB_2DDrawing_Default)
@@ -563,6 +590,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			EndIf
 		EndIf
 	Next
+	*this\dirty=#False
 	ProcedureReturn *this\calcheight
 EndProcedure
 
@@ -574,6 +602,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 		If *this\application
 			redraw=Bool(redraw And *this\application\redraw)
 		EndIf
+		redraw=Bool(redraw And Not *this\drawing)
 		If redraw
 			_callcountStart(Redraw)
 			If IsImage(*this\canvas)
@@ -582,7 +611,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			If IsGadget(*this\canvas)
 				StartDrawing(CanvasOutput(*this\canvas))
 			EndIf
-			
+			*this\drawing=#True
 			Protected font.i=*this\style\font
 			Protected backcolor.q=_MyTable_GetBackColor(*this)
 			Protected frontcolor.q=_MyTable_GetFrontColor(*this)
@@ -651,6 +680,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				Box(width-GadgetWidth(*this\vscroll),height-GadgetHeight(*this\hscroll),GadgetWidth(*this\vscroll),GadgetHeight(*this\hscroll))
 			EndIf
 			*this\dirty=#False
+			*this\drawing=#False
 			StopDrawing()
 			_callcountEnde(Redraw)
 		EndIf
@@ -659,20 +689,22 @@ EndProcedure
 
 Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow)
 	Protected result.i=0
-	ForEach *row\rows()
-		AddElement(*this\expRows())
-		*this\expRows()=*row\rows()
-		result+*this\rows()\height
-		If *row\rows()\expanded And ListSize(*row\rows()\rows())>0
-			result+_MyTable_Table_PredrawSub(*this,*row\rows())
-		EndIf
-	Next
+	If *row\rows
+		ForEach *row\rows\rows()
+			AddElement(*this\expRows())
+			*this\expRows()=*row\rows\rows()
+			result+*this\rows()\height
+			If *row\rows\rows()\expanded And *row\rows\rows()\rows And ListSize(*row\rows\rows()\rows\rows())>0
+				result+_MyTable_Table_PredrawSub(*this,*row\rows\rows())
+			EndIf
+		Next
+	EndIf
 	ProcedureReturn result
 EndProcedure
 
 Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
 	If *this
-		If *this\redraw And *this\dirty
+		If *this\redraw And *this\dirty And Not *this\drawing
 			_callcountStart(Predraw)
 			ClearList(*this\expRows())
 			Protected h=0
@@ -687,7 +719,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
 				*this\expRows()=*this\rows()
 				h+*this\rows()\height
 				If hierarchical
-					If *this\rows()\expanded And ListSize(*this\rows()\rows())>0
+					If *this\rows()\expanded And *this\rows()\rows And ListSize(*this\rows()\rows\rows())>0
 						h+_MyTable_Table_PredrawSub(*this,*this\rows())
 					EndIf
 				EndIf
@@ -816,7 +848,7 @@ Procedure _MyTable_Table_Recalc(*this.strMyTableTable)
 		If *this\application
 			recalc=Bool(recalc And *this\application\recalc)
 		EndIf
-		If recalc
+		If recalc And Not *this\drawing
 			_callcountStart(Recalc)
 			
 			
@@ -1008,63 +1040,69 @@ Procedure _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackCellChangedChecked(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedChecked)
+Procedure _MyTable_Table_RegisterEventCellChangedChecked(*this.strMyTableTable,event.MyTableProtoEventCellChangedChecked)
 	If *this
-		*this\CallbackCellChangedChecked=callback
+		*this\EventCellChangedChecked=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackCellChangedUnChecked(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedUnChecked)
+Procedure _MyTable_Table_RegisterEventCellChangedUnChecked(*this.strMyTableTable,event.MyTableProtoEventCellChangedUnChecked)
 	If *this
-		*this\CallbackCellChangedUnChecked=callback
+		*this\EventCellChangedUnChecked=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackCellChangedText(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedText)
+Procedure _MyTable_Table_RegisterEventCellChangedText(*this.strMyTableTable,event.MyTableProtoEventCellChangedText)
 	If *this
-		*this\CallbackCellChangedText=callback
+		*this\EventCellChangedText=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackCellChangedValue(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedValue)
+Procedure _MyTable_Table_RegisterEventCellChangedValue(*this.strMyTableTable,event.MyTableProtoEventCellChangedValue)
 	If *this
-		*this\CallbackCellChangedValue=callback
+		*this\EventCellChangedValue=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackCellSelected(*this.strMyTableTable,callback.MyTableProtoCallbackCellSelected)
+Procedure _MyTable_Table_RegisterEventCellSelected(*this.strMyTableTable,event.MyTableProtoEventCellSelected)
 	If *this
-		*this\CallbackCellSelected=callback
+		*this\EventCellSelected=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackRowChangedChecked(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedChecked)
+Procedure _MyTable_Table_RegisterEventRowChangedChecked(*this.strMyTableTable,event.MyTableProtoEventRowChangedChecked)
 	If *this
-		*this\CallbackRowChangedChecked=callback
+		*this\EventRowChangedChecked=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackRowChangedUnChecked(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedUnChecked)
+Procedure _MyTable_Table_RegisterEventRowChangedUnChecked(*this.strMyTableTable,event.MyTableProtoEventRowChangedUnChecked)
 	If *this
-		*this\CallbackRowChangedUnChecked=callback
+		*this\EventRowChangedUnChecked=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackRowChangedExpanded(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedExpanded)
+Procedure _MyTable_Table_RegisterEventRowChangedExpanded(*this.strMyTableTable,event.MyTableProtoEventRowChangedExpanded)
 	If *this
-		*this\CallbackRowChangedExpanded=callback
+		*this\EventRowChangedExpanded=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackRowChangedCollapsed(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedCollapsed)
+Procedure _MyTable_Table_RegisterEventRowChangedCollapsed(*this.strMyTableTable,event.MyTableProtoEventRowChangedCollapsed)
 	If *this
-		*this\CallbackRowChangedCollapsed=callback
+		*this\EventRowChangedCollapsed=event
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackRowSelected(*this.strMyTableTable,callback.MyTableProtoCallbackRowSelected)
+Procedure _MyTable_Table_RegisterEventRowSelected(*this.strMyTableTable,event.MyTableProtoEventRowSelected)
 	If *this
-		*this\CallbackRowSelected=callback
+		*this\EventRowSelected=event
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallback(*this.strMyTableTable,callback.MyTableProtoCallback)
+	If *this
+		*this\callback=callback
 	EndIf
 EndProcedure
 

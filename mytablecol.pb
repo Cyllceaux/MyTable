@@ -48,31 +48,32 @@ Procedure _MyTable_Col_CreateSort(*row.strMyTableRow,col.i,sort.i,numeric.b)
 	Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
 	*row\sorts=*cell\text
 	*row\sortd=*cell\value
-	If ListSize(*row\rows())>0
-		ForEach *row\rows()			
-			_MyTable_Col_CreateSort(*row\rows(),col,sort,numeric)			
+	
+	If *row\rows And ListSize(*row\rows\rows())>0
+		ForEach *row\rows\rows()			
+			_MyTable_Col_CreateSort(*row\rows\rows(),col,sort,numeric)			
 		Next
 		Select sort
 			Case #MYTABLE_COL_SORT_NONE
-				SortStructuredList(*row\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\listindex),TypeOf(strMyTableRow\listindex))
+				SortStructuredList(*row\rows\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\listindex),TypeOf(strMyTableRow\listindex))
 			Case #MYTABLE_COL_SORT_ASC	
 				If numeric
-					SortStructuredList(*row\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\sortd),TypeOf(strMyTableRow\sortd))
+					SortStructuredList(*row\rows\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\sortd),TypeOf(strMyTableRow\sortd))
 				Else
-					SortStructuredList(*row\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\sorts),TypeOf(strMyTableRow\sorts))
+					SortStructuredList(*row\rows\rows(),#PB_Sort_Ascending,OffsetOf(strMyTableRow\sorts),TypeOf(strMyTableRow\sorts))
 				EndIf
 			Case #MYTABLE_COL_SORT_DESC	
 				If numeric
-					SortStructuredList(*row\rows(),#PB_Sort_Descending,OffsetOf(strMyTableRow\sortd),TypeOf(strMyTableRow\sortd))
+					SortStructuredList(*row\rows\rows(),#PB_Sort_Descending,OffsetOf(strMyTableRow\sortd),TypeOf(strMyTableRow\sortd))
 				Else
-					SortStructuredList(*row\rows(),#PB_Sort_Descending,OffsetOf(strMyTableRow\sorts),TypeOf(strMyTableRow\sorts))
+					SortStructuredList(*row\rows\rows(),#PB_Sort_Descending,OffsetOf(strMyTableRow\sorts),TypeOf(strMyTableRow\sorts))
 				EndIf
 		EndSelect
 	EndIf
 EndProcedure
 
 Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
-	If *this		
+	If *this				
 		ForEach *this\table\cols()
 			*this\table\cols()\sort=#MYTABLE_COL_SORT_NONE
 		Next
@@ -81,7 +82,7 @@ Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 		_callcountStart(sort)
 		Protected *table.strMyTableTable=*this\table
 		Protected *row.strMyTableRow=0
-	
+		
 		ForEach *table\rows()			
 			_MyTable_Col_CreateSort(*table\rows(),*this\listindex,sort,numeric)			
 		Next
@@ -171,14 +172,18 @@ Procedure _MyTable_Col_SetText(*this.strMyTableCol,value.s)
 EndProcedure
 
 Procedure _MyTable_Col_DeleteColRow(*row.strMyTableRow,idx)
-	If ListSize(*row\cells())>idx
-		SelectElement(*row\cells(),idx)
-		DeleteElement(*row\cells())
+	If *row\cells
+		If ListSize(*row\cells\cells())>idx
+			SelectElement(*row\cells\cells(),idx)
+			DeleteElement(*row\cells\cells())
+		EndIf
 	EndIf
 	*row\dirty=#True
-	ForEach *row\rows()
-		_MyTable_Col_DeleteColRow(*row\rows(),idx)
-	Next
+	If *row\rows
+		ForEach *row\rows\rows()
+			_MyTable_Col_DeleteColRow(*row\rows\rows(),idx)
+		Next
+	EndIf
 EndProcedure
 
 Procedure _MyTable_Col_Delete(*this.strMyTableCol)
