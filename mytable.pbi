@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 396
-	#MYTABLE_VERSION_DATE = 20210607
+	#MYTABLE_VERSION = 418
+	#MYTABLE_VERSION_DATE = 20210608
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -77,6 +77,10 @@
 	EndEnumeration
 	
 	Interface MyTableCell Extends MyTableObject
+		GetApplication()
+		GetTable()
+		GetRow()
+		GetCol()
 		GetParent()
 		SetText(value.s):GetText.s()
 		SetValue(value.d):GetValue.d()
@@ -95,6 +99,9 @@
 	EndEnumeration
 	
 	Interface MyTableCol Extends MyTableObject
+		GetApplication()
+		GetTable()
+		GetPosition()
 		SetText(value.s):GetText.s()
 		SetImage(value.i):GetImage.i()
 		SetWidth(value.i):GetWidth.i()
@@ -104,7 +111,10 @@
 	EndInterface
 	
 	Interface MyTableRow Extends MyTableObject
+		GetApplication()
+		GetTable()
 		GetParent()
+		GetPosition()
 		SetExpanded(value.b):GetExpanded.b()
 		SetImage(value.i):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
@@ -129,15 +139,19 @@
 	#MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_BORDER
 	
 	Prototype MyTableProtoCallbackCellChangedChecked(*cell.MyTableCell)
+	Prototype MyTableProtoCallbackCellChangedUnChecked(*cell.MyTableCell)
 	Prototype MyTableProtoCallbackCellChangedText(*cell.MyTableCell,old.s)
 	Prototype MyTableProtoCallbackCellChangedValue(*cell.MyTableCell,old.d)
 	Prototype MyTableProtoCallbackCellSelected(*cell.MyTableCell)
 	Prototype MyTableProtoCallbackRowChangedChecked(*row.MyTableRow)
+	Prototype MyTableProtoCallbackRowChangedUnChecked(*row.MyTableRow)
 	Prototype MyTableProtoCallbackRowChangedExpanded(*row.MyTableRow)
+	Prototype MyTableProtoCallbackRowChangedCollapsed(*row.MyTableRow)
 	Prototype MyTableProtoCallbackRowSelected(*row.MyTableRow)
 	
 	
 	Interface MyTableTable Extends MyTableObject
+		GetApplication()
 		SetName(value.s):GetName.s()
 		SetTitle(value.s):GetTitle.s()
 		SetRedraw(value.b):GetRedraw.b()
@@ -162,12 +176,15 @@
 		Free()
 		
 		RegisterCallbackCellChangedChecked(callback.MyTableProtoCallbackCellChangedChecked)
+		RegisterCallbackCellChangedUnChecked(callback.MyTableProtoCallbackCellChangedUnChecked)
 		RegisterCallbackCellChangedText(callback.MyTableProtoCallbackCellChangedText)
 		RegisterCallbackCellChangedValue(callback.MyTableProtoCallbackCellChangedValue)
 		RegisterCallbackCellSelected(callback.MyTableProtoCallbackCellSelected)
 		RegisterCallbackRowChangedChecked(callback.MyTableProtoCallbackRowChangedChecked)
+		RegisterCallbackRowChangedUnChecked(callback.MyTableProtoCallbackRowChangedUnChecked)
 		RegisterCallbackRowChangedExpanded(callback.MyTableProtoCallbackRowChangedExpanded)
-		RegisterCallbackProtoRowSelected(callback.MyTableProtoCallbackRowSelected)
+		RegisterCallbackRowChangedCollapsed(callback.MyTableProtoCallbackRowChangedCollapsed)
+		RegisterCallbackRowSelected(callback.MyTableProtoCallbackRowSelected)
 	EndInterface
 	
 	Interface MyTableApplication Extends MyTableObject

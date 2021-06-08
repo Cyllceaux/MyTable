@@ -10,6 +10,18 @@ Procedure _MyTable_Row_GetParent(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Row_GetTable(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\table
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetApplication(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\table\application
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Row_GetFlags(*this.strMyTableRow)
 	If *this
 		ProcedureReturn *this\flags
@@ -65,6 +77,19 @@ EndProcedure
 Procedure _MyTable_Row_GetData(*this.strMyTableRow)
 	If *this
 		ProcedureReturn *this\data
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetPosition(*this.strMyTableRow)
+	If *this
+		Protected result.i=-1
+		ForEach *this\table\expRows()
+			If *this\table\expRows()=*this
+				result=ListIndex(*this\table\expRows())
+				Break
+			EndIf
+		Next
+		ProcedureReturn result
 	EndIf
 EndProcedure
 

@@ -326,70 +326,73 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			*col\dirty=#False
 		EndIf
 		
-		Protected addx=DesktopScaledX(2)
-		Protected addy=0
-		Protected valign=_MyTable_GetVAlign(*col)
-		Protected halign=_MyTable_GetHAlign(*col)
-		
-		
-		
-		DrawingMode(#PB_2DDrawing_Default)
-		BackColor(_MyTable_GetBackColor(*col))
-		FrontColor(_MyTable_GetFrontColor(*col))
-		ClipOutput(bx,0,*col\calcwidth,*this\calcheaderheight)
-		Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBackColor(*col))
-		
-		If *col\image\orig And IsImage(*col\image\orig)
-			addx+DesktopScaledX(2)
-			If Not *col\image\sized
-				*col\image\sized=CopyImage(*col\image\orig,#PB_Any)
-				ResizeImage(*col\image\sized,*this\calcheaderheight-MyTableW8,*this\calcheaderheight-MyTableH8)
-			EndIf
-			DrawingMode(#PB_2DDrawing_AlphaClip)
-			DrawImage(ImageID(*col\image\sized),bx+addx,addy+MyTableW4)
+		If *col\calcwidth>0
+			
+			Protected addx=DesktopScaledX(2)
+			Protected addy=0
+			Protected valign=_MyTable_GetVAlign(*col)
+			Protected halign=_MyTable_GetHAlign(*col)
+			
+			
+			
 			DrawingMode(#PB_2DDrawing_Default)
-			addx+*this\calcheaderheight
-		EndIf
-		
-		If halign=#MYTABLE_STYLE_HALIGN_CENTER
-			If *col\sort
-				addx+(*col\calcwidth /2- addx - MyTableW20)-*col\textwidth/2
+			BackColor(_MyTable_GetBackColor(*col))
+			FrontColor(_MyTable_GetFrontColor(*col))
+			ClipOutput(bx,0,*col\calcwidth,*this\calcheaderheight)
+			Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBackColor(*col))
+			
+			If *col\image\orig And IsImage(*col\image\orig)
+				addx+DesktopScaledX(2)
+				If Not *col\image\sized
+					*col\image\sized=CopyImage(*col\image\orig,#PB_Any)
+					ResizeImage(*col\image\sized,*this\calcheaderheight-MyTableW8,*this\calcheaderheight-MyTableH8)
+				EndIf
+				DrawingMode(#PB_2DDrawing_AlphaClip)
+				DrawImage(ImageID(*col\image\sized),bx+addx,addy+MyTableW4)
+				DrawingMode(#PB_2DDrawing_Default)
+				addx+*this\calcheaderheight
+			EndIf
+			
+			If halign=#MYTABLE_STYLE_HALIGN_CENTER
+				If *col\sort
+					addx+(*col\calcwidth /2- addx - MyTableW20)-*col\textwidth/2
+				Else
+					addx+(*col\calcwidth /2- addx)-*col\textwidth/2
+				EndIf
+			ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
+				addx+*col\calcwidth - *col\textwidth - MyTableW8 - addx
+				If *col\sort
+					addx - MyTableW20
+				EndIf
 			Else
-				addx+(*col\calcwidth /2- addx)-*col\textwidth/2
+				addx+DesktopScaledX(2)
 			EndIf
-		ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
-			addx+*col\calcwidth - *col\textwidth - MyTableW8 - addx
-			If *col\sort
-				addx - MyTableW20
+			
+			If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
+				addy+*this\calcheaderheight/2 - *col\textheight/2
+			ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
+				addy+*this\calcheaderheight-*col\textheight-MyTableH1			
+			Else
+				addy+DesktopScaledY(1)
 			EndIf
-		Else
-			addx+DesktopScaledX(2)
-		EndIf
-		
-		If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
-			addy+*this\calcheaderheight/2 - *col\textheight/2
-		ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
-			addy+*this\calcheaderheight-*col\textheight-MyTableH1			
-		Else
-			addy+DesktopScaledY(1)
-		EndIf
-		
-		DrawingMode(#PB_2DDrawing_AlphaClip)
-		Select *col\sort
-			Case #MYTABLE_COL_SORT_ASC
-				DrawImage(ImageID(MyTableDefaultImageSortAsc),bx+*col\calcwidth-MyTableW20,0)
-			Case #MYTABLE_COL_SORT_DESC
-				DrawImage(ImageID(MyTableDefaultImageSortDesc),bx+*col\calcwidth-MyTableW20,0)
-		EndSelect
-		
-		DrawingMode(#PB_2DDrawing_Default)
-		DrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
-		DrawingMode(#PB_2DDrawing_Outlined)
-		Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBorderColor(*col))
-		UnclipOutput()
-		bx+*col\calcwidth
-		If bx>=width
-			Break
+			
+			DrawingMode(#PB_2DDrawing_AlphaClip)
+			Select *col\sort
+				Case #MYTABLE_COL_SORT_ASC
+					DrawImage(ImageID(MyTableDefaultImageSortAsc),bx+*col\calcwidth-MyTableW20,0)
+				Case #MYTABLE_COL_SORT_DESC
+					DrawImage(ImageID(MyTableDefaultImageSortDesc),bx+*col\calcwidth-MyTableW20,0)
+			EndSelect
+			
+			DrawingMode(#PB_2DDrawing_Default)
+			DrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
+			DrawingMode(#PB_2DDrawing_Outlined)
+			Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBorderColor(*col))
+			UnclipOutput()
+			bx+*col\calcwidth
+			If bx>=width
+				Break
+			EndIf
 		EndIf
 	Next
 	ProcedureReturn *this\calcheaderheight
@@ -427,136 +430,137 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			*cell\dirty=#False
 		EndIf
 		Protected *col.strMyTableCol=*cell\col
-		
-		
-		If selected
-			Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedColor(*cell))
-		Else
-			Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
-		EndIf
-		
-		
-		Protected addx=DesktopScaledX(2)
-		Protected addy=0
-		Protected valign=_MyTable_GetVAlign(*cell)
-		Protected halign=_MyTable_GetHAlign(*cell)
-		
-		If hierarchical
-			If idx=1
-				addx+*this\level*MyTableW20
-				DrawingMode(#PB_2DDrawing_AlphaClip)
-				If ListSize(*this\rows())>0
-					If *this\expanded
-						DrawImage(ImageID(MyTableDefaultImageMinusArrow),bx+addx,by)
-					Else
-						DrawImage(ImageID(MyTableDefaultImagePlusArrow),bx+addx,by)
-					EndIf
-				EndIf
-				DrawingMode(#PB_2DDrawing_Default)
-				addx+MyTableW20
-			EndIf
-		EndIf
-		
-		If checkboxes
-			If idx=1
-				DrawingMode(#PB_2DDrawing_AlphaClip)				
-				If *this\checked
-					DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
-				Else
-					DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
-				EndIf				
-				DrawingMode(#PB_2DDrawing_Default)
-				addx+MyTableW20
-				
+		If *col\calcwidth>0
+			
+			If selected
+				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedColor(*cell))
+			Else
+				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
 			EndIf
 			
-		EndIf
-		checkboxes=#False
-		checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
-		
-		If idx=1
-			If *this\image\orig And IsImage(*this\image\orig)
+			
+			Protected addx=DesktopScaledX(2)
+			Protected addy=0
+			Protected valign=_MyTable_GetVAlign(*cell)
+			Protected halign=_MyTable_GetHAlign(*cell)
+			
+			If hierarchical
+				If idx=1
+					addx+*this\level*MyTableW20
+					DrawingMode(#PB_2DDrawing_AlphaClip)
+					If ListSize(*this\rows())>0
+						If *this\expanded
+							DrawImage(ImageID(MyTableDefaultImageMinusArrow),bx+addx,by)
+						Else
+							DrawImage(ImageID(MyTableDefaultImagePlusArrow),bx+addx,by)
+						EndIf
+					EndIf
+					DrawingMode(#PB_2DDrawing_Default)
+					addx+MyTableW20
+				EndIf
+			EndIf
+			
+			If checkboxes
+				If idx=1
+					DrawingMode(#PB_2DDrawing_AlphaClip)				
+					If *this\checked
+						DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+					Else
+						DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+					EndIf				
+					DrawingMode(#PB_2DDrawing_Default)
+					addx+MyTableW20
+					
+				EndIf
+				
+			EndIf
+			checkboxes=#False
+			checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
+			
+			If idx=1
+				If *this\image\orig And IsImage(*this\image\orig)
+					addx+DesktopScaledX(2)
+					If Not *this\image\sized
+						*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
+						ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+					EndIf
+					DrawingMode(#PB_2DDrawing_AlphaClip)
+					DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
+					DrawingMode(#PB_2DDrawing_Default)
+					addx+*this\calcheight
+				EndIf
+			EndIf
+			
+			If *cell\image\orig And IsImage(*cell\image\orig)
 				addx+DesktopScaledX(2)
-				If Not *this\image\sized
-					*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
-					ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+				If Not *cell\image\sized
+					*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
+					ResizeImage(*cell\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
 				EndIf
 				DrawingMode(#PB_2DDrawing_AlphaClip)
-				DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
+				DrawImage(ImageID(*cell\image\sized),bx+addx,by+addy+MyTableW4)
 				DrawingMode(#PB_2DDrawing_Default)
 				addx+*this\calcheight
 			EndIf
-		EndIf
-		
-		If *cell\image\orig And IsImage(*cell\image\orig)
-			addx+DesktopScaledX(2)
-			If Not *cell\image\sized
-				*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
-				ResizeImage(*cell\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
-			EndIf
-			DrawingMode(#PB_2DDrawing_AlphaClip)
-			DrawImage(ImageID(*cell\image\sized),bx+addx,by+addy+MyTableW4)
-			DrawingMode(#PB_2DDrawing_Default)
-			addx+*this\calcheight
-		EndIf
-		
-		If halign=#MYTABLE_STYLE_HALIGN_CENTER
-			If checkboxes And idx>1
-				addx+(*col\calcwidth-addx - MyTableW20)/2-*cell\textwidth/2
-			Else
-				addx+(*col\calcwidth-addx)/2-*cell\textwidth/2
-			EndIf
-		ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
-			addx+*col\calcwidth - *cell\textwidth - MyTableW8 -addx
-			If checkboxes And idx>1
-				addx-MyTableW20
-			EndIf
-		Else
-			addx+DesktopScaledX(2)
-		EndIf
-		
-		If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
-			addy+*this\calcheight/2 - *cell\textheight/2
-		ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
-			addy+*this\calcheight-*cell\textheight-MyTableH1
-		Else
-			addy+DesktopScaledY(1)
-		EndIf
-		
-		If checkboxes
-			If idx>1
-				DrawingMode(#PB_2DDrawing_AlphaClip)
-				If *cell\checked
-					DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+			
+			If halign=#MYTABLE_STYLE_HALIGN_CENTER
+				If checkboxes And idx>1
+					addx+(*col\calcwidth-addx - MyTableW20)/2-*cell\textwidth/2
 				Else
-					DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+					addx+(*col\calcwidth-addx)/2-*cell\textwidth/2
 				EndIf
-				DrawingMode(#PB_2DDrawing_Default)
-				addx+MyTableW20
-			EndIf			
-		EndIf
-		
-		ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
-		If *cell\text<>""
-			DrawingMode(#PB_2DDrawing_Transparent)	
-			If selected
-				DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell))
+			ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
+				addx+*col\calcwidth - *cell\textwidth - MyTableW8 -addx
+				If checkboxes And idx>1
+					addx-MyTableW20
+				EndIf
 			Else
-				DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+				addx+DesktopScaledX(2)
 			EndIf
-		EndIf
-		If border
-			DrawingMode(#PB_2DDrawing_Outlined)
-			If selected
-				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBorderColor(*cell))
+			
+			If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
+				addy+*this\calcheight/2 - *cell\textheight/2
+			ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
+				addy+*this\calcheight-*cell\textheight-MyTableH1
 			Else
-				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBorderColor(*cell))
+				addy+DesktopScaledY(1)
 			EndIf
-		EndIf
-		UnclipOutput()
-		bx+*col\calcwidth
-		If bx>=width
-			Break
+			
+			If checkboxes
+				If idx>1
+					DrawingMode(#PB_2DDrawing_AlphaClip)
+					If *cell\checked
+						DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+					Else
+						DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+					EndIf
+					DrawingMode(#PB_2DDrawing_Default)
+					addx+MyTableW20
+				EndIf			
+			EndIf
+			
+			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
+			If *cell\text<>""
+				DrawingMode(#PB_2DDrawing_Transparent)	
+				If selected
+					DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell))
+				Else
+					DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+				EndIf
+			EndIf
+			If border
+				DrawingMode(#PB_2DDrawing_Outlined)
+				If selected
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBorderColor(*cell))
+				Else
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBorderColor(*cell))
+				EndIf
+			EndIf
+			UnclipOutput()
+			bx+*col\calcwidth
+			If bx>=width
+				Break
+			EndIf
 		EndIf
 	Next
 	ProcedureReturn *this\calcheight
@@ -932,6 +936,12 @@ Procedure _MyTable_Table_GetCol(*this.strMyTableTable,col.i)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_GetApplication(*this.strMyTableTable)
+	If *this		
+		ProcedureReturn *this\application
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	If *this
 		If ListSize(*this\cols())>col And ListSize(*this\rows())>row
@@ -1004,6 +1014,12 @@ Procedure _MyTable_Table_RegisterCallbackCellChangedChecked(*this.strMyTableTabl
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_RegisterCallbackCellChangedUnChecked(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedUnChecked)
+	If *this
+		*this\CallbackCellChangedUnChecked=callback
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_RegisterCallbackCellChangedText(*this.strMyTableTable,callback.MyTableProtoCallbackCellChangedText)
 	If *this
 		*this\CallbackCellChangedText=callback
@@ -1028,15 +1044,27 @@ Procedure _MyTable_Table_RegisterCallbackRowChangedChecked(*this.strMyTableTable
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_RegisterCallbackRowChangedUnChecked(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedUnChecked)
+	If *this
+		*this\CallbackRowChangedUnChecked=callback
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_RegisterCallbackRowChangedExpanded(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedExpanded)
 	If *this
 		*this\CallbackRowChangedExpanded=callback
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterCallbackProtoRowSelected(*this.strMyTableTable,callback.MyTableProtoCallbackRowSelected)
+Procedure _MyTable_Table_RegisterCallbackRowChangedCollapsed(*this.strMyTableTable,callback.MyTableProtoCallbackRowChangedCollapsed)
 	If *this
-		*this\CallbackProtoRowSelected=callback
+		*this\CallbackRowChangedCollapsed=callback
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_RegisterCallbackRowSelected(*this.strMyTableTable,callback.MyTableProtoCallbackRowSelected)
+	If *this
+		*this\CallbackRowSelected=callback
 	EndIf
 EndProcedure
 

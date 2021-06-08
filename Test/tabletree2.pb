@@ -15,7 +15,7 @@ UseModule MyTable
 	Define *col.MyTableCol,*style.MyTableStyleCol,*stamm.MyTableRow,*ast.MyTableRow,*zweig.MyTableRow,*blatt.MyTableRow
 	*col=*tree\AddCol("Test 1",200,rowImage)
 	*col=*tree\AddCol("Test 2",200,rowImageSub)
-	*col=*tree\AddCol("Test 3",200,rowImageSub2)
+	*col=*tree\AddCol("Test 3",#PB_Ignore,rowImageSub2)
 	
 	#Rows=10
 	
@@ -41,6 +41,34 @@ UseModule MyTable
 	Next
 	
 	*tree\SetRedraw(#True)
+	
+	Procedure RC(*row.MyTableRow)
+		Debug "RowCheck "+*row\GetPosition()
+	EndProcedure
+	Procedure RU(*row.MyTableRow)
+		Debug "RowUnCheck "+*row\GetPosition()
+	EndProcedure
+	Procedure RS(*row.MyTableRow)
+		Debug "RowSelect "+*row\GetPosition()
+	EndProcedure
+	Procedure CS(*cell.MyTableCell)
+		Protected *row.MyTableRow=*cell\getRow()
+		Protected *col.MyTableCol=*cell\getCol()
+		Debug "CelSelect "+*row\GetPosition()+" / "+*col\GetPosition()
+	EndProcedure
+	Procedure RE(*row.MyTableRow)
+		Debug "RowExpand "+*row\GetPosition()
+	EndProcedure
+	Procedure RCo(*row.MyTableRow)
+		Debug "RowCollpased "+*row\GetPosition()
+	EndProcedure
+	
+	*tree\RegisterCallbackCellSelected(@CS())
+	*tree\RegisterCallbackRowChangedChecked(@RC())
+	*tree\RegisterCallbackRowChangedUnChecked(@RU())
+	*tree\RegisterCallbackRowChangedExpanded(@RE())
+	*tree\RegisterCallbackRowChangedCollapsed(@RCo())
+	*tree\RegisterCallbackRowSelected(@RS())
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

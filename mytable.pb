@@ -135,12 +135,15 @@ Module MyTable
 		*lastcol.strMyTableCol
 		
 		callbackCellChangedChecked.MyTableProtoCallbackCellChangedChecked
+		callbackCellChangedUnChecked.MyTableProtoCallbackCellChangedUnChecked
 		callbackCellChangedText.MyTableProtoCallbackCellChangedText
 		callbackCellChangedValue.MyTableProtoCallbackCellChangedValue
 		callbackCellSelected.MyTableProtoCallbackCellSelected
 		callbackRowChangedChecked.MyTableProtoCallbackRowChangedChecked
+		callbackRowChangedUnChecked.MyTableProtoCallbackRowChangedUnChecked
 		callbackRowChangedExpanded.MyTableProtoCallbackRowChangedExpanded
-		callbackProtoRowSelected.MyTableProtoCallbackRowSelected
+		callbackRowChangedCollapsed.MyTableProtoCallbackRowChangedCollapsed
+		callbackRowSelected.MyTableProtoCallbackRowSelected
 	EndStructure
 	
 	Structure strMyTableApplication Extends strMyTableObject
@@ -442,7 +445,12 @@ Module MyTable
 								*row=*this\expRows()
 								If temp
 									*this\tempselectedRows(Str(*row))=#True
-								Else
+								Else									
+									If Not *this\selectedRows(Str(*row))
+										If *this\callbackRowSelected
+											*this\callbackRowSelected(*row)
+										EndIf
+									EndIf
 									*this\selectedRows(Str(*row))=#True
 								EndIf
 							Next
@@ -451,7 +459,12 @@ Module MyTable
 						If temp
 							*this\tempselectedRows(Str(*row))=#True
 						Else
-							*this\lastrow=*row
+							*this\lastrow=*row							
+							If Not *this\selectedRows(Str(*row))
+								If *this\callbackRowSelected
+									*this\callbackRowSelected(*row)
+								EndIf
+							EndIf
 							*this\selectedRows(Str(*row))=#True
 						EndIf
 					EndIf
@@ -498,7 +511,12 @@ Module MyTable
 									*cell=_MyTableGetOrAddCell(*row,c)									
 									If temp
 										*this\tempselectedCells(Str(*cell))=#True
-									Else
+									Else										
+										If Not *this\selectedCells(Str(*cell))
+											If *this\callbackCellSelected
+												*this\callbackCellSelected(*cell)
+											EndIf
+										EndIf
 										*this\selectedCells(Str(*cell))=#True
 									EndIf
 								Next
@@ -510,6 +528,11 @@ Module MyTable
 							*this\tempselectedCells(Str(*cell))=#True
 						Else
 							*this\lastcell=*cell
+							If Not *this\selectedCells(Str(*cell))
+								If *this\callbackCellSelected
+									*this\callbackCellSelected(*cell)
+								EndIf
+							EndIf
 							*this\selectedCells(Str(*cell))=#True
 						EndIf
 					EndIf
@@ -571,14 +594,32 @@ Module MyTable
 				*row=*this\expRows()
 				*row\checked=Bool(Not *row\checked)
 				*this\dirty=#True
+				If *row\checked			
+					If *this\callbackRowChangedChecked
+						*this\callbackRowChangedChecked(*row)
+					EndIf
+				Else
+					If *this\callbackRowChangedUnChecked
+						*this\callbackRowChangedUnChecked(*row)
+					EndIf
+				EndIf
 			ElseIf *rc\exp
 				SelectElement(*this\expRows(),*rc\row)
 				*row=*this\expRows()
 				*row\expanded=Bool(Not *row\expanded)
 				*this\dirty=#True
+				If *row\expanded
+					If *this\callbackRowChangedExpanded
+						*this\callbackRowChangedExpanded(*row)
+					EndIf
+				Else
+					If *this\callbackRowChangedCollapsed
+						*this\callbackRowChangedCollapsed(*row)
+					EndIf
+				EndIf
 				_MyTable_Table_Predraw(*this)
 			Else
-				If Not multiselect Or (Not shift And Not control) And *rc\col>0 And *rc\row>-1
+				If Not multiselect Or (Not shift And Not control) And *rc\col>-1 And *rc\row>-1
 					ClearMap(*this\selectedCells())
 					ClearMap(*this\selectedRows())
 					ClearMap(*this\selectedCols())
@@ -621,7 +662,7 @@ Module MyTable
 						*this\selectedCols(MapKey(*this\tempselectedCols()))=*this\tempselectedCols()
 					Next			
 					ForEach *this\tempselectedRows()
-						*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()
+						*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()						
 					Next
 					_MyTableSelect(*this,*rc,#False)	
 				EndIf
@@ -991,6 +1032,7 @@ Module MyTable
 		
 		vtable_table:;- Table
 		_MyTableDataSectionDefault(Table)
+		_MyTableDataSectionGetter(Table,Application)
 		_MyTableDataSectionSetterGetter(Table,Name)
 		_MyTableDataSectionSetterGetter(Table,Title)
 		_MyTableDataSectionSetterGetter(Table,Redraw)
@@ -1015,16 +1057,22 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,Free)
 		
 		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedChecked)
+		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedUnChecked)
 		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedText)
 		_MyTableDataSectionMethode(Table,RegisterCallbackCellChangedValue)
 		_MyTableDataSectionMethode(Table,RegisterCallbackCellSelected)
 		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedChecked)
+		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedUnChecked)
 		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedExpanded)
-		_MyTableDataSectionMethode(Table,RegisterCallbackProtoRowSelected)
+		_MyTableDataSectionMethode(Table,RegisterCallbackRowChangedCollapsed)
+		_MyTableDataSectionMethode(Table,RegisterCallbackRowSelected)
 		
 		vtable_row:;- Row
 		_MyTableDataSectionDefault(Row)
+		_MyTableDataSectionGetter(Row,Application)
+		_MyTableDataSectionGetter(Row,Table)
 		_MyTableDataSectionGetter(Row,Parent)
+		_MyTableDataSectionGetter(Row,Position)
 		_MyTableDataSectionSetterGetter(Row,Expanded)
 		_MyTableDataSectionSetterGetter(Row,Image)
 		_MyTableDataSectionSetterGetter(Row,Checked)
@@ -1038,6 +1086,9 @@ Module MyTable
 		
 		vtable_col:;- Col
 		_MyTableDataSectionDefault(Col)
+		_MyTableDataSectionGetter(Col,Application)
+		_MyTableDataSectionGetter(Col,Table)
+		_MyTableDataSectionGetter(Col,Position)
 		_MyTableDataSectionSetterGetter(Col,Text)
 		_MyTableDataSectionSetterGetter(Col,Image)
 		_MyTableDataSectionSetterGetter(Col,Width)
@@ -1048,6 +1099,10 @@ Module MyTable
 		
 		vtable_cell:;- Cell
 		_MyTableDataSectionDefault(Cell)
+		_MyTableDataSectionGetter(Cell,Application)
+		_MyTableDataSectionGetter(Cell,Table)
+		_MyTableDataSectionGetter(Cell,Row)
+		_MyTableDataSectionGetter(Cell,Col)
 		_MyTableDataSectionGetter(Cell,Parent)
 		_MyTableDataSectionSetterGetter(Cell,Text)
 		_MyTableDataSectionSetterGetter(Cell,Value)

@@ -10,6 +10,30 @@ Procedure _MyTable_Cell_GetParent(*this.strMyTableCell)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Cell_GetRow(*this.strMyTableCell)
+	If *this
+		ProcedureReturn *this\row
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_GetCol(*this.strMyTableCell)
+	If *this
+		ProcedureReturn *this\col
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_GetTable(*this.strMyTableCell)
+	If *this
+		ProcedureReturn *this\table
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_GetApplication(*this.strMyTableCell)
+	If *this
+		ProcedureReturn *this\table\application
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Cell_GetFlags(*this.strMyTableCell)
 	If *this
 		ProcedureReturn *this\flags

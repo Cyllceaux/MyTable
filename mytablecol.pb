@@ -4,6 +4,24 @@
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Col_GetTable(*this.strMyTableCol)
+	If *this
+		ProcedureReturn *this\table
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_GetApplication(*this.strMyTableCol)
+	If *this
+		ProcedureReturn *this\table\application
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_GetPosition(*this.strMyTableCol)
+	If *this
+		ProcedureReturn *this\listindex
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Col_GetFlags(*this.strMyTableCol)
 	If *this
 		ProcedureReturn *this\flags
