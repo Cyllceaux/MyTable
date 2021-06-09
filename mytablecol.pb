@@ -317,3 +317,79 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure
+
+
+Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
+	If *this 		
+		If Not *this\table\drawing
+			If IsImage(*this\table\canvas)
+				StartDrawing(ImageOutput(*this\table\canvas))
+			EndIf
+			If IsGadget(*this\table\canvas)
+				StartDrawing(CanvasOutput(*this\table\canvas))
+			EndIf
+		EndIf
+		_callcountStart(AutosizeCol)
+		Protected result.i=*this\textwidth+MyTableW8
+		If *this\image\sized
+			result+ImageWidth(*this\image\sized)
+			result+MyTableW8
+		EndIf
+		If *this\sort
+			result+MyTableW20
+		EndIf
+		Protected lastfont.i=0
+		ForEach *this\table\rows()
+			If *this\table\rows()\cells
+				If ListSize(*this\table\rows()\cells\cells())>*this\listindex
+					Protected tresult.i=0
+					If *this\listindex=0
+						If *this\table\rows()\image\orig						
+							If Not *this\table\rows()\image\sized															
+								*this\table\rows()\image\sized=CopyImage(*this\table\rows()\image\orig,#PB_Any)
+								If *this\table\rows()\image\resize
+									ResizeImage(*this\table\rows()\image\sized,*this\table\rows()\calcheight-MyTableW8,*this\table\rows()\calcheight-MyTableH8)
+								Else
+									ResizeImage(*this\table\rows()\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+								EndIf
+							EndIf
+							tresult+ImageWidth(*this\table\rows()\image\sized)+MyTableW8
+						EndIf
+					EndIf
+					If *this\table\rows()\cells\cells()\textwidth=0 And *this\table\rows()\cells\cells()\text<>""
+						Protected nfont=_MyTable_GetFont(*this\table\rows()\cells\cells())
+						If nfont<>lastfont
+							DrawingFont(nfont)
+							lastfont=nfont
+						EndIf
+						*this\table\rows()\cells\cells()\textwidth=_MyTableTextWidth(*this\table\rows()\cells\cells()\text)
+					EndIf
+					tresult+*this\table\rows()\cells\cells()\textwidth+MyTableW8
+					If *this\table\rows()\cells\cells()\image\orig					
+						If Not *this\table\rows()\cells\cells()\image\sized
+							*this\table\rows()\cells\cells()\image\sized=CopyImage(*this\table\rows()\cells\cells()\image\orig,#PB_Any)
+							If *this\table\rows()\image\resize
+								ResizeImage(*this\table\rows()\cells\cells()\image\sized,*this\table\rows()\calcheight-MyTableW8,*this\table\rows()\calcheight-MyTableH8)
+							Else
+								ResizeImage(*this\table\rows()\cells\cells()\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+							EndIf
+						EndIf
+						tresult+ImageWidth(*this\table\rows()\cells\cells()\image\sized)+MyTableW8
+					EndIf
+					If tresult>result
+						result=tresult
+					EndIf
+				EndIf
+			EndIf
+		Next
+		*this\calcwidth=result+MyTableW8
+		*this\width=DesktopUnscaledX(*this\calcwidth)
+		*this\dirty=#True
+		*this\table\dirty=#True
+		If Not *this\table\drawing
+			StopDrawing()
+		EndIf
+		_callcountEnde(AutosizeCol)
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure

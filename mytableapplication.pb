@@ -158,3 +158,11 @@ Procedure _MyTable_Application_SetSelected(*this.strMyTableApplication,value.b)
 		Next
 	EndIf
 EndProcedure
+
+Procedure _MyTable_Application_Autosize(*this.strMyTableApplication)
+	If *this
+		ForEach *this\tables()
+			_MyTable_Table_Autosize(*this\tables())
+		Next
+	EndIf
+EndProcedure

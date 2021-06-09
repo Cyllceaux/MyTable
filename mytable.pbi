@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 662
+	#MYTABLE_VERSION = 715
 	#MYTABLE_VERSION_DATE = 20210609
 	
 	Enumeration _mytable_type
@@ -70,6 +70,8 @@
 		SetData(*value):GetData()
 		SetDirty(value.b):GetDirty.b()
 		SetSelected(value.b):GetSelected.b()
+		
+		Autosize()
 	EndInterface
 	
 	EnumerationBinary _mytable_cell	

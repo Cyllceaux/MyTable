@@ -216,3 +216,10 @@ Procedure _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure
+
+Procedure _MyTable_Cell_Autosize(*this.strMyTableCell)
+	If *this
+		_MyTable_Col_Autosize(*this\col)
+		_MyTable_Row_Autosize(*this\row)
+	EndIf
+EndProcedure

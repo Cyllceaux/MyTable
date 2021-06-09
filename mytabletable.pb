@@ -282,6 +282,14 @@ Procedure.q _MyTable_GetForeColor(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Procedure.i _MyTable_GetFont(*this.strMyTableStyleObject)
+	If *this
+		Protected result.i=0
+		_MyTableStyleGetRow(*this,font)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_GetSelectedColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
@@ -1259,5 +1267,33 @@ Procedure _MyTable_Table_ScrollToCellPos(*this.strMyTableTable,row.i,col.i,setSe
 				_MyTable_Table_Redraw(*this)
 			EndIf
 		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
+	If *this
+		_callcountStart(AutosizeTable)
+		Protected thisdrawing.b=#False
+		If Not *this\drawing
+			If IsImage(*this\canvas)
+				StartDrawing(ImageOutput(*this\canvas))
+			EndIf
+			If IsGadget(*this\canvas)
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
+			*this\drawing=#True
+			thisdrawing=#True
+		EndIf
+		ForEach *this\cols()
+			_MyTable_Col_Autosize(*this\cols())
+		Next
+		ForEach *this\rows()
+			_MyTable_Row_Autosize(*this\rows())
+		Next
+		If thisdrawing
+			StopDrawing()
+			*this\drawing=#False
+		EndIf
+		_callcountEnde(AutosizeTable)
 	EndIf
 EndProcedure

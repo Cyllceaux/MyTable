@@ -272,3 +272,46 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure
+
+Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
+	If *this 		
+		If Not *this\table\drawing
+			If IsImage(*this\table\canvas)
+				StartDrawing(ImageOutput(*this\table\canvas))
+			EndIf
+			If IsGadget(*this\table\canvas)
+				StartDrawing(CanvasOutput(*this\table\canvas))
+			EndIf
+		EndIf
+		Protected result.i=*this\table\calcdefaultrowheight
+		Protected lastfont.i=0
+		If*this\cells
+			ForEach *this\cells\cells()
+				If *this\cells\cells()\textheight=0 And *this\cells\cells()\text<>""
+					Protected nfont=_MyTable_GetFont(*this\table\rows()\cells\cells())
+					If nfont<>lastfont
+						DrawingFont(nfont)
+						lastfont=nfont
+					EndIf
+					*this\cells\cells()\textheight=_MyTableTextHeight(*this\cells\cells()\text)
+				EndIf
+				If *this\cells\cells()\textheight>result
+					result=*this\cells\cells()\textheight
+				EndIf
+			Next
+		EndIf
+		If result>*this\table\calcdefaultrowheight			
+			result+MyTableH4
+		EndIf
+		If Not *this\table\drawing
+			StopDrawing()
+		EndIf
+		*this\dirty=#True
+		*this\table\dirty=#True
+		*this\calcheight=result
+		*this\height=DesktopUnscaledY(result)
+		_MyTable_Table_Predraw(*this\table)
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+	
+EndProcedure

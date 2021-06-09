@@ -10,7 +10,7 @@ UseModule MyTable
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 	CloseGadgetList()
 	
-	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll)
+	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT|#MYTABLE_TABLE_FLAGS_RESIZABLE)
 	*table\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow
 	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
@@ -35,7 +35,9 @@ UseModule MyTable
 	Next
 	
 	*col\SetSort(#MYTABLE_COL_SORT_DESC)
+	*table\Autosize()
 	*table\SetRedraw(#True)
+	
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

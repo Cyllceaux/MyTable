@@ -45,11 +45,12 @@ Declare _MyTable_Application_Redraw(*this.strMyTableApplication)
 
 ;- Tables
 Declare _MyTable_Table_Redraw(*this.strMyTableTable)
-Declare _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#false)
+Declare _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 Declare _MyTable_Table_Recalc(*this.strMyTableTable)
 Declare _MyTable_Table_ClearMaps(*this.strMyTableTable)
 Declare.b _MyTable_Table_GetSelected(*this.strMyTableTable)
 Declare _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
+Declare _MyTable_Table_Autosize(*this.strMyTableTable)
 
 Declare _MyTableEvtResize()
 Declare _MyTableEvtCanvasKeyDown()
@@ -65,9 +66,12 @@ Declare _MyTableEvtScroll()
 
 ;- Rows
 Declare _MyTable_Row_Delete(*this.strMyTableRow)
+Declare _MyTable_Row_Autosize(*this.strMyTableRow)
+
 
 ;-Cols
 Declare _MyTable_Col_Delete(*this.strMyTableCol)
+Declare _MyTable_Col_Autosize(*this.strMyTableCol)
 Declare _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 
 ;- Styled
