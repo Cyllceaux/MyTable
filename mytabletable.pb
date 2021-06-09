@@ -509,12 +509,20 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 					addx+DesktopScaledX(2)
 					If Not *this\image\sized
 						*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
-						ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+						If *this\image\resize
+							ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+						Else
+							ResizeImage(*this\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+						EndIf
 					EndIf
 					DrawingMode(#PB_2DDrawing_AlphaClip)
 					DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
 					DrawingMode(#PB_2DDrawing_Default)
-					addx+*this\calcheight
+					If *this\image\resize
+						addx+*this\calcheight
+					Else
+						addx+*this\table\calcdefaultrowheight
+					EndIf
 				EndIf
 			EndIf
 			
@@ -522,12 +530,20 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				addx+DesktopScaledX(2)
 				If Not *cell\image\sized
 					*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
-					ResizeImage(*cell\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+					If *cell\image\resize
+						ResizeImage(*cell\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+					Else
+						ResizeImage(*cell\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+					EndIf
 				EndIf
 				DrawingMode(#PB_2DDrawing_AlphaClip)
 				DrawImage(ImageID(*cell\image\sized),bx+addx,by+addy+MyTableW4)
 				DrawingMode(#PB_2DDrawing_Default)
-				addx+*this\calcheight
+				If *cell\image\resize
+					addx+*this\calcheight
+				Else
+					addx+*this\table\calcdefaultrowheight
+				EndIf
 			EndIf
 			
 			If halign=#MYTABLE_STYLE_HALIGN_CENTER
@@ -660,10 +676,13 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			Protected c=ListSize(*this\cols())
 			ForEach *this\expRows()
 				Protected *row.strMyTableRow=*this\expRows()
+				
 				If by+*row\calcheight>0
 					_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly)
 				EndIf
 				by+*row\calcheight
+				
+				
 				If by>height
 					Break
 				EndIf
@@ -720,7 +739,9 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			ForEach *this\rows()
 				AddElement(*this\expRows())
 				*this\expRows()=*this\rows()
+				
 				h+*this\rows()\height
+				
 				If hierarchical
 					If *this\rows()\expanded And *this\rows()\rows And ListSize(*this\rows()\rows\rows())>0
 						h+_MyTable_Table_PredrawSub(*this,*this\rows())
@@ -959,7 +980,7 @@ EndProcedure
 
 Procedure _MyTable_Table_GetRow(*this.strMyTableTable,row.i)
 	If *this
-		If ListSize(*this\rows())>row
+		If ListSize(*this\rows())>row			
 			ProcedureReturn SelectElement(*this\rows(),row)
 		EndIf
 	EndIf

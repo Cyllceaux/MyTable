@@ -42,6 +42,7 @@ Module MyTable
 	Structure strMyTableImage
 		orig.i
 		sized.i
+		resize.b
 	EndStructure
 	
 	Structure strMyTableCell Extends strMyTableObject
@@ -133,9 +134,14 @@ Module MyTable
 		selectall.b
 		
 		md.b
+		mxd.i
+		myd.i
 		*lastcell.strMyTableCell
 		*lastrow.strMyTableRow
 		*lastcol.strMyTableCol
+		
+		*resizeRow.strMyTableRow
+		*resizeCol.strMyTableCol
 		
 		eventCellChangedChecked.MyTableProtoEventCellChangedChecked
 		eventCellChangedUnChecked.MyTableProtoEventCellChangedUnChecked
@@ -164,6 +170,11 @@ Module MyTable
 		right.b
 		exp.b
 		check.b
+		*trow.strMyTableRow
+		*tcol.strMyTableCol
+		*tcell.strMyTableCell
+		mx.i
+		my.i
 	EndStructure
 	
 	Structure strMyTableCellList
@@ -281,6 +292,7 @@ Module MyTable
 		Protected resizable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_RESIZABLE)
 		
 		Protected *row.strMyTableRow=0
+		Protected *cell.strMyTableCell=0
 		Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 		Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 		Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
@@ -318,9 +330,12 @@ Module MyTable
 			If mx>(hsc+*col\calcwidth-MyTableW2) And mx<(hsc+*col\calcwidth+MyTableW2)
 				*rc\col=ListIndex(*this\cols())
 				*rc\right=colresize
+				*rc\tcol=*col
+				*rc\mx=mx
 				Break
 			ElseIf mx>hsc And mx<(hsc+*col\calcwidth)
 				*rc\col=ListIndex(*this\cols())
+				*rc\tcol=*col				
 				Break
 			Else				
 				hsc+*col\calcwidth
@@ -333,18 +348,32 @@ Module MyTable
 				*row=*this\expRows()
 				Protected rowresize.b=Bool(resizable Or *row\flags & #MYTABLE_ROW_FLAGS_RESIZABLE)
 				rowresize=Bool(rowresize And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_RESIZABLE))
-			
+				
 				If my>(vsc+*row\calcheight-MyTableH2) And my<(vsc+*row\calcheight+MyTableH2)
 					*rc\row=ListIndex(*this\expRows())
 					*rc\bottom=rowresize
+					*rc\trow=*row
+					*rc\my=my
 					Break
 				ElseIf my>vsc And my<(vsc+*row\calcheight)
 					*rc\row=ListIndex(*this\expRows())
+					*rc\trow=*row
 					Break
 				Else				
 					vsc+*row\calcheight
 				EndIf
 			Next
+		EndIf
+		
+		If *rc\row>-1 And *rc\col>-1
+			If Not *rc\trow
+				SelectElement(*this\expRows(),*rc\row)
+				*rc\trow=*this\expRows()
+			EndIf
+			*rc\tcell=_MyTableGetOrAddCell(*rc\trow,*rc\col)
+			If Not *rc\tcol
+				*rc\tcol=*rc\tcell\col
+			EndIf
 		EndIf
 		
 		If *rc\row>-1 And *rc\col=0
@@ -415,43 +444,36 @@ Module MyTable
 		
 		Protected rf,rt,cf,ct,r,c
 		
-		Protected *cell.strMyTableCell=0
-		Protected *col.strMyTableCol=0
-		Protected *row.strMyTableRow=0
-		
-		
 		If *rc\row=-1 And *rc\col>-1
-			*col=SelectElement(*this\cols(),*rc\col)
-			sortable=Bool(sortable Or Bool(*col\flags & #MYTABLE_COL_FLAGS_SORTABLE))
-			sortable=Bool(sortable And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_SORTABLE))
+			sortable=Bool(sortable Or Bool(*rc\tcol\flags & #MYTABLE_COL_FLAGS_SORTABLE))
+			sortable=Bool(sortable And Not Bool(*rc\tcol\flags & #MYTABLE_COL_FLAGS_NO_SORTABLE))
 			If sortable
-				Select *col\sort
+				Select *rc\tcol\sort
 					Case #MYTABLE_COL_SORT_NONE
-						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_ASC)
+						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_ASC)
 					Case #MYTABLE_COL_SORT_ASC
-						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_DESC)
+						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_DESC)
 					Case #MYTABLE_COL_SORT_DESC
-						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_NONE)
+						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_NONE)
 				EndSelect		
-			EndIf
-			*this\md=#False
+				*this\dirty=#True
+			EndIf			
+			ProcedureReturn 0
 		Else
 			If fullrow
 				If *rc\row>-1 And *rc\col>-1
-					SelectElement(*this\expRows(),*rc\row)
-					*row=*this\expRows()
 					
 					If multiselect And 
 					   (shift Or *this\md) And 
-					   *row<>*this\lastrow And
+					   *rc\trow<>*this\lastrow And
 					   *this\lastrow<>0 And 
-					   *row\level=*this\lastrow\level And 
-					   *row\parent=*this\lastrow\parent
+					   *rc\trow\level=*this\lastrow\level And 
+					   *rc\trow\parent=*this\lastrow\parent
 						
 						rf=-1
 						rt=-1
 						ForEach *this\expRows()
-							If *this\expRows()=*row
+							If *this\expRows()=*rc\trow
 								rf=ListIndex(*this\expRows())
 							EndIf
 							If *this\expRows()=*this\lastrow
@@ -465,9 +487,9 @@ Module MyTable
 							If rt<rf
 								Swap rt,rf									
 							EndIf
-							For r=rf To rt
+							For r=rf To rt								
 								SelectElement(*this\expRows(),r)
-								*row=*this\expRows()
+								Protected *row.strMyTableRow=*this\expRows()
 								If temp
 									*this\tempselectedRows(Str(*row))=#True
 								Else									
@@ -482,37 +504,34 @@ Module MyTable
 						EndIf
 					Else
 						If temp
-							*this\tempselectedRows(Str(*row))=#True
+							*this\tempselectedRows(Str(*rc\trow))=#True
 						Else
-							*this\lastrow=*row							
-							If Not *this\selectedRows(Str(*row))
+							*this\lastrow=*rc\trow							
+							If Not *this\selectedRows(Str(*rc\trow))
 								If *this\eventRowSelected
-									*this\eventRowSelected(*row)
+									*this\eventRowSelected(*rc\trow)
 								EndIf
 							EndIf
-							*this\selectedRows(Str(*row))=#True
+							*this\selectedRows(Str(*rc\trow))=#True
 						EndIf
 					EndIf
 					*this\dirty=#True
 				EndIf
 			Else
 				If *rc\row>-1 And *rc\col>-1
-					SelectElement(*this\expRows(),*rc\row)
-					*row=*this\expRows()
-					*cell=_MyTableGetOrAddCell(*row,*rc\col)
 					If multiselect And 
 					   (shift Or *this\md) And 
-					   *cell<>*this\lastcell And 
+					   *rc\tcell<>*this\lastcell And 
 					   *this\lastcell<>0 And 
-					   *cell\row\level=*this\lastcell\row\level And
-					   *cell\row\parent=*this\lastcell\row\parent
+					   *rc\trow\level=*this\lastcell\row\level And
+					   *rc\trow\parent=*this\lastcell\row\parent
 						
-						cf=*cell\col\listindex
+						cf=*rc\tcol\listindex
 						ct=*this\lastcell\col\listindex
 						rf=-1
 						rt=-1
 						ForEach *this\expRows()
-							If *this\expRows()=*cell\row
+							If *this\expRows()=*rc\tcell\row
 								rf=ListIndex(*this\expRows())
 							EndIf
 							If *this\expRows()=*this\lastcell\row
@@ -533,7 +552,7 @@ Module MyTable
 								SelectElement(*this\expRows(),r)
 								*row=*this\expRows()
 								For c=cf To ct
-									*cell=_MyTableGetOrAddCell(*row,c)									
+									Protected *cell.strMyTablecell=_MyTableGetOrAddCell(*row,c)									
 									If temp
 										*this\tempselectedCells(Str(*cell))=#True
 									Else										
@@ -550,15 +569,15 @@ Module MyTable
 					Else
 						
 						If temp
-							*this\tempselectedCells(Str(*cell))=#True
+							*this\tempselectedCells(Str(*rc\tcell))=#True
 						Else
-							*this\lastcell=*cell
-							If Not *this\selectedCells(Str(*cell))
+							*this\lastcell=*rc\tcell
+							If Not *this\selectedCells(Str(*rc\tcell))
 								If *this\eventCellSelected
-									*this\eventCellSelected(*cell)
+									*this\eventCellSelected(*rc\tcell)
 								EndIf
 							EndIf
-							*this\selectedCells(Str(*cell))=#True
+							*this\selectedCells(Str(*rc\tcell))=#True
 						EndIf
 					EndIf
 					
@@ -570,25 +589,78 @@ Module MyTable
 	
 	Procedure _MyTableEvtCanvasMouseMove()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-		Protected *row.strMyTableRow=0
-		Protected *col.strMyTableCol=0
-		Protected *cell.strMyTableCell=0
 		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		
 		
+		
 		If IsGadget(*this\canvas)
+			Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+			Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
+			
+			Protected sized.b=#False
+			
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 			
-			If *rc\bottom And *rc\right 
-				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftUpRightDown)
-			ElseIf *rc\bottom 			
-				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
-			ElseIf *rc\right			
-				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
-			Else				
+			If (*rc\bottom And *rc\right) Or (*this\resizeRow And *this\resizeCol)
+				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftUpRightDown)			
+				sized=#True
+			EndIf
+			
+			If *rc\bottom Or *this\resizeRow 	
+				If Not sized
+					SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
+				EndIf
+				If *this\md And *this\resizeRow
+					*this\resizeRow\height+DesktopUnscaledY(my-*this\myd)
+					If *this\resizeRow\height<0
+						*this\resizeRow\height=0
+					EndIf
+					*this\myd=my
+					*this\resizeRow\calcheight=DesktopScaledY(*this\resizeRow\height)
+					*this\resizeRow\dirty=#True	
+					If *this\resizeRow\image\sized And *this\resizeRow\image\resize
+						FreeImage(*this\resizeRow\image\sized)
+						*this\resizeRow\image\sized=0
+					EndIf
+					If *this\resizeRow\cells
+						ForEach *this\resizeRow\cells\cells()
+							If *this\resizeRow\cells\cells()\image\sized And *this\resizeRow\cells\cells()\image\resize
+								FreeImage(*this\resizeRow\cells\cells()\image\sized)
+								*this\resizeRow\cells\cells()\image\sized=0
+							EndIf
+						Next
+					EndIf
+					*this\dirty=#True
+					_Mytable_Table_Predraw(*this)
+					_Mytable_Table_Redraw(*this)
+				EndIf			
+				sized=#True
+			EndIf				
+			If *rc\right Or *this\resizeCol
+				If Not sized
+					SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)				
+				EndIf
+				If *this\md And *this\resizeCol
+					*this\resizeCol\width+DesktopUnscaledY(mx-*this\mxd)					
+					If *this\resizeCol\width<0
+						*this\resizeCol\width=0
+					EndIf
+					*this\mxd=mx
+					*this\resizeCol\calcwidth=DesktopScaledX(*this\resizeCol\width)
+					*this\resizeCol\dirty=#True					
+					*this\dirty=#True
+					_Mytable_Table_Predraw(*this)
+					_Mytable_Table_Redraw(*this)
+				EndIf			
+				sized=#True
+			EndIf		
+			
+			
+			
+			If Not sized
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_Default)
 				
 				If *this\md And multiselect
@@ -607,46 +679,44 @@ Module MyTable
 	
 	Procedure _MyTableEvtCanvasMouseLeftDown()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-		Protected *row.strMyTableRow=0
 		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
-		
-				
+		Protected redraw.b=#False
 		*this\md=#True
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 			
+			*this\myd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
+			*this\mxd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 			If *rc\check
-				SelectElement(*this\expRows(),*rc\row)
-				*row=*this\expRows()
-				*row\checked=Bool(Not *row\checked)
+				*rc\trow\checked=Bool(Not *rc\trow\checked)
 				*this\dirty=#True
-				If *row\checked			
+				If *rc\trow\checked			
 					If *this\eventRowChangedChecked
-						*this\eventRowChangedChecked(*row)
+						*this\eventRowChangedChecked(*rc\trow)
 					EndIf
 				Else
 					If *this\eventRowChangedUnChecked
-						*this\eventRowChangedUnChecked(*row)
+						*this\eventRowChangedUnChecked(*rc\trow)
 					EndIf
 				EndIf
+				redraw=#True
 			ElseIf *rc\exp
-				SelectElement(*this\expRows(),*rc\row)
-				*row=*this\expRows()
-				*row\expanded=Bool(Not *row\expanded)
+				*rc\trow\expanded=Bool(Not *rc\trow\expanded)
 				*this\dirty=#True
-				If *row\expanded
+				If *rc\trow\expanded
 					If *this\eventRowChangedExpanded
-						*this\eventRowChangedExpanded(*row)
+						*this\eventRowChangedExpanded(*rc\trow)
 					EndIf
 				Else
 					If *this\eventRowChangedCollapsed
-						*this\eventRowChangedCollapsed(*row)
+						*this\eventRowChangedCollapsed(*rc\trow)
 					EndIf
 				EndIf
 				_MyTable_Table_Predraw(*this)
+				redraw=#True
 			Else
 				If Not multiselect Or (Not shift And Not control) And *rc\col>-1 And *rc\row>-1
 					ClearMap(*this\selectedCells())
@@ -665,12 +735,21 @@ Module MyTable
 				ClearMap(*this\tempselectedCells())
 				ClearMap(*this\tempselectedRows())
 				ClearMap(*this\tempselectedCols())
-				_MyTableSelect(*this,*rc,#False)				
+				If *rc\right
+					*this\resizeCol=*rc\tcol
+				EndIf
+				If *rc\bottom
+					*this\resizeRow=*rc\trow
+				EndIf
+				_MyTableSelect(*this,*rc,#False)	
+				redraw=#True
 			EndIf
 			
 			FreeStructure(*rc)
 		EndIf
-		_MyTable_Table_Redraw(*this)
+		If redraw
+			_MyTable_Table_Redraw(*this)
+		EndIf
 	EndProcedure
 	
 	Procedure _MyTableEvtCanvasMouseLeftUp()
@@ -680,6 +759,8 @@ Module MyTable
 		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)	
 		
 		*this\md=#False
+		*this\resizeCol=0
+		*this\resizeRow=0
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 			If *rc\col>-1 And *rc\row>-1 And Not *rc\exp And Not *rc\check
@@ -826,7 +907,7 @@ Module MyTable
 	                          image.i,
 	                          flags.i)
 		
-					
+		
 		With *row
 			\vtable=?vtable_row
 			\type=#MYTABLE_TYPE_ROW

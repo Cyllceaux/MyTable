@@ -13,9 +13,9 @@ UseModule MyTable
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_RESIZABLE)
 	*table\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow
-	*col=*table\AddCol("Test 1",120,rowImage,#MYTABLE_COL_FLAGS_NO_RESIZABLE):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
-	*col=*table\AddCol("Test 2",120,rowImageSub,#MYTABLE_COL_FLAGS_NO_RESIZABLE):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
-	*col=*table\AddCol("Test 3",120,rowImageSub2,#MYTABLE_COL_FLAGS_NO_RESIZABLE):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
+	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
+	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
+	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	
 	
 	#Rows=100
@@ -27,9 +27,6 @@ UseModule MyTable
 	Next
 	For i=1 To #Rows
 		*row=*table\AddRow("","",images(Random(9,0)))	
-		If Mod(i,2)=0
-			*row\SetFlags(#MYTABLE_ROW_FLAGS_NO_RESIZABLE)
-		EndIf
 		For g=0 To (#Cols-1)
 			*cell=*row\GetCell(g)
 			*cell\SetText("Text "+i+"_"+g)
