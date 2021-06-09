@@ -318,9 +318,69 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
+	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+	Protected checkboxes.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+	Protected lastfont.i=0
+	Protected tresult.i=0
+	If *this\listindex=0
+		If hierarchical And *this\listindex=0
+			tresult+(MyTableW20 * (*row\level + 1))
+		EndIf
+		If checkboxes And *this\listindex=0
+			tresult+MyTableW20
+		EndIf
+		If *row\image\orig						
+			If Not *row\image\sized															
+				*row\image\sized=CopyImage(*row\image\orig,#PB_Any)
+				If *row\image\resize
+					ResizeImage(*row\image\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
+				Else
+					ResizeImage(*row\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+				EndIf
+			EndIf
+			If *this\listindex=0
+				tresult+ImageWidth(*row\image\sized)+MyTableW8
+			EndIf
+		EndIf
+	EndIf
+	If *row\cells And ListSize(*row\cells\cells())>*this\listindex	
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,*this\listindex)
+		If *cell\textwidth=0 And *cell\text<>""
+			Protected nfont=_MyTable_GetFont(*cell)
+			If nfont<>lastfont
+				DrawingFont(nfont)
+				lastfont=nfont
+			EndIf
+			*cell\textwidth=_MyTableTextWidth(*cell\text)
+		EndIf
+		tresult+*cell\textwidth+MyTableW8
+		If *cell\image\orig					
+			If Not *cell\image\sized
+				*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
+				If *row\image\resize
+					ResizeImage(*cell\image\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
+				Else
+					ResizeImage(*cell\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+				EndIf
+			EndIf
+			tresult+ImageWidth(*cell\image\sized)+MyTableW8
+		EndIf
+	EndIf
+	If *row\rows
+		ForEach *row\rows\rows()
+			Protected sresult=_MyTable_Col_AutosizeSubRow(*this,*row\rows\rows())	
+			If sresult>tresult
+				tresult=sresult
+			EndIf
+		Next
+	EndIf
+	ProcedureReturn tresult
+EndProcedure
 
 Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
-	If *this 		
+	If *this And Not *this\stretched 		
+		
 		If Not *this\table\drawing
 			If IsImage(*this\table\canvas)
 				StartDrawing(ImageOutput(*this\table\canvas))
@@ -337,45 +397,12 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		EndIf
 		If *this\sort
 			result+MyTableW20
-		EndIf
-		Protected lastfont.i=0
+		EndIf		
+		
 		ForEach *this\table\rows()
 			If *this\table\rows()\cells
-				If ListSize(*this\table\rows()\cells\cells())>*this\listindex
-					Protected tresult.i=0
-					If *this\listindex=0
-						If *this\table\rows()\image\orig						
-							If Not *this\table\rows()\image\sized															
-								*this\table\rows()\image\sized=CopyImage(*this\table\rows()\image\orig,#PB_Any)
-								If *this\table\rows()\image\resize
-									ResizeImage(*this\table\rows()\image\sized,*this\table\rows()\calcheight-MyTableW8,*this\table\rows()\calcheight-MyTableH8)
-								Else
-									ResizeImage(*this\table\rows()\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-								EndIf
-							EndIf
-							tresult+ImageWidth(*this\table\rows()\image\sized)+MyTableW8
-						EndIf
-					EndIf
-					If *this\table\rows()\cells\cells()\textwidth=0 And *this\table\rows()\cells\cells()\text<>""
-						Protected nfont=_MyTable_GetFont(*this\table\rows()\cells\cells())
-						If nfont<>lastfont
-							DrawingFont(nfont)
-							lastfont=nfont
-						EndIf
-						*this\table\rows()\cells\cells()\textwidth=_MyTableTextWidth(*this\table\rows()\cells\cells()\text)
-					EndIf
-					tresult+*this\table\rows()\cells\cells()\textwidth+MyTableW8
-					If *this\table\rows()\cells\cells()\image\orig					
-						If Not *this\table\rows()\cells\cells()\image\sized
-							*this\table\rows()\cells\cells()\image\sized=CopyImage(*this\table\rows()\cells\cells()\image\orig,#PB_Any)
-							If *this\table\rows()\image\resize
-								ResizeImage(*this\table\rows()\cells\cells()\image\sized,*this\table\rows()\calcheight-MyTableW8,*this\table\rows()\calcheight-MyTableH8)
-							Else
-								ResizeImage(*this\table\rows()\cells\cells()\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-							EndIf
-						EndIf
-						tresult+ImageWidth(*this\table\rows()\cells\cells()\image\sized)+MyTableW8
-					EndIf
+				If ListSize(*this\table\rows()\cells\cells())>*this\listindex					
+					Protected tresult=_MyTable_Col_AutosizeSubRow(*this,*this\table\rows())					
 					If tresult>result
 						result=tresult
 					EndIf
@@ -390,6 +417,7 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 			StopDrawing()
 		EndIf
 		_callcountEnde(AutosizeCol)
+		_MyTable_Table_Predraw(*this\table)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure

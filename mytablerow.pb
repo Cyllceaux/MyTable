@@ -274,7 +274,7 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False)
 EndProcedure
 
 Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
-	If *this 		
+	If *this
 		If Not *this\table\drawing
 			If IsImage(*this\table\canvas)
 				StartDrawing(ImageOutput(*this\table\canvas))

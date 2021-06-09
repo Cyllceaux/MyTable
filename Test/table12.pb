@@ -36,7 +36,7 @@ UseModule MyTable
 	
 	*col\SetSort(#MYTABLE_COL_SORT_DESC)
 	
-	
+	*table\ScrollToCellPos(Random(#rows-1),Random(#cols-1),#True)
 	
 	*table\SetRedraw(#True)
 	
