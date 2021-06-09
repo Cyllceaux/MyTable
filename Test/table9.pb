@@ -35,6 +35,9 @@ UseModule MyTable
 	Next
 	
 	*col\SetSort(#MYTABLE_COL_SORT_DESC)
+	
+	*table\ScrollToCellPos(#rows/2,#cols/2,#True)
+	
 	*table\SetRedraw(#True)
 	
 	Procedure Resize()

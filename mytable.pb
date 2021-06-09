@@ -115,6 +115,8 @@ Module MyTable
 		canvas.i
 		vscroll.i
 		hscroll.i
+		maxvscroll.i
+		maxhscroll.i
 		
 		headerheight.i
 		calcheaderheight.i
@@ -814,10 +816,11 @@ Module MyTable
 	                          image.i,
 	                          flags.i)
 		
+					
 		With *row
 			\vtable=?vtable_row
 			\type=#MYTABLE_TYPE_ROW
-			\flags=flags
+			\flags=flags			
 			\application=*application
 			\table=*table
 			\parent=*parent
@@ -1059,6 +1062,9 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,Recalc)
 		_MyTableDataSectionSetterGetter(Table,HeaderHeight)
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
+		_MyTableDataSectionGetter(Table,SelectedRows)
+		_MyTableDataSectionGetter(Table,SelectedCells)
+		_MyTableDataSectionGetter(Table,SelectedCols)
 		
 		_MyTableDataSectionMethode(Table,AddDirtyRows)
 		_MyTableDataSectionMethode(Table,AddRow)
@@ -1076,6 +1082,8 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,Redraw)
 		_MyTableDataSectionMethode(Table,Recalc)
 		_MyTableDataSectionMethode(Table,Free)
+		_MyTableDataSectionMethode(Table,ScrollToPos)
+		_MyTableDataSectionMethode(Table,ScrollToCellPos)
 		
 		_MyTableDataSectionMethode(Table,RegisterEventCellChangedChecked)
 		_MyTableDataSectionMethode(Table,RegisterEventCellChangedUnChecked)
@@ -1107,6 +1115,7 @@ Module MyTable
 		_MyTableDataSectionMethode(Row,RowCount)
 		_MyTableDataSectionGetter(Row,Cell)
 		_MyTableDataSectionMethode(Row,Delete)
+		_MyTableDataSectionMethode(Row,ScrollTo)
 		
 		vtable_col:;- Col
 		_MyTableDataSectionDefault(Col)
@@ -1120,6 +1129,7 @@ Module MyTable
 		
 		
 		_MyTableDataSectionMethode(Col,Delete)
+		_MyTableDataSectionMethode(Col,ScrollTo)
 		
 		vtable_cell:;- Cell
 		_MyTableDataSectionDefault(Cell)
@@ -1132,6 +1142,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Cell,Value)
 		_MyTableDataSectionSetterGetter(Cell,Image)
 		_MyTableDataSectionSetterGetter(Cell,Checked)
+		_MyTableDataSectionMethode(Cell,ScrollTo)
 		
 	EndDataSection	
 EndModule

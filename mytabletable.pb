@@ -705,9 +705,9 @@ Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow)
 	ProcedureReturn result
 EndProcedure
 
-Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
+Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 	If *this
-		If *this\redraw And *this\dirty And Not *this\drawing
+		If ((*this\redraw And *this\dirty) Or force) And Not *this\drawing
 			_callcountStart(Predraw)
 			ClearList(*this\expRows())
 			Protected h=0
@@ -754,6 +754,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
 			
 			w-cw
 			h-ch
+			*this\maxhscroll=w
 			
 			If IsGadget(*this\hscroll)
 				If h>0
@@ -790,7 +791,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
 				EndIf
 				
 				If w>0
-					HideGadget(*this\hscroll,#False)					
+					HideGadget(*this\hscroll,#False)										
 					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,w)
 				Else
 					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,0)
@@ -801,6 +802,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable)
 				w-*this\hscroll
 			EndIf
 			
+			*this\maxvscroll=h
 			If IsGadget(*this\vscroll)
 				If w>0					
 					h+GadgetHeight(*this\hscroll)		
@@ -1109,3 +1111,132 @@ Procedure _MyTable_Table_RegisterCallback(*this.strMyTableTable,callback.MyTable
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_GetSelectedRows(*this.strMyTableTable,List rows.i())
+	If *this
+		ClearList(rows())
+		ForEach *this\selectedRows()
+			If *this\selectedRows()
+				AddElement(rows())
+				rows()=Val(MapKey(*this\selectedRows()))
+			EndIf
+		Next
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_GetSelectedCells(*this.strMyTableTable,List cells.i())
+	If *this
+		ClearList(cells())
+		ForEach *this\selectedCells()
+			If *this\selectedCells()
+				AddElement(cells())
+				cells()=Val(MapKey(*this\selectedCells()))
+			EndIf
+		Next
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_GetSelectedCols(*this.strMyTableTable,List cols.i())
+	If *this
+		ClearList(cols())
+		ForEach *this\selectedCols()
+			If *this\selectedCols()
+				AddElement(cols())
+				cols()=Val(MapKey(*this\selectedCols()))
+			EndIf
+		Next
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_ScrollToPos(*this.strMyTableTable,row.i,setSelect.b=#False)
+	If *this		
+		_MyTable_Table_Predraw(*this,#True)
+		If ListSize(*this\expRows())>row
+			Protected h=0
+			Protected idy=0
+			ForEach *this\expRows()			
+				Protected *row.strMyTableRow=*this\expRows()
+				If idy=row
+					If setSelect
+						Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+						Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+						If fullrow
+							If Not multiselect
+								ClearMap(*this\selectedRows())															
+							EndIf
+							*this\selectedRows(Str(*row))=#True
+						EndIf
+						Break						
+					EndIf
+				EndIf
+				h+*row\height
+				idy+1
+			Next
+			If IsGadget(*this\vscroll)
+				SetGadgetState(*this\vscroll,h)
+			Else
+				*this\vscroll=h
+			EndIf
+			*this\dirty=#True
+			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_ScrollToCellPos(*this.strMyTableTable,row.i,col.i,setSelect.b=#False)
+	If *this	
+		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+		If fullrow
+			_MyTable_Table_ScrollToPos(*this,row,setSelect)
+		Else
+			_MyTable_Table_Predraw(*this,#True)
+			If ListSize(*this\expRows())>row And ListSize(*this\cols())>col
+				Protected h=0
+				Protected w=0
+				Protected idy=0
+				Protected idx=0
+				ForEach *this\expRows()			
+					Protected *row.strMyTableRow=*this\expRows()
+					If idy=row
+						Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
+						Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+						ForEach *this\cols()
+							If idx=col
+								Break
+							EndIf
+							w+*this\cols()\width
+							idx+1
+						Next
+						If Not multiselect
+							ClearMap(*this\selectedCells())
+						EndIf
+						*this\selectedCells(Str(*cell))=#True
+						Break
+					EndIf
+					h+*row\height
+					idy+1
+				Next
+				
+				If IsGadget(*this\vscroll)
+					SetGadgetState(*this\vscroll,h)
+				Else
+					*this\vscroll=h
+					If *this\vscroll>*this\maxvscroll
+						*this\vscroll=*this\maxvscroll
+					EndIf
+				EndIf
+				
+				If IsGadget(*this\hscroll)
+					SetGadgetState(*this\hscroll,w)
+				Else					
+					*this\hscroll=w
+					If *this\hscroll>*this\maxhscroll
+						*this\hscroll=*this\maxhscroll
+					EndIf
+				EndIf
+				
+				*this\dirty=#True
+				_MyTable_Table_Redraw(*this)
+			EndIf
+		EndIf
+	EndIf
+EndProcedure

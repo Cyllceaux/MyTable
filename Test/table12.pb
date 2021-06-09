@@ -4,21 +4,21 @@ XIncludeFile "declare.pb"
 
 UseModule MyTable
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 10",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 12 (no Scrollbars)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
-	Global hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
-	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 	CloseGadgetList()
 	
-	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MULTISELECT)
+	Global *table.MyTableTable=MyTableCreateTable(window,canvas,0,0,#MYTABLE_TABLE_FLAGS_DEFAULT)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow
+	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable
 	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
 	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
 	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	
+	*tablestyle=*table\GetStyle()
+	*tablestyle\SetSelectedColor(RGBA(250,100,100,255))
 	
-	#Rows=1000
+	#Rows=100
 	#Cols=10
 	
 	Define i,g
@@ -36,7 +36,8 @@ UseModule MyTable
 	
 	*col\SetSort(#MYTABLE_COL_SORT_DESC)
 	
-	*table\ScrollToPos(#rows/2,#True)
+	
+	
 	*table\SetRedraw(#True)
 	
 	Procedure Resize()
@@ -46,6 +47,14 @@ UseModule MyTable
 		             WindowWidth(window),
 		             WindowHeight(window))
 	EndProcedure
+	
+	Procedure TimerJump()
+		*table\ScrollToCellPos(Random(#rows-1),Random(#cols-1),#True)
+	EndProcedure
+	
+	AddWindowTimer(window,1,1000)
+	
+	BindEvent(#PB_Event_Timer,@TimerJump(),window)
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
 	BindEvent(#PB_Event_RestoreWindow,@Resize(),window)

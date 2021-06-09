@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 473
+	#MYTABLE_VERSION = 546
 	#MYTABLE_VERSION_DATE = 20210609
 	
 	Enumeration _mytable_type
@@ -85,7 +85,9 @@
 		SetText(value.s):GetText.s()
 		SetValue(value.d):GetValue.d()
 		SetImage(value.i):GetImage.i()
-		SetChecked(value.b):GetChecked.b()		
+		SetChecked(value.b):GetChecked.b()
+		
+		ScrollTo(setSelect.b=#False)
 	EndInterface
 	
 	EnumerationBinary _mytable_col
@@ -110,6 +112,7 @@
 		SetSort(value.i):GetSort.i()
 		
 		Delete()
+		ScrollTo(setSelect.b=#False)
 	EndInterface
 	
 	Interface MyTableRow Extends MyTableObject
@@ -128,6 +131,7 @@
 		RowCount()
 		GetCell(col.i)
 		Delete()
+		ScrollTo(setSelect.b=#False)
 	EndInterface
 	
 	EnumerationBinary _mytable_table
@@ -166,6 +170,9 @@
 		SetRecalc(value.b):GetRecalc.b()
 		SetHeaderHeight(value.i):GetHeaderHeight.i()
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
+		GetSelectedRows(List rows.MyTableRow())
+		GetSelectedCells(List cells.MyTableCell())
+		GetSelectedCols(List cols.MyTableCol())		
 		
 		AddDirtyRows(rows.i)
 		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
@@ -183,6 +190,8 @@
 		Redraw()
 		Recalc()
 		Free()
+		ScrollToPos(row.i,setSelect.b=#False)
+		ScrollToCellPos(row.i,col.i,setSelect.b=#False)
 		
 		RegisterEventCellChangedChecked(callback.MyTableProtoEventCellChangedChecked)
 		RegisterEventCellChangedUnChecked(callback.MyTableProtoEventCellChangedUnChecked)

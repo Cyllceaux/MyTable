@@ -168,3 +168,51 @@ Procedure _MyTable_Cell_GetStyle(*this.strMyTableCell)
 	_MyTableInitStyleObject(*style,*this)
 	ProcedureReturn *style
 EndProcedure
+
+Procedure _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False)
+	If *this			
+		_MyTable_Table_Predraw(*this,#True)
+		Protected h=0
+		Protected w=0
+		Protected idy=0
+		Protected idx=0
+		ForEach *this\table\expRows()			
+			Protected *row.strMyTableRow=*this\table\expRows()
+			If *row=*this\row
+				Protected multiselect.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+				ForEach *this\table\cols()
+					If *this\table\cols()=*this\col
+						Break
+					EndIf
+					w+*this\table\cols()\width
+					idx+1
+				Next
+				If Not multiselect
+					ClearMap(*this\table\selectedCells())
+				EndIf
+				*this\table\selectedCells(Str(*this))=#True
+				Break
+			EndIf
+			h+*row\height
+			idy+1
+		Next
+		If IsGadget(*this\table\vscroll)
+			SetGadgetState(*this\table\vscroll,h)
+		Else
+			*this\table\vscroll=h
+			If *this\table\vscroll>*this\table\maxvscroll
+				*this\table\vscroll=*this\table\maxvscroll
+			EndIf
+		EndIf
+		If IsGadget(*this\table\hscroll)
+			SetGadgetState(*this\table\hscroll,w)
+		Else
+			*this\table\hscroll=w
+			If *this\table\hscroll>*this\table\maxhscroll
+				*this\table\hscroll=*this\table\maxhscroll
+			EndIf
+		EndIf
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure

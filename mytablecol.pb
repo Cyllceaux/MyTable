@@ -280,3 +280,40 @@ Procedure _MyTable_Col_SetSelected(*this.strMyTableCol,value.b)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure
+
+
+Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False)
+	If *this		
+		_MyTable_Table_Predraw(*this,#True)
+		Protected w=0
+		Protected idw=0
+		ForEach *this\table\cols()			
+			Protected *col.strMyTableCol=*this\table\cols()			
+			If *col=*this
+				If setSelect
+					Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+					Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+					If fullrow
+						If Not multiselect
+							ClearMap(*this\table\selectedCols())															
+						EndIf
+						*this\table\selectedCols(Str(*col))=#True
+					EndIf
+					Break						
+				EndIf
+			EndIf
+			w+*col\width
+			idw+1
+		Next
+		If IsGadget(*this\table\hscroll)
+			SetGadgetState(*this\table\hscroll,w)
+		Else
+			*this\table\hscroll=w
+			If *this\table\hscroll>*this\table\maxhscroll
+				*this\table\hscroll=*this\table\maxhscroll
+			EndIf
+		EndIf
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure

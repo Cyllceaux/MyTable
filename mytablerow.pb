@@ -140,10 +140,10 @@ EndProcedure
 Procedure _MyTable_Row_GetRow(*this.strMyTableRow,row.i)
 	If *this
 		If *this\rows
-		If ListSize(*this\rows\rows())>row
-			ProcedureReturn SelectElement(*this\rows\rows(),row)
+			If ListSize(*this\rows\rows())>row
+				ProcedureReturn SelectElement(*this\rows\rows(),row)
+			EndIf
 		EndIf
-	EndIf
 	EndIf
 EndProcedure
 
@@ -233,6 +233,42 @@ Procedure _MyTable_Row_SetSelected(*this.strMyTableRow,value.b)
 		*this\table\selectedrows(Str(*this))=value
 		*this\table\dirty=#True
 		*this\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False)
+	If *this		
+		_MyTable_Table_Predraw(*this,#True)
+		Protected h=0
+		Protected idy=0
+		ForEach *this\table\expRows()			
+			Protected *row.strMyTableRow=*this\table\expRows()
+			If *row=*this
+				If setSelect
+					Protected multiselect.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+					Protected fullrow.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+					If fullrow
+						If Not multiselect
+							ClearMap(*this\table\selectedRows())															
+						EndIf
+						*this\table\selectedRows(Str(*row))=#True
+					EndIf
+					Break						
+				EndIf
+			EndIf
+			h+*row\height
+			idy+1
+		Next
+		If IsGadget(*this\table\vscroll)
+			SetGadgetState(*this\table\vscroll,h)
+		Else
+			*this\table\vscroll=h
+			If *this\table\vscroll>*this\table\maxvscroll
+				*this\table\vscroll=*this\table\maxvscroll
+			EndIf
+		EndIf
+		*this\table\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure

@@ -45,7 +45,7 @@ Declare _MyTable_Application_Redraw(*this.strMyTableApplication)
 
 ;- Tables
 Declare _MyTable_Table_Redraw(*this.strMyTableTable)
-Declare _MyTable_Table_Predraw(*this.strMyTableTable)
+Declare _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#false)
 Declare _MyTable_Table_Recalc(*this.strMyTableTable)
 Declare _MyTable_Table_ClearMaps(*this.strMyTableTable)
 Declare.b _MyTable_Table_GetSelected(*this.strMyTableTable)
