@@ -278,6 +278,7 @@ Module MyTable
 	Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 		Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+		Protected resizable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_RESIZABLE)
 		
 		Protected *row.strMyTableRow=0
 		Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
@@ -311,9 +312,12 @@ Module MyTable
 		
 		ForEach *this\cols()
 			Protected *col.strMyTableCol=*this\cols()
+			Protected colresize.b=Bool(resizable Or *col\flags & #MYTABLE_COL_FLAGS_RESIZABLE)
+			colresize=Bool(colresize And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_RESIZABLE))
+			
 			If mx>(hsc+*col\calcwidth-MyTableW2) And mx<(hsc+*col\calcwidth+MyTableW2)
 				*rc\col=ListIndex(*this\cols())
-				*rc\right=#True
+				*rc\right=colresize
 				Break
 			ElseIf mx>hsc And mx<(hsc+*col\calcwidth)
 				*rc\col=ListIndex(*this\cols())
@@ -327,9 +331,12 @@ Module MyTable
 		If *rc\row=-2	
 			ForEach *this\expRows()
 				*row=*this\expRows()
+				Protected rowresize.b=Bool(resizable Or *row\flags & #MYTABLE_ROW_FLAGS_RESIZABLE)
+				rowresize=Bool(rowresize And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_RESIZABLE))
+			
 				If my>(vsc+*row\calcheight-MyTableH2) And my<(vsc+*row\calcheight+MyTableH2)
 					*rc\row=ListIndex(*this\expRows())
-					*rc\bottom=#True
+					*rc\bottom=rowresize
 					Break
 				ElseIf my>vsc And my<(vsc+*row\calcheight)
 					*rc\row=ListIndex(*this\expRows())
@@ -563,22 +570,25 @@ Module MyTable
 	
 	Procedure _MyTableEvtCanvasMouseMove()
 		Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-		
+		Protected *row.strMyTableRow=0
+		Protected *col.strMyTableCol=0
+		Protected *cell.strMyTableCell=0
 		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		
+		
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 			
-			If *rc\bottom And *rc\right
+			If *rc\bottom And *rc\right 
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftUpRightDown)
-			ElseIf *rc\bottom
+			ElseIf *rc\bottom 			
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_UpDown)
-			ElseIf *rc\right
+			ElseIf *rc\right			
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
-			Else
+			Else				
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_Default)
 				
 				If *this\md And multiselect
