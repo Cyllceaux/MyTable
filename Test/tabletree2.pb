@@ -10,12 +10,12 @@ UseModule MyTable
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 	CloseGadgetList()
 	
-	Global *tree.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_CHECKBOXES|#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_MULTISELECT)
+	Global *tree.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_CHECKBOXES|#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_SORTABLE)
 	*tree\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyleCol,*stamm.MyTableRow,*ast.MyTableRow,*zweig.MyTableRow,*blatt.MyTableRow
 	*col=*tree\AddCol("Test 1",200,rowImage)
-	*col=*tree\AddCol("Test 2",200,rowImageSub)
-	*col=*tree\AddCol("Test 3",#PB_Ignore,rowImageSub2)
+	*col=*tree\AddCol("Test 2",200,rowImageSub,#MYTABLE_COL_FLAGS_NO_SORTABLE)
+	*col=*tree\AddCol("Test 3",#PB_Ignore,rowImageSub2,#MYTABLE_COL_FLAGS_NO_SORTABLE)
 	
 	#Rows=10
 	
@@ -63,12 +63,12 @@ UseModule MyTable
 		Debug "RowCollpased "+*row\GetPosition()
 	EndProcedure
 	
-	*tree\RegisterCallbackCellSelected(@CS())
-	*tree\RegisterCallbackRowChangedChecked(@RC())
-	*tree\RegisterCallbackRowChangedUnChecked(@RU())
-	*tree\RegisterCallbackRowChangedExpanded(@RE())
-	*tree\RegisterCallbackRowChangedCollapsed(@RCo())
-	*tree\RegisterCallbackRowSelected(@RS())
+	*tree\RegisterEventCellSelected(@CS())
+	*tree\RegisterEventRowChangedChecked(@RC())
+	*tree\RegisterEventRowChangedUnChecked(@RU())
+	*tree\RegisterEventRowChangedExpanded(@RE())
+	*tree\RegisterEventRowChangedCollapsed(@RCo())
+	*tree\RegisterEventRowSelected(@RS())
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

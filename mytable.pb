@@ -402,6 +402,8 @@ Module MyTable
 		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+		Protected sortable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE)
+		
 		Protected rf,rt,cf,ct,r,c
 		
 		Protected *cell.strMyTableCell=0
@@ -411,14 +413,18 @@ Module MyTable
 		
 		If *rc\row=-1 And *rc\col>-1
 			*col=SelectElement(*this\cols(),*rc\col)
-			Select *col\sort
-				Case #MYTABLE_COL_SORT_NONE
-					_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_ASC)
-				Case #MYTABLE_COL_SORT_ASC
-					_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_DESC)
-				Case #MYTABLE_COL_SORT_DESC
-					_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_NONE)
-			EndSelect		
+			sortable=Bool(sortable Or Bool(*col\flags & #MYTABLE_COL_FLAGS_SORTABLE))
+			sortable=Bool(sortable And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_SORTABLE))
+			If sortable
+				Select *col\sort
+					Case #MYTABLE_COL_SORT_NONE
+						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_ASC)
+					Case #MYTABLE_COL_SORT_ASC
+						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_DESC)
+					Case #MYTABLE_COL_SORT_DESC
+						_MyTable_Col_SetSort(*col,#MYTABLE_COL_SORT_NONE)
+				EndSelect		
+			EndIf
 			*this\md=#False
 		Else
 			If fullrow
@@ -595,6 +601,7 @@ Module MyTable
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		
+				
 		*this\md=#True
 		If IsGadget(*this\canvas)
 			Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)

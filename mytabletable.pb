@@ -677,7 +677,10 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				BackColor(backcolor)
 				FrontColor(frontcolor)
 				DrawingMode(#PB_2DDrawing_Default)
-				Box(width-GadgetWidth(*this\vscroll),height-GadgetHeight(*this\hscroll),GadgetWidth(*this\vscroll),GadgetHeight(*this\hscroll))
+				Box(width-DesktopScaledX(GadgetWidth(*this\vscroll)),
+				    height-DesktopScaledY(GadgetHeight(*this\hscroll)),
+				    DesktopScaledX(GadgetWidth(*this\vscroll)),
+				    DesktopScaledY(GadgetHeight(*this\hscroll)))
 			EndIf
 			*this\dirty=#False
 			*this\drawing=#False
