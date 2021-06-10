@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 869
+	#MYTABLE_VERSION = 960
 	#MYTABLE_VERSION_DATE = 20210610
 	
 	Enumeration _mytable_type
@@ -20,7 +20,9 @@
 		SetForeColor(value.q):GetForeColor.q()
 		SetSelectedColor(value.q):GetSelectedColor.q()
 		SetBorderColor(value.q):GetBorderColor.q()
+		SetBorderWidth(value.i):GetBorderWidth.i()
 		SetSelectedBorderColor(value.q):GetSelectedBorderColor.q()
+		SetSelectedBorderWidth(value.i):GetSelectedBorderWidth.i()
 		SetSelectedForeColor(value.q):GetSelectedForeColor.q()
 		Free()
 		Delete()
@@ -38,9 +40,18 @@
 		#MYTABLE_STYLE_HALIGN_RIGHT
 	EndEnumeration
 	
+	EnumerationBinary _mytable_style_border
+		#MYTABLE_STYLE_BORDER_TOP
+		#MYTABLE_STYLE_BORDER_RIGHT
+		#MYTABLE_STYLE_BORDER_BOTTOM
+		#MYTABLE_STYLE_BORDER_LEFT
+	EndEnumeration
+	
 	Interface MyTableStyleCell Extends MYTableStyleObject		
 		SetHAlign(value.i):GetHAlign()
 		SetVAlign(value.i):GetVAlign()		
+		SetBorder(value.i):GetBorder()		
+		SetBorderStyle(border.i,color.q=0,width.q=0,selectedcolor.q=0,selectedwidth.q=0)
 	EndInterface
 	
 	Interface MyTableStyleCol Extends MYTableStyleCell

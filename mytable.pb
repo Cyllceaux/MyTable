@@ -7,14 +7,24 @@ Module MyTable
 		type.i
 	EndStructure
 	
+	Structure strMyTableStyleBorderStyle
+		color.q
+		width.i
+		selectedcolor.q
+		selectedwidth.q
+	EndStructure
+	
 	Structure strMyTableStyleBorder
-		bordercolor.q
-		selectedbordercolor.q
-		
+		border.i
+		defaultBorder.strMyTableStyleBorderStyle
+		borderLeft.strMyTableStyleBorderStyle
+		borderRight.strMyTableStyleBorderStyle
+		borderTop.strMyTableStyleBorderStyle
+		borderBottom.strMyTableStyleBorderStyle
 		elementselectedbordercolor.q
 	EndStructure
 	
-	Structure strMyTableStyle
+	Structure strMyTableStyle		
 		font.i
 		backcolor.q
 		frontcolor.q
@@ -209,8 +219,9 @@ Module MyTable
 			\forecolor=RGBA(50,50,50,255)
 			\selectedcolor=RGBA(230,230,250,255)
 			\selectedforecolor=RGBA(20,20,20,255)
-			\border\bordercolor=RGBA(50,50,50,255)
-			\border\selectedbordercolor=RGBA(200,200,250,255)
+			\border\defaultBorder\color=RGBA(50,50,50,255)
+			\border\defaultBorder\selectedcolor=RGBA(200,200,250,255)
+			\border\defaultBorder\width=1
 		EndWith
 	EndProcedure
 	
@@ -980,7 +991,7 @@ Module MyTable
 			EndIf
 			\style\forecolor=RGBA(250,250,250,255)
 			\style\backcolor=RGBA(150,150,150,255)
-			\style\border\bordercolor=RGBA(250,250,250,255)
+			\style\border\defaultBorder\color=RGBA(250,250,250,255)
 			\calcwidth=DesktopScaledX(\width)
 			\listindex=ListSize(*table\cols())-1
 		EndWith
@@ -1116,7 +1127,9 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(gruppe,ForeColor)
 		_MyTableDataSectionSetterGetter(gruppe,SelectedColor)
 		_MyTableDataSectionSetterGetter(gruppe,BorderColor)
+		_MyTableDataSectionSetterGetter(gruppe,BorderWidth)
 		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderColor)
+		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderWidth)
 		_MyTableDataSectionSetterGetter(gruppe,SelectedForeColor)
 		
 		_MyTableDataSectionMethode(gruppe,Free)
@@ -1127,6 +1140,8 @@ Module MyTable
 		_MyTableDataSectionStyleDefault(gruppe)
 		_MyTableDataSectionSetterGetter(gruppe,HAlign)
 		_MyTableDataSectionSetterGetter(gruppe,VAlign)
+		_MyTableDataSectionSetterGetter(gruppe,Border)
+		_MyTableDataSectionSetter(gruppe,BorderStyle)
 		
 	EndMacro
 	

@@ -290,6 +290,14 @@ Procedure.i _MyTable_GetFont(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Procedure.i _MyTable_GetBorder(*this.strMyTableStyleObject)
+	If *this
+		Protected result.i=0
+		_MyTableStyleGetRowCol(*this,border\border)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_GetSelectedColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
@@ -309,18 +317,76 @@ EndProcedure
 Procedure.q _MyTable_GetBorderColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
-		_MyTableStyleGetRow(*this,border\bordercolor)
+		_MyTableStyleGetRow(*this,border\defaultBorder\color)
 		ProcedureReturn result
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_GetSelectedBorderColor(*this.strMyTableStyleObject)
+Procedure.i _MyTable_GetBorderWidth(*this.strMyTableStyleObject)
 	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this,border\selectedbordercolor)
+		Protected result.i=0
+		_MyTableStyleGetRow(*this,border\defaultBorder\width)
 		ProcedureReturn result
 	EndIf
 EndProcedure
+
+Macro _MyTableStyleGetBorder(name)
+	Procedure.i _MyTable_GetBorderWidth#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.i=0
+			_MyTableStyleGetRowAlternative(*this,border\Border#name\width,border\defaultBorder\width)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	
+	Procedure.q _MyTable_GetBorderColor#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.q=0
+			_MyTableStyleGetRowAlternative(*this,border\Border#name\color,border\defaultBorder\color)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure.q _MyTable_GetSelectedBorderColor#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.q=0
+			_MyTableStyleGetAlternative(*this,border\Border#name\selectedcolor,border\defaultBorder\selectedcolor)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure.i _MyTable_GetSelectedBorderWidth#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.i=0
+			_MyTableStyleGetAlternative(*this,border\Border#name\selectedwidth,border\defaultBorder\selectedwidth)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+EndMacro
+
+_MyTableStyleGetBorder(Top)
+_MyTableStyleGetBorder(Left)
+_MyTableStyleGetBorder(Right)
+_MyTableStyleGetBorder(Bottom)
+
+Procedure.q _MyTable_GetSelectedBorderColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this,border\defaultBorder\selectedcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+
+Procedure.i _MyTable_GetSelectedBorderWidth(*this.strMyTableStyleObject)
+	If *this
+		Protected result.i=0
+		_MyTableStyleGet(*this,border\defaultBorder\selectedwidth)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 
 Procedure _MyTable_GetVAlign(*this.strMyTableStyleObject)
 	If *this
@@ -339,11 +405,13 @@ Procedure _MyTable_GetHAlign(*this.strMyTableStyleObject)
 EndProcedure
 
 Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height.i,scrollx.i,scrolly.i)
+	Protected border.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_BORDER)
 	Protected bx=-scrollx
 	Protected lastfont.i=font
 	ForEach *this\cols()
 		Protected *col.strMyTableCol=*this\cols()
 		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
+		Protected tborder=_MyTable_GetBorder(*col)
 		
 		Protected tfont=_MyTable_GetFont(*col)
 		If tfont
@@ -430,8 +498,66 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			
 			DrawingMode(#PB_2DDrawing_Default)
 			DrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
-			DrawingMode(#PB_2DDrawing_Outlined)
-			Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBorderColor(*col))
+			If border
+				Protected bw=0
+				Protected c=0
+				Protected bcolor.q=0
+				DrawingMode(#PB_2DDrawing_Default)
+				If Bool(tborder & #MYTABLE_STYLE_BORDER_TOP)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorTop(*col)
+						c=_MyTable_GetSelectedBorderWidthTop(*col)
+					Else
+						bcolor=_MyTable_GetBorderColorTop(*col)
+						c=_MyTable_GetBorderWidthTop(*col)
+					EndIf
+					Box(bx,0,*col\calcwidth,c,bcolor)
+				EndIf
+				
+				If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorRight(*col)
+						c=_MyTable_GetSelectedBorderWidthRight(*col)
+					Else
+						bcolor=_MyTable_GetBorderColorRight(*col)
+						c=_MyTable_GetBorderWidthRight(*col)
+					EndIf
+					Box(bx+*col\calcwidth-c,0,*col\calcwidth,c,bcolor)
+				EndIf
+				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorBottom(*col)
+						c=_MyTable_GetSelectedBorderWidthBottom(*col)
+					Else
+						bcolor=_MyTable_GetBorderColorBottom(*col)
+						c=_MyTable_GetBorderWidthBottom(*col)
+					EndIf
+					Box(bx,*this\calcheaderheight-c,*col\calcwidth,c,bcolor)
+				EndIf
+				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorLeft(*col)
+						c=_MyTable_GetSelectedBorderWidthLeft(*col)
+					Else
+						bcolor=_MyTable_GetBorderColorLeft(*col)
+						c=_MyTable_GetBorderWidthLeft(*col)
+					EndIf
+					Box(bx,0,c,*this\calcheaderheight,bcolor)
+				EndIf
+				If tborder=0
+					DrawingMode(#PB_2DDrawing_Outlined)					
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColor(*col)
+						c=_MyTable_GetSelectedBorderWidth(*col)
+					Else
+						bcolor=_MyTable_GetBorderColor(*col)
+						c=_MyTable_GetBorderWidth(*col)
+					EndIf
+					For bw=1 To c
+						Box(bx+(bw-1),(bw-1),*col\calcwidth-(c-1),*this\calcheaderheight-(c-1),bcolor)
+					Next
+				EndIf
+			EndIf
 			UnclipOutput()
 			bx+*col\calcwidth
 			If bx>=width
@@ -455,13 +581,13 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	EndIf
 	Protected selected.b=#False
 	For idx=1 To cols
-		
-		
-		
+
 		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 		
 		DrawingMode(#PB_2DDrawing_Default)			
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
+		
+		Protected tborder=_MyTable_GetBorder(*cell)
 		
 		Protected tfont=_MyTable_GetFont(*cell)
 		If tfont
@@ -634,11 +760,63 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				EndIf
 			EndIf
 			If border
-				DrawingMode(#PB_2DDrawing_Outlined)
-				If selected
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBorderColor(*cell))
-				Else
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBorderColor(*cell))
+				Protected bw=0
+				Protected c=0
+				Protected bcolor.q=0
+				DrawingMode(#PB_2DDrawing_Default)
+				If Bool(tborder & #MYTABLE_STYLE_BORDER_TOP)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorTop(*cell)
+						c=_MyTable_GetSelectedBorderWidthTop(*cell)
+					Else
+						bcolor=_MyTable_GetBorderColorTop(*cell)
+						c=_MyTable_GetBorderWidthTop(*cell)
+					EndIf
+					Box(bx,by,*col\calcwidth,c,bcolor)
+				EndIf
+				
+				If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorRight(*cell)
+						c=_MyTable_GetSelectedBorderWidthRight(*cell)
+					Else
+						bcolor=_MyTable_GetBorderColorRight(*cell)
+						c=_MyTable_GetBorderWidthRight(*cell)
+					EndIf
+					Box(bx+*col\calcwidth-c,by,*col\calcwidth,c,bcolor)
+				EndIf
+				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorBottom(*cell)
+						c=_MyTable_GetSelectedBorderWidthBottom(*cell)
+					Else
+						bcolor=_MyTable_GetBorderColorBottom(*cell)
+						c=_MyTable_GetBorderWidthBottom(*cell)
+					EndIf
+					Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
+				EndIf
+				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColorLeft(*cell)
+						c=_MyTable_GetSelectedBorderWidthLeft(*cell)
+					Else
+						bcolor=_MyTable_GetBorderColorLeft(*cell)
+						c=_MyTable_GetBorderWidthLeft(*cell)
+					EndIf
+					Box(bx,by,c,*this\calcheight,bcolor)
+				EndIf
+				If tborder=0
+					DrawingMode(#PB_2DDrawing_Outlined)					
+					If selected
+						bcolor=_MyTable_GetSelectedBorderColor(*cell)
+						c=_MyTable_GetSelectedBorderWidth(*cell)
+					Else
+						bcolor=_MyTable_GetBorderColor(*cell)
+						c=_MyTable_GetBorderWidth(*cell)
+					EndIf
+					For bw=1 To c
+						Box(bx+(bw-1),by+(bw-1),*col\calcwidth-(c-1),*this\calcheight-(c-1),bcolor)
+					Next
 				EndIf
 			EndIf
 			UnclipOutput()

@@ -19,18 +19,37 @@ UseModule MyTable
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT)
 	*table\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable,*cellstyle.MyTableStyleCell
-	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT):*style\SetFont(fonts(0))
-	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER):*style\SetFont(fonts(1))
-	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT):*style\SetFont(fonts(2))
 	
-
 	
 	#Rows=10
-	#Cols=10
+	#Cols=5
 	
 	Define i,g
-	For g=4 To #Cols
-		*table\AddCol("Test "+g,100,images(Random(9,0)))
+	Define border=0
+	For g=1 To #Cols
+		*col=*table\AddCol("Test "+g,100,images(Random(9,0)))
+		*style=*col\GetStyle()
+		*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
+		*style\SetFont(fonts(Random(ArraySize(fonts()))))
+		*style\SetForeColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
+		*style\SetBackColor(RGBA(Random(100,50),Random(100,50),Random(100,50),255))
+	
+		border=0
+		If Random(1)
+			border|#MYTABLE_STYLE_BORDER_BOTTOM
+		EndIf
+		If Random(1)
+			border|#MYTABLE_STYLE_BORDER_LEFT
+		EndIf
+		If Random(1)
+			border|#MYTABLE_STYLE_BORDER_RIGHT
+		EndIf
+		If Random(1)
+			border|#MYTABLE_STYLE_BORDER_TOP
+		EndIf
+		*style\SetBorder(border)
+		*style\SetBorderColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
+		*style\SetBorderWidth(Random(4,1))
 	Next
 	For i=1 To #Rows
 		*row=*table\AddRow("","",images(Random(9,0)))		
@@ -40,6 +59,24 @@ UseModule MyTable
 			*cell\SetImage(images(Random(9,0)))	
 			*cellstyle=*cell\GetStyle()
 			*cellstyle\SetFont(fonts(Random(ArraySize(fonts()))))
+			*cellstyle\SetForeColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
+			*cellstyle\SetBackColor(RGBA(Random(250,200),Random(250,200),Random(250,200),255))
+			border=0
+			If Random(1)
+				border|#MYTABLE_STYLE_BORDER_BOTTOM
+			EndIf
+			If Random(1)
+				border|#MYTABLE_STYLE_BORDER_LEFT
+			EndIf
+			If Random(1)
+				border|#MYTABLE_STYLE_BORDER_RIGHT
+			EndIf
+			If Random(1)
+				border|#MYTABLE_STYLE_BORDER_TOP
+			EndIf
+			*cellstyle\SetBorder(border)
+			*cellstyle\SetBorderColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
+			*cellstyle\SetBorderWidth(Random(4,1))
 		Next
 	Next
 	
@@ -54,7 +91,7 @@ UseModule MyTable
 		             WindowHeight(window))
 	EndProcedure
 	
-
+	
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
 	BindEvent(#PB_Event_RestoreWindow,@Resize(),window)
