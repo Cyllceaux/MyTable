@@ -67,12 +67,17 @@ Declare _MyTableEvtScroll()
 ;- Rows
 Declare _MyTable_Row_Delete(*this.strMyTableRow)
 Declare _MyTable_Row_Autosize(*this.strMyTableRow)
+Declare _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False,redraw.b=#True)
 
 
 ;-Cols
 Declare _MyTable_Col_Delete(*this.strMyTableCol)
 Declare _MyTable_Col_Autosize(*this.strMyTableCol)
 Declare _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
+Declare _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=#True)
+
+;- Cells
+Declare _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.b=#True)
 
 ;- Styled
 Declare _MyTable_Style_Redraw(*this.strMyTableStyleObject)

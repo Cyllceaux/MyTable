@@ -12,11 +12,13 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT|#MYTABLE_TABLE_FLAGS_MULTISELECT)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow
+	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable
 	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
 	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
 	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	
+	*tablestyle=*table\GetStyle()
+	*tablestyle\SetSelectedColor(RGBA(250,100,100,255))
 	
 	#Rows=100
 	#Cols=10
@@ -39,6 +41,8 @@ UseModule MyTable
 	*table\ScrollToCellPos(#rows/2,#cols/2,#True)
 	
 	*table\SetRedraw(#True)
+	
+	
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

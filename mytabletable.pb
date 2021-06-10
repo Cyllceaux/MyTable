@@ -340,9 +340,26 @@ EndProcedure
 
 Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height.i,scrollx.i,scrolly.i)
 	Protected bx=-scrollx
+	Protected lastfont.i=font
 	ForEach *this\cols()
 		Protected *col.strMyTableCol=*this\cols()
 		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
+		
+		Protected tfont=_MyTable_GetFont(*col)
+		If tfont
+			If IsFont(tfont)
+				tfont=FontID(tfont)
+			EndIf
+			If lastfont<>tfont
+				DrawingFont(tfont)
+				lastfont=tfont
+			EndIf
+		Else
+			If lastfont<>font
+				DrawingFont(font)
+				lastfont=font
+			EndIf
+		EndIf
 		
 		If *col\dirty
 			*col\calcwidth=DesktopScaledX(*col\width)
@@ -425,9 +442,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
-Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i)
-	
-	
+Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i)	
+	Protected lastfont.i=font
 	Protected bx=-scrollx
 	Protected idx
 	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
@@ -439,11 +455,29 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	EndIf
 	Protected selected.b=#False
 	For idx=1 To cols
+		
+		
+		
 		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 		
 		DrawingMode(#PB_2DDrawing_Default)			
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
 		
+		Protected tfont=_MyTable_GetFont(*cell)
+		If tfont
+			If IsFont(tfont)
+				tfont=FontID(tfont)
+			EndIf
+			If lastfont<>tfont
+				DrawingFont(tfont)
+				lastfont=tfont
+			EndIf
+		Else
+			If lastfont<>font
+				DrawingFont(font)
+				lastfont=font
+			EndIf
+		EndIf
 		
 		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
 		selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
@@ -452,7 +486,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		selected=Bool(selected Or *this\table\tempselectedcols(Str(*cell\col)))
 		selected=Bool(selected Or *this\table\tempselectedcells(Str(*cell)))
 		
-		If *cell\dirty 
+		If *cell\dirty Or *cell\textheight=0 Or *cell\textwidth=0
 			If *cell\text<>""
 				*cell\textheight=_MyTableTextHeight(*cell\text)
 				*cell\textwidth=_MyTableTextWidth(*cell\text)
@@ -784,6 +818,9 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			w-cw
 			h-ch
 			*this\maxhscroll=w
+			If *this\maxhscroll<0
+				*this\maxhscroll=0
+			EndIf
 			
 			If IsGadget(*this\hscroll)
 				If h>0
@@ -831,7 +868,11 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				w-*this\hscroll
 			EndIf
 			
+			
 			*this\maxvscroll=h
+			If *this\maxvscroll<0
+				*this\maxvscroll=0
+			EndIf
 			If IsGadget(*this\vscroll)
 				If w>0					
 					h+GadgetHeight(*this\hscroll)		
@@ -1178,35 +1219,9 @@ EndProcedure
 
 Procedure _MyTable_Table_ScrollToPos(*this.strMyTableTable,row.i,setSelect.b=#False)
 	If *this		
-		_MyTable_Table_Predraw(*this,#True)
 		If ListSize(*this\expRows())>row
-			Protected h=0
-			Protected idy=0
-			ForEach *this\expRows()			
-				Protected *row.strMyTableRow=*this\expRows()
-				If idy=row
-					If setSelect
-						Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
-						Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-						If fullrow
-							If Not multiselect
-								ClearMap(*this\selectedRows())															
-							EndIf
-							*this\selectedRows(Str(*row))=#True
-						EndIf
-						Break						
-					EndIf
-				EndIf
-				h+*row\height
-				idy+1
-			Next
-			If IsGadget(*this\vscroll)
-				SetGadgetState(*this\vscroll,h)
-			Else
-				*this\vscroll=h
-			EndIf
-			*this\dirty=#True
-			_MyTable_Table_Redraw(*this)
+			SelectElement(*this\expRows(),row)
+			_MyTable_Row_ScrollTo(*this\expRows(),setSelect)
 		EndIf
 	EndIf
 EndProcedure
@@ -1219,50 +1234,8 @@ Procedure _MyTable_Table_ScrollToCellPos(*this.strMyTableTable,row.i,col.i,setSe
 		Else
 			_MyTable_Table_Predraw(*this,#True)
 			If ListSize(*this\expRows())>row And ListSize(*this\cols())>col
-				Protected h=0
-				Protected w=0
-				Protected idy=0
-				Protected idx=0
-				ForEach *this\expRows()			
-					Protected *row.strMyTableRow=*this\expRows()
-					If idy=row
-						Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
-						Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
-						ForEach *this\cols()
-							If idx=col
-								Break
-							EndIf
-							w+*this\cols()\width
-							idx+1
-						Next
-						If Not multiselect
-							ClearMap(*this\selectedCells())
-						EndIf
-						*this\selectedCells(Str(*cell))=#True
-						Break
-					EndIf
-					h+*row\height
-					idy+1
-				Next
-				
-				If IsGadget(*this\vscroll)
-					SetGadgetState(*this\vscroll,h)
-				Else
-					*this\vscroll=h
-					If *this\vscroll>*this\maxvscroll
-						*this\vscroll=*this\maxvscroll
-					EndIf
-				EndIf
-				
-				If IsGadget(*this\hscroll)
-					SetGadgetState(*this\hscroll,w)
-				Else					
-					*this\hscroll=w
-					If *this\hscroll>*this\maxhscroll
-						*this\hscroll=*this\maxhscroll
-					EndIf
-				EndIf
-				
+				SelectElement(*this\expRows(),row)
+				_MyTable_Cell_ScrollTo(_MyTableGetOrAddCell(*this\expRows(),col),setSelect,#False)
 				*this\dirty=#True
 				_MyTable_Table_Redraw(*this)
 			EndIf
@@ -1284,12 +1257,40 @@ Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 			*this\drawing=#True
 			thisdrawing=#True
 		EndIf
+		
+		Protected headerheight.i=*this\headerheight
+		Protected calcheaderheight.i=*this\calcheaderheight
+		Protected lastfont.i=0
+		
+		ForEach *this\cols()
+			If (*this\cols()\textheight=0 And *this\cols()\text<>"") Or *this\cols()\dirty
+				Protected nfont=_MyTable_GetFont(*this\cols())
+				If nfont<>lastfont
+					If IsFont(nfont)
+						nfont=FontID(nfont)
+					EndIf
+					DrawingFont(nfont)
+					lastfont=nfont
+				EndIf
+				*this\cols()\textheight=_MyTableTextHeight(*this\cols()\text)
+			EndIf
+			If (*this\cols()\textheight+MyTableH4)>calcheaderheight
+				calcheaderheight=*this\cols()\textheight+MyTableH4
+			EndIf
+		Next
+		
+		If calcheaderheight>*this\calcheaderheight
+			*this\calcheaderheight=calcheaderheight+MyTableH4
+		EndIf
+		*this\headerheight=DesktopUnscaledY(*this\calcheaderheight)
+		
 		ForEach *this\cols()
 			_MyTable_Col_Autosize(*this\cols())
 		Next
 		ForEach *this\rows()
 			_MyTable_Row_Autosize(*this\rows())
 		Next
+		
 		If thisdrawing
 			StopDrawing()
 			*this\drawing=#False

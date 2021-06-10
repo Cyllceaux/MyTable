@@ -63,9 +63,9 @@ Macro _MyTableStyleGetCol(root,name)
 			*table=*col\table
 			*application=*table\application
 		Case #MYTABLE_TYPE_CELL
-			*cell=root
+			*cell=root			
 			*table=*cell\table
-			*col=*cell\col
+			*col=*cell\col			
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
@@ -132,9 +132,24 @@ EndMacro
 Macro _MyTableStyleSet(name)
 	*this\obj\style\name=value
 	*this\obj\dirty=#True
+	Protected *col.strMyTableCol=0
+	Protected *row.strMyTableRow=0
+	Protected *cell.strMyTableCell=0
 	Select *this\obj\type
+		Case #MYTABLE_TYPE_CELL
+			*cell=*this\obj
+			If *cell\image\sized
+				FreeImage(*cell\image\sized)
+			EndIf
+			*cell\image\sized=0
+		Case #MYTABLE_TYPE_COL
+			*col=*this\obj
+			If *col\image\sized
+				FreeImage(*col\image\sized)
+			EndIf
+			*col\image\sized=0
 		Case #MYTABLE_TYPE_ROW
-			Protected *row.strMyTableRow=*this\obj
+			*row=*this\obj
 			If *row\cells
 				ForEach *row\cells\cells()
 					*row\cells\cells()\style\name=value

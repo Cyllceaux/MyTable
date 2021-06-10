@@ -237,9 +237,9 @@ Procedure _MyTable_Row_SetSelected(*this.strMyTableRow,value.b)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False)
+Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False,redraw.b=#True)
 	If *this		
-		_MyTable_Table_Predraw(*this,#True)
+		_MyTable_Table_Predraw(*this\table,#True)
 		Protected h=0
 		Protected idy=0
 		ForEach *this\table\expRows()			
@@ -254,8 +254,8 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False)
 						EndIf
 						*this\table\selectedRows(Str(*row))=#True
 					EndIf
-					Break						
 				EndIf
+				Break						
 			EndIf
 			h+*row\height
 			idy+1
@@ -269,7 +269,9 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False)
 			EndIf
 		EndIf
 		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		If redraw
+			_MyTable_Table_Redraw(*this\table)
+		EndIf
 	EndIf
 EndProcedure
 
@@ -287,20 +289,24 @@ Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
 		Protected lastfont.i=0
 		If*this\cells
 			ForEach *this\cells\cells()
-				If *this\cells\cells()\textheight=0 And *this\cells\cells()\text<>""
+				If (*this\cells\cells()\textheight=0 And *this\cells\cells()\text<>"") Or *this\cells\cells()\dirty
 					Protected nfont=_MyTable_GetFont(*this\table\rows()\cells\cells())
 					If nfont<>lastfont
+						If IsFont(nfont)
+							nfont=FontID(nfont)
+						EndIf
 						DrawingFont(nfont)
 						lastfont=nfont
 					EndIf
 					*this\cells\cells()\textheight=_MyTableTextHeight(*this\cells\cells()\text)
+					*this\cells\cells()\textwidth=_MyTableTextWidth(*this\cells\cells()\text)
 				EndIf
-				If *this\cells\cells()\textheight>result
+				If (*this\cells\cells()\textheight+MyTableH4)>result
 					result=*this\cells\cells()\textheight
 				EndIf
 			Next
 		EndIf
-		If result>*this\table\calcdefaultrowheight			
+		If (result+MyTableH4)>*this\table\calcdefaultrowheight			
 			result+MyTableH4
 		EndIf
 		If Not *this\table\drawing

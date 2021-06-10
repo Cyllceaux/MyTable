@@ -119,6 +119,8 @@ Module MyTable
 		maxvscroll.i
 		maxhscroll.i
 		
+		defaultheaderheight.i
+		calcdefaultheaderheight.i
 		headerheight.i
 		calcheaderheight.i
 		
@@ -842,7 +844,9 @@ Module MyTable
 				SetGadgetState(*this\vscroll,GetGadgetState(*this\vscroll)-DesktopScaledY(mw))	
 			Else
 				*this\vscroll-DesktopScaledY(mw)
-				If *this\vscroll<0
+				If *this\vscroll>*this\maxvscroll
+					*this\vscroll=0
+				ElseIf *this\vscroll<0
 					*this\vscroll=0
 				EndIf
 			EndIf
@@ -874,7 +878,10 @@ Module MyTable
 			\defaultrowheight=20
 			\calcdefaultrowheight=DesktopScaledY(\defaultrowheight)
 			\headerheight=20
+			\defaultheaderheight=20
+			\calcdefaultheaderheight=20
 			\calcheaderheight=DesktopScaledY(\headerheight)
+			\calcdefaultheaderheight=DesktopScaledY(\defaultheaderheight)
 			
 			If IsGadget(canvas)
 				SetGadgetData(canvas,*table)

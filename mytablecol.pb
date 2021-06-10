@@ -282,9 +282,9 @@ Procedure _MyTable_Col_SetSelected(*this.strMyTableCol,value.b)
 EndProcedure
 
 
-Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False)
+Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=#True)
 	If *this		
-		_MyTable_Table_Predraw(*this,#True)
+		_MyTable_Table_Predraw(*this\table,#True)
 		Protected w=0
 		Protected idw=0
 		ForEach *this\table\cols()			
@@ -299,8 +299,8 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False)
 						EndIf
 						*this\table\selectedCols(Str(*col))=#True
 					EndIf
-					Break						
 				EndIf
+				Break						
 			EndIf
 			w+*col\width
 			idw+1
@@ -314,7 +314,9 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False)
 			EndIf
 		EndIf
 		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		If redraw
+			_MyTable_Table_Redraw(*this\table)
+		EndIf
 	EndIf
 EndProcedure
 
@@ -346,13 +348,17 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 	EndIf
 	If *row\cells And ListSize(*row\cells\cells())>*this\listindex	
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,*this\listindex)
-		If *cell\textwidth=0 And *cell\text<>""
+		If (*cell\textwidth=0 And *cell\text<>"") Or *cell\dirty
 			Protected nfont=_MyTable_GetFont(*cell)
 			If nfont<>lastfont
+				If IsFont(nfont)
+					nfont=FontID(nfont)
+				EndIf
 				DrawingFont(nfont)
 				lastfont=nfont
 			EndIf
 			*cell\textwidth=_MyTableTextWidth(*cell\text)
+			*cell\textheight=_MyTableTextHeight(*cell\text)
 		EndIf
 		tresult+*cell\textwidth+MyTableW8
 		If *cell\image\orig					
@@ -390,10 +396,29 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 			EndIf
 		EndIf
 		_callcountStart(AutosizeCol)
+		If (*this\textheight=0 And *this\text<>"") Or *this\dirty
+			Protected nfont=_MyTable_GetFont(*this)
+			If IsFont(nfont)
+				nfont=FontID(nfont)
+			EndIf
+			DrawingFont(nfont)
+			*this\textheight=_MyTableTextHeight(*this\text)
+			*this\textwidth=_MyTableTextWidth(*this\text)
+		EndIf
+		
+		
 		Protected result.i=*this\textwidth+MyTableW8
-		If *this\image\sized
+		If *this\image\orig
+			If Not *this\image\sized
+				*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
+				If *this\image\resize
+					ResizeImage(*this\image\sized,*this\table\calcdefaultheaderheight-MyTableW8,*this\table\calcdefaultheaderheight-MyTableH8)
+				Else
+					ResizeImage(*this\image\sized,*this\table\calcheaderheight-MyTableW8,*this\table\calcheaderheight-MyTableH8)
+				EndIf
+			EndIf
 			result+ImageWidth(*this\image\sized)
-			result+MyTableW8
+			result+MyTableW8			
 		EndIf
 		If *this\sort
 			result+MyTableW20

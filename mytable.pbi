@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 743
-	#MYTABLE_VERSION_DATE = 20210609
+	#MYTABLE_VERSION = 869
+	#MYTABLE_VERSION_DATE = 20210610
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -89,7 +89,7 @@
 		SetImage(value.i):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
 		
-		ScrollTo(setSelect.b=#False)
+		ScrollTo(setSelect.b=#False,redraw.b=#True)
 	EndInterface
 	
 	EnumerationBinary _mytable_col
@@ -116,7 +116,7 @@
 		SetSort(value.i):GetSort.i()
 		
 		Delete()
-		ScrollTo(setSelect.b=#False)
+		ScrollTo(setSelect.b=#False,redraw.b=#True)
 	EndInterface
 	
 	EnumerationBinary _mytable_row
@@ -140,7 +140,7 @@
 		RowCount()
 		GetCell(col.i)
 		Delete()
-		ScrollTo(setSelect.b=#False)
+		ScrollTo(setSelect.b=#False,redraw.b=#True)
 	EndInterface
 	
 	EnumerationBinary _mytable_table
