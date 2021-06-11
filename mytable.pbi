@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1022
+	#MYTABLE_VERSION = 1043
 	#MYTABLE_VERSION_DATE = 20210611
 	
 	Enumeration _mytable_type
@@ -67,7 +67,8 @@
 	EndInterface
 	
 	Interface MyTableStyleTable Extends MYTableStyleObject
-		
+		SetZebraBackColor(value.q):GetZebraBackColor.q()
+		SetZebraFrontColor(value.q):GetZebraFrontColor.q()		
 	EndInterface
 	
 	Interface MyTableStyleApplication Extends MYTableStyleObject

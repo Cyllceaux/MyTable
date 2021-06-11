@@ -457,6 +457,14 @@ Procedure.q _MyTable_Style_GetBackColor(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Procedure.q _MyTable_Style_GetZebraBackColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this\obj,zebrabackcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_Style_GetSelectedColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
@@ -493,6 +501,14 @@ Procedure.q _MyTable_Style_GetFrontColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
 		_MyTableStyleGet(*this\obj,frontcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure.q _MyTable_Style_GetZebraFrontColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGet(*this\obj,zebrafrontcolor)
 		ProcedureReturn result
 	EndIf
 EndProcedure
@@ -581,6 +597,12 @@ Procedure _MyTable_Style_SetBackColor(*this.strMyTableStyleObject,value.q)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Style_SetZebraBackColor(*this.strMyTableStyleObject,value.q)
+	If *this
+		_MyTableStyleSet(zebrabackcolor)
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Style_SetSelectedColor(*this.strMyTableStyleObject,value.q)
 	If *this
 		_MyTableStyleSet(selectedcolor)
@@ -644,6 +666,12 @@ EndProcedure
 Procedure _MyTable_Style_SetFrontColor(*this.strMyTableStyleObject,value.q)
 	If *this
 		_MyTableStyleSet(frontcolor)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Style_SetZebraFrontColor(*this.strMyTableStyleObject,value.q)
+	If *this
+		_MyTableStyleSet(zebrafrontcolor)
 	EndIf
 EndProcedure
 

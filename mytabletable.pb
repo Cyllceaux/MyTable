@@ -266,6 +266,14 @@ Procedure.q _MyTable_GetBackColor(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Procedure.q _MyTable_GetZebraBackColor(*this.strMyTableStyleObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGetAlternative(*this,zebrabackcolor,backcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_GetFrontColor(*this.strMyTableStyleObject)
 	If *this
 		Protected result.q=0
@@ -573,7 +581,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
-Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i)	
+Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i,zebra.b)	
 	Protected lastfont.i=font
 	Protected bx=-scrollx
 	Protected idx
@@ -633,7 +641,11 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			If selected
 				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedColor(*cell))
 			Else
-				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
+				If zebra
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
+				Else
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetZebraBackColor(*cell))
+				EndIf
 			EndIf
 			
 			
@@ -908,7 +920,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				Protected *row.strMyTableRow=*this\expRows()
 				
 				If by+*row\calcheight>0
-					_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly)
+					_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1))
 				EndIf
 				by+*row\calcheight
 				

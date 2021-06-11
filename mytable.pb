@@ -28,6 +28,8 @@ Module MyTable
 		font.i
 		backcolor.q
 		frontcolor.q
+		zebrabackcolor.q
+		zebrafrontcolor.q
 		valign.i
 		halign.i
 		border.strMyTableStyleBorder
@@ -1180,6 +1182,8 @@ Module MyTable
 		
 		vtable_style_table:;- Style Table
 		_MyTableDataSectionStyleDefault(Style)
+		_MyTableDataSectionSetterGetter(Style,ZebraBackColor)
+		_MyTableDataSectionSetterGetter(Style,ZebraFrontColor)
 		
 		vtable_style_application:;- Style Application
 		_MyTableDataSectionStyleDefault(Style)

@@ -12,16 +12,18 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MULTISELECT)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow
+	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*rowStyle.MyTableStyleRow,*tablestyle.MyTableStyleTable
 	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
 	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
 	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	
+	*tablestyle=*table\GetStyle()
+	*tablestyle\SetZebraBackColor(RGBA(220,220,220,255))
 	
 	#Rows=1000
 	#Cols=10
 	
-	Define i,g
+	Define i,g	
 	For g=4 To #Cols
 		*table\AddCol("Test "+g,100,images(Random(9,0)))
 	Next
