@@ -10,6 +10,13 @@ Procedure _MyTable_Row_GetParent(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Row_GetLevel(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\level
+	EndIf
+EndProcedure
+
+
 Procedure _MyTable_Row_GetTable(*this.strMyTableRow)
 	If *this
 		ProcedureReturn *this\table

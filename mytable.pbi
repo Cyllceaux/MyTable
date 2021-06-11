@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 982
-	#MYTABLE_VERSION_DATE = 20210610
+	#MYTABLE_VERSION = 993
+	#MYTABLE_VERSION_DATE = 20210611
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -140,6 +140,7 @@
 		GetTable()
 		GetParent()
 		GetPosition()
+		GetLevel()
 		SetExpanded(value.b):GetExpanded.b()
 		SetImage(value.i):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
@@ -200,6 +201,7 @@
 		DeleteRow(row.i)
 		GetRow(row.i)
 		RowCount()
+		VisibleRowCount()
 		AddCol(text.s,width.i,image.i=0,flags.i=0)
 		DeleteCol(col.i)
 		GetCol(col.i)

@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-10 11:00" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-11 07:36" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -20,11 +20,11 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="ade2baf1c67872408b4bafb1f1d5f84d"/>
+      <fingerprint md5="7ed48d8261da21457f6a2982140252b7"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="20ee45617bdc6abb6e657e93f7adb342"/>
+      <fingerprint md5="c364df2b156d2774672d70d112c24f15"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -40,7 +40,7 @@
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="8f2a054abc4f3fa486dcd45044859bc6"/>
+      <fingerprint md5="9c09392297343f42220b809af88962a8"/>
     </file>
     <file name="mytablestyle.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -48,7 +48,7 @@
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="9f05f0e10889e4a50cb09925464da7b5"/>
+      <fingerprint md5="e408d13e88290459c8750fc46f530051"/>
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -73,6 +73,10 @@
     <file name="Test\table12.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="428dd4d9fbbfeafe0e441f0a3676b71a"/>
+    </file>
+    <file name="Test\table13.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="abd3d065b9a5bfe77c6678059a0a28c2"/>
     </file>
     <file name="Test\table2.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -141,10 +145,6 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="052b40c32a8534c33a69f5f4f02b1b05"/>
-    </file>
-    <file name="Test\table13.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="abd3d065b9a5bfe77c6678059a0a28c2"/>
     </file>
   </section>
   <section name="targets">

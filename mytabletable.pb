@@ -511,6 +511,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						bcolor=_MyTable_GetBorderColorTop(*col)
 						c=_MyTable_GetBorderWidthTop(*col)
 					EndIf
+					c=DesktopScaledY(c)
 					Box(bx,0,*col\calcwidth,c,bcolor)
 				EndIf
 				
@@ -522,6 +523,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						bcolor=_MyTable_GetBorderColorRight(*col)
 						c=_MyTable_GetBorderWidthRight(*col)
 					EndIf
+					c=DesktopScaledX(c)
 					Box(bx+*col\calcwidth-c,0,*col\calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
@@ -532,6 +534,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						bcolor=_MyTable_GetBorderColorBottom(*col)
 						c=_MyTable_GetBorderWidthBottom(*col)
 					EndIf
+					c=DesktopScaledY(c)
 					Box(bx,*this\calcheaderheight-c,*col\calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
@@ -542,6 +545,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						bcolor=_MyTable_GetBorderColorLeft(*col)
 						c=_MyTable_GetBorderWidthLeft(*col)
 					EndIf
+					c=DesktopScaledX(c)
 					Box(bx,0,c,*this\calcheaderheight,bcolor)
 				EndIf
 				If tborder=0
@@ -553,6 +557,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						bcolor=_MyTable_GetBorderColor(*col)
 						c=_MyTable_GetBorderWidth(*col)
 					EndIf
+					c=DesktopScaledX(c)
 					For bw=1 To c
 						Box(bx+(bw-1),(bw-1),*col\calcwidth-(c-1),*this\calcheaderheight-(c-1),bcolor)
 					Next
@@ -772,6 +777,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 						bcolor=_MyTable_GetBorderColorTop(*cell)
 						c=_MyTable_GetBorderWidthTop(*cell)
 					EndIf
+					c=DesktopScaledY(c)
 					Box(bx,by,*col\calcwidth,c,bcolor)
 				EndIf
 				
@@ -783,6 +789,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 						bcolor=_MyTable_GetBorderColorRight(*cell)
 						c=_MyTable_GetBorderWidthRight(*cell)
 					EndIf
+					c=DesktopScaledX(c)
 					Box(bx+*col\calcwidth-c,by,*col\calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
@@ -793,6 +800,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 						bcolor=_MyTable_GetBorderColorBottom(*cell)
 						c=_MyTable_GetBorderWidthBottom(*cell)
 					EndIf
+					c=DesktopScaledY(c)
 					Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
@@ -803,6 +811,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 						bcolor=_MyTable_GetBorderColorLeft(*cell)
 						c=_MyTable_GetBorderWidthLeft(*cell)
 					EndIf
+					c=DesktopScaledX(c)
 					Box(bx,by,c,*this\calcheight,bcolor)
 				EndIf
 				If tborder=0
@@ -814,6 +823,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 						bcolor=_MyTable_GetBorderColor(*cell)
 						c=_MyTable_GetBorderWidth(*cell)
 					EndIf
+					c=DesktopScaledY(c)
 					For bw=1 To c
 						Box(bx+(bw-1),by+(bw-1),*col\calcwidth-(c-1),*this\calcheight-(c-1),bcolor)
 					Next
@@ -1244,6 +1254,13 @@ EndProcedure
 Procedure _MyTable_Table_RowCount(*this.strMyTableTable)
 	If *this
 		ProcedureReturn ListSize(*this\rows())
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_VisibleRowCount(*this.strMyTableTable)
+	If *this
+		_MyTable_Table_Predraw(*this)
+		ProcedureReturn ListSize(*this\expRows())
 	EndIf
 EndProcedure
 

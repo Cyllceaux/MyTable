@@ -198,6 +198,7 @@ Module MyTable
 	EndStructure
 	
 	XIncludeFile "declare.pb"
+		
 	
 	Procedure MyTableCreateApplication(flags.i=0)
 		Protected *this.strMyTableApplication=AllocateStructure(strMyTableApplication)
@@ -1196,6 +1197,7 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,DeleteRow)
 		_MyTableDataSectionGetter(Table,Row)
 		_MyTableDataSectionMethode(Table,RowCount)
+		_MyTableDataSectionMethode(Table,VisibleRowCount)
 		_MyTableDataSectionMethode(Table,AddCol)
 		_MyTableDataSectionMethode(Table,DeleteCol)
 		_MyTableDataSectionGetter(Table,Col)
@@ -1229,6 +1231,7 @@ Module MyTable
 		_MyTableDataSectionGetter(Row,Table)
 		_MyTableDataSectionGetter(Row,Parent)
 		_MyTableDataSectionGetter(Row,Position)
+		_MyTableDataSectionGetter(Row,Level)
 		_MyTableDataSectionSetterGetter(Row,Expanded)
 		_MyTableDataSectionSetterGetter(Row,Image)
 		_MyTableDataSectionSetterGetter(Row,Checked)
