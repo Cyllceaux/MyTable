@@ -323,6 +323,11 @@ Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
 		*this\table\dirty=#True
 		*this\calcheight=result
 		*this\height=DesktopUnscaledY(result)
+		If *this\rows
+			ForEach *this\rows\rows()
+				_MyTable_Row_Autosize(*this\rows\rows())
+			Next
+		EndIf
 		_MyTable_Table_Predraw(*this\table)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf

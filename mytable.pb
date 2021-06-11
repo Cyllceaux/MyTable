@@ -1092,6 +1092,23 @@ Module MyTable
 		EndIf
 	EndProcedure
 	
+	Procedure _MyTableDrawText(x,y,text.s,color.q)
+		If text<>""
+			Protected c=CountString(text,#CRLF$)
+			If c>0
+				Protected idx=0
+				Protected h=0
+				For idx=0 To c
+					Protected tt.s=StringField(text,idx+1,#CRLF$)
+					DrawText(x,y+h,tt,color)	
+					h+TextHeight(tt)
+				Next
+			Else
+				DrawText(x,y,text,color)
+			EndIf
+		EndIf
+	EndProcedure
+	
 	
 	Macro _MyTableDataSectionMethode(gruppe,methode)
 		Data.i @_MyTable_#gruppe#_#methode()

@@ -21,7 +21,7 @@ UseModule MyTable
 	
 	Define i,g,h,j
 	For i=1 To #Rows
-		*stamm=*tree\AddRow("Stamm "+i+"|Inhalt "+i+"|Sub Inhalt "+i,"|",images(0))
+		*stamm=*tree\AddRow("Stamm "+i+"|Inhalt "+i+"|Sub Inhalt "+i+#CRLF$+"Sub Sub","|",images(0))
 		*stamm\SetExpanded(Random(1,0))
 		*stamm\SetChecked(Random(1,0))
 		For g=1 To Random(#rows)
@@ -33,7 +33,7 @@ UseModule MyTable
 				*zweig\SetExpanded(Random(1,0))
 				*zweig\SetChecked(Random(1,0))
 				For j=1 To Random(#rows)
-					*blatt=*zweig\AddRow("Blatt "+j+"|Inhalt "+j+"|Sub Inhalt "+j,"|",images(3))
+					*blatt=*zweig\AddRow("Blatt "+j+"|Inhalt "+j+"|Sub Inhalt "+j+#CRLF$+"Sub Sub"+#CRLF$+"Sub Sub","|",images(3))
 					*blatt\SetChecked(Random(1,0))
 				Next
 			Next

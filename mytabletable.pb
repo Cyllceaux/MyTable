@@ -497,7 +497,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			EndSelect
 			
 			DrawingMode(#PB_2DDrawing_Default)
-			DrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
+			_MyTableDrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
 			If border
 				Protected bw=0
 				Protected c=0
@@ -759,9 +759,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			If *cell\text<>""
 				DrawingMode(#PB_2DDrawing_Transparent)	
 				If selected
-					DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell))
+					_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell))
 				Else
-					DrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+					_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
 				EndIf
 			EndIf
 			If border
@@ -945,7 +945,7 @@ Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow)
 		ForEach *row\rows\rows()
 			AddElement(*this\expRows())
 			*this\expRows()=*row\rows\rows()
-			result+*this\rows()\height
+			result+*row\rows\rows()\height			
 			If *row\rows\rows()\expanded And *row\rows\rows()\rows And ListSize(*row\rows\rows()\rows\rows())>0
 				result+_MyTable_Table_PredrawSub(*this,*row\rows\rows())
 			EndIf
@@ -966,6 +966,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			If header
 				h+*this\headerheight
 			EndIf
+			
 			ForEach *this\rows()
 				AddElement(*this\expRows())
 				*this\expRows()=*this\rows()
@@ -1482,6 +1483,7 @@ Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 		ForEach *this\cols()
 			_MyTable_Col_Autosize(*this\cols())
 		Next
+		
 		ForEach *this\rows()
 			_MyTable_Row_Autosize(*this\rows())
 		Next
