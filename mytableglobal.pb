@@ -21,6 +21,9 @@ Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
 		\border\defaultBorder\color=RGBA(50,50,50,255)
 		\border\defaultBorder\selectedcolor=RGBA(200,200,250,255)
 		\border\defaultBorder\width=1
+		\fixedfrontcolor=RGBA(250,250,250,255)
+		\fixedbackcolor=RGBA(150,150,150,255)
+		\fixedforecolor=RGBA(250,250,250,255)
 	EndWith
 EndProcedure
 
@@ -131,6 +134,18 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		If my<*this\calcheaderheight
 			*rc\row=-1
 		EndIf
+	EndIf
+	
+	Protected fwidth=0
+	If *this\fixedcols
+		ForEach *this\cols()
+			If *this\fixedcols>ListIndex(*this\cols())
+				fwidth+*this\cols()\calcwidth
+			EndIf
+		Next		
+	EndIf
+	If mx<fwidth
+		hsc=0
 	EndIf
 	
 	
@@ -270,6 +285,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_NONE)
 				EndSelect		
 				*this\dirty=#True
+				*this\md=#False
 			EndIf			
 		EndIf			
 		ProcedureReturn 0

@@ -84,6 +84,9 @@ Module MyTable
 		_MyTableDataSectionStyleDefault(Style)
 		_MyTableDataSectionSetterGetter(Style,ZebraBackColor)
 		_MyTableDataSectionSetterGetter(Style,ZebraFrontColor)
+		_MyTableDataSectionSetterGetter(Style,FixedBackColor)
+		_MyTableDataSectionSetterGetter(Style,FixedFrontColor)
+		_MyTableDataSectionSetterGetter(Style,FixedForeColor)
 		
 		vtable_style_application:;- Style Application
 		_MyTableDataSectionStyleDefault(Style)
@@ -109,6 +112,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,Recalc)
 		_MyTableDataSectionSetterGetter(Table,HeaderHeight)
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
+		_MyTableDataSectionSetterGetter(Table,FixedCols)
 		_MyTableDataSectionGetter(Table,SelectedRows)
 		_MyTableDataSectionGetter(Table,SelectedCells)
 		_MyTableDataSectionGetter(Table,SelectedCols)

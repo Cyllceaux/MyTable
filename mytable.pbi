@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1047
+	#MYTABLE_VERSION = 1106
 	#MYTABLE_VERSION_DATE = 20210612
 	
 	Enumeration _mytable_type
@@ -69,6 +69,9 @@
 	Interface MyTableStyleTable Extends MYTableStyleObject
 		SetZebraBackColor(value.q):GetZebraBackColor.q()
 		SetZebraFrontColor(value.q):GetZebraFrontColor.q()		
+		SetFixedBackColor(value.q):GetFixedBackColor.q()
+		SetFixedFrontColor(value.q):GetFixedFrontColor.q()		
+		SetFixedForeColor(value.q):GetFixedForeColor.q()		
 	EndInterface
 	
 	Interface MyTableStyleApplication Extends MYTableStyleObject
@@ -193,6 +196,8 @@
 		SetRecalc(value.b):GetRecalc.b()
 		SetHeaderHeight(value.i):GetHeaderHeight.i()
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
+		SetFixedCols(value.i):GetFixedCols.i()
+		
 		GetSelectedRows(List rows.MyTableRow())
 		GetSelectedCells(List cells.MyTableCell())
 		GetSelectedCols(List cols.MyTableCol())		

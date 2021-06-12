@@ -26,6 +26,9 @@ Structure strMyTableStyle
 	frontcolor.q
 	zebrabackcolor.q
 	zebrafrontcolor.q
+	fixedbackcolor.q
+	fixedfrontcolor.q
+	fixedforecolor.q
 	valign.i
 	halign.i
 	border.strMyTableStyleBorder
@@ -126,6 +129,8 @@ Structure strMyTableTable Extends strMyTableObject
 	hscroll.i
 	maxvscroll.i
 	maxhscroll.i
+	
+	fixedcols.i
 	
 	defaultheaderheight.i
 	calcdefaultheaderheight.i
