@@ -4,7 +4,7 @@
 	ProcedureReturn *this
 EndProcedure
 
-Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)
+Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
 	_MyTableInitTable(0,*this,window,canvas,vscroll,hscroll,flags)
 	ProcedureReturn *this
@@ -468,7 +468,8 @@ Procedure _MyTableEvtCanvasMouseMove()
 				_Mytable_Table_Redraw(*this)
 			EndIf			
 			sized=#True
-		EndIf				
+		EndIf			
+		
 		If *rc\right Or *this\resizeCol
 			If Not sized
 				SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)				
@@ -487,7 +488,6 @@ Procedure _MyTableEvtCanvasMouseMove()
 			EndIf			
 			sized=#True
 		EndIf		
-		
 		
 		
 		If Not sized
@@ -548,30 +548,34 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 			_MyTable_Table_Predraw(*this)
 			redraw=#True
 		Else
-			If Not multiselect Or (Not shift And Not control) And *rc\col>-1 And *rc\row>-1
-				ClearMap(*this\selectedCells())
-				ClearMap(*this\selectedRows())
-				ClearMap(*this\selectedCols())
-				*this\selectall=#False
-				*this\lastcell=0
-				*this\lastrow=0
-				*this\lastcol=0
-			EndIf
-			If control
-				*this\lastcell=0
-				*this\lastrow=0
-				*this\lastcol=0
-			EndIf
-			ClearMap(*this\tempselectedCells())
-			ClearMap(*this\tempselectedRows())
-			ClearMap(*this\tempselectedCols())
-			If *rc\right
+			
+			If *rc\right And *rc\bottom
 				*this\resizeCol=*rc\tcol
-			EndIf
-			If *rc\bottom
 				*this\resizeRow=*rc\trow
+			ElseIf *rc\right
+				*this\resizeCol=*rc\tcol
+			ElseIf *rc\bottom
+				*this\resizeRow=*rc\trow
+			Else
+				If Not multiselect Or (Not shift And Not control) And *rc\col>-1 And *rc\row>-1
+					ClearMap(*this\selectedCells())
+					ClearMap(*this\selectedRows())
+					ClearMap(*this\selectedCols())
+					*this\selectall=#False
+					*this\lastcell=0
+					*this\lastrow=0
+					*this\lastcol=0
+				EndIf
+				If control
+					*this\lastcell=0
+					*this\lastrow=0
+					*this\lastcol=0
+				EndIf
+				ClearMap(*this\tempselectedCells())
+				ClearMap(*this\tempselectedRows())
+				ClearMap(*this\tempselectedCols())
+				_MyTableSelect(*this,*rc,#False)	
 			EndIf
-			_MyTableSelect(*this,*rc,#False)	
 			redraw=#True
 		EndIf
 		
@@ -604,12 +608,13 @@ Procedure _MyTableEvtCanvasMouseLeftUp()
 				ForEach *this\tempselectedRows()
 					*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()						
 				Next
-				_MyTableSelect(*this,*rc,#False)	
+				If Not *rc\bottom And Not *rc\right
+					_MyTableSelect(*this,*rc,#False)	
+				EndIf
 			EndIf
 			ClearMap(*this\tempselectedCells())
 			ClearMap(*this\tempselectedRows())
 			ClearMap(*this\tempselectedCols())
-			
 			
 			_MyTable_Table_Redraw(*this)
 		EndIf

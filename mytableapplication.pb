@@ -25,7 +25,7 @@ Procedure.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
 	ProcedureReturn #False
 EndProcedure
 
-Procedure _MyTable_Application_AddTable(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)
+Procedure _MyTable_Application_AddTable(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	If *this
 		*this\lastindex+1
 		Protected *table.strMyTableTable=AddElement(*this\tables())

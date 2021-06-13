@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1106
-	#MYTABLE_VERSION_DATE = 20210612
+	#MYTABLE_VERSION = 1143
+	#MYTABLE_VERSION_DATE = 20210613
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -171,7 +171,8 @@
 		#MYTABLE_TABLE_FLAGS_RESIZABLE
 	EndEnumeration
 	
-	#MYTABLE_TABLE_FLAGS_DEFAULT=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE
+	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
+	#MYTABLE_TABLE_FLAGS_DEFAULT_TREE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_HIERARCHICAL
 	
 	Prototype MyTableProtoEventCellChangedChecked(*cell.MyTableCell)
 	Prototype MyTableProtoEventCellChangedUnChecked(*cell.MyTableCell)
@@ -240,7 +241,7 @@
 		SetRedraw(value.b):GetRedraw.b()
 		SetRecalc(value.b):GetRecalc.b()
 		
-		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)	
+		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
 		ClearTables()
 		Redraw()
 		Recalc()
@@ -248,7 +249,7 @@
 	EndInterface
 	
 	Declare MyTableCreateApplication(flags.i=0)	
-	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT)	
+	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	
 EndDeclareModule
 

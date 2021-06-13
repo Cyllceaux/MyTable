@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.73 LTS (Windows - x64)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 6.00 Alpha 1 (Windows - x64)">
   <section name="config">
     <options closefiles="1" openmode="0" name="MyTable"/>
   </section>
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-12 07:05" user="silko" host="AQUALAD"/>
+    <lastopen date="2021-06-12 18:50" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -20,11 +20,11 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="a4cec4bd4f3d8d4916a17024e79c24ab"/>
+      <fingerprint md5="31658da7bb1d310c7693e34612b88214"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="e2bbb7480094a2a9201ba9f43edac121"/>
+      <fingerprint md5="dc0b2efc92ccd48c87bef5e0ab8644eb"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -38,17 +38,25 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="308b60c101deba8f937d7f85a4a0338e"/>
     </file>
+    <file name="mytableglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="1f6b5d7caee740bdf79ef0ed6db2ec59"/>
+    </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="4a726f7732118751c9cde28a6758b47d"/>
     </file>
+    <file name="mytablestructures.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="98ba531b33dddbb442fbaade567ab891"/>
+    </file>
     <file name="mytablestyle.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="a7ceb61aa8d9bc2d284eb47362ff75fe"/>
+      <fingerprint md5="b182fa8553f94def332a053d7084d81b"/>
     </file>
     <file name="mytabletable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="55f34eb9ff5cad50b86a868345cb4cea"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="aad060d2bf558abbf383158e943cf161"/>
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -146,146 +154,164 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="052b40c32a8534c33a69f5f4f02b1b05"/>
     </file>
-    <file name="mytablestructures.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="1dcb1f355a6ce0b6fb479ac625bdebae"/>
+    <file name="Test\table14.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="0295756f17f4fb5cbf391b6a5ca8b960"/>
     </file>
-    <file name="mytableglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="7250cebd3f0472c1b008306f383b8e7f"/>
+    <file name="Test\tabletree4.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="b06fc5aa72ecafd195fc76a7f2af1975"/>
     </file>
   </section>
   <section name="targets">
     <target name="Backend (Only functions)" enabled="0" default="0">
       <inputfile value="Test\backend.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree" enabled="0" default="0">
       <inputfile value="Test\tree.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree2" enabled="0" default="0">
       <inputfile value="Test\tree2.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree3" enabled="0" default="0">
       <inputfile value="Test\tree3.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree4" enabled="0" default="0">
       <inputfile value="Test\tree4.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree5" enabled="0" default="0">
       <inputfile value="Test\tree5.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree6 (Checkbox, Border, Multiselect, No Header)" enabled="0" default="0">
       <inputfile value="Test\tree6.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table" enabled="0" default="0">
       <inputfile value="Test\table.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table2" enabled="0" default="0">
       <inputfile value="Test\table2.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table3" enabled="0" default="0">
       <inputfile value="Test\table3.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table4" enabled="0" default="0">
       <inputfile value="Test\table4.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table5" enabled="0" default="0">
       <inputfile value="Test\table5.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table6" enabled="0" default="0">
       <inputfile value="Test\table6.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table7 (Blue)" enabled="0" default="0">
       <inputfile value="Test\table7.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table8" enabled="0" default="0">
       <inputfile value="Test\table8.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table9" enabled="0" default="0">
       <inputfile value="Test\table9.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Table10" enabled="0" default="1">
+    <target name="Table10" enabled="0" default="0">
       <inputfile value="Test\table10.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table11 (Callback, 1 Million)" enabled="0" default="0">
       <inputfile value="Test\table11.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table12 (no Scrollbars)" enabled="0" default="0">
       <inputfile value="Test\table12.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table13 (Fonts, Borders, Colors)" enabled="0" default="0">
       <inputfile value="Test\table13.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="Table14 (FixedCols)" enabled="0" default="1">
+      <inputfile value="Test\table14.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree" enabled="0" default="0">
       <inputfile value="Test\tabletree.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="TableTree2" enabled="0" default="0">
+      <inputfile value="Test\tabletree2.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree3" enabled="0" default="0">
       <inputfile value="Test\tabletree3.pb"/>
       <outputfile value=""/>
-      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="TableTree4 (FixedCols)" enabled="0" default="0">
+      <inputfile value="Test\tabletree4.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
   </section>
