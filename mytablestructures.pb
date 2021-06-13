@@ -44,6 +44,7 @@ Structure strMyTableObject Extends strMyTableVTable
 	*data
 	dirty.b
 	style.strMyTableStyle
+	tooltip.s
 EndStructure
 
 Structure strMyTableStyleObject Extends strMyTableVTable
@@ -169,6 +170,15 @@ Structure strMyTableTable Extends strMyTableObject
 	eventRowChangedCollapsed.MyTableProtoEventRowChangedCollapsed
 	eventRowSelected.MyTableProtoEventRowSelected
 	callback.MyTableProtoCallback
+	
+	DefaultImageSortAsc.i
+	DefaultImageSortDesc.i
+	DefaultImagePlus.i
+	DefaultImageMinus.i
+	DefaultImageCheckBox.i
+	DefaultImageCheckBoxChecked.i
+	DefaultImagePlusArrow.i
+	DefaultImageMinusArrow.i
 EndStructure
 
 Structure strMyTableApplication Extends strMyTableObject

@@ -16,7 +16,7 @@ UseModule MyTable
 	fonts(2)=LoadFont(#PB_Any,"Arial",12,#PB_Font_HighQuality|#PB_Font_StrikeOut)
 	fonts(3)=LoadFont(#PB_Any,"Arial",12,#PB_Font_HighQuality|#PB_Font_Underline)
 	
-	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT)
+	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	*table\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable,*cellstyle.MyTableStyleCell
 	

@@ -417,6 +417,53 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 	*this\dirty=#True
 EndProcedure
 
+Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
+	Protected *cell.strMyTableCell=0
+	Protected *col.strMyTableCol=0
+	Protected *row.strMyTableRow=0
+	Protected *table.strMyTableTable=0
+	Protected *application.strMyTableApplication=0
+	Protected result.s=*this\tooltip
+	If result=""
+		Select *this\type
+			Case #MYTABLE_TYPE_APPLICATION
+				*application=*this
+			Case #MYTABLE_TYPE_TABLE
+				*table=*this
+				*application=*table\application
+			Case #MYTABLE_TYPE_ROW
+				*row=*this
+				*table=*row\table
+				*application=*table\application
+			Case #MYTABLE_TYPE_COL
+				*col=*this
+				*table=*col\table
+				*application=*table\application
+			Case #MYTABLE_TYPE_CELL
+				*cell=*this
+				*table=*cell\table
+				*application=*table\application
+		EndSelect
+		
+		If result="" And *cell		
+			result=*cell\tooltip
+		EndIf
+		If result="" And *col
+			result=*col\tooltip
+		EndIf
+		If result="" And *row
+			result=*row\tooltip
+		EndIf
+		If result="" And *table
+			result=*table\tooltip
+		EndIf
+		If result="" And *application
+			result=*application\tooltip			
+		EndIf
+	EndIf
+	ProcedureReturn result
+EndProcedure
+
 Procedure _MyTableEvtCanvasMouseMove()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
@@ -433,6 +480,15 @@ Procedure _MyTableEvtCanvasMouseMove()
 		Protected sized.b=#False
 		
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
+		If *rc\tcell
+			GadgetToolTip(*this\canvas,_MyTable_GetTooltip(*rc\tcell))
+		ElseIf *rc\tcol
+			GadgetToolTip(*this\canvas,_MyTable_GetTooltip(*rc\tcol))
+		ElseIf *rc\trow
+			GadgetToolTip(*this\canvas,_MyTable_GetTooltip(*rc\trow))
+		Else
+			GadgetToolTip(*this\canvas,_MyTable_GetTooltip(*this))
+		EndIf
 		
 		If (*rc\bottom And *rc\right) Or (*this\resizeRow And *this\resizeCol)
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftUpRightDown)			
@@ -701,7 +757,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		\type=#MYTABLE_TYPE_TABLE
 		\flags=flags
 		\application=*application
-		\redraw=#True
+		\redraw=Bool(Not Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_REDRAW))
 		\recalc=#True
 		\dirty=#True
 		\window=window
@@ -715,6 +771,14 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		\calcdefaultheaderheight=20
 		\calcheaderheight=DesktopScaledY(\headerheight)
 		\calcdefaultheaderheight=DesktopScaledY(\defaultheaderheight)
+		\DefaultImageSortAsc=tMyTableDefaultImageSortAsc
+		\DefaultImageSortDesc=tMyTableDefaultImageSortDesc
+		\DefaultImagePlus=tMyTableDefaultImagePlus
+		\DefaultImageMinus=tMyTableDefaultImageMinus
+		\DefaultImageCheckBox=tMyTableDefaultImageCheckBox
+		\DefaultImageCheckBoxChecked=tMyTableDefaultImageCheckBoxChecked
+		\DefaultImagePlusArrow=tMyTableDefaultImagePlusArrow
+		\DefaultImageMinusArrow=tMyTableDefaultImageMinusArrow
 		
 		If IsGadget(canvas)
 			SetGadgetData(canvas,*table)
@@ -913,19 +977,38 @@ Procedure  _MyTableTextWidth(text.s)
 	EndIf
 EndProcedure
 
-Procedure _MyTableDrawText(x,y,text.s,color.q)
-	If text<>""
+Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
+	If text<>"" And maxlen>0 And maxlen>TextWidth("...")
 		Protected c=CountString(text,#CRLF$)
+		Protected tw=0
+		Protected tt.s=""
 		If c>0
 			Protected idx=0
 			Protected h=0
 			For idx=0 To c
-				Protected tt.s=StringField(text,idx+1,#CRLF$)
+				tt=StringField(text,idx+1,#CRLF$)
+				tw=TextWidth(tt)
+				If tw>maxlen
+					While tw>maxlen
+						tt=Mid(tt,1,Len(tt)-1)
+						tw=TextWidth(tt+"...")						
+					Wend
+					tt+"..."
+				EndIf
 				DrawText(x,y+h,tt,color)	
 				h+TextHeight(tt)
 			Next
 		Else
-			DrawText(x,y,text,color)
+			tt=text
+			tw=TextWidth(tt)
+			If tw>maxlen
+				While tw>maxlen
+					tt=Mid(tt,1,Len(tt)-1)
+					tw=TextWidth(tt+"...")						
+				Wend
+				tt+"..."
+			EndIf			
+			DrawText(x,y,tt,color)
 		EndIf
 	EndIf
 EndProcedure

@@ -8,7 +8,7 @@ UseModule MyTable
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
 	CloseGadgetList()
 	
-	Global *table.MyTableTable=MyTableCreateTable(window,canvas,0,0,#MYTABLE_TABLE_FLAGS_DEFAULT)
+	Global *table.MyTableTable=MyTableCreateTable(window,canvas,0,0,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	*table\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable
 	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)

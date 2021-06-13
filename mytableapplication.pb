@@ -1,6 +1,13 @@
-﻿Procedure _MyTable_Application_GetType(*this.strMyTableApplication)
+﻿
+Procedure _MyTable_Application_GetType(*this.strMyTableApplication)
 	If *this
 		ProcedureReturn *this\type
+	EndIf
+EndProcedure
+
+Procedure.s _MyTable_Application_GetTooltip(*this.strMyTableApplication)
+	If *this
+		ProcedureReturn *this\tooltip
 	EndIf
 EndProcedure
 
@@ -126,6 +133,12 @@ EndProcedure
 Procedure _MyTable_Application_SetDirty(*this.strMyTableApplication,value.b)
 	If *this
 		*this\dirty=value
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Application_SetTooltip(*this.strMyTableApplication,value.s)
+	If *this
+		*this\tooltip=value
 	EndIf
 EndProcedure
 

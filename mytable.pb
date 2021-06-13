@@ -35,7 +35,8 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(gruppe,Flags)
 		_MyTableDataSectionSetterGetter(gruppe,Data)
 		_MyTableDataSectionSetterGetter(gruppe,Dirty)
-		_MyTableDataSectionSetterGetter(gruppe,Selected)
+		_MyTableDataSectionSetterGetter(gruppe,Selected)		
+		_MyTableDataSectionSetterGetter(gruppe,Tooltip)
 		
 		_MyTableDataSectionMethode(gruppe,Autosize)
 	EndMacro
@@ -113,9 +114,21 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,HeaderHeight)
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
 		_MyTableDataSectionSetterGetter(Table,FixedCols)
+		
+		_MyTableDataSectionSetterGetter(Table,DefaultImageSortAsc)
+		_MyTableDataSectionSetterGetter(Table,DefaultImageSortDesc)
+		_MyTableDataSectionSetterGetter(Table,DefaultImagePlus)
+		_MyTableDataSectionSetterGetter(Table,DefaultImageMinus)
+		_MyTableDataSectionSetterGetter(Table,DefaultImageCheckBox)
+		_MyTableDataSectionSetterGetter(Table,DefaultImageCheckBoxChecked)
+		_MyTableDataSectionSetterGetter(Table,DefaultImagePlusArrow)
+		_MyTableDataSectionSetterGetter(Table,DefaultImageMinusArrow)
+		
 		_MyTableDataSectionGetter(Table,SelectedRows)
 		_MyTableDataSectionGetter(Table,SelectedCells)
 		_MyTableDataSectionGetter(Table,SelectedCols)
+		_MyTableDataSectionGetter(Table,CalcHeight)
+		_MyTableDataSectionGetter(Table,CalcWidth)
 		
 		_MyTableDataSectionMethode(Table,AddDirtyRows)
 		_MyTableDataSectionMethode(Table,AddRow)

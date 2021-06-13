@@ -162,12 +162,24 @@ Procedure.s _MyTable_Col_GetText(*this.strMyTableCol)
 	EndIf
 EndProcedure
 
+Procedure.s _MyTable_Col_GetTooltip(*this.strMyTableCol)
+	If *this
+		ProcedureReturn *this\tooltip
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Col_SetText(*this.strMyTableCol,value.s)
 	If *this
 		*this\text=value
 		*this\dirty=#True
 		*this\table\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_SetTooltip(*this.strMyTableCol,value.s)
+	If *this
+		*this\tooltip=value		
 	EndIf
 EndProcedure
 
@@ -396,6 +408,7 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 			EndIf
 		EndIf
 		_callcountStart(AutosizeCol)
+		
 		If (*this\textheight=0 And *this\text<>"") Or *this\dirty
 			Protected nfont=_MyTable_GetFont(*this)
 			If IsFont(nfont)

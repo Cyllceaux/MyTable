@@ -55,12 +55,24 @@ Procedure.s _MyTable_Cell_GetText(*this.strMyTableCell)
 	EndIf
 EndProcedure
 
+Procedure.s _MyTable_Cell_GetTooltip(*this.strMyTableCell)
+	If *this
+		ProcedureReturn *this\tooltip
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Cell_SetText(*this.strMyTableCell,value.s)
 	If *this
 		*this\text=value
 		*this\table\dirty=#True
 		*this\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_SetTooltip(*this.strMyTableCell,value.s)
+	If *this
+		*this\tooltip=value				
 	EndIf
 EndProcedure
 

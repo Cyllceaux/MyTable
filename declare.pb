@@ -37,7 +37,7 @@ Declare _MyTableInitCell(*application.strMyTableApplication,
 Declare.s _MyTableCleanName(name.s)
 Declare _MyTableTextHeight(text.s)
 Declare _MyTableTextWidth(text.s)
-Declare _MyTableDrawText(x,y,text.s,color.q)
+Declare _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
 
 ;- Application
@@ -178,6 +178,43 @@ CompilerElse
 	Macro _callcountStart(sname):EndMacro
 	Macro _callcountEnde(sname):EndMacro
 CompilerEndIf
+
+Macro _MyTableSimpleGetter(gruppe,name,typ)
+	Procedure.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
+		If *this
+			ProcedureReturn *this\name
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableSimpleSetter(gruppe,name,typ)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
+		If *this
+			*this\name=value
+			*this\dirty=#True
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableSimpleSetterRedraw(gruppe,name,typ)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
+		If *this
+			*this\name=value
+			*this\dirty=#True			
+			_MyTable_Table_Redraw(*this)						
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableSimpleSetterGetter(gruppe,name,typ)
+	_MyTableSimpleGetter(gruppe,name,typ)
+	_MyTableSimpleSetter(gruppe,name,typ)
+EndMacro
+
+Macro _MyTableSimpleSetterGetterRedraw(gruppe,name,typ)
+	_MyTableSimpleGetter(gruppe,name,typ)
+	_MyTableSimpleSetterRedraw(gruppe,name,typ)
+EndMacro
 
 ;- Includes
 XIncludeFile "mytablestyle.pb"

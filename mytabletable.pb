@@ -19,62 +19,62 @@ Global MyTableH12=DesktopScaledY(12)
 Global MyTableH14=DesktopScaledY(14)
 Global MyTableH16=DesktopScaledY(16)
 
-Global MyTableDefaultImageSortAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImageSortDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global MyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageSortAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageSortDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
 
 
-StartDrawing(ImageOutput(MyTableDefaultImageSortAsc))
+StartDrawing(ImageOutput(tMyTableDefaultImageSortAsc))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH2,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH2,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImageSortDesc))
+StartDrawing(ImageOutput(tMyTableDefaultImageSortDesc))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH14,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH14,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImagePlus))
+StartDrawing(ImageOutput(tMyTableDefaultImagePlus))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
 LineXY(MyTableW7,MyTableH4,MyTableW7,MyTableH10,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImageMinus))
+StartDrawing(ImageOutput(tMyTableDefaultImageMinus))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImageCheckBox))
+StartDrawing(ImageOutput(tMyTableDefaultImageCheckBox))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImageCheckBoxChecked))
+StartDrawing(ImageOutput(tMyTableDefaultImageCheckBoxChecked))
 DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
 Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH4,MyTableW12,MyTableH12,RGBA(0,0,0,255))
 LineXY(MyTableW4,MyTableH12,MyTableW12,MyTableH4,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImagePlusArrow))
+StartDrawing(ImageOutput(tMyTableDefaultImagePlusArrow))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW8,MyTableH4,MyTableW12,MyTableH8,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH12,MyTableW12,MyTableH8,RGBA(0,0,0,255))
 StopDrawing()
 
-StartDrawing(ImageOutput(MyTableDefaultImageMinusArrow))
+StartDrawing(ImageOutput(tMyTableDefaultImageMinusArrow))
 DrawingMode(#PB_2DDrawing_AlphaBlend)
 LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(0,0,0,255))
@@ -95,6 +95,25 @@ EndProcedure
 Procedure _MyTable_Table_GetFlags(*this.strMyTableTable)
 	If *this
 		ProcedureReturn *this\flags
+	EndIf
+EndProcedure
+
+
+Procedure _MyTable_Table_GetCalcHeight(*this.strMyTableTable)
+	If *this
+		Protected result=_MyTable_Table_Predraw(*this,#True)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_GetCalcWidth(*this.strMyTableTable)
+	If *this
+		Protected result=0
+		_MyTable_Table_Predraw(*this,#True)
+		ForEach *this\cols()
+			result+*this\cols()\calcwidth			
+		Next
+		ProcedureReturn DesktopScaledX(result)
 	EndIf
 EndProcedure
 
@@ -121,9 +140,21 @@ Procedure.s _MyTable_Table_GetTitle(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
+Procedure.s _MyTable_Table_GetTooltip(*this.strMyTableTable)
+	If *this
+		ProcedureReturn *this\tooltip
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Table_SetTitle(*this.strMyTableTable,value.s)
 	If *this
 		*this\title=value
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_SetTooltip(*this.strMyTableTable,value.s)
+	If *this
+		*this\tooltip=value
 	EndIf
 EndProcedure
 
@@ -297,6 +328,7 @@ Procedure.q _MyTable_GetZebraBackColor(*this.strMyTableStyleObject)
 		ProcedureReturn result
 	EndIf
 EndProcedure
+
 
 Procedure.q _MyTable_GetFrontColor(*this.strMyTableStyleObject)
 	If *this
@@ -560,13 +592,18 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			DrawingMode(#PB_2DDrawing_AlphaClip)
 			Select *col\sort
 				Case #MYTABLE_COL_SORT_ASC
-					DrawImage(ImageID(MyTableDefaultImageSortAsc),bx+*col\calcwidth-MyTableW20,0)
+					DrawImage(ImageID(*this\DefaultImageSortAsc),bx+*col\calcwidth-MyTableW20,0)
 				Case #MYTABLE_COL_SORT_DESC
-					DrawImage(ImageID(MyTableDefaultImageSortDesc),bx+*col\calcwidth-MyTableW20,0)
+					DrawImage(ImageID(*this\DefaultImageSortDesc),bx+*col\calcwidth-MyTableW20,0)
 			EndSelect
 			
 			DrawingMode(#PB_2DDrawing_Default)
-			_MyTableDrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col))
+			Protected ta=0
+			If *col\sort
+				ta=MyTableW20
+			EndIf
+			
+			_MyTableDrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col),*col\calcwidth-addx-ta)
 			If border
 				Protected bw=0
 				Protected c=0
@@ -747,9 +784,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 					If *this\rows
 						If ListSize(*this\rows\rows())>0
 							If *this\expanded
-								DrawImage(ImageID(MyTableDefaultImageMinusArrow),bx+addx,by)
+								DrawImage(ImageID(*this\table\DefaultImageMinusArrow),bx+addx,by)
 							Else
-								DrawImage(ImageID(MyTableDefaultImagePlusArrow),bx+addx,by)
+								DrawImage(ImageID(*this\table\DefaultImagePlusArrow),bx+addx,by)
 							EndIf
 						EndIf
 					EndIf
@@ -762,9 +799,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				If idx=1
 					DrawingMode(#PB_2DDrawing_AlphaClip)				
 					If *this\checked
-						DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+						DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
 					Else
-						DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+						DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
 					EndIf				
 					DrawingMode(#PB_2DDrawing_Default)
 					addx+MyTableW20
@@ -844,9 +881,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				If idx>1
 					DrawingMode(#PB_2DDrawing_AlphaClip)
 					If *cell\checked
-						DrawImage(ImageID(MyTableDefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+						DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
 					Else
-						DrawImage(ImageID(MyTableDefaultImageCheckBox),bx+addx,by+MyTableH2)
+						DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
 					EndIf
 					DrawingMode(#PB_2DDrawing_Default)
 					addx+MyTableW20
@@ -857,12 +894,12 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			If *cell\text<>""
 				DrawingMode(#PB_2DDrawing_Transparent)	
 				If fixed
-					_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell))
+					_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),*cell\col\calcwidth-addx)
 				Else
 					If selected
-						_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell))
+						_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell),*cell\col\calcwidth-addx)
 					Else
-						_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell))
+						_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell),*cell\col\calcwidth-addx)
 					EndIf
 				EndIf
 			EndIf
@@ -1063,6 +1100,7 @@ Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow)
 EndProcedure
 
 Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
+	Protected result.i=0
 	If *this
 		If ((*this\redraw And *this\dirty) Or force) And Not *this\drawing
 			_callcountStart(Predraw)
@@ -1071,6 +1109,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			Protected w=0
 			Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
 			Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
+			
 			If header
 				h+*this\headerheight
 			EndIf
@@ -1087,6 +1126,8 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 					EndIf
 				EndIf
 			Next
+			
+			result=DesktopUnscaledY(h)
 			
 			Protected cw=0
 			Protected ch=0
@@ -1195,6 +1236,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			_callcountEnde(Predraw)
 		EndIf
 	EndIf
+	ProcedureReturn result
 EndProcedure
 
 Procedure.b _MyTable_Table_GetRedraw(*this.strMyTableTable)
@@ -1573,6 +1615,9 @@ Procedure _MyTable_Table_AutosizeRows(*this.strMyTableTable)
 			*this\drawing=#False
 		EndIf
 		_callcountEnde(AutosizeRows)
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
@@ -1594,6 +1639,7 @@ Procedure _MyTable_Table_AutosizeCols(*this.strMyTableTable)
 		
 		Protected lastfont.i=0
 		
+		
 		ForEach *this\cols()
 			_MyTable_Col_Autosize(*this\cols())
 		Next
@@ -1603,6 +1649,9 @@ Procedure _MyTable_Table_AutosizeCols(*this.strMyTableTable)
 			*this\drawing=#False
 		EndIf
 		_callcountEnde(AutosizeCols)
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
@@ -1653,6 +1702,9 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable)
 			*this\drawing=#False
 		EndIf
 		_callcountEnde(AutosizeHeader)
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
 
@@ -1672,11 +1724,24 @@ Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 		EndIf
 		_MyTable_Table_AutosizeHeader(*this)
 		_MyTable_Table_AutosizeCols(*this)
-		_MyTable_Table_AutosizeRows(*this)
+		_MyTable_Table_AutosizeRows(*this)		
 		If thisdrawing
 			StopDrawing()
 			*this\drawing=#False
 		EndIf
 		_callcountEnde(AutosizeRows)
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+		
 	EndIf
 EndProcedure
+
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortAsc,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortDesc,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlus,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinus,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBox,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBoxChecked,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlusArrow,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)

@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1149
+	#MYTABLE_VERSION = 1288
 	#MYTABLE_VERSION_DATE = 20210613
 	
 	Enumeration _mytable_type
@@ -85,6 +85,7 @@
 		SetData(*value):GetData()
 		SetDirty(value.b):GetDirty.b()
 		SetSelected(value.b):GetSelected.b()
+		SetTooltip(value.s):GetTooltip.s()
 		
 		Autosize()
 	EndInterface
@@ -166,6 +167,7 @@
 		#MYTABLE_TABLE_FLAGS_MULTISELECT
 		#MYTABLE_TABLE_FLAGS_BORDER
 		#MYTABLE_TABLE_FLAGS_NO_HEADER
+		#MYTABLE_TABLE_FLAGS_NO_REDRAW
 		#MYTABLE_TABLE_FLAGS_CALLBACK
 		#MYTABLE_TABLE_FLAGS_SORTABLE
 		#MYTABLE_TABLE_FLAGS_RESIZABLE
@@ -199,9 +201,20 @@
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
 		SetFixedCols(value.i):GetFixedCols.i()
 		
+		SetDefaultImageSortAsc(value.i):GeDefaultImageSortAsc.i()
+		SetDefaultImageSortDesc(value.i):GeDefaultImageSortDesc.i()
+		SetDefaultImagePlus(value.i):GeDefaultImagePlus.i()
+		SetDefaultImageMinus(value.i):GeDefaultImageMinus.i()
+		SetDefaultImageCheckBox(value.i):GeDefaultImageCheckBox.i()
+		SetDefaultImageCheckBoxChecked(value.i):GeDefaultImageCheckBoxChecked.i()
+		SetDefaultImagePlusArrow(value.i):GeDefaultImagePlusArrow.i()
+		SetDefaultImageMinusArrow(value.i):GeDefaultImageMinusArrow.i()
+		
 		GetSelectedRows(List rows.MyTableRow())
 		GetSelectedCells(List cells.MyTableCell())
 		GetSelectedCols(List cols.MyTableCol())		
+		GetCalcHeight()
+		GetCalcWidth()
 		
 		AddDirtyRows(rows.i)
 		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
@@ -225,6 +238,7 @@
 		AutosizeRows()
 		AutosizeCols()
 		AutosizeHeader()
+		
 		
 		RegisterEventCellChangedChecked(callback.MyTableProtoEventCellChangedChecked)
 		RegisterEventCellChangedUnChecked(callback.MyTableProtoEventCellChangedUnChecked)

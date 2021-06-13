@@ -111,6 +111,12 @@ Procedure _MyTable_Row_GetData(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
+Procedure.s _MyTable_Row_GetTooltip(*this.strMyTableRow)
+	If *this
+		ProcedureReturn *this\tooltip
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Row_GetPosition(*this.strMyTableRow)
 	If *this
 		Protected result.i=-1
@@ -241,6 +247,12 @@ Procedure _MyTable_Row_SetSelected(*this.strMyTableRow,value.b)
 		*this\table\dirty=#True
 		*this\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_SetTooltip(*this.strMyTableRow,value.s)
+	If *this
+		*this\tooltip=value
 	EndIf
 EndProcedure
 
