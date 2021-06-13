@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1442
+	#MYTABLE_VERSION = 1555
 	#MYTABLE_VERSION_DATE = 20210613
 	
 	Enumeration _mytable_type
@@ -14,6 +14,7 @@
 	EndEnumeration
 	
 	Interface MyTableStyleObject
+		GetObject()
 		SetFont(value.i):GetFont()
 		SetBackColor(value.q):GetBackColor.q()
 		SetFrontColor(value.q):GetFrontColor.q()

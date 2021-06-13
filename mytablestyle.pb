@@ -437,8 +437,10 @@ Macro _MyTableStyleSet(name)
 			*row=*this\obj
 			If *row\cells
 				ForEach *row\cells\cells()
-					*row\cells\cells()\style\name=value
-					*row\cells\cells()\dirty=#True
+					If Not *row\cells\cells()\style\name
+						*row\cells\cells()\style\name=value
+						*row\cells\cells()\dirty=#True
+					EndIf
 				Next
 			EndIf
 	EndSelect
@@ -447,9 +449,15 @@ EndMacro
 
 Procedure _MyTable_Style_GetFont(*this.strMyTableStyleObject)
 	If *this
-		Protected result.i=0
+		Protected result.i=0		
 		_MyTableStyleGet(*this\obj,font)
 		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Style_GetObject(*this.strMyTableStyleObject)
+	If *this
+		ProcedureReturn *this\obj
 	EndIf
 EndProcedure
 

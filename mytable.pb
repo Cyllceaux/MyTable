@@ -42,6 +42,7 @@ Module MyTable
 	EndMacro
 	
 	Macro _MyTableDataSectionStyleDefault(gruppe)
+		_MyTableDataSectionGetter(gruppe,Object)
 		_MyTableDataSectionSetterGetter(gruppe,Font)
 		_MyTableDataSectionSetterGetter(gruppe,BackColor)
 		_MyTableDataSectionSetterGetter(gruppe,FrontColor)
