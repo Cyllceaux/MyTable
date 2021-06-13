@@ -68,7 +68,8 @@ Structure strMyTableCell Extends strMyTableObject
 	value.d
 	checked.b
 	*cells.strMyTableCellList
-	image.strMyTableImage
+	imageLeft.strMyTableImage
+	imageRight.strMyTableImage
 	
 	textwidth.i
 	textheight.i

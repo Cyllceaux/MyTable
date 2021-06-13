@@ -210,8 +210,13 @@ Module MyTable
 		_MyTableDataSectionGetter(Cell,Parent)
 		_MyTableDataSectionSetterGetter(Cell,Text)
 		_MyTableDataSectionSetterGetter(Cell,Value)
-		_MyTableDataSectionSetterGetter(Cell,Image)
+		_MyTableDataSectionSetterGetter(Cell,ImageLeft)
+		_MyTableDataSectionSetterGetter(Cell,ImageRight)
 		_MyTableDataSectionSetterGetter(Cell,Checked)
+		_MyTableDataSectionMethode(Cell,AddCell)
+		_MyTableDataSectionMethode(Cell,DeleteCell)
+		_MyTableDataSectionMethode(Cell,GetCell)
+		_MyTableDataSectionMethode(Cell,CountCells)
 		_MyTableDataSectionMethode(Cell,ScrollTo)
 		
 	EndDataSection	

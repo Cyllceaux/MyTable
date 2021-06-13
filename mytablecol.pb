@@ -304,16 +304,27 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 			*cell\textheight=_MyTableTextHeight(*cell\text)
 		EndIf
 		tresult+*cell\textwidth+MyTableW8
-		If *cell\image\orig					
-			If Not *cell\image\sized
-				*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
-				If *row\image\resize
-					ResizeImage(*cell\image\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
+		If *cell\imageLeft\orig					
+			If Not *cell\imageLeft\sized
+				*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
+				If *cell\imageLeft\resize
+					ResizeImage(*cell\imageLeft\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
 				Else
-					ResizeImage(*cell\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+					ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
 				EndIf
 			EndIf
-			tresult+ImageWidth(*cell\image\sized)+MyTableW8
+			tresult+ImageWidth(*cell\imageLeft\sized)+MyTableW8
+		EndIf
+		If *cell\imageRight\orig					
+			If Not *cell\imageRight\sized
+				*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
+				If *cell\imageRight\resize
+					ResizeImage(*cell\imageRight\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
+				Else
+					ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+				EndIf
+			EndIf
+			tresult+ImageWidth(*cell\imageRight\sized)+MyTableW8
 		EndIf
 	EndIf
 	If *row\rows

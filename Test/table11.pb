@@ -25,9 +25,9 @@ UseModule MyTable
 		*cell2\SetText("Cell "+*row\GetPosition()+"_2")
 		*cell3\SetText("Cell "+*row\GetPosition()+"_3")
 		
-		*cell1\SetImage(images(Random(9,0)))
-		*cell2\SetImage(images(Random(9,0)))
-		*cell3\SetImage(images(Random(9,0)))
+		*cell1\SetImageLeft(images(Random(9,0)))
+		*cell2\SetImageLeft(images(Random(9,0)))
+		*cell3\SetImageLeft(images(Random(9,0)))
 	EndProcedure
 	
 	*table\AddDirtyRows(1000000)

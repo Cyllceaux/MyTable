@@ -640,6 +640,87 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
+Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,lastfont,font,fixed,selected,checkboxes,idx,*cell.strMyTableCell)
+	Protected result=*cell\table\calcdefaultrowheight
+	Protected valign=_MyTable_GetVAlign(*cell)
+	Protected halign=_MyTable_GetHAlign(*cell)
+	Protected *col.strMyTableCol=*cell\col
+	Protected *this.strMyTableRow=*cell\row
+	Protected tw=0
+	
+	If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+		
+		If *cell\imageRight\resize					
+			tw=*this\calcheight+MyTableW4
+		Else
+			tw=*this\table\calcdefaultrowheight+MyTableW4
+		EndIf
+		
+	EndIf
+	
+	If halign=#MYTABLE_STYLE_HALIGN_CENTER
+		If checkboxes And idx>1
+			addx+(*col\calcwidth-addx - MyTableW20-tw)/2-*cell\textwidth/2
+		Else
+			addx+(*col\calcwidth-addx-tw)/2-*cell\textwidth/2
+		EndIf
+	ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
+		addx+*col\calcwidth - *cell\textwidth - MyTableW8 - addx-tw
+		If checkboxes And idx>1
+			addx-MyTableW20
+		EndIf
+	Else
+		addx+DesktopScaledX(2)
+	EndIf
+	
+	If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
+		addy+*this\calcheight/2 - *cell\textheight/2
+	ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
+		addy+*this\calcheight-*cell\textheight-MyTableH1
+	Else
+		addy+DesktopScaledY(1)
+	EndIf
+	
+	If *cell\text<>""
+		Protected tfont=_MyTable_GetFont(*cell)
+		If tfont
+			If IsFont(tfont)
+				tfont=FontID(tfont)
+			EndIf
+			If lastfont<>tfont
+				DrawingFont(tfont)
+				lastfont=tfont
+			EndIf
+		Else
+			If lastfont<>font
+				If IsFont(font)
+					font=FontID(font)
+				EndIf
+				DrawingFont(font)
+				lastfont=font
+			EndIf
+		EndIf
+		DrawingMode(#PB_2DDrawing_Transparent)	
+		If fixed
+			_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),*cell\col\calcwidth-addx-tw)
+		Else
+			If selected
+				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell),*cell\col\calcwidth-addx-tw)
+			Else
+				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell),*cell\col\calcwidth-addx-tw)
+			EndIf
+		EndIf		
+		result=*cell\textheight
+	EndIf
+	
+	If *cell\cells
+		ForEach *cell\cells\cells()
+			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,lastfont,font,fixed,selected,checkboxes,idx,*cell\cells\cells())
+		Next
+	EndIf
+	ProcedureReturn result
+EndProcedure
+
 Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,height.i,scrollx.i,scrolly.i,zebra.b,fixed.b)	
 	Protected lastfont.i=font
 	Protected bx=-scrollx
@@ -682,22 +763,6 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		
 		Protected tborder=_MyTable_GetBorder(*cell)
 		
-		Protected tfont=_MyTable_GetFont(*cell)
-		If tfont
-			If IsFont(tfont)
-				tfont=FontID(tfont)
-			EndIf
-			If lastfont<>tfont
-				DrawingFont(tfont)
-				lastfont=tfont
-			EndIf
-		Else
-			If lastfont<>font
-				DrawingFont(font)
-				lastfont=font
-			EndIf
-		EndIf
-		
 		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
 		selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
 		selected=Bool(selected Or *this\table\selectedcells(Str(*cell)))
@@ -718,6 +783,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		Protected *col.strMyTableCol=*cell\col
 		If *col\calcwidth>0
 			
+			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
+			
 			If selected
 				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedColor(*cell))
 			Else
@@ -735,8 +802,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			
 			Protected addx=DesktopScaledX(2)
 			Protected addy=0
-			Protected valign=_MyTable_GetVAlign(*cell)
-			Protected halign=_MyTable_GetHAlign(*cell)
+			
 			
 			If hierarchical
 				If idx=1
@@ -795,47 +861,36 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				EndIf
 			EndIf
 			
-			If *cell\image\orig And IsImage(*cell\image\orig)
+			If *cell\imageLeft\orig And IsImage(*cell\imageLeft\orig)
 				addx+DesktopScaledX(2)
-				If Not *cell\image\sized
-					*cell\image\sized=CopyImage(*cell\image\orig,#PB_Any)
-					If *cell\image\resize
-						ResizeImage(*cell\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+				If Not *cell\imageLeft\sized
+					*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
+					If *cell\imageLeft\resize
+						ResizeImage(*cell\imageLeft\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
 					Else
-						ResizeImage(*cell\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+						ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
 					EndIf
 				EndIf
 				DrawingMode(#PB_2DDrawing_AlphaClip)
-				DrawImage(ImageID(*cell\image\sized),bx+addx,by+addy+MyTableW4)
+				DrawImage(ImageID(*cell\imageLeft\sized),bx+addx,by+addy+MyTableW4)
 				DrawingMode(#PB_2DDrawing_Default)
-				If *cell\image\resize
+				If *cell\imageLeft\resize
 					addx+*this\calcheight
 				Else
 					addx+*this\table\calcdefaultrowheight
 				EndIf
 			EndIf
 			
-			If halign=#MYTABLE_STYLE_HALIGN_CENTER
-				If checkboxes And idx>1
-					addx+(*col\calcwidth-addx - MyTableW20)/2-*cell\textwidth/2
-				Else
-					addx+(*col\calcwidth-addx)/2-*cell\textwidth/2
-				EndIf
-			ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
-				addx+*col\calcwidth - *cell\textwidth - MyTableW8 -addx
-				If checkboxes And idx>1
-					addx-MyTableW20
-				EndIf
-			Else
-				addx+DesktopScaledX(2)
-			EndIf
 			
-			If valign=#MYTABLE_STYLE_VALIGN_MIDDLE
-				addy+*this\calcheight/2 - *cell\textheight/2
-			ElseIf valign=#MYTABLE_STYLE_VALIGN_BOTTOM
-				addy+*this\calcheight-*cell\textheight-MyTableH1
-			Else
-				addy+DesktopScaledY(1)
+			If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)				
+				If Not *cell\imageRight\sized
+					*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
+					If *cell\imageRight\resize
+						ResizeImage(*cell\imageRight\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+					Else
+						ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+					EndIf
+				EndIf
 			EndIf
 			
 			If checkboxes
@@ -851,19 +906,20 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 				EndIf			
 			EndIf
 			
-			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
-			If *cell\text<>""
-				DrawingMode(#PB_2DDrawing_Transparent)	
-				If fixed
-					_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),*cell\col\calcwidth-addx)
+			
+			_MyTable_Table_Draw_CellText(bx,by,addx,addy,lastfont,font,fixed,selected,checkboxes,idx,*cell)
+			
+			
+			If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+				DrawingMode(#PB_2DDrawing_AlphaClip)				
+				If *cell\imageRight\resize					
+					DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\calcheight,by+addy+MyTableW4)
 				Else
-					If selected
-						_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell),*cell\col\calcwidth-addx)
-					Else
-						_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell),*cell\col\calcwidth-addx)
-					EndIf
+					DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
 				EndIf
+				DrawingMode(#PB_2DDrawing_Default)
 			EndIf
+			
 			If border
 				Protected bw=0
 				Protected c=0

@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1361
+	#MYTABLE_VERSION = 1442
 	#MYTABLE_VERSION_DATE = 20210613
 	
 	Enumeration _mytable_type
@@ -102,9 +102,14 @@
 		GetParent()
 		SetText(value.s):GetText.s()
 		SetValue(value.d):GetValue.d()
-		SetImage(value.i):GetImage.i()
+		SetImageLeft(value.i):GetImageLeft.i()
+		SetImageRight(value.i):GetImageRight.i()
 		SetChecked(value.b):GetChecked.b()
 		
+		AddCell(text.s,image.i=0,flags.i=0)
+		DeleteCell(row.i)
+		GetCell(row.i)
+		CountCells()
 		ScrollTo(setSelect.b=#False,redraw.b=#True)
 	EndInterface
 	

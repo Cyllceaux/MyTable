@@ -419,10 +419,14 @@ Macro _MyTableStyleSet(name)
 	Select *this\obj\type
 		Case #MYTABLE_TYPE_CELL
 			*cell=*this\obj
-			If *cell\image\sized
-				FreeImage(*cell\image\sized)
+			If *cell\imageLeft\sized
+				FreeImage(*cell\imageLeft\sized)
 			EndIf
-			*cell\image\sized=0
+			*cell\imageLeft\sized=0
+			If *cell\imageRight\sized
+				FreeImage(*cell\imageRight\sized)
+			EndIf
+			*cell\imageRight\sized=0
 		Case #MYTABLE_TYPE_COL
 			*col=*this\obj
 			If *col\image\sized

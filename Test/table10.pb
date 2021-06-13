@@ -32,7 +32,12 @@ UseModule MyTable
 		For g=0 To (#Cols-1)
 			*cell=*row\GetCell(g)
 			*cell\SetText("Text "+i+"_"+g)
-			*cell\SetImage(images(Random(9,0)))	
+			If Random(1,0)
+				*cell\SetImageLeft(images(Random(9,0)))	
+			EndIf
+			If Random(1,0)
+				*cell\SetImageRight(images(Random(9,0)))	
+			EndIf
 		Next
 	Next
 	

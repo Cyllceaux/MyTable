@@ -30,7 +30,7 @@ UseModule MyTable
 		For g=0 To (#Cols-1)
 			*cell=*row\GetCell(g)			
 			If Random(1,0)
-				*cell\SetImage(images(Random(9,0)))	
+				*cell\SetImageLeft(images(Random(9,0)))	
 			EndIf
 			If Random(1,0)
 				*cell\SetText("Text "+i+"_"+g)

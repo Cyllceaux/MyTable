@@ -513,9 +513,15 @@ Procedure _MyTableEvtCanvasMouseMove()
 				EndIf
 				If *this\resizeRow\cells
 					ForEach *this\resizeRow\cells\cells()
-						If *this\resizeRow\cells\cells()\image\sized And *this\resizeRow\cells\cells()\image\resize
-							FreeImage(*this\resizeRow\cells\cells()\image\sized)
-							*this\resizeRow\cells\cells()\image\sized=0
+						If *this\resizeRow\cells\cells()\imageLeft\sized And *this\resizeRow\cells\cells()\imageLeft\resize
+							FreeImage(*this\resizeRow\cells\cells()\imageLeft\sized)
+							*this\resizeRow\cells\cells()\imageLeft\sized=0
+						EndIf
+					Next
+					ForEach *this\resizeRow\cells\cells()
+						If *this\resizeRow\cells\cells()\imageRight\sized And *this\resizeRow\cells\cells()\imageRight\resize
+							FreeImage(*this\resizeRow\cells\cells()\imageRight\sized)
+							*this\resizeRow\cells\cells()\imageRight\sized=0
 						EndIf
 					Next
 				EndIf
@@ -1019,10 +1025,10 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 	If text<>"" And maxlen>0 And maxlen>TextWidth("...")
 		Protected c=CountString(text,#CRLF$)
 		Protected tw=0
-		Protected tt.s=""
+		Protected tt.s=""		
+		Protected h=0
 		If c>0
 			Protected idx=0
-			Protected h=0
 			For idx=0 To c
 				tt=StringField(text,idx+1,#CRLF$)
 				tw=TextWidth(tt)
@@ -1047,6 +1053,8 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 				tt+"..."
 			EndIf			
 			DrawText(x,y,tt,color)
+			h+TextHeight(tt)
 		EndIf
-	EndIf
+		ProcedureReturn h
+	EndIf	
 EndProcedure
