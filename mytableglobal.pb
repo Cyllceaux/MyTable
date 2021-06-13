@@ -977,6 +977,44 @@ Procedure  _MyTableTextWidth(text.s)
 	EndIf
 EndProcedure
 
+Procedure _MyTableDrawTextCompleteCenter(text.s,color.q,maxlen.i)
+	Protected tt.s=text
+	Protected tw=_MyTableTextWidth(text)
+	Protected c=CountString(text,#CRLF$)
+	Protected bx=0
+	Protected by=0
+	Protected idx
+	If c>0
+		For idx=0 To c
+			tt=StringField(text,idx+1,#CRLF$)
+			tw=TextWidth(tt)
+			bx=maxlen/2-tw/2
+			DrawText(bx,by,tt,color)
+			by+TextHeight(tt)
+		Next
+	Else
+		If tw>maxlen
+			Protected result.s=""
+			c=CountString(tt," ")
+			For idx=0 To c
+				Protected ts.s=StringField(tt,idx+1," ")
+				If _MyTableTextWidth(result+" "+ts)>maxlen
+					result+#CRLF$
+				EndIf
+				If result=""
+					result=ts
+				Else
+					result=Trim(result+" "+ts)
+				EndIf
+			Next
+			_MyTableDrawTextCompleteCenter(result,color,maxlen)
+		Else
+			bx=maxlen/2-tw/2
+			DrawText(bx,by,tt,color)
+		EndIf
+	EndIf
+EndProcedure
+
 Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 	If text<>"" And maxlen>0 And maxlen>TextWidth("...")
 		Protected c=CountString(text,#CRLF$)

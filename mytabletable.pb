@@ -86,6 +86,7 @@ _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetter(Table,Title,s)
 _MyTableSimpleSetterGetterRedraw(Table,Dirty,b)
 _MyTableSimpleSetterGetterRedraw(Table,Flags,i)
+_MyTableSimpleSetterGetterRedraw(Table,EmptyText,s)
 _MyTableSimpleSetterGetterPredraw(Table,FixedCols,i)
 _MyTableSimpleGetter(Table,Type,i)
 _MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortAsc,i)
@@ -957,7 +958,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				StartDrawing(CanvasOutput(*this\canvas))
 			EndIf
 			*this\drawing=#True
-			Protected font.i=*this\style\font
+			Protected font.i=_MyTable_GetFont(*this)
 			Protected backcolor.q=_MyTable_GetBackColor(*this)
 			Protected frontcolor.q=_MyTable_GetFrontColor(*this)
 			
@@ -976,22 +977,14 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			scrollx=DesktopScaledX(scrollx)
 			scrolly=DesktopScaledY(scrolly)
 			
-			If Not font 
-				If *this\application
-					font=*this\application\style\font
-					If Not font
-						font=GetGadgetFont(#PB_Default)
-						*this\application\style\font=font
-					EndIf
-				Else
-					font=GetGadgetFont(#PB_Default)
-					*this\style\font=font
-				EndIf
-			EndIf
 			
-			DrawingFont(font)
+			If IsFont(font)
+				font=FontID(font)
+			EndIf
 			BackColor(backcolor)
 			FrontColor(frontcolor)
+			DrawingFont(font)
+			
 			If backcolor<>frontcolor
 				DrawingMode(#PB_2DDrawing_Gradient)
 				LinearGradient(0,0,width,height)
@@ -1002,23 +995,33 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			If header
 				by+*this\calcheaderheight
 			EndIf
-			Protected c=ListSize(*this\cols())
-			ForEach *this\expRows()
-				Protected *row.strMyTableRow=*this\expRows()
-				
-				If by+*row\calcheight>0
-					_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#False)
-					If *this\fixedcols
-						_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#True)
+			If ListSize(*this\expRows())>0
+				Protected c=ListSize(*this\cols())
+				ForEach *this\expRows()
+					Protected *row.strMyTableRow=*this\expRows()
+					
+					If by+*row\calcheight>0
+						DrawingFont(font)
+						_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#False)
+						If *this\fixedcols
+							_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#True)
+						EndIf
 					EndIf
+					by+*row\calcheight
+					
+					
+					If by>height
+						Break
+					EndIf
+				Next
+			Else
+				DrawingMode(#PB_2DDrawing_Transparent)
+				If IsFont(font)
+					font=FontID(font)
 				EndIf
-				by+*row\calcheight
-				
-				
-				If by>height
-					Break
-				EndIf
-			Next
+				DrawingFont(font)
+				_MyTableDrawTextCompleteCenter(*this\emptytext,_MyTable_GetForeColor(*this),width)
+			EndIf
 			
 			If header				
 				_MyTable_Table_Draw_Header(*this,font,width,height,scrollx,scrolly,#False)

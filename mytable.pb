@@ -114,6 +114,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,HeaderHeight)
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
 		_MyTableDataSectionSetterGetter(Table,FixedCols)
+		_MyTableDataSectionSetterGetter(Table,EmptyText)
 		
 		_MyTableDataSectionSetterGetter(Table,DefaultImageSortAsc)
 		_MyTableDataSectionSetterGetter(Table,DefaultImageSortDesc)

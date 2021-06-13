@@ -122,6 +122,8 @@ Structure strMyTableTable Extends strMyTableObject
 	redraw.b
 	recalc.b
 	
+	emptytext.s
+	
 	drawing.b
 	
 	window.i

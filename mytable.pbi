@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1300
+	#MYTABLE_VERSION = 1361
 	#MYTABLE_VERSION_DATE = 20210613
 	
 	Enumeration _mytable_type
@@ -200,6 +200,7 @@
 		SetHeaderHeight(value.i):GetHeaderHeight.i()
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
 		SetFixedCols(value.i):GetFixedCols.i()
+		SetEmptyText(value.s):GetEmptyText.s()
 		
 		SetDefaultImageSortAsc(value.i):GeDefaultImageSortAsc.i()
 		SetDefaultImageSortDesc(value.i):GeDefaultImageSortDesc.i()
