@@ -1547,9 +1547,68 @@ Procedure _MyTable_Table_ScrollToCellPos(*this.strMyTableTable,row.i,col.i,setSe
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
+
+
+Procedure _MyTable_Table_AutosizeRows(*this.strMyTableTable)
 	If *this
-		_callcountStart(AutosizeTable)
+		_callcountStart(AutosizeRows)
+		Protected thisdrawing.b=#False
+		If Not *this\drawing
+			If IsImage(*this\canvas)
+				StartDrawing(ImageOutput(*this\canvas))
+			EndIf
+			If IsGadget(*this\canvas)
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
+			*this\drawing=#True
+			thisdrawing=#True
+		EndIf
+		
+		ForEach *this\rows()
+			_MyTable_Row_Autosize(*this\rows())
+		Next
+		
+		If thisdrawing
+			StopDrawing()
+			*this\drawing=#False
+		EndIf
+		_callcountEnde(AutosizeRows)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_AutosizeCols(*this.strMyTableTable)
+	If *this
+		_callcountStart(AutosizeCols)
+		Protected thisdrawing.b=#False
+		If Not *this\drawing
+			If IsImage(*this\canvas)
+				StartDrawing(ImageOutput(*this\canvas))
+			EndIf
+			If IsGadget(*this\canvas)
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
+			*this\drawing=#True
+			thisdrawing=#True
+		EndIf
+		
+		
+		Protected lastfont.i=0
+		
+		ForEach *this\cols()
+			_MyTable_Col_Autosize(*this\cols())
+		Next
+		
+		If thisdrawing
+			StopDrawing()
+			*this\drawing=#False
+		EndIf
+		_callcountEnde(AutosizeCols)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable)
+	If *this
+		_callcountStart(AutosizeHeader)
 		Protected thisdrawing.b=#False
 		If Not *this\drawing
 			If IsImage(*this\canvas)
@@ -1588,18 +1647,36 @@ Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 		EndIf
 		*this\headerheight=DesktopUnscaledY(*this\calcheaderheight)
 		
-		ForEach *this\cols()
-			_MyTable_Col_Autosize(*this\cols())
-		Next
-		
-		ForEach *this\rows()
-			_MyTable_Row_Autosize(*this\rows())
-		Next
 		
 		If thisdrawing
 			StopDrawing()
 			*this\drawing=#False
 		EndIf
-		_callcountEnde(AutosizeTable)
+		_callcountEnde(AutosizeHeader)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
+	If *this
+		_callcountStart(AutosizeTable)
+		Protected thisdrawing.b=#False
+		If Not *this\drawing
+			If IsImage(*this\canvas)
+				StartDrawing(ImageOutput(*this\canvas))
+			EndIf
+			If IsGadget(*this\canvas)
+				StartDrawing(CanvasOutput(*this\canvas))
+			EndIf
+			*this\drawing=#True
+			thisdrawing=#True
+		EndIf
+		_MyTable_Table_AutosizeHeader(*this)
+		_MyTable_Table_AutosizeCols(*this)
+		_MyTable_Table_AutosizeRows(*this)
+		If thisdrawing
+			StopDrawing()
+			*this\drawing=#False
+		EndIf
+		_callcountEnde(AutosizeRows)
 	EndIf
 EndProcedure

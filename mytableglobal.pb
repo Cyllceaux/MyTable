@@ -532,6 +532,7 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 					*this\eventRowChangedUnChecked(*rc\trow)
 				EndIf
 			EndIf
+			*this\md=#False
 			redraw=#True
 		ElseIf *rc\exp
 			*rc\trow\expanded=Bool(Not *rc\trow\expanded)
@@ -547,6 +548,7 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 			EndIf
 			_MyTable_Table_Predraw(*this)
 			redraw=#True
+			*this\md=#False
 		Else
 			
 			If *rc\right And *rc\bottom

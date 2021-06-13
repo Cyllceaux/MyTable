@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1143
+	#MYTABLE_VERSION = 1149
 	#MYTABLE_VERSION_DATE = 20210613
 	
 	Enumeration _mytable_type
@@ -222,6 +222,9 @@
 		Free()
 		ScrollToPos(row.i,setSelect.b=#False)
 		ScrollToCellPos(row.i,col.i,setSelect.b=#False)
+		AutosizeRows()
+		AutosizeCols()
+		AutosizeHeader()
 		
 		RegisterEventCellChangedChecked(callback.MyTableProtoEventCellChangedChecked)
 		RegisterEventCellChangedUnChecked(callback.MyTableProtoEventCellChangedUnChecked)

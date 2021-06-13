@@ -7,7 +7,7 @@ Module MyTable
 	XIncludeFile "mytablestructures.pb"
 	XIncludeFile "declare.pb"
 	XIncludeFile "mytableglobal.pb"
-		
+	
 	
 	
 	
@@ -136,6 +136,9 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,Free)
 		_MyTableDataSectionMethode(Table,ScrollToPos)
 		_MyTableDataSectionMethode(Table,ScrollToCellPos)
+		_MyTableDataSectionMethode(Table,AutosizeRows)
+		_MyTableDataSectionMethode(Table,AutosizeCols)
+		_MyTableDataSectionMethode(Table,AutosizeHeader)
 		
 		_MyTableDataSectionMethode(Table,RegisterEventCellChangedChecked)
 		_MyTableDataSectionMethode(Table,RegisterEventCellChangedUnChecked)

@@ -40,7 +40,8 @@ UseModule MyTable
 			Next
 		Next
 	Next
-
+	
+	*tree\AutosizeRows()
 	*tree\SetRedraw(#True)
 	
 	Procedure RC(*row.MyTableRow)
