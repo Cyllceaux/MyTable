@@ -1,27 +1,9 @@
-﻿
-Procedure _MyTable_Application_GetType(*this.strMyTableApplication)
-	If *this
-		ProcedureReturn *this\type
-	EndIf
-EndProcedure
+﻿_MyTableSimpleSetterGetter(Application,Tooltip,s)
+_MyTableSimpleSetterGetter(Application,Dirty,b)
+_MyTableSimpleSetterGetter(Application,Flags,i)
+_MyTableSimpleSetterGetterPointer(Application,Data)
+_MyTableSimpleGetter(Application,Type,i)
 
-Procedure.s _MyTable_Application_GetTooltip(*this.strMyTableApplication)
-	If *this
-		ProcedureReturn *this\tooltip
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Application_GetFlags(*this.strMyTableApplication)
-	If *this
-		ProcedureReturn *this\flags
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Application_SetFlags(*this.strMyTableApplication,value.i)
-	If *this
-		*this\flags=value
-	EndIf
-EndProcedure
 
 Procedure.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
 	ForEach *this\tables()
@@ -58,17 +40,6 @@ Procedure _MyTable_Application_AddTable(*this.strMyTableApplication,window.i,can
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Application_GetData(*this.strMyTableApplication)
-	If *this
-		ProcedureReturn *this\data
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Application_SetData(*this.strMyTableApplication,*value)
-	If *this
-		*this\data=*value
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Application_Redraw(*this.strMyTableApplication)
 	If *this
@@ -124,23 +95,6 @@ Procedure _MyTable_Application_ClearTables(*this.strMyTableApplication)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Application_GetDirty(*this.strMyTableApplication)
-	If *this
-		ProcedureReturn *this\dirty
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Application_SetDirty(*this.strMyTableApplication,value.b)
-	If *this
-		*this\dirty=value
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Application_SetTooltip(*this.strMyTableApplication,value.s)
-	If *this
-		*this\tooltip=value
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Application_GetStyle(*this.strMyTableApplication)
 	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)

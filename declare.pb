@@ -179,6 +179,15 @@ CompilerElse
 	Macro _callcountEnde(sname):EndMacro
 CompilerEndIf
 
+
+Macro _MyTableSimpleGetterPointer(gruppe,name)
+	Procedure _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
+		If *this
+			ProcedureReturn *this\name
+		EndIf
+	EndProcedure
+EndMacro
+
 Macro _MyTableSimpleGetter(gruppe,name,typ)
 	Procedure.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
 		If *this
@@ -196,11 +205,55 @@ Macro _MyTableSimpleSetter(gruppe,name,typ)
 	EndProcedure
 EndMacro
 
+Macro _MyTableSimpleSetterPointer(gruppe,name)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value)
+		If *this
+			*this\name=*value
+			*this\dirty=#True
+		EndIf
+	EndProcedure
+EndMacro
+
 Macro _MyTableSimpleSetterRedraw(gruppe,name,typ)
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
 			*this\name=value
 			*this\dirty=#True			
+			_MyTable_Table_Redraw(*this)						
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableSimpleSetterSubRedraw(gruppe,name,typ)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
+		If *this
+			*this\name=value
+			*this\dirty=#True			
+			*this\table\dirty=#True
+			_MyTable_Table_Redraw(*this\table)						
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableSimpleSetterSubPredraw(gruppe,name,typ)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
+		If *this
+			*this\name=value
+			*this\dirty=#True			
+			*this\table\dirty=#True
+			_MyTable_Table_Predraw(*this\table)						
+			_MyTable_Table_Redraw(*this\table)						
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableSimpleSetterPredraw(gruppe,name,typ)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
+		If *this
+			*this\name=value
+			*this\dirty=#True			
+			*this\dirty=#True
+			_MyTable_Table_Predraw(*this)						
 			_MyTable_Table_Redraw(*this)						
 		EndIf
 	EndProcedure
@@ -214,6 +267,26 @@ EndMacro
 Macro _MyTableSimpleSetterGetterRedraw(gruppe,name,typ)
 	_MyTableSimpleGetter(gruppe,name,typ)
 	_MyTableSimpleSetterRedraw(gruppe,name,typ)
+EndMacro
+
+Macro _MyTableSimpleSetterGetterPointer(gruppe,name)
+	_MyTableSimpleGetterPointer(gruppe,name)
+	_MyTableSimpleSetterPointer(gruppe,name)
+EndMacro
+
+Macro _MyTableSimpleSetterGetterSubRedraw(gruppe,name,typ)
+	_MyTableSimpleGetter(gruppe,name,typ)
+	_MyTableSimpleSetterSubRedraw(gruppe,name,typ)
+EndMacro
+
+Macro _MyTableSimpleSetterGetterSubPredraw(gruppe,name,typ)
+	_MyTableSimpleGetter(gruppe,name,typ)
+	_MyTableSimpleSetterSubPredraw(gruppe,name,typ)
+EndMacro
+
+Macro _MyTableSimpleSetterGetterPredraw(gruppe,name,typ)
+	_MyTableSimpleGetter(gruppe,name,typ)
+	_MyTableSimpleSetterPredraw(gruppe,name,typ)
 EndMacro
 
 ;- Includes

@@ -80,23 +80,23 @@ LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(0,0,0,255))
 LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(0,0,0,255))
 StopDrawing()
 
-Procedure _MyTable_Table_GetType(*this.strMyTableTable)
-	If *this
-		ProcedureReturn *this\type
-	EndIf
-EndProcedure
 
-Procedure _MyTable_Table_GetFixedCols(*this.strMyTableTable)
-	If *this
-		ProcedureReturn *this\fixedcols
-	EndIf
-EndProcedure
 
-Procedure _MyTable_Table_GetFlags(*this.strMyTableTable)
-	If *this
-		ProcedureReturn *this\flags
-	EndIf
-EndProcedure
+_MyTableSimpleSetterGetter(Table,Tooltip,s)
+_MyTableSimpleSetterGetter(Table,Title,s)
+_MyTableSimpleSetterGetterRedraw(Table,Dirty,b)
+_MyTableSimpleSetterGetterRedraw(Table,Flags,i)
+_MyTableSimpleSetterGetterPredraw(Table,FixedCols,i)
+_MyTableSimpleGetter(Table,Type,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortAsc,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortDesc,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlus,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinus,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBox,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBoxChecked,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlusArrow,i)
+_MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)
+
 
 
 Procedure _MyTable_Table_GetCalcHeight(*this.strMyTableTable)
@@ -117,46 +117,6 @@ Procedure _MyTable_Table_GetCalcWidth(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_SetFlags(*this.strMyTableTable,value.i)
-	If *this
-		*this\flags=value
-		*this\dirty=#True
-		_MyTable_Table_Redraw(*this)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetFixedCols(*this.strMyTableTable,value.i)
-	If *this
-		*this\fixedcols=value
-		*this\dirty=#True
-		_MyTable_Table_Predraw(*this)
-		_MyTable_Table_Redraw(*this)
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Table_GetTitle(*this.strMyTableTable)
-	If *this
-		ProcedureReturn *this\title
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Table_GetTooltip(*this.strMyTableTable)
-	If *this
-		ProcedureReturn *this\tooltip
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetTitle(*this.strMyTableTable,value.s)
-	If *this
-		*this\title=value
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetTooltip(*this.strMyTableTable,value.s)
-	If *this
-		*this\tooltip=value
-	EndIf
-EndProcedure
 
 
 Procedure.s _MyTable_Table_GetName(*this.strMyTableTable)
@@ -1288,11 +1248,6 @@ Procedure _MyTable_Table_SetRecalc(*this.strMyTableTable,value.b)
 	EndIf
 EndProcedure
 
-Procedure.b _MyTable_Table_GetDirty(*this.strMyTableTable)
-	If *this
-		ProcedureReturn *this\dirty
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Table_GetHeaderHeight(*this.strMyTableTable)
 	If *this
@@ -1339,13 +1294,6 @@ Procedure _MyTable_Table_SetDefaultRowHeight(*this.strMyTableTable,value.i)
 				*this\rows()\calcheight=*this\calcdefaultrowheight
 			EndIf
 		Next
-		_MyTable_Table_Redraw(*this)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_SetDirty(*this.strMyTableTable,value.b)
-	If *this
-		*this\dirty=value
 		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure
@@ -1737,11 +1685,3 @@ Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortAsc,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImageSortDesc,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlus,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinus,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBox,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBoxChecked,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlusArrow,i)
-_MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)

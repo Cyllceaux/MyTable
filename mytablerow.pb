@@ -1,27 +1,14 @@
-﻿Procedure _MyTable_Row_GetType(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\type
-	EndIf
-EndProcedure
+﻿_MyTableSimpleSetterGetter(Row,Tooltip,s)
+_MyTableSimpleSetterGetterSubRedraw(Row,Dirty,b)
+_MyTableSimpleSetterGetterSubPredraw(Row,Expanded,b)
+_MyTableSimpleSetterGetterSubRedraw(Row,Checked,b)
+_MyTableSimpleSetterGetterSubPredraw(Row,Flags,i)
+_MyTableSimpleGetterPointer(Row,Table)
+_MyTableSimpleGetterPointer(Row,Parent)
+_MyTableSimpleGetter(Row,Type,i)
+_MyTableSimpleSetterGetter(Row,Level,i)
+_MyTableSimpleSetterGetterPointer(Row,Data)
 
-Procedure _MyTable_Row_GetParent(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\parent
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetLevel(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\level
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_Row_GetTable(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\table
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Row_GetApplication(*this.strMyTableRow)
 	If *this
@@ -29,20 +16,6 @@ Procedure _MyTable_Row_GetApplication(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_GetFlags(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\flags
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetFlags(*this.strMyTableRow,value.i)
-	If *this
-		*this\flags=value
-		*this\table\dirty=#True
-		*this\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",image.i=0,flags.i=0)
 	If *this
@@ -105,17 +78,6 @@ Procedure _MyTable_Row_DeleteRow(*this.strMyTableRow,idx.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_GetData(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\data
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Row_GetTooltip(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\tooltip
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Row_GetPosition(*this.strMyTableRow)
 	If *this
@@ -130,25 +92,6 @@ Procedure _MyTable_Row_GetPosition(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_SetData(*this.strMyTableRow,*value)
-	If *this
-		*this\data=*value
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_GetDirty(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\dirty
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetDirty(*this.strMyTableRow,value.b)
-	If *this
-		*this\dirty=value
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Row_GetRow(*this.strMyTableRow,row.i)
 	If *this
@@ -168,20 +111,6 @@ Procedure _MyTable_Row_GetCell(*this.strMyTableRow,col.i)
 	EndIf
 EndProcedure
 
-Procedure.b _MyTable_Row_GetExpanded(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\expanded
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetExpanded(*this.strMyTableRow,value.b)
-	If *this
-		*this\expanded=value
-		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Row_GetImage(*this.strMyTableRow)
 	If *this
@@ -216,20 +145,6 @@ Procedure _MyTable_Row_GetStyle(*this.strMyTableRow)
 	ProcedureReturn *style
 EndProcedure
 
-Procedure.b _MyTable_Row_GetChecked(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\checked
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetChecked(*this.strMyTableRow,value.b)
-	If *this
-		*this\checked=value
-		*this\table\dirty=#True
-		*this\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
 
 Procedure.b _MyTable_Row_GetSelected(*this.strMyTableRow)
 	If *this
@@ -247,12 +162,6 @@ Procedure _MyTable_Row_SetSelected(*this.strMyTableRow,value.b)
 		*this\table\dirty=#True
 		*this\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Row_SetTooltip(*this.strMyTableRow,value.s)
-	If *this
-		*this\tooltip=value
 	EndIf
 EndProcedure
 

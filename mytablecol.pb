@@ -1,14 +1,11 @@
-﻿Procedure _MyTable_Col_GetType(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\type
-	EndIf
-EndProcedure
+﻿_MyTableSimpleSetterGetter(Col,Tooltip,s)
+_MyTableSimpleSetterGetterSubRedraw(Col,Dirty,b)
+_MyTableSimpleSetterGetterSubPredraw(Col,Flags,i)
+_MyTableSimpleGetterPointer(Col,Table)
+_MyTableSimpleGetter(Col,Type,i)
+_MyTableSimpleSetterGetterPointer(Col,Data)
+_MyTableSimpleSetterGetterSubRedraw(Col,Text,s)
 
-Procedure _MyTable_Col_GetTable(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\table
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Col_GetApplication(*this.strMyTableCol)
 	If *this
@@ -22,21 +19,6 @@ Procedure _MyTable_Col_GetPosition(*this.strMyTableCol)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Col_GetFlags(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\flags
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Col_SetFlags(*this.strMyTableCol,value.i)
-	If *this
-		*this\flags=value
-		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Predraw(*this\table)
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Col_GetSort(*this.strMyTableCol)
 	If *this
@@ -156,32 +138,6 @@ Procedure _MyTable_Col_SetMinWidth(*this.strMyTableCol,value.i)
 	EndIf
 EndProcedure
 
-Procedure.s _MyTable_Col_GetText(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\text
-	EndIf
-EndProcedure
-
-Procedure.s _MyTable_Col_GetTooltip(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\tooltip
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Col_SetText(*this.strMyTableCol,value.s)
-	If *this
-		*this\text=value
-		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Col_SetTooltip(*this.strMyTableCol,value.s)
-	If *this
-		*this\tooltip=value		
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Col_DeleteColRow(*row.strMyTableRow,idx)
 	If *row\cells
@@ -222,31 +178,6 @@ Procedure _MyTable_Col_Delete(*this.strMyTableCol)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Col_GetData(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\data
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Col_SetData(*this.strMyTableCol,*value)
-	If *this
-		*this\data=*value
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Col_GetDirty(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\dirty
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Col_SetDirty(*this.strMyTableCol,value.b)
-	If *this
-		*this\dirty=value
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Col_GetImage(*this.strMyTableCol)
 	If *this
