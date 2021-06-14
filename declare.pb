@@ -1,4 +1,5 @@
-﻿;- Global
+﻿
+;- Global
 Declare _MyTableInitStyleTable(*style.strMyTableStyle)
 Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
                                 *this.strMyTableObject)
@@ -289,6 +290,31 @@ Macro _MyTableSimpleSetterGetterPredraw(gruppe,name,typ)
 	_MyTableSimpleGetter(gruppe,name,typ)
 	_MyTableSimpleSetterPredraw(gruppe,name,typ)
 EndMacro
+
+;- workaround for MacOS. thx to mestnyi (https://www.purebasic.fr/english/viewtopic.php?p=571500#p571500)
+Macro PB( _pb_function_name_ ) 
+	_pb_function_name_
+EndMacro
+Macro ClipOutput(_x_,_y_,_width_,_height_)
+	CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
+		PB(ClipOutput)(_x_,_y_,_width_,_height_)
+	CompilerEndIf
+EndMacro
+Macro UnclipOutput()
+	CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
+		PB(UnclipOutput)()
+	CompilerEndIf
+EndMacro
+Macro DrawingFont(_font_id_)
+	CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+		If _font_id_
+			PB(DrawingFont)(_font_id_)
+		EndIf
+	CompilerElse
+		PB(DrawingFont)(_font_id_)
+	CompilerEndIf
+EndMacro
+
 
 ;- Includes
 XIncludeFile "mytablestyle.pb"
