@@ -200,6 +200,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Col,Image)
 		_MyTableDataSectionSetterGetter(Col,Width)
 		_MyTableDataSectionSetterGetter(Col,Sort)
+		_MyTableDataSectionSetterGetter(Col,Colspan)
 		
 		
 		_MyTableDataSectionMethode(Col,Delete)

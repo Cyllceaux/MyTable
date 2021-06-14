@@ -162,7 +162,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 			Break
 		ElseIf mx>hsc And mx<(hsc+*col\calcwidth)
 			*rc\col=ListIndex(*this\cols())
-			*rc\tcol=*col				
+			*rc\tcol=*col	
 			Break
 		Else				
 			hsc+*col\calcwidth
@@ -272,17 +272,21 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 	Protected rf,rt,cf,ct,r,c
 	
 	If *rc\row=-1 And *rc\col>-1
-		If Not *this\resizeCol
-			sortable=Bool(sortable Or Bool(*rc\tcol\flags & #MYTABLE_COL_FLAGS_SORTABLE))
-			sortable=Bool(sortable And Not Bool(*rc\tcol\flags & #MYTABLE_COL_FLAGS_NO_SORTABLE))
+		If Not *this\resizeCol			
+			Protected *tcol.strMyTableCol=*rc\tcol
+			If *tcol\parent
+				*tcol=*tcol\parent
+			EndIf
+			sortable=Bool(sortable Or Bool(*tcol\flags & #MYTABLE_COL_FLAGS_SORTABLE))
+			sortable=Bool(sortable And Not Bool(*tcol\flags & #MYTABLE_COL_FLAGS_NO_SORTABLE))
 			If sortable
-				Select *rc\tcol\sort
+				Select *tcol\sort
 					Case #MYTABLE_COL_SORT_NONE
-						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_ASC)
+						_MyTable_Col_SetSort(*tcol,#MYTABLE_COL_SORT_ASC)
 					Case #MYTABLE_COL_SORT_ASC
-						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_DESC)
+						_MyTable_Col_SetSort(*tcol,#MYTABLE_COL_SORT_DESC)
 					Case #MYTABLE_COL_SORT_DESC
-						_MyTable_Col_SetSort(*rc\tcol,#MYTABLE_COL_SORT_NONE)
+						_MyTable_Col_SetSort(*tcol,#MYTABLE_COL_SORT_NONE)
 				EndSelect		
 				*this\dirty=#True
 				*this\md=#False

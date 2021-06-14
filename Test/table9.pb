@@ -4,7 +4,7 @@ XIncludeFile "declare.pb"
 
 UseModule MyTable
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 9",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 9 (ScrollToCellPos)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
 	Global hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)

@@ -78,6 +78,7 @@ EndStructure
 Structure strMyTableCol Extends strMyTableObject
 	*table.strMyTableTable
 	*application.strMyTableApplication
+	*parent.strMyTableCol
 	listindex.i
 	text.s
 	image.strMyTableImage
@@ -92,6 +93,7 @@ Structure strMyTableCol Extends strMyTableObject
 	textheight.i
 	
 	sort.i
+	colspan.i
 EndStructure
 
 Structure strMyTableRow Extends strMyTableObject

@@ -5,6 +5,7 @@ _MyTableSimpleGetterPointer(Col,Table)
 _MyTableSimpleGetter(Col,Type,i)
 _MyTableSimpleSetterGetterPointer(Col,Data)
 _MyTableSimpleSetterGetterSubRedraw(Col,Text,s)
+_MyTableSimpleSetterGetterSubPredraw(Col,Colspan,i)
 
 
 Procedure _MyTable_Col_GetApplication(*this.strMyTableCol)
@@ -94,7 +95,11 @@ Procedure _MyTable_Col_SetSort(*this.strMyTableCol,value.i)
 		*this\sort=value
 		*this\dirty=#True
 		*this\table\dirty=#True		
-		_MyTable_Col_Sort(*this,value)
+		If *this\parent
+			_MyTable_Col_Sort(*this\parent,value)
+		Else
+			_MyTable_Col_Sort(*this,value)
+		EndIf
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure

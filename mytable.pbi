@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1599
+	#MYTABLE_VERSION = 1640
 	#MYTABLE_VERSION_DATE = 20210614
 	
 	Enumeration _mytable_type
@@ -136,6 +136,7 @@
 		SetImage(value.i):GetImage.i()
 		SetWidth(value.i):GetWidth.i()
 		SetSort(value.i):GetSort.i()
+		SetColspan(value.i):GetColspan.i()
 		
 		Delete()
 		ScrollTo(setSelect.b=#False,redraw.b=#True)

@@ -383,6 +383,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 	Protected cc=0
 	
 	ForEach *this\cols()
+		*this\cols()\parent=0
 		If *this\cols()\dirty
 			Protected nfont=_MyTable_GetFont(*this\cols())
 			DrawingFont(nfont)			
@@ -409,11 +410,20 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 	
 	For idx=start To cc
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),idx-1)
+		Protected calcwidth.i=*col\calcwidth
 		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
 		Protected tborder=_MyTable_GetBorder(*col)
 		
+		If *col\colspan>1
+			Protected i=0
+			For i=2 To *col\colspan
+				Protected *tcol.strMyTableCol=SelectElement(*this\cols(),idx-2+i)
+				calcwidth+*tcol\calcwidth
+				*tcol\parent=*col
+			Next
+		EndIf
 		
-		If *col\calcwidth>0
+		If calcwidth>0
 			Protected tfont=_MyTable_GetFont(*col)
 			If tfont
 				If IsFont(tfont)
@@ -440,8 +450,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			DrawingMode(#PB_2DDrawing_Default)
 			BackColor(_MyTable_GetBackColor(*col))
 			FrontColor(_MyTable_GetFrontColor(*col))
-			ClipOutput(bx,0,*col\calcwidth,*this\calcheaderheight)
-			Box(bx,0,*col\calcwidth,*this\calcheaderheight,_MyTable_GetBackColor(*col))
+			ClipOutput(bx,0,calcwidth,*this\calcheaderheight)
+			Box(bx,0,calcwidth,*this\calcheaderheight,_MyTable_GetBackColor(*col))
 			
 			If *col\image\orig And IsImage(*col\image\orig)
 				addx+DesktopScaledX(2)
@@ -457,12 +467,12 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			
 			If halign=#MYTABLE_STYLE_HALIGN_CENTER
 				If *col\sort
-					addx+(*col\calcwidth - addx - MyTableW20) /2-*col\textwidth/2
+					addx+(calcwidth - addx - MyTableW20) /2-*col\textwidth/2
 				Else
-					addx+(*col\calcwidth - addx) /2-*col\textwidth/2
+					addx+(calcwidth - addx) /2-*col\textwidth/2
 				EndIf
 			ElseIf halign=#MYTABLE_STYLE_HALIGN_RIGHT
-				addx+*col\calcwidth - *col\textwidth - MyTableW8 - addx
+				addx+calcwidth - *col\textwidth - MyTableW8 - addx
 				If *col\sort
 					addx - MyTableW20
 				EndIf
@@ -481,9 +491,9 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 			DrawingMode(#PB_2DDrawing_AlphaClip)
 			Select *col\sort
 				Case #MYTABLE_COL_SORT_ASC
-					DrawImage(ImageID(*this\DefaultImageSortAsc),bx+*col\calcwidth-MyTableW20,0)
+					DrawImage(ImageID(*this\DefaultImageSortAsc),bx+calcwidth-MyTableW20,0)
 				Case #MYTABLE_COL_SORT_DESC
-					DrawImage(ImageID(*this\DefaultImageSortDesc),bx+*col\calcwidth-MyTableW20,0)
+					DrawImage(ImageID(*this\DefaultImageSortDesc),bx+calcwidth-MyTableW20,0)
 			EndSelect
 			
 			DrawingMode(#PB_2DDrawing_Default)
@@ -492,7 +502,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 				ta=MyTableW20
 			EndIf
 			
-			_MyTableDrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col),*col\calcwidth-addx-ta)
+			_MyTableDrawText(bx+addx,addy,*col\text,_MyTable_GetForeColor(*col),calcwidth-addx-ta)
 			If border
 				Protected bw=0
 				Protected c=0
@@ -507,7 +517,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						c=_MyTable_GetBorderWidthTop(*col)
 					EndIf
 					c=DesktopScaledY(c)
-					Box(bx,0,*col\calcwidth,c,bcolor)
+					Box(bx,0,calcwidth,c,bcolor)
 				EndIf
 				
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
@@ -519,7 +529,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						c=_MyTable_GetBorderWidthRight(*col)
 					EndIf
 					c=DesktopScaledX(c)
-					Box(bx+*col\calcwidth-c,0,*col\calcwidth,c,bcolor)
+					Box(bx+calcwidth-c,0,calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
 					If selected
@@ -530,7 +540,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 						c=_MyTable_GetBorderWidthBottom(*col)
 					EndIf
 					c=DesktopScaledY(c)
-					Box(bx,*this\calcheaderheight-c,*col\calcwidth,c,bcolor)
+					Box(bx,*this\calcheaderheight-c,calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
 					If selected
@@ -554,15 +564,18 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,font.i,width.i,height
 					EndIf
 					c=DesktopScaledX(c)
 					For bw=1 To c
-						Box(bx+(bw-1),(bw-1),*col\calcwidth-(c-1),*this\calcheaderheight-(c-1),bcolor)
+						Box(bx+(bw-1),(bw-1),calcwidth-(c-1),*this\calcheaderheight-(c-1),bcolor)
 					Next
 				EndIf
 			EndIf
 			UnclipOutput()
-			bx+*col\calcwidth
+			bx+calcwidth
 			If bx>=width
 				Break
 			EndIf
+		EndIf
+		If *col\colspan>1
+			idx+(*col\colspan-1)
 		EndIf
 	Next
 	ProcedureReturn *this\calcheaderheight
