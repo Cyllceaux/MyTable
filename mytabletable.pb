@@ -1,87 +1,4 @@
-﻿Global MyTableW1=DesktopScaledX(1)
-Global MyTableW2=DesktopScaledX(2)
-Global MyTableW4=DesktopScaledX(4)
-Global MyTableW7=DesktopScaledX(7)
-Global MyTableW8=DesktopScaledX(8)
-Global MyTableW10=DesktopScaledX(10)
-Global MyTableW12=DesktopScaledX(12)
-Global MyTableW14=DesktopScaledX(14)
-Global MyTableW16=DesktopScaledX(16)
-Global MyTableW20=DesktopScaledX(20)
-Global MyTableH1=DesktopScaledY(1)
-Global MyTableH2=DesktopScaledY(2)
-Global MyTableH4=DesktopScaledY(4)
-Global MyTableH6=DesktopScaledY(6)
-Global MyTableH7=DesktopScaledY(7)
-Global MyTableH8=DesktopScaledY(8)
-Global MyTableH10=DesktopScaledY(10)
-Global MyTableH12=DesktopScaledY(12)
-Global MyTableH14=DesktopScaledY(14)
-Global MyTableH16=DesktopScaledY(16)
-
-Global tMyTableDefaultImageSortAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImageSortDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-Global tMyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
-
-
-StartDrawing(ImageOutput(tMyTableDefaultImageSortAsc))
-DrawingMode(#PB_2DDrawing_AlphaBlend)
-LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH2,RGBA(0,0,0,255))
-LineXY(MyTableW8,MyTableH2,MyTableW14,MyTableH8,RGBA(0,0,0,255))
-LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImageSortDesc))
-DrawingMode(#PB_2DDrawing_AlphaBlend)
-LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH14,RGBA(0,0,0,255))
-LineXY(MyTableW8,MyTableH14,MyTableW14,MyTableH8,RGBA(0,0,0,255))
-LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImagePlus))
-DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
-Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
-LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
-LineXY(MyTableW7,MyTableH4,MyTableW7,MyTableH10,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImageMinus))
-DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
-Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
-LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImageCheckBox))
-DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
-Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImageCheckBoxChecked))
-DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
-Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
-LineXY(MyTableW4,MyTableH4,MyTableW12,MyTableH12,RGBA(0,0,0,255))
-LineXY(MyTableW4,MyTableH12,MyTableW12,MyTableH4,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImagePlusArrow))
-DrawingMode(#PB_2DDrawing_AlphaBlend)
-LineXY(MyTableW8,MyTableH4,MyTableW12,MyTableH8,RGBA(0,0,0,255))
-LineXY(MyTableW8,MyTableH12,MyTableW12,MyTableH8,RGBA(0,0,0,255))
-StopDrawing()
-
-StartDrawing(ImageOutput(tMyTableDefaultImageMinusArrow))
-DrawingMode(#PB_2DDrawing_AlphaBlend)
-LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(0,0,0,255))
-LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(0,0,0,255))
-StopDrawing()
-
-
-
+﻿
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetter(Table,Title,s)
 _MyTableSimpleSetterGetterRedraw(Table,Dirty,b)
@@ -97,8 +14,19 @@ _MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBox,i)
 _MyTableSimpleSetterGetterRedraw(Table,DefaultImageCheckBoxChecked,i)
 _MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlusArrow,i)
 _MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)
+_MyTableSimpleSetterGetterPredraw(Table,Page,i)
+_MyTableSimpleSetterGetterPredraw(Table,PageElements,i)
 
 
+Procedure _MyTable_Table_GetPages(*this.strMyTableTable)
+	If *this
+		If *this\pageElements=0
+			*this\pageElements=1
+		EndIf
+		_MyTable_Table_Predraw(*this)
+		ProcedureReturn Round(ListSize(*this\rows())/*this\pageElements,#PB_Round_Up)
+	EndIf
+EndProcedure
 
 Procedure _MyTable_Table_GetCalcHeight(*this.strMyTableTable)
 	If *this
@@ -648,7 +576,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,font,fixed,selected,check
 	Protected *this.strMyTableRow=*cell\row
 	Protected tw=0
 	
-
+	
 	Protected tfont=_MyTable_GetFont(*cell)
 	
 	If tfont
@@ -998,6 +926,8 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 		_MyTable_Table_ClearMaps(*this)
 		Protected redraw.b=Bool(*this\dirty And *this\redraw)
 		Protected header.b=Bool(Not (*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
+		Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
+		
 		If *this\application
 			redraw=Bool(redraw And *this\application\redraw)
 		EndIf
@@ -1048,25 +978,48 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			If header
 				by+*this\calcheaderheight
 			EndIf
+			
+			Protected *row.strMyTableRow=0
+			
 			If ListSize(*this\expRows())>0
 				Protected c=ListSize(*this\cols())
-				ForEach *this\expRows()
-					Protected *row.strMyTableRow=*this\expRows()
-					
-					If by+*row\calcheight>0
-						DrawingFont(font)
-						_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#False)
-						If *this\fixedcols
-							_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#True)
+				If pages
+					ForEach *this\expRowsPage()
+						*row=*this\expRowsPage()
+						
+						If by+*row\calcheight>0
+							DrawingFont(font)
+							_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRowsPage()) % 2 = 1),#False)
+							If *this\fixedcols
+								_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRowsPage()) % 2 = 1),#True)
+							EndIf
 						EndIf
-					EndIf
-					by+*row\calcheight
-					
-					
-					If by>height
-						Break
-					EndIf
-				Next
+						by+*row\calcheight
+						
+						
+						If by>height
+							Break
+						EndIf
+					Next
+				Else
+					ForEach *this\expRows()
+						*row=*this\expRows()
+						
+						If by+*row\calcheight>0
+							DrawingFont(font)
+							_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#False)
+							If *this\fixedcols
+								_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#True)
+							EndIf
+						EndIf
+						by+*row\calcheight
+						
+						
+						If by>height
+							Break
+						EndIf
+					Next
+				EndIf
 			Else
 				DrawingMode(#PB_2DDrawing_Transparent)
 				If IsFont(font)
@@ -1121,13 +1074,33 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 		If ((*this\redraw And *this\dirty) Or force) And Not *this\drawing
 			_callcountStart(Predraw)
 			ClearList(*this\expRows())
+			ClearList(*this\expRowsPage())
 			Protected h=0
 			Protected w=0
+			Protected cc=0
+			Protected ph=0
 			Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
 			Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
+			Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
 			
 			If header
 				h+*this\headerheight
+				ph+*this\headerheight
+			EndIf
+			If pages
+				If *this\pageElements=0
+					*this\pageElements=1
+				EndIf
+				cc=*this\pageElements
+				Protected max=Round(ListSize(*this\rows())/cc,#PB_Round_Up)
+				If *this\page=0
+					*this\page=1
+				EndIf
+				If *this\page>max
+					*this\page=max
+				EndIf
+				
+				
 			EndIf
 			
 			ForEach *this\rows()
@@ -1135,10 +1108,20 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				*this\expRows()=*this\rows()
 				
 				h+*this\rows()\height
-				
+				If pages
+					If cc And max And *this\page And ListIndex(*this\rows())>=((*this\page-1) * cc)
+						ph+*this\rows()\height
+						AddElement(*this\expRowsPage())
+						*this\expRowsPage()=*this\rows()
+						cc-1
+					EndIf
+				EndIf
 				If hierarchical
 					If *this\rows()\expanded And *this\rows()\rows And ListSize(*this\rows()\rows\rows())>0
 						h+_MyTable_Table_PredrawSub(*this,*this\rows())
+						If pages
+							ph+_MyTable_Table_PredrawSub(*this,*this\expRowsPage())
+						EndIf
 					EndIf
 				EndIf
 			Next
@@ -1167,7 +1150,9 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				EndIf
 			Next
 			
-			
+			If pages
+				h=ph
+			EndIf
 			
 			w-cw
 			h-ch
@@ -1187,7 +1172,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				EndIf
 				
 				If cs>0
-					Protected cc=Abs(w)/cs
+					cc=Abs(w)/cs
 					Protected dcc=DesktopScaledX(cc)
 					If cc>0
 						ForEach *this\cols()
@@ -1248,6 +1233,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			Else
 				h-*this\vscroll
 			EndIf
+			
 			
 			_callcountEnde(Predraw)
 		EndIf

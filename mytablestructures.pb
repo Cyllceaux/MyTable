@@ -182,6 +182,10 @@ Structure strMyTableTable Extends strMyTableObject
 	DefaultImageCheckBoxChecked.i
 	DefaultImagePlusArrow.i
 	DefaultImageMinusArrow.i
+	
+	pageElements.i
+	page.i
+	List expRowsPage.i()
 EndStructure
 
 Structure strMyTableApplication Extends strMyTableObject

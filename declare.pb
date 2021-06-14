@@ -1,4 +1,87 @@
-﻿
+﻿;- Images
+Global MyTableW1=DesktopScaledX(1)
+Global MyTableW2=DesktopScaledX(2)
+Global MyTableW4=DesktopScaledX(4)
+Global MyTableW7=DesktopScaledX(7)
+Global MyTableW8=DesktopScaledX(8)
+Global MyTableW10=DesktopScaledX(10)
+Global MyTableW12=DesktopScaledX(12)
+Global MyTableW14=DesktopScaledX(14)
+Global MyTableW16=DesktopScaledX(16)
+Global MyTableW20=DesktopScaledX(20)
+Global MyTableH1=DesktopScaledY(1)
+Global MyTableH2=DesktopScaledY(2)
+Global MyTableH4=DesktopScaledY(4)
+Global MyTableH6=DesktopScaledY(6)
+Global MyTableH7=DesktopScaledY(7)
+Global MyTableH8=DesktopScaledY(8)
+Global MyTableH10=DesktopScaledY(10)
+Global MyTableH12=DesktopScaledY(12)
+Global MyTableH14=DesktopScaledY(14)
+Global MyTableH16=DesktopScaledY(16)
+
+Global tMyTableDefaultImageSortAsc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageSortDesc=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImagePlus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageMinus=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageCheckBox=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageCheckBoxChecked=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+Global tMyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
+
+
+StartDrawing(ImageOutput(tMyTableDefaultImageSortAsc))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH2,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH2,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImageSortDesc))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW2,MyTableH8,MyTableW8,MyTableH14,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH14,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+LineXY(MyTableW2,MyTableH8,MyTableW14,MyTableH8,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImagePlus))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
+LineXY(MyTableW7,MyTableH4,MyTableW7,MyTableH10,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImageMinus))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH7,MyTableW10,MyTableH7,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImageCheckBox))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImageCheckBoxChecked))
+DrawingMode(#PB_2DDrawing_Outlined|#PB_2DDrawing_AlphaBlend)
+Box(MyTableW2,MyTableH2,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH4,MyTableW12,MyTableH12,RGBA(0,0,0,255))
+LineXY(MyTableW4,MyTableH12,MyTableW12,MyTableH4,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImagePlusArrow))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW8,MyTableH4,MyTableW12,MyTableH8,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH12,MyTableW12,MyTableH8,RGBA(0,0,0,255))
+StopDrawing()
+
+StartDrawing(ImageOutput(tMyTableDefaultImageMinusArrow))
+DrawingMode(#PB_2DDrawing_AlphaBlend)
+LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(0,0,0,255))
+LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(0,0,0,255))
+StopDrawing()
+
+
 ;- Global
 Declare _MyTableInitStyleTable(*style.strMyTableStyle)
 Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
@@ -291,30 +374,31 @@ Macro _MyTableSimpleSetterGetterPredraw(gruppe,name,typ)
 	_MyTableSimpleSetterPredraw(gruppe,name,typ)
 EndMacro
 
+;{
 ;- workaround for MacOS. thx to mestnyi (https://www.purebasic.fr/english/viewtopic.php?p=571500#p571500)
-Macro PB( _pb_function_name_ ) 
-	_pb_function_name_
-EndMacro
-Macro ClipOutput(_x_,_y_,_width_,_height_)
-	CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
-		PB(ClipOutput)(_x_,_y_,_width_,_height_)
-	CompilerEndIf
-EndMacro
-Macro UnclipOutput()
-	CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
-		PB(UnclipOutput)()
-	CompilerEndIf
-EndMacro
-Macro DrawingFont(_font_id_)
-	CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
-		If _font_id_
+	Macro PB( _pb_function_name_ ) 
+		_pb_function_name_
+	EndMacro
+	Macro ClipOutput(_x_,_y_,_width_,_height_)
+		CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
+			PB(ClipOutput)(_x_,_y_,_width_,_height_)
+		CompilerEndIf
+	EndMacro
+	Macro UnclipOutput()
+		CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
+			PB(UnclipOutput)()
+		CompilerEndIf
+	EndMacro
+	Macro DrawingFont(_font_id_)
+		CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+			If _font_id_
+				PB(DrawingFont)(_font_id_)
+			EndIf
+		CompilerElse
 			PB(DrawingFont)(_font_id_)
-		EndIf
-	CompilerElse
-		PB(DrawingFont)(_font_id_)
-	CompilerEndIf
-EndMacro
-
+		CompilerEndIf
+	EndMacro
+;}
 
 ;- Includes
 XIncludeFile "mytablestyle.pb"

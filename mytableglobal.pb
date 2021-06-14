@@ -785,6 +785,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		\DefaultImageCheckBoxChecked=tMyTableDefaultImageCheckBoxChecked
 		\DefaultImagePlusArrow=tMyTableDefaultImagePlusArrow
 		\DefaultImageMinusArrow=tMyTableDefaultImageMinusArrow
+		\pageElements=100
 		
 		If IsGadget(canvas)
 			SetGadgetData(canvas,*table)

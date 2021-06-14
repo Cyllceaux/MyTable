@@ -108,6 +108,7 @@ Module MyTable
 		vtable_table:;- Table
 		_MyTableDataSectionDefault(Table)
 		_MyTableDataSectionGetter(Table,Application)
+		_MyTableDataSectionGetter(Table,Pages)
 		_MyTableDataSectionSetterGetter(Table,Name)
 		_MyTableDataSectionSetterGetter(Table,Title)
 		_MyTableDataSectionSetterGetter(Table,Redraw)
@@ -116,6 +117,8 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
 		_MyTableDataSectionSetterGetter(Table,FixedCols)
 		_MyTableDataSectionSetterGetter(Table,EmptyText)
+		_MyTableDataSectionSetterGetter(Table,Page)
+		_MyTableDataSectionSetterGetter(Table,PageElements)
 		
 		_MyTableDataSectionSetterGetter(Table,DefaultImageSortAsc)
 		_MyTableDataSectionSetterGetter(Table,DefaultImageSortDesc)

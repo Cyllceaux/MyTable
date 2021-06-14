@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1556
+	#MYTABLE_VERSION = 1599
 	#MYTABLE_VERSION_DATE = 20210614
 	
 	Enumeration _mytable_type
@@ -177,6 +177,7 @@
 		#MYTABLE_TABLE_FLAGS_CALLBACK
 		#MYTABLE_TABLE_FLAGS_SORTABLE
 		#MYTABLE_TABLE_FLAGS_RESIZABLE
+		#MYTABLE_TABLE_FLAGS_PAGES
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
@@ -199,6 +200,7 @@
 	
 	Interface MyTableTable Extends MyTableObject
 		GetApplication()
+		GetPages()
 		SetName(value.s):GetName.s()
 		SetTitle(value.s):GetTitle.s()
 		SetRedraw(value.b):GetRedraw.b()
@@ -207,6 +209,8 @@
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
 		SetFixedCols(value.i):GetFixedCols.i()
 		SetEmptyText(value.s):GetEmptyText.s()
+		SetPage(value.i):GetPage.i()
+		SetPageElements(value.i):GetPageElements.i()
 		
 		SetDefaultImageSortAsc(value.i):GeDefaultImageSortAsc.i()
 		SetDefaultImageSortDesc(value.i):GeDefaultImageSortDesc.i()
