@@ -6,44 +6,37 @@ EndStructure
 Structure strMyTableStyleBorderStyle
 	color.q
 	width.i
-	selectedcolor.q
-	selectedwidth.q
 EndStructure
 
 Structure strMyTableStyleBorder
 	border.i
-	defaultBorder.strMyTableStyleBorderStyle
+	borderDefault.strMyTableStyleBorderStyle
 	borderLeft.strMyTableStyleBorderStyle
 	borderRight.strMyTableStyleBorderStyle
 	borderTop.strMyTableStyleBorderStyle
 	borderBottom.strMyTableStyleBorderStyle
-	elementselectedbordercolor.q
 EndStructure
 
 Structure strMyTableStyle		
 	font.i
 	backcolor.q
 	frontcolor.q
-	zebrabackcolor.q
-	zebrafrontcolor.q
-	fixedbackcolor.q
-	fixedfrontcolor.q
-	fixedforecolor.q
+	forecolor.q
 	valign.i
 	halign.i
 	border.strMyTableStyleBorder
-	forecolor.q
-	selectedcolor.q
-	selectedforecolor.q
-	elementselectedcolor.q
-	elementselectedforecolor.q
 EndStructure
 
 Structure strMyTableObject Extends strMyTableVTable
 	flags.i
 	*data
 	dirty.b
-	style.strMyTableStyle
+	defaultStyle.strMyTableStyle
+	selectedStyle.strMyTableStyle
+	zebraStyle.strMyTableStyle
+	fixedStyle.strMyTableStyle
+	elementselectedStyle.strMyTableStyle
+	titleStyle.strMyTableStyle
 	tooltip.s
 EndStructure
 
@@ -122,9 +115,13 @@ Structure strMyTableTable Extends strMyTableObject
 	listindex.i
 	name.s
 	title.s
+	textheight.i
+	textwidth.i
+	titleHeight.i
+	calctitleHeight.i
 	redraw.b
 	recalc.b
-	
+		
 	emptytext.s
 	
 	drawing.b

@@ -8,9 +8,7 @@ Module MyTable
 	XIncludeFile "declare.pb"
 	XIncludeFile "mytableglobal.pb"
 	
-	
-	
-	
+
 	
 	Macro _MyTableDataSectionMethode(gruppe,methode)
 		Data.i @_MyTable_#gruppe#_#methode()
@@ -43,15 +41,16 @@ Module MyTable
 	
 	Macro _MyTableDataSectionStyleDefault(gruppe)
 		_MyTableDataSectionGetter(gruppe,Object)
-		_MyTableDataSectionSetterGetter(gruppe,Font)
-		_MyTableDataSectionSetterGetter(gruppe,BackColor)
-		_MyTableDataSectionSetterGetter(gruppe,FrontColor)
-		_MyTableDataSectionSetterGetter(gruppe,ForeColor)
-		_MyTableDataSectionSetterGetter(gruppe,SelectedColor)
-		_MyTableDataSectionSetterGetter(gruppe,BorderColor)
-		_MyTableDataSectionSetterGetter(gruppe,BorderWidth)
-		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderColor)
-		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderWidth)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultFont)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultBackColor)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultFrontColor)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultForeColor)
+		
+		_MyTableDataSectionSetterGetter(gruppe,SelectedBackColor)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultBorderColorDefault)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultBorderWidthDefault)
+		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderColorDefault)
+		_MyTableDataSectionSetterGetter(gruppe,SelectedBorderWidthDefault)
 		_MyTableDataSectionSetterGetter(gruppe,SelectedForeColor)
 		
 		_MyTableDataSectionMethode(gruppe,Free)
@@ -60,10 +59,9 @@ Module MyTable
 	
 	Macro _MyTableDataSectionCellStyleDefault(gruppe)
 		_MyTableDataSectionStyleDefault(gruppe)
-		_MyTableDataSectionSetterGetter(gruppe,HAlign)
-		_MyTableDataSectionSetterGetter(gruppe,VAlign)
-		_MyTableDataSectionSetterGetter(gruppe,Border)
-		_MyTableDataSectionSetter(gruppe,BorderStyle)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultHAlign)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultVAlign)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultBorder)
 		
 	EndMacro
 	
@@ -73,13 +71,13 @@ Module MyTable
 		
 		vtable_style_row:;- Style Row
 		_MyTableDataSectionCellStyleDefault(Style)
-		_MyTableDataSectionSetterGetter(Style,ElementSelectedColor)
-		_MyTableDataSectionSetterGetter(Style,ElementSelectedBorderColor)
+		_MyTableDataSectionSetterGetter(Style,ElementSelectedBackColor)
+		_MyTableDataSectionSetterGetter(Style,ElementSelectedBorderColorDefault)
 		_MyTableDataSectionSetterGetter(Style,ElementSelectedForeColor)
 		
 		vtable_style_col:;- Style Col
 		_MyTableDataSectionCellStyleDefault(Style)
-		_MyTableDataSectionSetterGetter(Style,ElementSelectedColor)
+		_MyTableDataSectionSetterGetter(Style,ElementSelectedBackColor)
 		_MyTableDataSectionSetterGetter(Style,ElementSelectedForeColor)
 		
 		vtable_style_table:;- Style Table
@@ -89,6 +87,13 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Style,FixedBackColor)
 		_MyTableDataSectionSetterGetter(Style,FixedFrontColor)
 		_MyTableDataSectionSetterGetter(Style,FixedForeColor)
+		_MyTableDataSectionSetterGetter(Style,TitleFont)
+		_MyTableDataSectionSetterGetter(Style,TitleBackColor)
+		_MyTableDataSectionSetterGetter(Style,TitleFrontColor)
+		_MyTableDataSectionSetterGetter(Style,TitleForeColor)
+		_MyTableDataSectionSetterGetter(Style,TitleHAlign)
+		_MyTableDataSectionSetterGetter(Style,TitleVAlign)
+		
 		
 		vtable_style_application:;- Style Application
 		_MyTableDataSectionStyleDefault(Style)
@@ -114,6 +119,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Table,Redraw)
 		_MyTableDataSectionSetterGetter(Table,Recalc)
 		_MyTableDataSectionSetterGetter(Table,HeaderHeight)
+		_MyTableDataSectionSetterGetter(Table,TitleHeight)
 		_MyTableDataSectionSetterGetter(Table,DefaultRowHeight)
 		_MyTableDataSectionSetterGetter(Table,FixedCols)
 		_MyTableDataSectionSetterGetter(Table,EmptyText)

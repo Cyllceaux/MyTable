@@ -16,14 +16,33 @@ Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
 		\backcolor=RGBA(250,250,250,255)
 		\frontcolor=RGBA(230,230,230,255)
 		\forecolor=RGBA(50,50,50,255)
-		\selectedcolor=RGBA(230,230,250,255)
-		\selectedforecolor=RGBA(20,20,20,255)
-		\border\defaultBorder\color=RGBA(50,50,50,255)
-		\border\defaultBorder\selectedcolor=RGBA(200,200,250,255)
-		\border\defaultBorder\width=1
-		\fixedfrontcolor=RGBA(250,250,250,255)
-		\fixedbackcolor=RGBA(150,150,150,255)
-		\fixedforecolor=RGBA(250,250,250,255)
+		\border\borderDefault\color=RGBA(50,50,50,255)		
+		\border\borderDefault\width=1
+	EndWith
+EndProcedure
+
+Procedure  _MyTableInitStyleTableSelected(*style.strMyTableStyle)
+	With *style
+		\backcolor=RGBA(230,230,250,255)
+		\forecolor=RGBA(20,20,20,255)
+		\border\borderDefault\color=RGBA(200,200,250,255)
+	EndWith
+EndProcedure
+
+Procedure  _MyTableInitStyleTableFixed(*style.strMyTableStyle)
+	With *style
+		\frontcolor=RGBA(250,250,250,255)
+		\backcolor=RGBA(150,150,150,255)
+		\forecolor=RGBA(250,250,250,255)
+	EndWith
+EndProcedure
+
+Procedure  _MyTableInitStyleTableTitle(*style.strMyTableStyle)
+	With *style
+		\frontcolor=RGBA(250,250,250,255)
+		\backcolor=RGBA(150,150,150,255)
+		\forecolor=RGBA(250,250,250,255)
+		\halign=#MYTABLE_STYLE_HALIGN_CENTER
 	EndWith
 EndProcedure
 
@@ -55,7 +74,10 @@ Procedure _MyTableInitApplication(*application.strMyTableApplication,
 		\recalc=#True
 		\redraw=#True
 		\dirty=#True
-		_MyTableInitStyleTable(\style)
+		_MyTableInitStyleTable(\defaultStyle)
+		_MyTableInitStyleTableFixed(\fixedStyle)		
+		_MyTableInitStyleTableSelected(\selectedStyle)
+		_MyTableInitStyleTableTitle(\titleStyle)
 	EndWith
 EndProcedure
 
@@ -105,12 +127,13 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 	Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
 	Protected resizable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_RESIZABLE)
+	Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
+	Protected header.b=Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
 	
 	Protected *row.strMyTableRow=0
 	Protected *cell.strMyTableCell=0
 	Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 	Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
-	Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
 	Protected vsc=0
 	Protected hsc=0
 	Protected *rc.strMyTableRowCol=AllocateStructure(strMyTableRowCol)
@@ -129,12 +152,27 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		hsc=-*this\hscroll
 	EndIf
 	
+	If title
+		vsc+*this\calctitleHeight
+		If my<*this\calctitleHeight
+			ProcedureReturn *rc
+		endif
+	EndIf
+	
 	If header
 		vsc+*this\calcheaderheight
-		If my<*this\calcheaderheight
-			*rc\row=-1
+		If title
+			If my>*this\calctitleHeight And my<(*this\calcheaderheight+*this\calctitleHeight)
+				*rc\row=-1
+			EndIf
+		Else
+			If my<*this\calcheaderheight
+				*rc\row=-1
+			EndIf
 		EndIf
 	EndIf
+	
+	
 	
 	Protected fwidth=0
 	If *this\fixedcols
@@ -790,6 +828,8 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		\DefaultImagePlusArrow=tMyTableDefaultImagePlusArrow
 		\DefaultImageMinusArrow=tMyTableDefaultImageMinusArrow
 		\pageElements=100
+		\titleHeight=20
+		\calctitleHeight=DesktopScaledY(\titleHeight)
 		
 		If IsGadget(canvas)
 			SetGadgetData(canvas,*table)
@@ -813,10 +853,14 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			SetGadgetData(hscroll,*table)
 			BindGadgetEvent(hscroll,@_MyTableEvtScroll())
 		EndIf
+		
 		If *application
 			\listindex=ListSize(*application\tables())-1
 		Else
-			_MyTableInitStyleTable(\style)
+			_MyTableInitStyleTable(\defaultStyle)
+			_MyTableInitStyleTableFixed(\fixedStyle)
+			_MyTableInitStyleTableSelected(\selectedStyle)
+			_MyTableInitStyleTableTitle(\titleStyle)
 		EndIf
 	EndWith
 	
@@ -886,9 +930,9 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		If width=#PB_Ignore
 			\stretched=#True
 		EndIf
-		\style\forecolor=RGBA(250,250,250,255)
-		\style\backcolor=RGBA(150,150,150,255)
-		\style\border\defaultBorder\color=RGBA(250,250,250,255)
+		\defaultStyle\forecolor=RGBA(250,250,250,255)
+		\defaultStyle\backcolor=RGBA(150,150,150,255)
+		\defaultStyle\border\borderDefault\color=RGBA(250,250,250,255)
 		\calcwidth=DesktopScaledX(\width)
 		\listindex=ListSize(*table\cols())-1
 	EndWith
@@ -913,12 +957,12 @@ Procedure _MyTableInitCell(*application.strMyTableApplication,
 		\row=*row
 		\col=*col
 		\dirty=#True
-		\style\font=\row\style\font
-		\style\backcolor=\row\style\backcolor
-		\style\frontcolor=\row\style\frontcolor
-		\style\forecolor=\row\style\forecolor
-		\style\valign=#MYTABLE_STYLE_VALIGN_TOP
-		\style\halign=#MYTABLE_STYLE_HALIGN_LEFT
+		\defaultStyle\font=\row\defaultStyle\font
+		\defaultStyle\backcolor=\row\defaultStyle\backcolor
+		\defaultStyle\frontcolor=\row\defaultStyle\frontcolor
+		\defaultStyle\forecolor=\row\defaultStyle\forecolor
+		\defaultStyle\valign=#MYTABLE_STYLE_VALIGN_TOP
+		\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_LEFT
 		If *parent
 			\listindex=ListSize(*parent\cells\cells())-1
 		Else

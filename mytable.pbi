@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1640
+	#MYTABLE_VERSION = 1757
 	#MYTABLE_VERSION_DATE = 20210614
 	
 	Enumeration _mytable_type
@@ -19,12 +19,14 @@
 		SetBackColor(value.q):GetBackColor.q()
 		SetFrontColor(value.q):GetFrontColor.q()
 		SetForeColor(value.q):GetForeColor.q()
+		
 		SetSelectedColor(value.q):GetSelectedColor.q()
 		SetBorderColor(value.q):GetBorderColor.q()
 		SetBorderWidth(value.i):GetBorderWidth.i()
 		SetSelectedBorderColor(value.q):GetSelectedBorderColor.q()
 		SetSelectedBorderWidth(value.i):GetSelectedBorderWidth.i()
 		SetSelectedForeColor(value.q):GetSelectedForeColor.q()
+		
 		Free()
 		Delete()
 	EndInterface
@@ -52,7 +54,6 @@
 		SetHAlign(value.i):GetHAlign()
 		SetVAlign(value.i):GetVAlign()		
 		SetBorder(value.i):GetBorder()		
-		SetBorderStyle(border.i,color.q=0,width.q=0,selectedcolor.q=0,selectedwidth.q=0)
 	EndInterface
 	
 	Interface MyTableStyleCol Extends MYTableStyleCell
@@ -73,6 +74,13 @@
 		SetFixedBackColor(value.q):GetFixedBackColor.q()
 		SetFixedFrontColor(value.q):GetFixedFrontColor.q()		
 		SetFixedForeColor(value.q):GetFixedForeColor.q()		
+		
+		SetTitleFont(value.i):GetTitleFont()
+		SetTitleBackColor(value.q):GetTitleBackColor.q()
+		SetTitleFrontColor(value.q):GetTitleFrontColor.q()
+		SetTitleForeColor(value.q):GetTitleForeColor.q()
+		SetTitleHAlign(value.i):GetTitleHAlign()
+		SetTitleVAlign(value.i):GetTitleVAlign()
 	EndInterface
 	
 	Interface MyTableStyleApplication Extends MYTableStyleObject
@@ -179,6 +187,7 @@
 		#MYTABLE_TABLE_FLAGS_SORTABLE
 		#MYTABLE_TABLE_FLAGS_RESIZABLE
 		#MYTABLE_TABLE_FLAGS_PAGES
+		#MYTABLE_TABLE_FLAGS_TITLE
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
@@ -207,6 +216,7 @@
 		SetRedraw(value.b):GetRedraw.b()
 		SetRecalc(value.b):GetRecalc.b()
 		SetHeaderHeight(value.i):GetHeaderHeight.i()
+		SetTitleHeight(value.i):GetTitleHeight.i()
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
 		SetFixedCols(value.i):GetFixedCols.i()
 		SetEmptyText(value.s):GetEmptyText.s()

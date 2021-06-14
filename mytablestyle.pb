@@ -25,19 +25,19 @@
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 	EndIf
 EndMacro
 
@@ -69,19 +69,19 @@ Macro _MyTableStyleGetCol(root,name)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 	EndIf
 EndMacro
 
@@ -113,19 +113,19 @@ Macro _MyTableStyleGetRow(root,name)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 	EndIf
 EndMacro
 
@@ -158,19 +158,19 @@ Macro _MyTableStyleGetRowCol(root,name)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 	EndIf
 EndMacro
 
@@ -201,33 +201,33 @@ Macro _MyTableStyleGetAlternative(root,name,alternative)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 		If Not result
-			result=*cell\style\alternative
+			result=*cell\alternative
 		EndIf
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 		If Not result
-			result=*col\style\alternative
+			result=*col\alternative
 		EndIf
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 		If Not result
-			result=*row\style\alternative
+			result=*row\alternative
 		EndIf
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 		If Not result
-			result=*table\style\alternative
+			result=*table\alternative
 		EndIf
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 		If Not result
-			result=*application\style\alternative
+			result=*application\alternative
 		EndIf
 	EndIf
 EndMacro
@@ -260,33 +260,33 @@ Macro _MyTableStyleGetColAlternative(root,name,alternative)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 		If Not result
-			result=*cell\style\alternative
+			result=*cell\alternative
 		EndIf
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 		If Not result
-			result=*col\style\alternative
+			result=*col\alternative
 		EndIf
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 		If Not result
-			result=*row\style\alternative
+			result=*row\alternative
 		EndIf
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 		If Not result
-			result=*table\style\alternative
+			result=*table\alternative
 		EndIf
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 		If Not result
-			result=*application\style\alternative
+			result=*application\alternative
 		EndIf
 	EndIf
 EndMacro
@@ -319,33 +319,33 @@ Macro _MyTableStyleGetRowAlternative(root,name,alternative)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 		If Not result
-			result=*cell\style\alternative
+			result=*cell\alternative
 		EndIf
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 		If Not result
-			result=*col\style\alternative
+			result=*col\alternative
 		EndIf
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 		If Not result
-			result=*row\style\alternative
+			result=*row\alternative
 		EndIf
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 		If Not result
-			result=*table\style\alternative
+			result=*table\alternative
 		EndIf
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 		If Not result
-			result=*application\style\alternative
+			result=*application\alternative
 		EndIf
 	EndIf
 EndMacro
@@ -379,39 +379,39 @@ Macro _MyTableStyleGetRowColAlternative(root,name,alternative)
 			*application=*table\application
 	EndSelect
 	If Not result And *cell
-		result=*cell\style\name
+		result=*cell\name
 		If Not result
-			result=*cell\style\alternative
+			result=*cell\alternative
 		EndIf
 	EndIf
 	If Not result And *col
-		result=*col\style\name
+		result=*col\name
 		If Not result
-			result=*col\style\alternative
+			result=*col\alternative
 		EndIf
 	EndIf
 	If Not result And *row
-		result=*row\style\name
+		result=*row\name
 		If Not result
-			result=*row\style\alternative
+			result=*row\alternative
 		EndIf
 	EndIf
 	If Not result And *table
-		result=*table\style\name
+		result=*table\name
 		If Not result
-			result=*table\style\alternative
+			result=*table\alternative
 		EndIf
 	EndIf
 	If Not result And *application
-		result=*application\style\name
+		result=*application\name
 		If Not result
-			result=*application\style\alternative
+			result=*application\alternative
 		EndIf
 	EndIf
 EndMacro
 
 Macro _MyTableStyleSet(name)
-	*this\obj\style\name=value
+	
 	*this\obj\dirty=#True
 	Protected *col.strMyTableCol=0
 	Protected *row.strMyTableRow=0
@@ -437,23 +437,149 @@ Macro _MyTableStyleSet(name)
 			*row=*this\obj
 			If *row\cells
 				ForEach *row\cells\cells()
-					If Not *row\cells\cells()\style\name
-						*row\cells\cells()\style\name=value
+					If *this\obj\name=*row\cells\cells()\name
+						*row\cells\cells()\name=value
 						*row\cells\cells()\dirty=#True
 					EndIf
 				Next
 			EndIf
 	EndSelect
+	*this\obj\name=value
 	_MyTable_Style_Redraw(*this)
 EndMacro
 
-Procedure _MyTable_Style_GetFont(*this.strMyTableStyleObject)
-	If *this
-		Protected result.i=0		
-		_MyTableStyleGet(*this\obj,font)
-		ProcedureReturn result
-	EndIf
-EndProcedure
+Macro _MyTable_SetterGetter(state,name,typ)
+	Procedure.typ _MyTable_Style_Get#state#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.typ=0		
+			_MyTableStyleGet(*this\obj,state#Style\name)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTable_Style_Set#state#name(*this.strMyTableStyleObject,value.typ)
+		If *this
+			_MyTableStyleSet(state#Style\name)
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTable_SetterGetterCol(state,name,typ)
+	Procedure.typ _MyTable_Style_Get#state#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.typ=0		
+			_MyTableStyleGetCol(*this\obj,state#Style\name)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTable_Style_Set#state#name(*this.strMyTableStyleObject,value.typ)
+		If *this
+			_MyTableStyleSet(state#Style\name)
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTable_SetterGetterRow(state,name,typ)
+	Procedure.typ _MyTable_Style_Get#state#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.typ=0		
+			_MyTableStyleGetRow(*this\obj,state#Style\name)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTable_Style_Set#state#name(*this.strMyTableStyleObject,value.typ)
+		If *this
+			_MyTableStyleSet(state#Style\name)
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTable_SetterGetterRowCol(state,name,typ)
+	Procedure.typ _MyTable_Style_Get#state#name(*this.strMyTableStyleObject)
+		If *this
+			Protected result.typ=0		
+			_MyTableStyleGetRowCol(*this\obj,state#Style\name)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTable_Style_Set#state#name(*this.strMyTableStyleObject,value.typ)
+		If *this
+			_MyTableStyleSet(state#Style\name)
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTable_SetterGetterBorder(state,tname,name,typ)
+	
+	Procedure _MyTable_Style_Set#state#Border#name#tname(*this.strMyTableStyleObject,value.typ)
+		If *this
+			_MyTableStyleSet(state#Style\border\border#tname\name)
+		EndIf
+	EndProcedure
+	
+	Procedure.typ _MyTable_Style_Get#state#Border#name#tname(*this.strMyTableStyleObject,value.typ)
+		If *this
+			Protected result.typ
+			_MyTableStyleGetAlternative(*this\obj,state#Style\border\border#tname\name,defaultStyle\border\border#tname\name)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+EndMacro
+
+Macro _MyTableStyleBorder(state,name)
+	_MyTable_SetterGetterBorder(state,name,Color,q)
+	_MyTable_SetterGetterBorder(state,name,Width,q)
+	
+EndMacro
+
+Macro _MyTable_SetterGetter_default(state)
+	_MyTable_SetterGetterRow(state,Font,i)
+	_MyTable_SetterGetterRow(state,ForeColor,q)
+	_MyTable_SetterGetterRow(state,BackColor,q)
+	_MyTable_SetterGetterRow(state,FrontColor,q)
+	_MyTable_SetterGetterCol(state,HAlign,i)
+	_MyTable_SetterGetter(state,VAlign,i)
+	
+	
+	_MyTableStyleBorder(state,Default);}
+	_MyTableStyleBorder(state,Top)
+	_MyTableStyleBorder(state,Left)
+	_MyTableStyleBorder(state,Bottom)
+	_MyTableStyleBorder(state,Right)
+	
+	Procedure _MyTable_Style_Get#state#Border(*this.strMyTableStyleObject)
+		If *this
+			Protected result.i=0
+			_MyTableStyleGetRowCol(*this\obj,state#Style\border\border)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTable_Style_Set#state#Border(*this.strMyTableStyleObject,value.i)
+		If *this
+			_MyTableStyleSet(state#Style\border\border)
+		EndIf
+	EndProcedure
+	
+	
+EndMacro
+
+
+
+
+_MyTable_SetterGetter_default(Default);}
+_MyTable_SetterGetter_default(Zebra)	
+_MyTable_SetterGetter_default(Selected)
+_MyTable_SetterGetter_default(ElementSelected)
+_MyTable_SetterGetter_default(Fixed)					
+_MyTable_SetterGetter_default(Title)					
+
+
+
 
 Procedure _MyTable_Style_GetObject(*this.strMyTableStyleObject)
 	If *this
@@ -461,291 +587,7 @@ Procedure _MyTable_Style_GetObject(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
-Procedure.q _MyTable_Style_GetBackColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,backcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
 
-Procedure.q _MyTable_Style_GetZebraBackColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,zebrabackcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetFixedBackColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,fixedbackcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetSelectedColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,selectedcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetSelectedForeColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,selectedforecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetElementSelectedColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,elementselectedcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetElementSelectedForeColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,elementselectedforecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetFrontColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,frontcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetZebraFrontColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,zebrafrontcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetFixedFrontColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,fixedfrontcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetFixedForeColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,fixedforecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetBorderColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,border\defaultBorder\color)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.i _MyTable_Style_GetBorderwidth(*this.strMyTableStyleObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGet(*this\obj,border\defaultBorder\width)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetSelectedBorderColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,border\defaultBorder\selectedcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.i _MyTable_Style_GetSelectedBorderwidth(*this.strMyTableStyleObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGet(*this\obj,border\defaultBorder\selectedwidth)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetElementSelectedBorderColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this\obj,border\elementselectedbordercolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_Style_GetForeColor(*this.strMyTableStyleObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this\obj,forecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_GetVAlign(*this.strMyTableStyleObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetRow(*this\obj,valign)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_GetHAlign(*this.strMyTableStyleObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetCol(*this\obj,halign)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_GetBorder(*this.strMyTableStyleObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetRowCol(*this\obj,border\border)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetFont(*this.strMyTableStyleObject,value.i)
-	If *this
-		_MyTableStyleSet(font)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetBackColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(backcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetZebraBackColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(zebrabackcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetFixedBackColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(fixedbackcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetSelectedColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(selectedcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetSelectedForeColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(selectedforecolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetElementSelectedColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(elementselectedcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetElementSelectedForeColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(elementselectedforecolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetForeColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(forecolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetBorderColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(border\defaultBorder\color)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetBorderWidth(*this.strMyTableStyleObject,value.i)
-	If *this
-		_MyTableStyleSet(border\defaultBorder\width)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetSelectedBorderColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(border\defaultBorder\selectedcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetSelectedBorderWidth(*this.strMyTableStyleObject,value.i)
-	If *this
-		_MyTableStyleSet(border\defaultBorder\selectedwidth)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetElementSelectedBorderColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(border\elementselectedbordercolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetFrontColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(frontcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetZebraFrontColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(zebrafrontcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetFixedFrontColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(fixedfrontcolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetFixedForeColor(*this.strMyTableStyleObject,value.q)
-	If *this
-		_MyTableStyleSet(fixedforecolor)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetBorder(*this.strMyTableStyleObject,value.i)
-	If *this
-		_MyTableStyleSet(border\border)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetVAlign(*this.strMyTableStyleObject,value.i)
-	If *this
-		_MyTableStyleSet(valign)
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Style_SetHAlign(*this.strMyTableStyleObject,value.i)
-	If *this
-		_MyTableStyleSet(halign)
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 	Select *this\obj\type
@@ -775,66 +617,8 @@ Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 	EndSelect
 EndProcedure
 
-Macro _MyTableStyleBorder(name)
-	Procedure _MyTable_Style_SetBorderColor#name(*this.strMyTableStyleObject,value.q)
-		If *this
-			_MyTableStyleSet(border\border#name\color)
-		EndIf
-	EndProcedure
-	
-	Procedure _MyTable_Style_SetBorderWidth#name(*this.strMyTableStyleObject,value.i)
-		If *this
-			_MyTableStyleSet(border\border#name\width)
-		EndIf
-	EndProcedure
-	
-	Procedure _MyTable_Style_SetBorderSelectedColor#name(*this.strMyTableStyleObject,value.q)
-		If *this
-			_MyTableStyleSet(border\border#name\selectedcolor)
-		EndIf
-	EndProcedure
-	
-	Procedure _MyTable_Style_SetBorderSelectedWidth#name(*this.strMyTableStyleObject,value.i)
-		If *this
-			_MyTableStyleSet(border\border#name\selectedwidth)
-		EndIf
-	EndProcedure
-EndMacro
 
-_MyTableStyleBorder(Top)
-_MyTableStyleBorder(Left)
-_MyTableStyleBorder(Bottom)
-_MyTableStyleBorder(Right)
 
-Procedure _MyTable_Style_SetBorderStyle(*this.strMyTableStyleObject,border.i,color.q=0,width.q=0,selectedcolor.q=0,selectedwidth.q=0)
-	If *this
-		Protected value.q
-		If Bool(border & #MYTABLE_STYLE_BORDER_TOP)
-			_MyTable_Style_SetBorderColorTop(*this,color)
-			_MyTable_Style_SetBorderWidthTop(*this,width)
-			_MyTable_Style_SetBorderSelectedColorTop(*this,selectedcolor)
-			_MyTable_Style_SetBorderSelectedWidthTop(*this,selectedwidth)
-		EndIf
-		If Bool(border & #MYTABLE_STYLE_BORDER_BOTTOM)
-			_MyTable_Style_SetBorderColorBottom(*this,color)
-			_MyTable_Style_SetBorderWidthBottom(*this,width)
-			_MyTable_Style_SetBorderSelectedColorBottom(*this,selectedcolor)
-			_MyTable_Style_SetBorderSelectedWidthBottom(*this,selectedwidth)	
-		EndIf
-		If Bool(border & #MYTABLE_STYLE_BORDER_LEFT)
-			_MyTable_Style_SetBorderColorLeft(*this,color)
-			_MyTable_Style_SetBorderWidthLeft(*this,width)
-			_MyTable_Style_SetBorderSelectedColorLeft(*this,selectedcolor)
-			_MyTable_Style_SetBorderSelectedWidthLeft(*this,selectedwidth)
-		EndIf
-		If Bool(border & #MYTABLE_STYLE_BORDER_RIGHT)
-			_MyTable_Style_SetBorderColorRight(*this,color)
-			_MyTable_Style_SetBorderWidthRight(*this,width)
-			_MyTable_Style_SetBorderSelectedColorRight(*this,selectedcolor)
-			_MyTable_Style_SetBorderSelectedWidthRight(*this,selectedwidth)
-		EndIf
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Style_Free(*this.strMyTableStyleObject)
 	If *this
@@ -844,7 +628,7 @@ EndProcedure
 
 Procedure _MyTable_Style_Delete(*this.strMyTableStyleObject)
 	If *this
-		*this\obj\style\font=0
+		;TODO Delete Style
 		_MyTable_Style_Redraw(*this)
 	EndIf
 EndProcedure
