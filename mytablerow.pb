@@ -33,6 +33,7 @@ EndProcedure
 
 Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,text.s,rows.i)
 	If *this
+		
 		Protected idx
 		_callcountStart(row_adddirtyrows)
 		If Not *this\rows

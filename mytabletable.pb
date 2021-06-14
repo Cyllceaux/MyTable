@@ -699,6 +699,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	Protected checkboxes.b=#False
 	Protected border.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_BORDER)
 	Protected callback.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
+	Protected alwaysexpanded.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+	alwaysexpanded=Bool(alwaysexpanded Or Bool(*this\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
 	
 	Protected idx=0
 	Protected start=1	
@@ -772,10 +774,12 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 					DrawingMode(#PB_2DDrawing_AlphaClip)
 					If *this\rows
 						If ListSize(*this\rows\rows())>0
-							If *this\expanded
-								DrawImage(ImageID(*this\table\DefaultImageMinusArrow),bx+addx,by)
-							Else
-								DrawImage(ImageID(*this\table\DefaultImagePlusArrow),bx+addx,by)
+							If Not alwaysexpanded
+								If *this\expanded
+									DrawImage(ImageID(*this\table\DefaultImageMinusArrow),bx+addx,by)
+								Else
+									DrawImage(ImageID(*this\table\DefaultImagePlusArrow),bx+addx,by)
+								EndIf
 							EndIf
 						EndIf
 					EndIf

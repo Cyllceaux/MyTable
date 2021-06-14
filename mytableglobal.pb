@@ -129,6 +129,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	Protected resizable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_RESIZABLE)
 	Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
 	Protected header.b=Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
+	Protected alwaysexpanded.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 	
 	Protected *row.strMyTableRow=0
 	Protected *cell.strMyTableCell=0
@@ -156,7 +157,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		vsc+*this\calctitleHeight
 		If my<*this\calctitleHeight
 			ProcedureReturn *rc
-		endif
+		EndIf
 	EndIf
 	
 	If header
@@ -617,6 +618,8 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+	Protected alwaysexpanded.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+	
 	Protected redraw.b=#False
 	*this\md=#True
 	If IsGadget(*this\canvas)
@@ -624,6 +627,9 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 		
 		*this\myd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 		*this\mxd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
+		If *rc\trow
+			alwaysexpanded=Bool(alwaysexpanded Or Bool(*rc\trow\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
+		EndIf
 		If *rc\check
 			*rc\trow\checked=Bool(Not *rc\trow\checked)
 			*this\dirty=#True
@@ -638,7 +644,9 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 			EndIf
 			*this\md=#False
 			redraw=#True
-		ElseIf *rc\exp
+		ElseIf *rc\exp And Not alwaysexpanded
+			
+			
 			*rc\trow\expanded=Bool(Not *rc\trow\expanded)
 			*this\dirty=#True
 			If *rc\trow\expanded
@@ -653,6 +661,7 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 			_MyTable_Table_Predraw(*this)
 			redraw=#True
 			*this\md=#False
+			
 		Else
 			
 			If *rc\right And *rc\bottom
@@ -876,7 +885,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
                           image.i,
                           flags.i)
 	
-	
+	Protected alwaysexpanded.b=Bool(*table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 	With *row
 		\vtable=?vtable_row
 		\type=#MYTABLE_TYPE_ROW
@@ -887,7 +896,8 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 		\dirty=#True
 		\height=*table\defaultrowheight
 		\calcheight=*table\calcdefaultrowheight
-		\image\orig=image						
+		\image\orig=image		
+		\expanded=alwaysexpanded
 		If text<>""
 			Protected c=CountString(text,sep)+1
 			Protected idx=0
