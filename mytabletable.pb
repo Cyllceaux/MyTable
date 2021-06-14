@@ -275,6 +275,14 @@ Procedure.q _MyTable_GetSelectedBackColor(*this.strMyTableObject)
 	EndIf
 EndProcedure
 
+Procedure.q _MyTable_GetMouseOverBackColor(*this.strMyTableObject)
+	If *this
+		Protected result.q=0
+		_MyTableStyleGetRow(*this,mouseoverStyle\backcolor)
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
 Procedure.q _MyTable_GetTitleBackColor(*this.strMyTableObject)
 	If *this
 		Protected result.q=0
@@ -701,6 +709,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	Protected callback.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
 	Protected alwaysexpanded.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 	alwaysexpanded=Bool(alwaysexpanded Or Bool(*this\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
+	Protected markmouseover.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
+	
 	
 	Protected idx=0
 	Protected start=1	
@@ -726,6 +736,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		*this\table\callback(*this)
 	EndIf
 	Protected selected.b=#False
+	Protected mselected.b=#False
 	
 	For idx=start To cols
 		
@@ -743,6 +754,12 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		selected=Bool(selected Or *this\table\tempselectedcols(Str(*cell\col)))
 		selected=Bool(selected Or *this\table\tempselectedcells(Str(*cell)))
 		
+		mselected=#False
+		If markmouseover And Not selected
+			mselected=Bool(mselected Or Bool(*this\table\mvcell=*cell))			
+			mselected=Bool(mselected Or Bool(*this\table\mvrow=*this))
+		EndIf
+		
 		
 		Protected *col.strMyTableCol=*cell\col
 		If *col\calcwidth>0
@@ -752,7 +769,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 			If selected
 				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
 			Else
-				If fixed
+				If mselected
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetMouseOverBackColor(*cell))
+				ElseIf fixed
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetFixedBackColor(*cell))
 				Else
 					If zebra
@@ -969,6 +988,8 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 		Protected header.b=Bool(Not (*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
 		Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
 		Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
+		
+		
 		
 		If *this\application
 			redraw=Bool(redraw And *this\application\redraw)

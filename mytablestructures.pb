@@ -37,6 +37,7 @@ Structure strMyTableObject Extends strMyTableVTable
 	fixedStyle.strMyTableStyle
 	elementselectedStyle.strMyTableStyle
 	titleStyle.strMyTableStyle
+	mouseoverStyle.strMyTableStyle
 	tooltip.s
 EndStructure
 
@@ -121,7 +122,7 @@ Structure strMyTableTable Extends strMyTableObject
 	calctitleHeight.i
 	redraw.b
 	recalc.b
-		
+	
 	emptytext.s
 	
 	drawing.b
@@ -158,6 +159,10 @@ Structure strMyTableTable Extends strMyTableObject
 	*lastrow.strMyTableRow
 	*lastcol.strMyTableCol
 	
+	*mvcell.strMyTableCell
+	*mvrow.strMyTableRow
+	*mvcol.strMyTableCol
+		
 	*resizeRow.strMyTableRow
 	*resizeCol.strMyTableCol
 	

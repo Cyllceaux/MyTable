@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-14 12:17" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-14 16:49" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -24,10 +24,10 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="800c2979899247797b5d542706c494f9"/>
+      <fingerprint md5="36913852d10ee0e892ca9a08c6588856"/>
     </file>
     <file name="mytableapplication.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="8686c253f98f72754786fb6d12ca7e66"/>
     </file>
     <file name="mytablecell.pb">
@@ -40,23 +40,23 @@
     </file>
     <file name="mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="89e95c8e801eb31d6293ebd39df8567e"/>
+      <fingerprint md5="26e2f12d302990c256105935e4b47ddd"/>
     </file>
     <file name="mytablerow.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="0cf6c465f617db4eed2bc975fdaaabf5"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="ac067fadaaa55960375255a1faaa02df"/>
     </file>
     <file name="mytablestructures.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="0652d6e61dfa974726b7c637c7c81852"/>
+      <fingerprint md5="e5ae6e4536f90963203a84732a6a7dab"/>
     </file>
     <file name="mytablestyle.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="31ef5b6f2d680e500a33c811aa47c3bd"/>
+      <fingerprint md5="79183513bce2228a3ed7fb4a69dafad5"/>
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="5c9fd2fbf12bd4b816e16fd219f63a2a"/>
+      <fingerprint md5="2cec2538615527f3989364ac512e6734"/>
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -75,7 +75,7 @@
       <fingerprint md5="c1093cd6e95fa27b70790a0647043698"/>
     </file>
     <file name="Test\table10.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="2d32d3e191406eba013cc6b065bd69ce"/>
     </file>
     <file name="Test\table11.pb">
@@ -169,6 +169,14 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="052b40c32a8534c33a69f5f4f02b1b05"/>
+    </file>
+    <file name="Test\tabletree5.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="2cb842a20eda3d1e405a1ae0a25c1de3"/>
+    </file>
+    <file name="Test\kontakte.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="16d39b80375c0a6058477bd79343ecf8"/>
     </file>
   </section>
   <section name="targets">
@@ -328,8 +336,20 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
+    <target name="TableTree5 (always Expanded)" enabled="0" default="0">
+      <inputfile value="Test\tabletree5.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
     <target name="Outlook" enabled="0" default="1">
       <inputfile value="Test\outlook.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="Kontakte" enabled="0" default="0">
+      <inputfile value="Test\kontakte.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>

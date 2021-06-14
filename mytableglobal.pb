@@ -29,6 +29,14 @@ Procedure  _MyTableInitStyleTableSelected(*style.strMyTableStyle)
 	EndWith
 EndProcedure
 
+Procedure  _MyTableInitStyleTableMouseOver(*style.strMyTableStyle)
+	With *style
+		\backcolor=RGBA(100,100,120,255)
+		\forecolor=RGBA(20,20,20,255)
+		\border\borderDefault\color=RGBA(200,200,250,255)
+	EndWith
+EndProcedure
+
 Procedure  _MyTableInitStyleTableFixed(*style.strMyTableStyle)
 	With *style
 		\frontcolor=RGBA(250,250,250,255)
@@ -78,6 +86,7 @@ Procedure _MyTableInitApplication(*application.strMyTableApplication,
 		_MyTableInitStyleTableFixed(\fixedStyle)		
 		_MyTableInitStyleTableSelected(\selectedStyle)
 		_MyTableInitStyleTableTitle(\titleStyle)
+		_MyTableInitStyleTableMouseOver(\mouseoverStyle)
 	EndWith
 EndProcedure
 
@@ -511,6 +520,7 @@ Procedure _MyTableEvtCanvasMouseMove()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Protected markmouseover.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 	
@@ -604,6 +614,12 @@ Procedure _MyTableEvtCanvasMouseMove()
 				ClearMap(*this\tempselectedCols())
 				_MyTableSelect(*this,*rc,#True)
 				*this\dirty=#True
+				_MyTable_Table_Redraw(*this)
+			ElseIf markmouseover
+				*this\dirty=#True
+				*this\mvcell=*rc\tcell
+				*this\mvcol=*rc\tcol
+				*this\mvrow=*rc\trow
 				_MyTable_Table_Redraw(*this)
 			EndIf				
 		EndIf
@@ -870,6 +886,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			_MyTableInitStyleTableFixed(\fixedStyle)
 			_MyTableInitStyleTableSelected(\selectedStyle)
 			_MyTableInitStyleTableTitle(\titleStyle)
+			_MyTableInitStyleTableMouseOver(\mouseoverStyle)
 		EndIf
 	EndWith
 	

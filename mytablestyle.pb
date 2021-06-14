@@ -577,6 +577,7 @@ _MyTable_SetterGetter_default(Selected)
 _MyTable_SetterGetter_default(ElementSelected)
 _MyTable_SetterGetter_default(Fixed)					
 _MyTable_SetterGetter_default(Title)					
+_MyTable_SetterGetter_default(MouseOver)					
 
 
 
