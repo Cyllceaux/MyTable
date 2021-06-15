@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1805
-	#MYTABLE_VERSION_DATE = 20210614
+	#MYTABLE_VERSION = 1817
+	#MYTABLE_VERSION_DATE = 20210615
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -200,12 +200,20 @@
 	Prototype MyTableProtoEventCellChangedUnChecked(*cell.MyTableCell)
 	Prototype MyTableProtoEventCellChangedText(*cell.MyTableCell,old.s)
 	Prototype MyTableProtoEventCellChangedValue(*cell.MyTableCell,old.d)
-	Prototype MyTableProtoEventCellSelected(*cell.MyTableCell)
+	Prototype MyTableProtoEventCellSelected(*cell.MyTableCell)		
+	Prototype MyTableProtoEventCellLeftClick(*cell.MyTableCell)	
+	Prototype MyTableProtoEventCellRightClick(*cell.MyTableCell)
+	Prototype MyTableProtoEventCellLeftDoubleClick(*cell.MyTableCell)		
+	Prototype MyTableProtoEventCellRightDoubleClick(*cell.MyTableCell)
 	Prototype MyTableProtoEventRowChangedChecked(*row.MyTableRow)
 	Prototype MyTableProtoEventRowChangedUnChecked(*row.MyTableRow)
 	Prototype MyTableProtoEventRowChangedExpanded(*row.MyTableRow)
 	Prototype MyTableProtoEventRowChangedCollapsed(*row.MyTableRow)
 	Prototype MyTableProtoEventRowSelected(*row.MyTableRow)
+	Prototype MyTableProtoEventRowLeftClick(*cell.MyTableRow)	
+	Prototype MyTableProtoEventRowRightClick(*cell.MyTableRow)
+	Prototype MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
+	Prototype MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
 	
 	
 	Prototype MyTableProtoCallback(*row.MyTableRow)
@@ -270,11 +278,19 @@
 		RegisterEventCellChangedText(callback.MyTableProtoEventCellChangedText)
 		RegisterEventCellChangedValue(callback.MyTableProtoEventCellChangedValue)
 		RegisterEventCellSelected(callback.MyTableProtoEventCellSelected)
+		RegisterEventCellLeftClick(callback.MyTableProtoEventCellLeftClick)
+		RegisterEventCellLeftDoubleClick(callback.MyTableProtoEventCellLeftDoubleClick)
+		RegisterEventCellRightClick(callback.MyTableProtoEventCellRightClick)
+		RegisterEventCellRightDoubleClick(callback.MyTableProtoEventCellRightDoubleClick)
 		RegisterEventRowChangedChecked(callback.MyTableProtoEventRowChangedChecked)
 		RegisterEventRowChangedUnChecked(callback.MyTableProtoEventRowChangedUnChecked)
 		RegisterEventRowChangedExpanded(callback.MyTableProtoEventRowChangedExpanded)
 		RegisterEventRowChangedCollapsed(callback.MyTableProtoEventRowChangedCollapsed)
 		RegisterEventRowSelected(callback.MyTableProtoEventRowSelected)
+		RegisterEventRowLeftClick(callback.MyTableProtoEventRowLeftClick)
+		RegisterEventRowLeftDoubleClick(callback.MyTableProtoEventRowLeftDoubleClick)
+		RegisterEventRowRightClick(callback.MyTableProtoEventRowRightClick)
+		RegisterEventRowRightDoubleClick(callback.MyTableProtoEventRowRightDoubleClick)
 		
 		RegisterCallback(callback.MyTableProtoCallback)
 	EndInterface

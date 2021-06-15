@@ -765,6 +765,13 @@ Procedure _MyTableEvtCanvasMouseLeftDouble()
 			_MyTable_Col_Autosize(*rc\tcol)
 		Else
 			
+			If *this\eventCellLeftDoubleClick And *rc\tcell
+				*this\eventCellLeftDoubleClick(*rc\tcell)
+			EndIf
+			If *this\eventRowLeftDoubleClick And *rc\trow
+				*this\eventRowLeftDoubleClick(*rc\trow)
+			EndIf		
+			
 		EndIf
 		FreeStructure(*rc)
 	EndIf
@@ -792,6 +799,50 @@ Procedure _MyTableEvtCanvasMouseRightDouble()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
+		
+		If Not *rc\bottom And Not *rc\check And Not *rc\exp And Not *rc\right
+			If *this\eventCellRightDoubleClick And *rc\tcell
+				*this\eventCellRightDoubleClick(*rc\tcell)
+			EndIf
+			If *this\eventRowRightDoubleClick And *rc\trow
+				*this\eventRowRightDoubleClick(*rc\trow)
+			EndIf		
+		EndIf
+		FreeStructure(*rc)
+	EndIf
+EndProcedure
+
+Procedure _MyTableEvtCanvasMouseRightClick()
+	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	If IsGadget(*this\canvas)
+		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
+		
+		If Not *rc\bottom And Not *rc\check And Not *rc\exp And Not *rc\right
+			If *this\eventCellRightClick And *rc\tcell
+				*this\eventCellRightClick(*rc\tcell)
+			EndIf
+			If *this\eventRowRightClick And *rc\trow
+				*this\eventRowRightClick(*rc\trow)
+			EndIf		
+		EndIf
+		
+		FreeStructure(*rc)
+	EndIf
+EndProcedure
+
+Procedure _MyTableEvtCanvasMouseLeftClick()
+	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	If IsGadget(*this\canvas)
+		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
+		
+		If Not *rc\bottom And Not *rc\check And Not *rc\exp And Not *rc\right
+			If *this\eventCellLeftClick And *rc\tcell
+				*this\eventCellLeftClick(*rc\tcell)
+			EndIf
+			If *this\eventRowLeftClick And *rc\trow
+				*this\eventRowLeftClick(*rc\trow)
+			EndIf		
+		EndIf
 		
 		FreeStructure(*rc)
 	EndIf
@@ -863,12 +914,14 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseMove(),#PB_EventType_MouseMove)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftDown(),#PB_EventType_LeftButtonDown)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LeftButtonUp)
-			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftDouble(),#PB_EventType_LeftDoubleClick)
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftClick(),#PB_EventType_LeftClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightDown(),#PB_EventType_RightButtonDown)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightUp(),#PB_EventType_RightButtonUp)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightDouble(),#PB_EventType_RightDoubleClick)
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightClick(),#PB_EventType_RightClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)
 		EndIf
 		If IsGadget(vscroll)
 			SetGadgetData(vscroll,*table)

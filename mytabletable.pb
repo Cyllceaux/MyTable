@@ -1,4 +1,73 @@
-﻿
+﻿Macro _MyTableStyleGetBorder(name)
+	Procedure.i _MyTable_GetBorderWidth#name(*this.strMyTableObject)
+		If *this
+			Protected result.i=0
+			_MyTableStyleGetRowAlternative(*this,defaultStyle\border\Border#name\width,defaultStyle\border\borderDefault\width)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	
+	Procedure.q _MyTable_GetBorderColor#name(*this.strMyTableObject)
+		If *this
+			Protected result.q=0
+			_MyTableStyleGetRowAlternative(*this,defaultStyle\border\Border#name\color,defaultStyle\border\borderDefault\color)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure.q _MyTable_GetSelectedBorderColor#name(*this.strMyTableObject)
+		If *this
+			Protected result.q=0
+			_MyTableStyleGetAlternative(*this,selectedStyle\border\Border#name\color,selectedStyle\border\borderDefault\color)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+	
+	Procedure.i _MyTable_GetSelectedBorderWidth#name(*this.strMyTableObject)
+		If *this
+			Protected result.i=0
+			_MyTableStyleGetAlternative(*this,selectedStyle\border\Border#name\width,selectedStyle\border\borderDefault\width)
+			ProcedureReturn result
+		EndIf
+	EndProcedure
+EndMacro
+
+Macro _MyTableRegisterEvent(name)
+	Procedure _MyTable_Table_RegisterEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
+		If *this
+			*this\Event#name=event
+		EndIf
+	EndProcedure
+EndMacro
+
+
+
+_MyTableRegisterEvent(CellChangedChecked)
+_MyTableRegisterEvent(CellChangedUnChecked)
+_MyTableRegisterEvent(CellChangedText)
+_MyTableRegisterEvent(CellChangedValue)
+_MyTableRegisterEvent(CellSelected)		
+_MyTableRegisterEvent(CellLeftClick)	
+_MyTableRegisterEvent(CellRightClick)
+_MyTableRegisterEvent(CellLeftDoubleClick)		
+_MyTableRegisterEvent(CellRightDoubleClick)
+_MyTableRegisterEvent(RowChangedChecked)
+_MyTableRegisterEvent(RowChangedUnChecked)
+_MyTableRegisterEvent(RowChangedExpanded)
+_MyTableRegisterEvent(RowChangedCollapsed)
+_MyTableRegisterEvent(RowSelected)
+_MyTableRegisterEvent(RowLeftClick)	
+_MyTableRegisterEvent(RowRightClick)
+_MyTableRegisterEvent(RowLeftDoubleClick)		
+_MyTableRegisterEvent(RowRightDoubleClick)
+
+_MyTableStyleGetBorder(Top)
+_MyTableStyleGetBorder(Left)
+_MyTableStyleGetBorder(Right)
+_MyTableStyleGetBorder(Bottom)
+
+
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetterPredraw(Table,Title,s)
 _MyTableSimpleSetterGetterRedraw(Table,Dirty,b)
@@ -331,45 +400,6 @@ Procedure.i _MyTable_GetBorderWidth(*this.strMyTableObject)
 	EndIf
 EndProcedure
 
-Macro _MyTableStyleGetBorder(name)
-	Procedure.i _MyTable_GetBorderWidth#name(*this.strMyTableObject)
-		If *this
-			Protected result.i=0
-			_MyTableStyleGetRowAlternative(*this,defaultStyle\border\Border#name\width,defaultStyle\border\borderDefault\width)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-	
-	
-	Procedure.q _MyTable_GetBorderColor#name(*this.strMyTableObject)
-		If *this
-			Protected result.q=0
-			_MyTableStyleGetRowAlternative(*this,defaultStyle\border\Border#name\color,defaultStyle\border\borderDefault\color)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-	
-	Procedure.q _MyTable_GetSelectedBorderColor#name(*this.strMyTableObject)
-		If *this
-			Protected result.q=0
-			_MyTableStyleGetAlternative(*this,selectedStyle\border\Border#name\color,selectedStyle\border\borderDefault\color)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-	
-	Procedure.i _MyTable_GetSelectedBorderWidth#name(*this.strMyTableObject)
-		If *this
-			Protected result.i=0
-			_MyTableStyleGetAlternative(*this,selectedStyle\border\Border#name\width,selectedStyle\border\borderDefault\width)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-EndMacro
-
-_MyTableStyleGetBorder(Top)
-_MyTableStyleGetBorder(Left)
-_MyTableStyleGetBorder(Right)
-_MyTableStyleGetBorder(Bottom)
 
 Procedure.q _MyTable_GetSelectedBorderColor(*this.strMyTableObject)
 	If *this
@@ -1607,65 +1637,8 @@ Procedure _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_RegisterEventCellChangedChecked(*this.strMyTableTable,event.MyTableProtoEventCellChangedChecked)
-	If *this
-		*this\EventCellChangedChecked=event
-	EndIf
-EndProcedure
 
-Procedure _MyTable_Table_RegisterEventCellChangedUnChecked(*this.strMyTableTable,event.MyTableProtoEventCellChangedUnChecked)
-	If *this
-		*this\EventCellChangedUnChecked=event
-	EndIf
-EndProcedure
 
-Procedure _MyTable_Table_RegisterEventCellChangedText(*this.strMyTableTable,event.MyTableProtoEventCellChangedText)
-	If *this
-		*this\EventCellChangedText=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventCellChangedValue(*this.strMyTableTable,event.MyTableProtoEventCellChangedValue)
-	If *this
-		*this\EventCellChangedValue=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventCellSelected(*this.strMyTableTable,event.MyTableProtoEventCellSelected)
-	If *this
-		*this\EventCellSelected=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventRowChangedChecked(*this.strMyTableTable,event.MyTableProtoEventRowChangedChecked)
-	If *this
-		*this\EventRowChangedChecked=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventRowChangedUnChecked(*this.strMyTableTable,event.MyTableProtoEventRowChangedUnChecked)
-	If *this
-		*this\EventRowChangedUnChecked=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventRowChangedExpanded(*this.strMyTableTable,event.MyTableProtoEventRowChangedExpanded)
-	If *this
-		*this\EventRowChangedExpanded=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventRowChangedCollapsed(*this.strMyTableTable,event.MyTableProtoEventRowChangedCollapsed)
-	If *this
-		*this\EventRowChangedCollapsed=event
-	EndIf
-EndProcedure
-
-Procedure _MyTable_Table_RegisterEventRowSelected(*this.strMyTableTable,event.MyTableProtoEventRowSelected)
-	If *this
-		*this\EventRowSelected=event
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Table_RegisterCallback(*this.strMyTableTable,callback.MyTableProtoCallback)
 	If *this
