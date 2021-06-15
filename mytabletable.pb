@@ -1130,7 +1130,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 					font=FontID(font)
 				EndIf
 				DrawingFont(font)
-				_MyTableDrawTextCompleteCenter(*this\emptytext,_MyTable_GetForeColor(*this),width)
+				_MyTableDrawTextCompleteCenter(by,*this\emptytext,_MyTable_GetForeColor(*this),width)
 			EndIf
 			
 			by=0

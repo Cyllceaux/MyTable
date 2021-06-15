@@ -1112,12 +1112,11 @@ Procedure  _MyTableTextWidth(text.s)
 	EndIf
 EndProcedure
 
-Procedure _MyTableDrawTextCompleteCenter(text.s,color.q,maxlen.i)
+Procedure _MyTableDrawTextCompleteCenter(by,text.s,color.q,maxlen.i)
 	Protected tt.s=text
 	Protected tw=_MyTableTextWidth(text)
 	Protected c=CountString(text,#CRLF$)
 	Protected bx=0
-	Protected by=0
 	Protected idx
 	If c>0
 		For idx=0 To c
@@ -1142,7 +1141,7 @@ Procedure _MyTableDrawTextCompleteCenter(text.s,color.q,maxlen.i)
 					result=Trim(result+" "+ts)
 				EndIf
 			Next
-			_MyTableDrawTextCompleteCenter(result,color,maxlen)
+			_MyTableDrawTextCompleteCenter(by,result,color,maxlen)
 		Else
 			bx=maxlen/2-tw/2
 			DrawText(bx,by,tt,color)

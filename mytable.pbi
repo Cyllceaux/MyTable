@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1824
+	#MYTABLE_VERSION = 1831
 	#MYTABLE_VERSION_DATE = 20210615
 	
 	Enumeration _mytable_type
@@ -221,7 +221,7 @@
 	Prototype MyTableProtoEventRowRightClick(*cell.MyTableRow)
 	Prototype MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
 	Prototype MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
-	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h)
+	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is drawn
 	
 	
 	Prototype MyTableProtoCallback(*row.MyTableRow)
