@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-14 16:49" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-15 07:08" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -20,11 +20,11 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="6d493a4d4edef6d8acd213c7e1e63e6b"/>
+      <fingerprint md5="9db683e5e114ee2966af8ee900f6403e"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="36913852d10ee0e892ca9a08c6588856"/>
+      <fingerprint md5="69ea0eaa23a26d1a3155838842d588c0"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -40,7 +40,7 @@
     </file>
     <file name="mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="26e2f12d302990c256105935e4b47ddd"/>
+      <fingerprint md5="bcc5e8e430dbeebe619f2a0002195d15"/>
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -48,7 +48,7 @@
     </file>
     <file name="mytablestructures.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="e5ae6e4536f90963203a84732a6a7dab"/>
+      <fingerprint md5="fcbefe505f0bf528c378ad53449f218e"/>
     </file>
     <file name="mytablestyle.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -56,7 +56,7 @@
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="2cec2538615527f3989364ac512e6734"/>
+      <fingerprint md5="47418ea8c6bfdac4da2a33f5bc5c9344"/>
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -65,6 +65,10 @@
     <file name="Test\declare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="c4aed6b0751473bfb8c601e6a302bfd7"/>
+    </file>
+    <file name="Test\kontakte.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="16d39b80375c0a6058477bd79343ecf8"/>
     </file>
     <file name="Test\outlook.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -146,6 +150,10 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="6fdd446f3351b58cb44efa54711abd0d"/>
     </file>
+    <file name="Test\tabletree5.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="2cb842a20eda3d1e405a1ae0a25c1de3"/>
+    </file>
     <file name="Test\tree.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="52dffbb9dd111ac37caaaff6cca38a9d"/>
@@ -169,14 +177,6 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="052b40c32a8534c33a69f5f4f02b1b05"/>
-    </file>
-    <file name="Test\tabletree5.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="2cb842a20eda3d1e405a1ae0a25c1de3"/>
-    </file>
-    <file name="Test\kontakte.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="16d39b80375c0a6058477bd79343ecf8"/>
     </file>
   </section>
   <section name="targets">
@@ -276,7 +276,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Table10 (SetImageLeft,SetImageRight)" enabled="0" default="0">
+    <target name="Table10 (SetImageLeft,SetImageRight)" enabled="0" default="1">
       <inputfile value="Test\table10.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
@@ -342,7 +342,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Outlook" enabled="0" default="1">
+    <target name="Outlook" enabled="0" default="0">
       <inputfile value="Test\outlook.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
