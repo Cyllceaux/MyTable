@@ -204,11 +204,7 @@ Procedure _MyTable_Col_SetImage(*this.strMyTableCol,value.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Col_GetStyle(*this.strMyTableCol)
-	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-	_MyTableInitStyleObject(*style,*this)
-	ProcedureReturn *style
-EndProcedure
+_MyTable_GetStylesCol()
 
 Procedure.b _MyTable_Col_GetSelected(*this.strMyTableCol)
 	If *this
@@ -297,7 +293,7 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 	If *row\cells And ListSize(*row\cells\cells())>*this\listindex	
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,*this\listindex)
 		If (*cell\textwidth=0 And *cell\text<>"") Or *cell\dirty
-			Protected nfont=_MyTable_GetFont(*cell)
+			Protected nfont=_MyTable_GetDefaultFont(*cell)
 			If nfont<>lastfont
 				If IsFont(nfont)
 					nfont=FontID(nfont)
@@ -357,7 +353,7 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		_callcountStart(AutosizeCol)
 		
 		If (*this\textheight=0 And *this\text<>"") Or *this\dirty
-			Protected nfont=_MyTable_GetFont(*this)
+			Protected nfont=_MyTable_GetDefaultFont(*this)
 			If IsFont(nfont)
 				nfont=FontID(nfont)
 			EndIf

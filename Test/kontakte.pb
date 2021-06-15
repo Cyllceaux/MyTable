@@ -15,26 +15,26 @@ UseModule MyTable
 	
 	Global *tree.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
 	*tree\SetRedraw(#False)
-	Define *col.MyTableCol,*rowStyle.MyTableStyleRow,*tableStyle.MyTableStyleTable,*colStyle.MyTableStyleCol
+	Define *col.MyTableCol,*rowStyle.MyTableStyle,*tableStyle.MyTableStyle,*colStyle.MyTableStyle
 	Define i,g
-	*col=*tree\AddCol("Name",#PB_Ignore):*colStyle=*col\GetStyle():*colStyle\SetBackColor(RGBA(5,5,5,255)):*colStyle\SetForeColor(RGBA(250,250,250,255)):*colStyle\SetFont(header)
-	*col=*tree\AddCol("E-Mail",#PB_Ignore):*colStyle=*col\GetStyle():*colStyle\SetBackColor(RGBA(5,5,5,255)):*colStyle\SetForeColor(RGBA(250,250,250,255)):*colStyle\SetFont(header)
-	*col=*tree\AddCol("Telefon",#PB_Ignore):*colStyle=*col\GetStyle():*colStyle\SetBackColor(RGBA(5,5,5,255)):*colStyle\SetForeColor(RGBA(250,250,250,255)):*colStyle\SetFont(header)
+	*col=*tree\AddCol("Name",#PB_Ignore):*colStyle=*col\GetDefaultStyle():*colStyle\SetBackColor(RGBA(5,5,5,255)):*colStyle\SetForeColor(RGBA(250,250,250,255)):*colStyle\SetFont(header)
+	*col=*tree\AddCol("E-Mail",#PB_Ignore):*colStyle=*col\GetDefaultStyle():*colStyle\SetBackColor(RGBA(5,5,5,255)):*colStyle\SetForeColor(RGBA(250,250,250,255)):*colStyle\SetFont(header)
+	*col=*tree\AddCol("Telefon",#PB_Ignore):*colStyle=*col\GetDefaultStyle():*colStyle\SetBackColor(RGBA(5,5,5,255)):*colStyle\SetForeColor(RGBA(250,250,250,255)):*colStyle\SetFont(header)
 	
 	*tree\SetDefaultRowHeight(32)
-	*tableStyle=*tree\GetStyle()
+	*tableStyle=*tree\GetDefaultStyle()
 	*tableStyle\SetBackColor(RGBA(5,5,5,255))
 	*tableStyle\SetForeColor(RGBA(250,250,250,255))
 	
 	Define *row.MyTableRow=*tree\AddRow("&")	
-	*rowStyle=*row\GetStyle()
+	*rowStyle=*row\GetDefaultStyle()
 	*rowStyle\SetFont(titel)
 	For g=1 To Random(100)
 		*row\AddRow("Name "+g+"|Mail "+g+"|Telefon "+g,"|",images(Random(9)))
 	Next
 	For i=Asc("A") To Asc("Z")
 		*row=*tree\AddRow(Chr(i))	
-		*rowStyle=*row\GetStyle()
+		*rowStyle=*row\GetDefaultStyle()
 		*rowStyle\SetFont(titel)
 		For g=1 To Random(100)
 			*row\AddRow(Chr(i)+" - Name "+g+"|Mail "+g+"|Telefon "+g,"|",images(Random(9)))

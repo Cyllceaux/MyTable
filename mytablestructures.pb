@@ -38,11 +38,18 @@ Structure strMyTableObject Extends strMyTableVTable
 	elementselectedStyle.strMyTableStyle
 	titleStyle.strMyTableStyle
 	mouseoverStyle.strMyTableStyle
+	emptyStyle.strMyTableStyle
 	tooltip.s
 EndStructure
 
 Structure strMyTableStyleObject Extends strMyTableVTable
 	*obj.strMyTableObject
+	*cellStyle.strMyTableStyle
+	*rowStyle.strMyTableStyle
+	*colStyle.strMyTableStyle
+	*tableStyle.strMyTableStyle
+	*applicationStyle.strMyTableStyle
+	*style.strMyTableStyle
 EndStructure
 
 Structure strMyTableImage

@@ -1,38 +1,4 @@
-﻿Macro _MyTableStyleGetBorder(name)
-	Procedure.i _MyTable_GetBorderWidth#name(*this.strMyTableObject)
-		If *this
-			Protected result.i=0
-			_MyTableStyleGetRowAlternative(*this,defaultStyle\border\Border#name\width,defaultStyle\border\borderDefault\width)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-	
-	
-	Procedure.q _MyTable_GetBorderColor#name(*this.strMyTableObject)
-		If *this
-			Protected result.q=0
-			_MyTableStyleGetRowAlternative(*this,defaultStyle\border\Border#name\color,defaultStyle\border\borderDefault\color)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-	
-	Procedure.q _MyTable_GetSelectedBorderColor#name(*this.strMyTableObject)
-		If *this
-			Protected result.q=0
-			_MyTableStyleGetAlternative(*this,selectedStyle\border\Border#name\color,selectedStyle\border\borderDefault\color)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-	
-	Procedure.i _MyTable_GetSelectedBorderWidth#name(*this.strMyTableObject)
-		If *this
-			Protected result.i=0
-			_MyTableStyleGetAlternative(*this,selectedStyle\border\Border#name\width,selectedStyle\border\borderDefault\width)
-			ProcedureReturn result
-		EndIf
-	EndProcedure
-EndMacro
-
+﻿
 Macro _MyTableRegisterEvent(name)
 	Procedure _MyTable_Table_RegisterEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
 		If *this
@@ -62,12 +28,6 @@ _MyTableRegisterEvent(RowRightClick)
 _MyTableRegisterEvent(RowLeftDoubleClick)		
 _MyTableRegisterEvent(RowRightDoubleClick)
 _MyTableRegisterEvent(CustomCellDraw)
-
-_MyTableStyleGetBorder(Top)
-_MyTableStyleGetBorder(Left)
-_MyTableStyleGetBorder(Right)
-_MyTableStyleGetBorder(Bottom)
-
 
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetterPredraw(Table,Title,s)
@@ -264,177 +224,7 @@ Procedure _MyTable_Table_ClearCols(*this.strMyTableTable,*value)
 EndProcedure
 
 
-Procedure.q _MyTable_GetBackColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,defaultStyle\backcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
 
-Procedure.q _MyTable_GetFixedBackColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetAlternative(*this,fixedStyle\backcolor,defaultStyle\backColor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetZebraBackColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetAlternative(*this,zebraStyle\backcolor,defaultStyle\backcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-
-Procedure.q _MyTable_GetFrontColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,defaultStyle\frontcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetFixedFrontColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetAlternative(*this,fixedStyle\frontcolor,defaultStyle\frontcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetFixedForeColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetAlternative(*this,fixedStyle\forecolor,defaultStyle\forecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetForeColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,defaultStyle\forecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.i _MyTable_GetFont(*this.strMyTableObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetRow(*this,defaultStyle\font)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.i _MyTable_GetBorder(*this.strMyTableObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetRowCol(*this,defaultStyle\border\border)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetSelectedBackColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,selectedStyle\backcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetMouseOverBackColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,mouseoverStyle\backcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetTitleBackColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this,titleStyle\backcolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetTitleFont(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this,titleStyle\font)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetTitleForeColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this,titleStyle\forecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetSelectedForeColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,selectedStyle\forecolor)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.q _MyTable_GetBorderColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGetRow(*this,defaultStyle\border\borderDefault\color)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure.i _MyTable_GetBorderWidth(*this.strMyTableObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetRow(*this,defaultStyle\border\borderDefault\width)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-
-Procedure.q _MyTable_GetSelectedBorderColor(*this.strMyTableObject)
-	If *this
-		Protected result.q=0
-		_MyTableStyleGet(*this,selectedStyle\border\borderDefault\color)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-
-Procedure.i _MyTable_GetSelectedBorderWidth(*this.strMyTableObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGet(*this,selectedStyle\border\borderDefault\width)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-
-Procedure _MyTable_GetVAlign(*this.strMyTableObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetRow(*this,defaultStyle\valign)
-		ProcedureReturn result
-	EndIf
-EndProcedure
-
-Procedure _MyTable_GetHAlign(*this.strMyTableObject)
-	If *this
-		Protected result.i=0
-		_MyTableStyleGetCol(*this,defaultStyle\halign)
-		ProcedureReturn result
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,height.i,scrollx.i,scrolly.i,fixed.b)
 	Protected border.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_BORDER)
@@ -448,7 +238,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 	ForEach *this\cols()
 		*this\cols()\parent=0
 		If *this\cols()\dirty
-			Protected nfont=_MyTable_GetFont(*this\cols())
+			Protected nfont=_MyTable_GetDefaultFont(*this\cols())
 			DrawingFont(nfont)			
 			*this\cols()\calcwidth=DesktopScaledX(*this\cols()\width)			
 			*this\cols()\textwidth=_MyTableTextWidth(*this\cols()\text)
@@ -475,7 +265,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),idx-1)
 		Protected calcwidth.i=*col\calcwidth
 		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
-		Protected tborder=_MyTable_GetBorder(*col)
+		Protected tborder=_MyTable_GetDefaultBorder(*col)
 		
 		If *col\colspan>1
 			Protected i=0
@@ -487,7 +277,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 		EndIf
 		
 		If calcwidth>0
-			Protected tfont=_MyTable_GetFont(*col)
+			Protected tfont=_MyTable_GetDefaultFont(*col)
 			If tfont
 				If IsFont(tfont)
 					tfont=FontID(tfont)
@@ -505,16 +295,16 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 			
 			Protected addx=DesktopScaledX(2)
 			Protected addy=0
-			Protected valign=_MyTable_GetVAlign(*col)
-			Protected halign=_MyTable_GetHAlign(*col)
+			Protected valign=_MyTable_GetDefaultVAlign(*col)
+			Protected halign=_MyTable_GetDefaultHAlign(*col)
 			
 			
 			
 			DrawingMode(#PB_2DDrawing_Default)
-			BackColor(_MyTable_GetBackColor(*col))
-			FrontColor(_MyTable_GetFrontColor(*col))
+			BackColor(_MyTable_GetDefaultBackColor(*col))
+			FrontColor(_MyTable_GetDefaultFrontColor(*col))
 			ClipOutput(bx,by,calcwidth,*this\calcheaderheight)
-			Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetBackColor(*col))
+			Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
 			
 			If *col\image\orig And IsImage(*col\image\orig)
 				addx+DesktopScaledX(2)
@@ -565,7 +355,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 				ta=MyTableW20
 			EndIf
 			
-			_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetForeColor(*col),calcwidth-addx-ta)
+			_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetDefaultForeColor(*col),calcwidth-addx-ta)
 			If border
 				Protected bw=0
 				Protected c=0
@@ -576,8 +366,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 						bcolor=_MyTable_GetSelectedBorderColorTop(*col)
 						c=_MyTable_GetSelectedBorderWidthTop(*col)
 					Else
-						bcolor=_MyTable_GetBorderColorTop(*col)
-						c=_MyTable_GetBorderWidthTop(*col)
+						bcolor=_MyTable_GetDefaultBorderColorTop(*col)
+						c=_MyTable_GetDefaultBorderWidthTop(*col)
 					EndIf
 					c=DesktopScaledY(c)
 					Box(bx,by,calcwidth,c,bcolor)
@@ -588,8 +378,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 						bcolor=_MyTable_GetSelectedBorderColorRight(*col)
 						c=_MyTable_GetSelectedBorderWidthRight(*col)
 					Else
-						bcolor=_MyTable_GetBorderColorRight(*col)
-						c=_MyTable_GetBorderWidthRight(*col)
+						bcolor=_MyTable_GetDefaultBorderColorRight(*col)
+						c=_MyTable_GetDefaultBorderWidthRight(*col)
 					EndIf
 					c=DesktopScaledX(c)
 					Box(bx+calcwidth-c,by,calcwidth,c,bcolor)
@@ -599,8 +389,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 						bcolor=_MyTable_GetSelectedBorderColorBottom(*col)
 						c=_MyTable_GetSelectedBorderWidthBottom(*col)
 					Else
-						bcolor=_MyTable_GetBorderColorBottom(*col)
-						c=_MyTable_GetBorderWidthBottom(*col)
+						bcolor=_MyTable_GetDefaultBorderColorBottom(*col)
+						c=_MyTable_GetDefaultBorderWidthBottom(*col)
 					EndIf
 					c=DesktopScaledY(c)
 					Box(bx,*this\calcheaderheight-c,calcwidth,c,bcolor)
@@ -610,8 +400,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 						bcolor=_MyTable_GetSelectedBorderColorLeft(*col)
 						c=_MyTable_GetSelectedBorderWidthLeft(*col)
 					Else
-						bcolor=_MyTable_GetBorderColorLeft(*col)
-						c=_MyTable_GetBorderWidthLeft(*col)
+						bcolor=_MyTable_GetDefaultBorderColorLeft(*col)
+						c=_MyTable_GetDefaultBorderWidthLeft(*col)
 					EndIf
 					c=DesktopScaledX(c)
 					Box(bx,by,c,*this\calcheaderheight,bcolor)
@@ -619,11 +409,11 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,font.i,width.i,hei
 				If tborder=0
 					DrawingMode(#PB_2DDrawing_Outlined)					
 					If selected
-						bcolor=_MyTable_GetSelectedBorderColor(*col)
-						c=_MyTable_GetSelectedBorderWidth(*col)
+						bcolor=_MyTable_GetSelectedBorderColorDefault(*col)
+						c=_MyTable_GetSelectedBorderWidthDefault(*col)
 					Else
-						bcolor=_MyTable_GetBorderColor(*col)
-						c=_MyTable_GetBorderWidth(*col)
+						bcolor=_MyTable_GetDefaultBorderColorDefault(*col)
+						c=_MyTable_GetDefaultBorderWidthDefault(*col)
 					EndIf
 					c=DesktopScaledX(c)
 					For bw=1 To c
@@ -646,14 +436,14 @@ EndProcedure
 
 Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,font,fixed,selected,checkboxes,idx,*cell.strMyTableCell)
 	Protected result=*cell\table\calcdefaultrowheight
-	Protected valign=_MyTable_GetVAlign(*cell)
-	Protected halign=_MyTable_GetHAlign(*cell)
+	Protected valign=_MyTable_GetDefaultVAlign(*cell)
+	Protected halign=_MyTable_GetDefaultHAlign(*cell)
 	Protected *col.strMyTableCol=*cell\col
 	Protected *this.strMyTableRow=*cell\row
 	Protected tw=0
 	
 	
-	Protected tfont=_MyTable_GetFont(*cell)
+	Protected tfont=_MyTable_GetDefaultFont(*cell)
 	
 	If tfont
 		If IsFont(tfont)
@@ -717,7 +507,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,font,fixed,selected,check
 			If selected
 				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell),*cell\col\calcwidth-addx-tw)
 			Else
-				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetForeColor(*cell),*cell\col\calcwidth-addx-tw)
+				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetDefaultForeColor(*cell),*cell\col\calcwidth-addx-tw)
 			EndIf
 		EndIf		
 		result=*cell\textheight
@@ -779,7 +569,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		
 		
 		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
-		Protected tborder=_MyTable_GetBorder(*cell)
+		Protected tborder=_MyTable_GetDefaultBorder(*cell)
 		
 		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
 		selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
@@ -811,9 +601,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetFixedBackColor(*cell))
 					Else
 						If zebra
-							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
-						Else
 							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetZebraBackColor(*cell))
+						Else
+							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetDefaultBackColor(*cell))
 						EndIf
 					EndIf
 				EndIf
@@ -951,8 +741,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 							bcolor=_MyTable_GetSelectedBorderColorTop(*cell)
 							c=_MyTable_GetSelectedBorderWidthTop(*cell)
 						Else
-							bcolor=_MyTable_GetBorderColorTop(*cell)
-							c=_MyTable_GetBorderWidthTop(*cell)
+							bcolor=_MyTable_GetDefaultBorderColorTop(*cell)
+							c=_MyTable_GetDefaultBorderWidthTop(*cell)
 						EndIf
 						c=DesktopScaledY(c)
 						Box(bx,by,*col\calcwidth,c,bcolor)
@@ -963,8 +753,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 							bcolor=_MyTable_GetSelectedBorderColorRight(*cell)
 							c=_MyTable_GetSelectedBorderWidthRight(*cell)
 						Else
-							bcolor=_MyTable_GetBorderColorRight(*cell)
-							c=_MyTable_GetBorderWidthRight(*cell)
+							bcolor=_MyTable_GetDefaultBorderColorRight(*cell)
+							c=_MyTable_GetDefaultBorderWidthRight(*cell)
 						EndIf
 						c=DesktopScaledX(c)
 						Box(bx+*col\calcwidth-c,by,*col\calcwidth,*this\calcheight,bcolor)
@@ -974,8 +764,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 							bcolor=_MyTable_GetSelectedBorderColorBottom(*cell)
 							c=_MyTable_GetSelectedBorderWidthBottom(*cell)
 						Else
-							bcolor=_MyTable_GetBorderColorBottom(*cell)
-							c=_MyTable_GetBorderWidthBottom(*cell)
+							bcolor=_MyTable_GetDefaultBorderColorBottom(*cell)
+							c=_MyTable_GetDefaultBorderWidthBottom(*cell)
 						EndIf
 						c=DesktopScaledY(c)
 						Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
@@ -985,8 +775,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 							bcolor=_MyTable_GetSelectedBorderColorLeft(*cell)
 							c=_MyTable_GetSelectedBorderWidthLeft(*cell)
 						Else
-							bcolor=_MyTable_GetBorderColorLeft(*cell)
-							c=_MyTable_GetBorderWidthLeft(*cell)
+							bcolor=_MyTable_GetDefaultBorderColorLeft(*cell)
+							c=_MyTable_GetDefaultBorderWidthLeft(*cell)
 						EndIf
 						c=DesktopScaledX(c)
 						Box(bx,by,c,*this\calcheight,bcolor)
@@ -994,11 +784,11 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 					If tborder=0
 						DrawingMode(#PB_2DDrawing_Outlined)					
 						If selected
-							bcolor=_MyTable_GetSelectedBorderColor(*cell)
-							c=_MyTable_GetSelectedBorderWidth(*cell)
+							bcolor=_MyTable_GetSelectedBorderColorDefault(*cell)
+							c=_MyTable_GetSelectedBorderWidthDefault(*cell)
 						Else
-							bcolor=_MyTable_GetBorderColor(*cell)
-							c=_MyTable_GetBorderWidth(*cell)
+							bcolor=_MyTable_GetDefaultBorderColorDefault(*cell)
+							c=_MyTable_GetDefaultBorderWidthDefault(*cell)
 						EndIf
 						c=DesktopScaledY(c)
 						For bw=1 To c
@@ -1025,7 +815,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 		Protected header.b=Bool(Not (*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
 		Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
 		Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
-		
+		Protected zebra.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_ZEBRA)
 		
 		
 		If *this\application
@@ -1041,9 +831,9 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				StartDrawing(CanvasOutput(*this\canvas))
 			EndIf
 			*this\drawing=#True
-			Protected font.i=_MyTable_GetFont(*this)
-			Protected backcolor.q=_MyTable_GetBackColor(*this)
-			Protected frontcolor.q=_MyTable_GetFrontColor(*this)
+			Protected font.i=_MyTable_GetDefaultFont(*this)
+			Protected backcolor.q=_MyTable_GetDefaultBackColor(*this)
+			Protected frontcolor.q=_MyTable_GetDefaultFrontColor(*this)
 			
 			Protected height=OutputHeight()
 			Protected width=OutputWidth()
@@ -1111,9 +901,13 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 						
 						If by+*row\calcheight>0
 							DrawingFont(font)
-							_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#False)
+							Protected tz.b=zebra
+							If tz
+								tz=Bool(ListIndex(*this\expRows()) % 2 = 1)
+							EndIf
+							_MyTable_Table_Draw_Row(*row,by,c,font,width,height,scrollx,scrolly,tz,#False)
 							If *this\fixedcols
-								_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRows()) % 2 = 1),#True)
+								_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,font,width,height,scrollx,scrolly,tz,#True)
 							EndIf
 						EndIf
 						by+*row\calcheight
@@ -1126,11 +920,14 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				EndIf
 			Else
 				DrawingMode(#PB_2DDrawing_Transparent)
-				If IsFont(font)
-					font=FontID(font)
+				font=_MyTable_GetEmptyFont(*this)
+				If font
+					If IsFont(font)
+						font=FontID(font)
+					EndIf
+					DrawingFont(font)
 				EndIf
-				DrawingFont(font)
-				_MyTableDrawTextCompleteCenter(by,*this\emptytext,_MyTable_GetForeColor(*this),width)
+				_MyTableDrawTextCompleteCenter(by,*this\emptytext,_MyTable_GetEmptyForeColor(*this),width)
 			EndIf
 			
 			by=0
@@ -1579,11 +1376,7 @@ Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetStyle(*this.strMyTableTable)
-	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-	_MyTableInitStyleObject(*style,*this)
-	ProcedureReturn *style
-EndProcedure
+_MyTable_GetStylesTable()
 
 Procedure _MyTable_Table_RowCount(*this.strMyTableTable)
 	If *this
@@ -1802,7 +1595,7 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable)
 		
 		ForEach *this\cols()
 			If (*this\cols()\textheight=0 And *this\cols()\text<>"") Or *this\cols()\dirty
-				Protected nfont=_MyTable_GetFont(*this\cols())
+				Protected nfont=_MyTable_GetDefaultFont(*this\cols())
 				If nfont<>lastfont
 					If IsFont(nfont)
 						nfont=FontID(nfont)

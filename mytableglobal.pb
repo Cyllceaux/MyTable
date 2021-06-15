@@ -29,6 +29,22 @@ Procedure  _MyTableInitStyleTableSelected(*style.strMyTableStyle)
 	EndWith
 EndProcedure
 
+Procedure  _MyTableInitStyleTableElementSelected(*style.strMyTableStyle)
+	With *style
+		\backcolor=RGBA(230,230,250,255)
+		\forecolor=RGBA(20,20,20,255)
+		\border\borderDefault\color=RGBA(200,200,250,255)
+	EndWith
+EndProcedure
+
+Procedure  _MyTableInitStyleTableZebra(*style.strMyTableStyle)
+	With *style
+		\backcolor=RGBA(230,230,250,255)
+		\forecolor=RGBA(20,20,20,255)
+		\border\borderDefault\color=RGBA(200,200,250,255)
+	EndWith
+EndProcedure
+
 Procedure  _MyTableInitStyleTableMouseOver(*style.strMyTableStyle)
 	With *style
 		\backcolor=RGBA(100,100,120,255)
@@ -54,22 +70,34 @@ Procedure  _MyTableInitStyleTableTitle(*style.strMyTableStyle)
 	EndWith
 EndProcedure
 
-Procedure _MyTableInitStyleObject(*style.strMyTableStyleObject,*this.strMyTableObject)
+Procedure  _MyTableInitStyleTableEmpty(*style.strMyTableStyle)
 	With *style
-		Select *this\type
-			Case #MYTABLE_TYPE_APPLICATION
-				\vtable=?vtable_style_application
-			Case #MYTABLE_TYPE_CELL
-				\vtable=?vtable_style_cell
-			Case #MYTABLE_TYPE_COL
-				\vtable=?vtable_style_col
-			Case #MYTABLE_TYPE_ROW
-				\vtable=?vtable_style_row
-			Case #MYTABLE_TYPE_TABLE
-				\vtable=?vtable_style_table
-		EndSelect
+		\frontcolor=RGBA(250,250,250,255)
+		\backcolor=RGBA(150,150,150,255)
+		\forecolor=RGBA(50,50,50,255)
+		\halign=#MYTABLE_STYLE_HALIGN_CENTER
+	EndWith
+EndProcedure
+
+Procedure _MyTableInitStyleObject(*style.strMyTableStyleObject,*this.strMyTableObject,*s.strMyTableStyle)
+	With *style
+		\vtable=?vtable_style
 		\type=#MYTABLE_TYPE_STYLE
 		\obj=*this
+		\style=*s
+	EndWith
+EndProcedure
+
+Procedure _MyTableInitStyles(*this.strMyTableObject)
+	With *this
+		_MyTableInitStyleTable(\defaultStyle)
+		_MyTableInitStyleTableFixed(\fixedStyle)
+		_MyTableInitStyleTableSelected(\selectedStyle)
+		_MyTableInitStyleTableTitle(\titleStyle)
+		_MyTableInitStyleTableMouseOver(\mouseoverStyle)
+		_MyTableInitStyleTableEmpty(\emptyStyle)
+		_MyTableInitStyleTableElementSelected(\elementselectedStyle)
+		_MyTableInitStyleTableZebra(\zebraStyle)
 	EndWith
 EndProcedure
 
@@ -82,11 +110,7 @@ Procedure _MyTableInitApplication(*application.strMyTableApplication,
 		\recalc=#True
 		\redraw=#True
 		\dirty=#True
-		_MyTableInitStyleTable(\defaultStyle)
-		_MyTableInitStyleTableFixed(\fixedStyle)		
-		_MyTableInitStyleTableSelected(\selectedStyle)
-		_MyTableInitStyleTableTitle(\titleStyle)
-		_MyTableInitStyleTableMouseOver(\mouseoverStyle)
+		_MyTableInitStyles(*application)
 	EndWith
 EndProcedure
 
@@ -935,11 +959,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		If *application
 			\listindex=ListSize(*application\tables())-1
 		Else
-			_MyTableInitStyleTable(\defaultStyle)
-			_MyTableInitStyleTableFixed(\fixedStyle)
-			_MyTableInitStyleTableSelected(\selectedStyle)
-			_MyTableInitStyleTableTitle(\titleStyle)
-			_MyTableInitStyleTableMouseOver(\mouseoverStyle)
+			_MyTableInitStyles(*table)		
 		EndIf
 	EndWith
 	
@@ -1186,3 +1206,152 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 		ProcedureReturn h
 	EndIf	
 EndProcedure
+
+Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
+	
+	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
+		Protected result.typ=*obj\gruppe#Style\sub#name
+		
+		If Not result
+			Select *obj\type
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*obj					
+					result=_MyTable_Get#gruppe#name(*cell\table,#False)
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*obj					
+					result=_MyTable_Get#gruppe#name(*row\table,#False)
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*obj					
+					result=_MyTable_Get#gruppe#name(*col\table,#False)					
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*obj
+					If *table\application
+						result=_MyTable_Get#gruppe#name(*table\application,#False)
+					EndIf
+			EndSelect
+		EndIf
+		If root And Not result
+			result=_MyTable_GetDefault#name(*obj,#False)
+		EndIf
+		ProcedureReturn result
+	EndProcedure
+EndMacro
+
+Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
+	
+	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
+		Protected result.typ=*obj\gruppe#Style\sub#name
+		
+		If Not result
+			Select *obj\type
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*obj					
+					result=_MyTable_Get#gruppe#name(*cell\row,#False)
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*obj					
+					result=_MyTable_Get#gruppe#name(*row\table,#False)
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*obj					
+					result=_MyTable_Get#gruppe#name(*col\table,#False)					
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*obj
+					If *table\application
+						result=_MyTable_Get#gruppe#name(*table\application,#False)
+					EndIf
+			EndSelect
+		EndIf
+		If root And Not result
+			result=_MyTable_GetDefault#name(*obj,#False)
+		EndIf
+		ProcedureReturn result
+	EndProcedure
+EndMacro
+
+Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
+	
+	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
+		Protected result.typ=*obj\gruppe#Style\sub#name
+		
+		If Not result
+			Select *obj\type
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*obj					
+					result=_MyTable_Get#gruppe#name(*cell\col,#False)
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*obj					
+					result=_MyTable_Get#gruppe#name(*row\table,#False)
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*obj					
+					result=_MyTable_Get#gruppe#name(*col\table,#False)					
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*obj
+					If *table\application
+						result=_MyTable_Get#gruppe#name(*table\application,#False)
+					EndIf
+			EndSelect
+		EndIf
+		If root And Not result
+			result=_MyTable_GetDefault#name(*obj,#False)
+		EndIf
+		ProcedureReturn result
+	EndProcedure
+EndMacro
+
+Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
+	
+	Procedure.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True)
+		Protected result.typ=*obj\gruppe#Style\border\border#pos\name
+	
+		If Not result
+			Select *obj\type
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*obj					
+					result= _MyTable_Get#gruppe#Border#name#pos(*cell\row,#False)
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*obj					
+					result= _MyTable_Get#gruppe#Border#name#pos(*row\table,#False)
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*obj					
+					result= _MyTable_Get#gruppe#Border#name#pos(*col\table,#False)					
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*obj
+					If *table\application
+						result= _MyTable_Get#gruppe#Border#name#pos(*table\application,#False)
+					EndIf
+			EndSelect
+		EndIf
+		If root And Not result
+			result=_MyTable_Get#gruppe#Border#name#Default(*obj,#False)
+		EndIf
+		ProcedureReturn result
+	EndProcedure
+EndMacro
+
+Macro _MyTable_StylesBordersMethods(gruppe,name,typ)
+_MyTable_StyleBorderMethods(gruppe,name,Default,i)
+	_MyTable_StyleBorderMethods(gruppe,name,Top,i)
+	_MyTable_StyleBorderMethods(gruppe,name,Bottom,i)
+	_MyTable_StyleBorderMethods(gruppe,name,Left,i)
+	_MyTable_StyleBorderMethods(gruppe,name,Right,i)
+EndMacro
+
+Macro _MyTable_StylesMethods(gruppe)
+	_MyTable_StyleMethodsRow(gruppe,BackColor,q)
+	_MyTable_StyleMethodsRow(gruppe,FrontColor,q)
+	_MyTable_StyleMethodsRow(gruppe,ForeColor,q)
+	_MyTable_StyleMethodsRow(gruppe,Font,i)
+	_MyTable_StyleMethodsRow(gruppe,Border,i,border\)
+	_MyTable_StyleMethodsCol(gruppe,HAlign,i)
+	_MyTable_StyleMethodsRow(gruppe,VAlign,i)
+	_MyTable_StylesBordersMethods(gruppe,Color,q)
+	_MyTable_StylesBordersMethods(gruppe,Width,i)
+EndMacro
+
+_MyTable_StylesMethods(Default);}
+_MyTable_StylesMethods(Selected)
+_MyTable_StylesMethods(Fixed)
+_MyTable_StylesMethods(Empty)
+_MyTable_StylesMethods(Title)
+_MyTable_StylesMethods(ElementSelected)
+_MyTable_StylesMethods(MouseOver)
+_MyTable_StylesMethods(Zebra)

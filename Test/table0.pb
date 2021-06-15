@@ -12,15 +12,17 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol
-	*col=*table\AddCol("Test 1",100):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
-	*col=*table\AddCol("Test 2",100):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
-	*col=*table\AddCol("Test 3",100):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
-	*col=*table\AddCol("Test 4",100):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT):*style\SetVAlign(#MYTABLE_STYLE_VALIGN_TOP)
-	*col=*table\AddCol("Test 5",100):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER):*style\SetVAlign(#MYTABLE_STYLE_VALIGN_MIDDLE)
-	*col=*table\AddCol("Test 6",100):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT):*style\SetVAlign(#MYTABLE_STYLE_VALIGN_BOTTOM)
+	Define *col.MyTableCol,*style.MyTableStyle,*tableStyle.MyTableStyle
+	*col=*table\AddCol("Test 1",100):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
+	*col=*table\AddCol("Test 2",100):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
+	*col=*table\AddCol("Test 3",100):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
+	*col=*table\AddCol("Test 4",100):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT):*style\SetVAlign(#MYTABLE_STYLE_VALIGN_TOP)
+	*col=*table\AddCol("Test 5",100):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER):*style\SetVAlign(#MYTABLE_STYLE_VALIGN_MIDDLE)
+	*col=*table\AddCol("Test 6",100):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT):*style\SetVAlign(#MYTABLE_STYLE_VALIGN_BOTTOM)
 	
-	*table\SetEmptyText("Keine einträge vorhanden")
+	*table\SetEmptyText("Keine Einträge vorhanden")
+	*tableStyle=*table\GetEmptyStyle()
+	*tableStyle\SetFont(LoadFont(#PB_Any,"Arial",16,#PB_Font_Italic))
 	
 	*table\SetRedraw(#True)
 	

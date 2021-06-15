@@ -12,7 +12,7 @@ UseModule MyTable
 	
 	Global *tree.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_CHECKBOXES|#MYTABLE_TABLE_FLAGS_NO_HEADER)
 	*tree\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*stamm.MyTableRow,*ast.MyTableRow,*zweig.MyTableRow,*blatt.MyTableRow
+	Define *col.MyTableCol,*style.MyTableStyle,*stamm.MyTableRow,*ast.MyTableRow,*zweig.MyTableRow,*blatt.MyTableRow
 	*col=*tree\AddCol("Test 1",#PB_Ignore,rowImage)
 	
 	#Rows=10

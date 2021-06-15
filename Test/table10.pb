@@ -6,25 +6,26 @@ UseModule MyTable
 	
 	Global titleFont=LoadFont(#PB_Any,"Arial",14,#PB_Font_HighQuality|#PB_Font_Italic|#PB_Font_Underline)
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 10 (SetImageLeft, SetImageRight, Title)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 10 (SetImageLeft, SetImageRight, Title, Zebra)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
 	Global hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 	CloseGadgetList()
 	
-	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_TITLE)
+	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_TITLE|#MYTABLE_TABLE_FLAGS_ZEBRA)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*rowStyle.MyTableStyleRow,*tablestyle.MyTableStyleTable
-	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
-	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
-	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
+	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*rowStyle.MyTableStyle,*tablestyle.MyTableStyle
+	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
+	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
+	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	
-	*tablestyle=*table\GetStyle()
-	*tablestyle\SetZebraBackColor(RGBA(220,220,220,255))
+	*tablestyle=*table\GetZebraStyle()
+	*tablestyle\SetBackColor(RGBA(220,220,220,255))
+	*tablestyle=*table\GetTitleStyle()
 	
-	*tablestyle\SetTitleFont(titleFont)
-	*tablestyle\SetTitleBackColor(RGBA(250,250,220,255))
-	*tablestyle\SetTitleForeColor(RGBA(50,50,220,255))
+	*tablestyle\SetFont(titleFont)
+	*tablestyle\SetBackColor(RGBA(250,250,220,255))
+	*tablestyle\SetForeColor(RGBA(50,50,220,255))
 	*table\SetTitle(GetWindowTitle(window))
 	*table\SetTitleHeight(25)
 	

@@ -79,11 +79,7 @@ Procedure _MyTable_Cell_SetImageRight(*this.strMyTableCell,value.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Cell_GetStyle(*this.strMyTableCell)
-	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-	_MyTableInitStyleObject(*style,*this)
-	ProcedureReturn *style
-EndProcedure
+_MyTable_GetStylesCell()
 
 Procedure _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.b=#True)
 	If *this			

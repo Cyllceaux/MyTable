@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1831
+	#MYTABLE_VERSION = 1977
 	#MYTABLE_VERSION_DATE = 20210615
 	
 	Enumeration _mytable_type
@@ -13,19 +13,19 @@
 		#MYTABLE_TYPE_STYLE
 	EndEnumeration
 	
-	Interface MyTableStyleObject
+	Interface MyTableStyle
 		GetObject()
+		
 		SetFont(value.i):GetFont()
 		SetBackColor(value.q):GetBackColor.q()
 		SetFrontColor(value.q):GetFrontColor.q()
 		SetForeColor(value.q):GetForeColor.q()
-		
-		SetSelectedColor(value.q):GetSelectedColor.q()
+		SetHAlign(value.i):GetHAlign()
+		SetVAlign(value.i):GetVAlign()	
+		SetBorder(value.i):GetBorder()		
 		SetBorderColor(value.q):GetBorderColor.q()
 		SetBorderWidth(value.i):GetBorderWidth.i()
-		SetSelectedBorderColor(value.q):GetSelectedBorderColor.q()
-		SetSelectedBorderWidth(value.i):GetSelectedBorderWidth.i()
-		SetSelectedForeColor(value.q):GetSelectedForeColor.q()
+		
 		
 		Free()
 		Delete()
@@ -50,46 +50,13 @@
 		#MYTABLE_STYLE_BORDER_LEFT
 	EndEnumeration
 	
-	Interface MyTableStyleCell Extends MYTableStyleObject		
-		SetHAlign(value.i):GetHAlign()
-		SetVAlign(value.i):GetVAlign()		
-		SetBorder(value.i):GetBorder()		
-	EndInterface
-	
-	Interface MyTableStyleCol Extends MYTableStyleCell
-		SetElementSelectedColor(value.q):GetElementSelectedColor.q()
-		SetElementSelectedBorderColor(value.q):GetElementSelectedBorderColor.q()
-		SetElementSelectedForeColor(value.q):GetElementSelectedForeColor.q()
-	EndInterface
-	
-	Interface MyTableStyleRow Extends MyTableStyleCell
-		SetElementSelectedColor(value.q):GetElementSelectedColor.q()
-		SetElementSelectedBorderColor(value.q):GetElementSelectedBorderColor.q()
-		SetElementSelectedForeColor(value.q):GetElementSelectedForeColor.q()
-	EndInterface
-	
-	Interface MyTableStyleTable Extends MYTableStyleObject
-		SetZebraBackColor(value.q):GetZebraBackColor.q()
-		SetZebraFrontColor(value.q):GetZebraFrontColor.q()		
-		SetFixedBackColor(value.q):GetFixedBackColor.q()
-		SetFixedFrontColor(value.q):GetFixedFrontColor.q()		
-		SetFixedForeColor(value.q):GetFixedForeColor.q()		
-		
-		SetTitleFont(value.i):GetTitleFont()
-		SetTitleBackColor(value.q):GetTitleBackColor.q()
-		SetTitleFrontColor(value.q):GetTitleFrontColor.q()
-		SetTitleForeColor(value.q):GetTitleForeColor.q()
-		SetTitleHAlign(value.i):GetTitleHAlign()
-		SetTitleVAlign(value.i):GetTitleVAlign()
-	EndInterface
-	
-	Interface MyTableStyleApplication Extends MYTableStyleObject
-		
-	EndInterface
 	
 	Interface MyTableObject
 		GetType()
-		GetStyle()
+		GetDefaultStyle()
+		GetSelectedStyle()
+		GetMouseOverStyle()
+		GetFixedStyle()
 		SetFlags(value.i):GetFlags()
 		SetData(*value):GetData()
 		SetDirty(value.b):GetDirty.b()
@@ -141,6 +108,7 @@
 	EndEnumeration
 	
 	Interface MyTableCol Extends MyTableObject
+		GetElementSelectedStyle()
 		GetApplication()
 		GetTable()
 		GetPosition()
@@ -163,6 +131,7 @@
 	EndEnumeration
 	
 	Interface MyTableRow Extends MyTableObject
+		GetElementSelectedStyle()
 		GetApplication()
 		GetTable()
 		GetParent()
@@ -197,7 +166,8 @@
 		#MYTABLE_TABLE_FLAGS_PAGES ; Table can have pages
 		#MYTABLE_TABLE_FLAGS_TITLE ; draw the title
 		#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER ; MouseOver marks the cell
-		#MYTABLE_TABLE_FLAGS_EDITABLE
+		#MYTABLE_TABLE_FLAGS_EDITABLE ; Editable
+		#MYTABLE_TABLE_FLAGS_ZEBRA ; Zebra Layout
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
@@ -228,6 +198,11 @@
 	
 	
 	Interface MyTableTable Extends MyTableObject
+		GetElementSelectedStyle()
+		GetZebraStyle()
+		GetTitleStyle()
+		GetEmptyStyle()		
+		
 		GetApplication()
 		GetPages()
 		SetName(value.s):GetName.s()
@@ -305,6 +280,11 @@
 	EndInterface
 	
 	Interface MyTableApplication Extends MyTableObject
+		GetElementSelectedStyle()
+		GetZebraStyle()
+		GetTitleStyle()
+		GetEmptyStyle()	
+		
 		SetRedraw(value.b):GetRedraw.b()
 		SetRecalc(value.b):GetRecalc.b()
 		

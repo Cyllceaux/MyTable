@@ -140,11 +140,7 @@ Procedure _MyTable_Row_SetImage(*this.strMyTableRow,value.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_GetStyle(*this.strMyTableRow)
-	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-	_MyTableInitStyleObject(*style,*this)
-	ProcedureReturn *style
-EndProcedure
+_MyTable_GetStylesRow()
 
 
 Procedure.b _MyTable_Row_GetSelected(*this.strMyTableRow)
@@ -207,7 +203,7 @@ EndProcedure
 Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,lastfont)
 	Protected result.i=*cell\table\calcdefaultrowheight
 	If (*cell\textheight=0 And *cell\text<>"") Or *cell\dirty
-		Protected nfont=_MyTable_GetFont(*cell)
+		Protected nfont=_MyTable_GetDefaultFont(*cell)
 		If nfont<>lastfont
 			If IsFont(nfont)
 				nfont=FontID(nfont)

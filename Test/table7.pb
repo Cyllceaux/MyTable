@@ -12,24 +12,26 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll)
 	*table\SetRedraw(#False)	
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable
-	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetBackColor(RGBA(10,10,100,255))
-	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetBackColor(RGBA(10,10,100,255))
-	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetBackColor(RGBA(10,10,100,255))
+	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyle
+	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetDefaultStyle():*style\SetBackColor(RGBA(10,10,100,255))
+	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetDefaultStyle():*style\SetBackColor(RGBA(10,10,100,255))
+	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetDefaultStyle():*style\SetBackColor(RGBA(10,10,100,255))
 	
-	*tablestyle=*table\GetStyle()
+	*tablestyle=*table\GetDefaultStyle()
 	*tablestyle\SetBackColor(RGBA(50,50,150,255))
 	*tablestyle\SetFrontColor(RGBA(10,10,10,255))
 	*tablestyle\SetForeColor(RGBA(210,210,210,255))
 	*tablestyle\SetBorderColor(RGBA(210,210,210,255))
-	*tablestyle\SetSelectedForeColor(RGBA(20,20,20,255))
+	*tablestyle=*table\GetSelectedStyle()
+	*tablestyle\SetForeColor(RGBA(220,220,220,255))
+	*tablestyle\SetBackColor(RGBA(20,20,20,255))
 	
 	#Rows=100
 	#Cols=10
 	
 	Define i,g
 	For g=4 To #Cols
-		*col=*table\AddCol("Test "+g,100,images(Random(9,0))):*style=*col\GetStyle()
+		*col=*table\AddCol("Test "+g,100,images(Random(9,0))):*style=*col\GetDefaultStyle()
 		*style\SetBackColor(RGBA(10,10,100,255))
 	Next
 	For i=1 To #Rows

@@ -95,12 +95,8 @@ Procedure _MyTable_Application_ClearTables(*this.strMyTableApplication)
 	EndIf
 EndProcedure
 
+_MyTable_GetStylesApplication()
 
-Procedure _MyTable_Application_GetStyle(*this.strMyTableApplication)
-	Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-	_MyTableInitStyleObject(*style,*this)
-	ProcedureReturn *style
-EndProcedure
 
 Procedure _MyTable_Application_Free(*this.strMyTableApplication)
 	If *this

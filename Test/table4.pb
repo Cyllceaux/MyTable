@@ -12,10 +12,10 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow
-	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
-	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
-	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
+	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow
+	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)
+	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
+	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	
 	
 	#Rows=100
@@ -39,13 +39,13 @@ UseModule MyTable
 				*cell\SetFlags(#MYTABLE_CELL_FLAGS_CHECKBOXES)
 				Select Random(2,0)
 					Case 0
-						*style=*cell\GetStyle()
+						*style=*cell\GetDefaultStyle()
 						*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)						
 					Case 1
-						*style=*cell\GetStyle()
+						*style=*cell\GetDefaultStyle()
 						*style\SetHAlign(#MYTABLE_STYLE_HALIGN_CENTER)
 					Case 2
-						*style=*cell\GetStyle()
+						*style=*cell\GetDefaultStyle()
 						*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 				EndSelect
 			EndIf

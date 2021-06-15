@@ -85,7 +85,8 @@ StopDrawing()
 ;- Global
 Declare _MyTableInitStyleTable(*style.strMyTableStyle)
 Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
-                                *this.strMyTableObject)
+                                *this.strMyTableObject,
+                                *s.strMyTableStyle)
 Declare _MyTableInitApplication(*application.strMyTableApplication,
                                 flags.i)
 Declare _MyTableInitTable(*application.strMyTableApplication,
@@ -161,9 +162,11 @@ Declare _MyTable_Col_Delete(*this.strMyTableCol)
 Declare _MyTable_Col_Autosize(*this.strMyTableCol)
 Declare _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 Declare _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=#True)
+Declare _MyTable_Col_SetSort(*this.strMyTableCol,value.i)
 
 ;- Cells
 Declare _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.b=#True)
+Declare _MyTable_Cell_Autosize(*this.strMyTableCell)
 
 ;- Styled
 Declare _MyTable_Style_Redraw(*this.strMyTableStyleObject)
@@ -220,6 +223,124 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	EndProcedure
 CompilerEndIf
 
+Macro _MyTable_GetStyleCell(name)
+	Procedure _MyTable_Cell_Get#name#Style(*this.strMyTableCell)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\cellStyle=*this\name#Style
+		*style\rowStyle=*this\row\name#Style
+		*style\colStyle=*this\col\name#Style
+		*style\tableStyle=*this\table\name#Style
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleCol(name)
+	Procedure _MyTable_Col_Get#name#Style(*this.strMyTableCol)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\colStyle=*this\name#Style
+		*style\tableStyle=*this\table\name#Style
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleRow(name)
+	Procedure _MyTable_Row_Get#name#Style(*this.strMyTableRow)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\rowStyle=*this\name#Style
+		*style\tableStyle=*this\table\name#Style
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleTable(name)
+	Procedure _MyTable_Table_Get#name#Style(*this.strMyTableTable)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\tableStyle=*this\name#Style		
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleApplication(name)
+	Procedure _MyTable_Application_Get#name#Style(*this.strMyTableApplication)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\applicationStyle=*this\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStylesApplication()
+	_MyTable_GetStyleApplication(Default)
+	_MyTable_GetStyleApplication(Selected)
+	_MyTable_GetStyleApplication(Fixed)
+	_MyTable_GetStyleApplication(MouseOver)
+	_MyTable_GetStyleApplication(Title)
+	_MyTable_GetStyleApplication(ElementSelected)
+	_MyTable_GetStyleApplication(Empty)
+	_MyTable_GetStyleApplication(Zebra)
+EndMacro
+
+Macro _MyTable_GetStylesTable()
+	_MyTable_GetStyleTable(Default)
+	_MyTable_GetStyleTable(Selected)
+	_MyTable_GetStyleTable(Fixed)
+	_MyTable_GetStyleTable(MouseOver)
+	_MyTable_GetStyleTable(Title)
+	_MyTable_GetStyleTable(ElementSelected)
+	_MyTable_GetStyleTable(Empty)
+	_MyTable_GetStyleTable(Zebra)
+EndMacro
+
+Macro _MyTable_GetStylesRow()
+	_MyTable_GetStyleRow(Default)
+	_MyTable_GetStyleRow(Selected)
+	_MyTable_GetStyleRow(Fixed)
+	_MyTable_GetStyleRow(MouseOver)
+	_MyTable_GetStyleRow(Title)
+	_MyTable_GetStyleRow(ElementSelected)
+	_MyTable_GetStyleRow(Empty)
+	_MyTable_GetStyleRow(Zebra)
+EndMacro
+
+Macro _MyTable_GetStylesCol()
+	_MyTable_GetStyleCol(Default)
+	_MyTable_GetStyleCol(Selected)
+	_MyTable_GetStyleCol(Fixed)
+	_MyTable_GetStyleCol(MouseOver)
+	_MyTable_GetStyleCol(Title)
+	_MyTable_GetStyleCol(ElementSelected)
+	_MyTable_GetStyleCol(Empty)
+	_MyTable_GetStyleCol(Zebra)
+EndMacro
+
+Macro _MyTable_GetStylesCell()
+	_MyTable_GetStyleCell(Default)
+	_MyTable_GetStyleCell(Selected)
+	_MyTable_GetStyleCell(Fixed)
+	_MyTable_GetStyleCell(MouseOver)
+	_MyTable_GetStyleCell(Title)
+	_MyTable_GetStyleCell(ElementSelected)
+	_MyTable_GetStyleCell(Empty)
+	_MyTable_GetStyleCell(Zebra)
+EndMacro
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	Macro _callcountStart(sname)
@@ -400,10 +521,3 @@ EndMacro
 	EndMacro
 ;}
 
-;- Includes
-XIncludeFile "mytablestyle.pb"
-XIncludeFile "mytableapplication.pb"
-XIncludeFile "mytabletable.pb"
-XIncludeFile "mytablerow.pb"
-XIncludeFile "mytablecol.pb"
-XIncludeFile "mytablecell.pb"

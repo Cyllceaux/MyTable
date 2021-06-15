@@ -18,7 +18,7 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyleCol,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyleTable,*cellstyle.MyTableStyleCell
+	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyle,*cellstyle.MyTableStyle
 	
 	
 	#Rows=10
@@ -28,7 +28,7 @@ UseModule MyTable
 	Define border=0
 	For g=1 To #Cols
 		*col=*table\AddCol("Test "+g,100,images(Random(9,0)))
-		*style=*col\GetStyle()
+		*style=*col\GetDefaultStyle()
 		*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 		*style\SetFont(fonts(Random(ArraySize(fonts()))))
 		*style\SetForeColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
@@ -57,7 +57,7 @@ UseModule MyTable
 			*cell=*row\GetCell(g)
 			*cell\SetText("Text "+i+"_"+g)
 			*cell\SetImageLeft(images(Random(9,0)))	
-			*cellstyle=*cell\GetStyle()
+			*cellstyle=*cell\GetDefaultStyle()
 			*cellstyle\SetFont(fonts(Random(ArraySize(fonts()))))
 			*cellstyle\SetForeColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
 			*cellstyle\SetBackColor(RGBA(Random(250,200),Random(250,200),Random(250,200),255))
