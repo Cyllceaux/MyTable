@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1817
+	#MYTABLE_VERSION = 1824
 	#MYTABLE_VERSION_DATE = 20210615
 	
 	Enumeration _mytable_type
@@ -101,6 +101,8 @@
 	
 	EnumerationBinary _mytable_cell	
 		#MYTABLE_CELL_FLAGS_CHECKBOXES
+		#MYTABLE_CELL_FLAGS_EDITABLE
+		#MYTABLE_CELL_FLAGS_NO_EDITABLE
 	EndEnumeration
 	
 	Interface MyTableCell Extends MyTableObject
@@ -128,6 +130,8 @@
 		#MYTABLE_COL_FLAGS_NO_SORTABLE
 		#MYTABLE_COL_FLAGS_RESIZABLE
 		#MYTABLE_COL_FLAGS_NO_RESIZABLE
+		#MYTABLE_COL_FLAGS_EDITABLE
+		#MYTABLE_COL_FLAGS_NO_EDITABLE
 	EndEnumeration
 	
 	Enumeration _mytable_col_sort
@@ -151,9 +155,11 @@
 	EndInterface
 	
 	EnumerationBinary _mytable_row
-		#MYTABLE_ROW_FLAGS_RESIZABLE
-		#MYTABLE_ROW_FLAGS_NO_RESIZABLE
-		#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED
+		#MYTABLE_ROW_FLAGS_RESIZABLE ; Row is resizeable
+		#MYTABLE_ROW_FLAGS_NO_RESIZABLE ; if table is resizeable, this stops the row to be resizeable
+		#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED ; always expand the row
+		#MYTABLE_ROW_FLAGS_EDITABLE
+		#MYTABLE_ROW_FLAGS_NO_EDITABLE
 	EndEnumeration
 	
 	Interface MyTableRow Extends MyTableObject
@@ -176,21 +182,22 @@
 		ScrollTo(setSelect.b=#False,redraw.b=#True)
 	EndInterface
 	
-	EnumerationBinary _mytable_table
-		#MYTABLE_TABLE_FLAGS_HIERARCHICAL
-		#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED
-		#MYTABLE_TABLE_FLAGS_CHECKBOXES
-		#MYTABLE_TABLE_FLAGS_FULLROWSELECT
-		#MYTABLE_TABLE_FLAGS_MULTISELECT
-		#MYTABLE_TABLE_FLAGS_BORDER
-		#MYTABLE_TABLE_FLAGS_NO_HEADER
-		#MYTABLE_TABLE_FLAGS_NO_REDRAW
-		#MYTABLE_TABLE_FLAGS_CALLBACK
-		#MYTABLE_TABLE_FLAGS_SORTABLE
-		#MYTABLE_TABLE_FLAGS_RESIZABLE
-		#MYTABLE_TABLE_FLAGS_PAGES
-		#MYTABLE_TABLE_FLAGS_TITLE
-		#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER
+	EnumerationBinary _mytable_table		
+		#MYTABLE_TABLE_FLAGS_HIERARCHICAL ; Tree
+		#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED ; always expanded rows in tree
+		#MYTABLE_TABLE_FLAGS_CHECKBOXES ; rows woth checkboxes
+		#MYTABLE_TABLE_FLAGS_FULLROWSELECT ; select always rows
+		#MYTABLE_TABLE_FLAGS_MULTISELECT ; can select more rows/cells/cols		
+		#MYTABLE_TABLE_FLAGS_BORDER ; draw a grid
+		#MYTABLE_TABLE_FLAGS_NO_HEADER ; no header will drawn
+		#MYTABLE_TABLE_FLAGS_NO_REDRAW ; stops redrawing. setRedraw(#True) will activate it again
+		#MYTABLE_TABLE_FLAGS_CALLBACK	; Table has callbacks for dynamic loads	
+		#MYTABLE_TABLE_FLAGS_SORTABLE ; Table is sortable		
+		#MYTABLE_TABLE_FLAGS_RESIZABLE ; Cols and Rows are Resizeable
+		#MYTABLE_TABLE_FLAGS_PAGES ; Table can have pages
+		#MYTABLE_TABLE_FLAGS_TITLE ; draw the title
+		#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER ; MouseOver marks the cell
+		#MYTABLE_TABLE_FLAGS_EDITABLE
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
@@ -214,6 +221,7 @@
 	Prototype MyTableProtoEventRowRightClick(*cell.MyTableRow)
 	Prototype MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
 	Prototype MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
+	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h)
 	
 	
 	Prototype MyTableProtoCallback(*row.MyTableRow)
@@ -273,24 +281,25 @@
 		AutosizeHeader()
 		
 		
-		RegisterEventCellChangedChecked(callback.MyTableProtoEventCellChangedChecked)
-		RegisterEventCellChangedUnChecked(callback.MyTableProtoEventCellChangedUnChecked)
-		RegisterEventCellChangedText(callback.MyTableProtoEventCellChangedText)
-		RegisterEventCellChangedValue(callback.MyTableProtoEventCellChangedValue)
-		RegisterEventCellSelected(callback.MyTableProtoEventCellSelected)
-		RegisterEventCellLeftClick(callback.MyTableProtoEventCellLeftClick)
-		RegisterEventCellLeftDoubleClick(callback.MyTableProtoEventCellLeftDoubleClick)
-		RegisterEventCellRightClick(callback.MyTableProtoEventCellRightClick)
-		RegisterEventCellRightDoubleClick(callback.MyTableProtoEventCellRightDoubleClick)
-		RegisterEventRowChangedChecked(callback.MyTableProtoEventRowChangedChecked)
-		RegisterEventRowChangedUnChecked(callback.MyTableProtoEventRowChangedUnChecked)
-		RegisterEventRowChangedExpanded(callback.MyTableProtoEventRowChangedExpanded)
-		RegisterEventRowChangedCollapsed(callback.MyTableProtoEventRowChangedCollapsed)
-		RegisterEventRowSelected(callback.MyTableProtoEventRowSelected)
-		RegisterEventRowLeftClick(callback.MyTableProtoEventRowLeftClick)
-		RegisterEventRowLeftDoubleClick(callback.MyTableProtoEventRowLeftDoubleClick)
-		RegisterEventRowRightClick(callback.MyTableProtoEventRowRightClick)
-		RegisterEventRowRightDoubleClick(callback.MyTableProtoEventRowRightDoubleClick)
+		RegisterEventCellChangedChecked(event.MyTableProtoEventCellChangedChecked)
+		RegisterEventCellChangedUnChecked(event.MyTableProtoEventCellChangedUnChecked)
+		RegisterEventCellChangedText(event.MyTableProtoEventCellChangedText)
+		RegisterEventCellChangedValue(event.MyTableProtoEventCellChangedValue)
+		RegisterEventCellSelected(event.MyTableProtoEventCellSelected)
+		RegisterEventCellLeftClick(event.MyTableProtoEventCellLeftClick)
+		RegisterEventCellLeftDoubleClick(event.MyTableProtoEventCellLeftDoubleClick)
+		RegisterEventCellRightClick(event.MyTableProtoEventCellRightClick)
+		RegisterEventCellRightDoubleClick(event.MyTableProtoEventCellRightDoubleClick)
+		RegisterEventRowChangedChecked(event.MyTableProtoEventRowChangedChecked)
+		RegisterEventRowChangedUnChecked(event.MyTableProtoEventRowChangedUnChecked)
+		RegisterEventRowChangedExpanded(event.MyTableProtoEventRowChangedExpanded)
+		RegisterEventRowChangedCollapsed(event.MyTableProtoEventRowChangedCollapsed)
+		RegisterEventRowSelected(event.MyTableProtoEventRowSelected)
+		RegisterEventRowLeftClick(event.MyTableProtoEventRowLeftClick)
+		RegisterEventRowLeftDoubleClick(event.MyTableProtoEventRowLeftDoubleClick)
+		RegisterEventRowRightClick(event.MyTableProtoEventRowRightClick)
+		RegisterEventRowRightDoubleClick(event.MyTableProtoEventRowRightDoubleClick)
+		RegisterEventCustomCellDraw(event.MyTableProtoEventCustomCellDraw)
 		
 		RegisterCallback(callback.MyTableProtoCallback)
 	EndInterface

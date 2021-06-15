@@ -182,6 +182,7 @@ Module MyTable
 		_MyTableDataSectionMethode(Table,RegisterEventRowLeftDoubleClick)
 		_MyTableDataSectionMethode(Table,RegisterEventRowRightClick)
 		_MyTableDataSectionMethode(Table,RegisterEventRowRightDoubleClick)
+		_MyTableDataSectionMethode(Table,RegisterEventCustomCellDraw)
 		
 		_MyTableDataSectionMethode(Table,RegisterCallback)
 		

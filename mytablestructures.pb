@@ -179,12 +179,13 @@ Structure strMyTableTable Extends strMyTableObject
 	eventRowChangedUnChecked.MyTableProtoEventRowChangedUnChecked
 	eventRowChangedExpanded.MyTableProtoEventRowChangedExpanded
 	eventRowChangedCollapsed.MyTableProtoEventRowChangedCollapsed
+	eventRowSelected.MyTableProtoEventRowSelected
 	eventRowLeftClick.MyTableProtoEventRowLeftClick	
 	eventRowRightClick.MyTableProtoEventRowRightClick
 	eventRowLeftDoubleClick.MyTableProtoEventRowLeftDoubleClick		
 	eventRowRightDoubleClick.MyTableProtoEventRowRightDoubleClick
+	eventCustomCellDraw.MyTableProtoEventCustomCellDraw
 	
-	eventRowSelected.MyTableProtoEventRowSelected
 	
 	callback.MyTableProtoCallback
 	

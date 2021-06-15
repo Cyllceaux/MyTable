@@ -61,6 +61,7 @@ _MyTableRegisterEvent(RowLeftClick)
 _MyTableRegisterEvent(RowRightClick)
 _MyTableRegisterEvent(RowLeftDoubleClick)		
 _MyTableRegisterEvent(RowRightDoubleClick)
+_MyTableRegisterEvent(CustomCellDraw)
 
 _MyTableStyleGetBorder(Top)
 _MyTableStyleGetBorder(Left)
@@ -770,11 +771,14 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 	
 	For idx=start To cols
 		
-		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 		
 		DrawingMode(#PB_2DDrawing_Default)			
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
+		Protected customdraw.b=#False
 		
+		
+		
+		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 		Protected tborder=_MyTable_GetBorder(*cell)
 		
 		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
@@ -792,212 +796,215 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		
 		
 		Protected *col.strMyTableCol=*cell\col
-		If *col\calcwidth>0
-			
+		If *col\calcwidth>0			
 			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
-			
-			If selected
-				Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
-			Else
-				If mselected
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetMouseOverBackColor(*cell))
-				ElseIf fixed
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetFixedBackColor(*cell))
+			If *this\table\eventCustomCellDraw
+				customdraw=*this\table\eventCustomCellDraw(*cell,bx,by,*col\calcwidth,*this\calcheight)
+			EndIf
+			If Not customdraw
+				If selected
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
 				Else
-					If zebra
-						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
+					If mselected
+						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetMouseOverBackColor(*cell))
+					ElseIf fixed
+						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetFixedBackColor(*cell))
 					Else
-						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetZebraBackColor(*cell))
+						If zebra
+							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetBackColor(*cell))
+						Else
+							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetZebraBackColor(*cell))
+						EndIf
 					EndIf
 				EndIf
-			EndIf
-			
-			
-			Protected addx=DesktopScaledX(2)
-			Protected addy=0
-			
-			
-			If hierarchical
-				If idx=1
-					addx+*this\level*MyTableW20
-					DrawingMode(#PB_2DDrawing_AlphaClip)
-					If *this\rows
-						If ListSize(*this\rows\rows())>0
-							If Not alwaysexpanded
-								If *this\expanded
-									DrawImage(ImageID(*this\table\DefaultImageMinusArrow),bx+addx,by)
-								Else
-									DrawImage(ImageID(*this\table\DefaultImagePlusArrow),bx+addx,by)
+				
+				
+				Protected addx=DesktopScaledX(2)
+				Protected addy=0
+				
+				
+				If hierarchical
+					If idx=1
+						addx+*this\level*MyTableW20
+						DrawingMode(#PB_2DDrawing_AlphaClip)
+						If *this\rows
+							If ListSize(*this\rows\rows())>0
+								If Not alwaysexpanded
+									If *this\expanded
+										DrawImage(ImageID(*this\table\DefaultImageMinusArrow),bx+addx,by)
+									Else
+										DrawImage(ImageID(*this\table\DefaultImagePlusArrow),bx+addx,by)
+									EndIf
 								EndIf
 							EndIf
 						EndIf
+						DrawingMode(#PB_2DDrawing_Default)
+						addx+MyTableW20
 					EndIf
-					DrawingMode(#PB_2DDrawing_Default)
-					addx+MyTableW20
-				EndIf
-			EndIf
-			
-			If checkboxes
-				If idx=1
-					DrawingMode(#PB_2DDrawing_AlphaClip)				
-					If *this\checked
-						DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
-					Else
-						DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
-					EndIf				
-					DrawingMode(#PB_2DDrawing_Default)
-					addx+MyTableW20
-					
 				EndIf
 				
-			EndIf
-			checkboxes=#False
-			checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
-			
-			If idx=1
-				If *this\image\orig And IsImage(*this\image\orig)
-					addx+DesktopScaledX(2)
-					If Not *this\image\sized
-						*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
-						If *this\image\resize
-							ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+				If checkboxes
+					If idx=1
+						DrawingMode(#PB_2DDrawing_AlphaClip)				
+						If *this\checked
+							DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
 						Else
-							ResizeImage(*this\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+							DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
+						EndIf				
+						DrawingMode(#PB_2DDrawing_Default)
+						addx+MyTableW20
+						
+					EndIf
+					
+				EndIf
+				checkboxes=#False
+				checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
+				
+				If idx=1
+					If *this\image\orig And IsImage(*this\image\orig)
+						addx+DesktopScaledX(2)
+						If Not *this\image\sized
+							*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
+							If *this\image\resize
+								ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+							Else
+								ResizeImage(*this\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+							EndIf
+						EndIf
+						DrawingMode(#PB_2DDrawing_AlphaClip)
+						DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
+						DrawingMode(#PB_2DDrawing_Default)
+						If *this\image\resize
+							addx+*this\calcheight
+						Else
+							addx+*this\table\calcdefaultrowheight
+						EndIf
+					EndIf
+				EndIf
+				
+				If *cell\imageLeft\orig And IsImage(*cell\imageLeft\orig)
+					addx+DesktopScaledX(2)
+					If Not *cell\imageLeft\sized
+						*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
+						If *cell\imageLeft\resize
+							ResizeImage(*cell\imageLeft\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+						Else
+							ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
 						EndIf
 					EndIf
 					DrawingMode(#PB_2DDrawing_AlphaClip)
-					DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
+					DrawImage(ImageID(*cell\imageLeft\sized),bx+addx,by+addy+MyTableW4)
 					DrawingMode(#PB_2DDrawing_Default)
-					If *this\image\resize
+					If *cell\imageLeft\resize
 						addx+*this\calcheight
 					Else
 						addx+*this\table\calcdefaultrowheight
 					EndIf
 				EndIf
-			EndIf
-			
-			If *cell\imageLeft\orig And IsImage(*cell\imageLeft\orig)
-				addx+DesktopScaledX(2)
-				If Not *cell\imageLeft\sized
-					*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
-					If *cell\imageLeft\resize
-						ResizeImage(*cell\imageLeft\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
-					Else
-						ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+				
+				
+				If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)				
+					If Not *cell\imageRight\sized
+						*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
+						If *cell\imageRight\resize
+							ResizeImage(*cell\imageRight\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+						Else
+							ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
+						EndIf
 					EndIf
-				EndIf
-				DrawingMode(#PB_2DDrawing_AlphaClip)
-				DrawImage(ImageID(*cell\imageLeft\sized),bx+addx,by+addy+MyTableW4)
-				DrawingMode(#PB_2DDrawing_Default)
-				If *cell\imageLeft\resize
-					addx+*this\calcheight
-				Else
-					addx+*this\table\calcdefaultrowheight
-				EndIf
-			EndIf
-			
-			
-			If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)				
-				If Not *cell\imageRight\sized
-					*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
-					If *cell\imageRight\resize
-						ResizeImage(*cell\imageRight\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
-					Else
-						ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-					EndIf
-				EndIf
-			EndIf
-			
-			If checkboxes
-				If idx>1
-					DrawingMode(#PB_2DDrawing_AlphaClip)
-					If *cell\checked
-						DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
-					Else
-						DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
-					EndIf
-					DrawingMode(#PB_2DDrawing_Default)
-					addx+MyTableW20
-				EndIf			
-			EndIf
-			
-			
-			_MyTable_Table_Draw_CellText(bx,by,addx,addy,font,fixed,selected,checkboxes,idx,*cell)
-			
-			
-			If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
-				DrawingMode(#PB_2DDrawing_AlphaClip)				
-				If *cell\imageRight\resize					
-					DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\calcheight,by+addy+MyTableW4)
-				Else
-					DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
-				EndIf
-				DrawingMode(#PB_2DDrawing_Default)
-			EndIf
-			
-			If border
-				Protected bw=0
-				Protected c=0
-				Protected bcolor.q=0
-				DrawingMode(#PB_2DDrawing_Default)
-				If Bool(tborder & #MYTABLE_STYLE_BORDER_TOP)
-					If selected
-						bcolor=_MyTable_GetSelectedBorderColorTop(*cell)
-						c=_MyTable_GetSelectedBorderWidthTop(*cell)
-					Else
-						bcolor=_MyTable_GetBorderColorTop(*cell)
-						c=_MyTable_GetBorderWidthTop(*cell)
-					EndIf
-					c=DesktopScaledY(c)
-					Box(bx,by,*col\calcwidth,c,bcolor)
 				EndIf
 				
-				If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
-					If selected
-						bcolor=_MyTable_GetSelectedBorderColorRight(*cell)
-						c=_MyTable_GetSelectedBorderWidthRight(*cell)
-					Else
-						bcolor=_MyTable_GetBorderColorRight(*cell)
-						c=_MyTable_GetBorderWidthRight(*cell)
-					EndIf
-					c=DesktopScaledX(c)
-					Box(bx+*col\calcwidth-c,by,*col\calcwidth,*this\calcheight,bcolor)
+				If checkboxes
+					If idx>1
+						DrawingMode(#PB_2DDrawing_AlphaClip)
+						If *cell\checked
+							DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+						Else
+							DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
+						EndIf
+						DrawingMode(#PB_2DDrawing_Default)
+						addx+MyTableW20
+					EndIf			
 				EndIf
-				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
-					If selected
-						bcolor=_MyTable_GetSelectedBorderColorBottom(*cell)
-						c=_MyTable_GetSelectedBorderWidthBottom(*cell)
+				
+				
+				_MyTable_Table_Draw_CellText(bx,by,addx,addy,font,fixed,selected,checkboxes,idx,*cell)
+				
+				
+				If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+					DrawingMode(#PB_2DDrawing_AlphaClip)				
+					If *cell\imageRight\resize					
+						DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\calcheight,by+addy+MyTableW4)
 					Else
-						bcolor=_MyTable_GetBorderColorBottom(*cell)
-						c=_MyTable_GetBorderWidthBottom(*cell)
+						DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
 					EndIf
-					c=DesktopScaledY(c)
-					Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
+					DrawingMode(#PB_2DDrawing_Default)
 				EndIf
-				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
-					If selected
-						bcolor=_MyTable_GetSelectedBorderColorLeft(*cell)
-						c=_MyTable_GetSelectedBorderWidthLeft(*cell)
-					Else
-						bcolor=_MyTable_GetBorderColorLeft(*cell)
-						c=_MyTable_GetBorderWidthLeft(*cell)
+				
+				If border
+					Protected bw=0
+					Protected c=0
+					Protected bcolor.q=0
+					DrawingMode(#PB_2DDrawing_Default)
+					If Bool(tborder & #MYTABLE_STYLE_BORDER_TOP)
+						If selected
+							bcolor=_MyTable_GetSelectedBorderColorTop(*cell)
+							c=_MyTable_GetSelectedBorderWidthTop(*cell)
+						Else
+							bcolor=_MyTable_GetBorderColorTop(*cell)
+							c=_MyTable_GetBorderWidthTop(*cell)
+						EndIf
+						c=DesktopScaledY(c)
+						Box(bx,by,*col\calcwidth,c,bcolor)
 					EndIf
-					c=DesktopScaledX(c)
-					Box(bx,by,c,*this\calcheight,bcolor)
-				EndIf
-				If tborder=0
-					DrawingMode(#PB_2DDrawing_Outlined)					
-					If selected
-						bcolor=_MyTable_GetSelectedBorderColor(*cell)
-						c=_MyTable_GetSelectedBorderWidth(*cell)
-					Else
-						bcolor=_MyTable_GetBorderColor(*cell)
-						c=_MyTable_GetBorderWidth(*cell)
+					
+					If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
+						If selected
+							bcolor=_MyTable_GetSelectedBorderColorRight(*cell)
+							c=_MyTable_GetSelectedBorderWidthRight(*cell)
+						Else
+							bcolor=_MyTable_GetBorderColorRight(*cell)
+							c=_MyTable_GetBorderWidthRight(*cell)
+						EndIf
+						c=DesktopScaledX(c)
+						Box(bx+*col\calcwidth-c,by,*col\calcwidth,*this\calcheight,bcolor)
 					EndIf
-					c=DesktopScaledY(c)
-					For bw=1 To c
-						Box(bx+(bw-1),by+(bw-1),*col\calcwidth-(c-1),*this\calcheight-(c-1),bcolor)
-					Next
+					If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
+						If selected
+							bcolor=_MyTable_GetSelectedBorderColorBottom(*cell)
+							c=_MyTable_GetSelectedBorderWidthBottom(*cell)
+						Else
+							bcolor=_MyTable_GetBorderColorBottom(*cell)
+							c=_MyTable_GetBorderWidthBottom(*cell)
+						EndIf
+						c=DesktopScaledY(c)
+						Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
+					EndIf
+					If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
+						If selected
+							bcolor=_MyTable_GetSelectedBorderColorLeft(*cell)
+							c=_MyTable_GetSelectedBorderWidthLeft(*cell)
+						Else
+							bcolor=_MyTable_GetBorderColorLeft(*cell)
+							c=_MyTable_GetBorderWidthLeft(*cell)
+						EndIf
+						c=DesktopScaledX(c)
+						Box(bx,by,c,*this\calcheight,bcolor)
+					EndIf
+					If tborder=0
+						DrawingMode(#PB_2DDrawing_Outlined)					
+						If selected
+							bcolor=_MyTable_GetSelectedBorderColor(*cell)
+							c=_MyTable_GetSelectedBorderWidth(*cell)
+						Else
+							bcolor=_MyTable_GetBorderColor(*cell)
+							c=_MyTable_GetBorderWidth(*cell)
+						EndIf
+						c=DesktopScaledY(c)
+						For bw=1 To c
+							Box(bx+(bw-1),by+(bw-1),*col\calcwidth-(c-1),*this\calcheight-(c-1),bcolor)
+						Next
+					EndIf
 				EndIf
 			EndIf
 			UnclipOutput()
