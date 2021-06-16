@@ -4,7 +4,7 @@ XIncludeFile "declare.pb"
 
 UseModule MyTable
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"TableTree 4 (Fixed cols)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global window=OpenWindow(#PB_Any,0,0,800,600,"TableTree 4 (Fixed cols, Editable col 3)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
 	Global hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
@@ -15,7 +15,7 @@ UseModule MyTable
 	Define *col.MyTableCol,*stamm.MyTableRow,*ast.MyTableRow,*zweig.MyTableRow,*blatt.MyTableRow
 	*col=*tree\AddCol("Test 1 (fix)",200,rowImage)
 	*col=*tree\AddCol("Test 2",200,rowImageSub,#MYTABLE_COL_FLAGS_NO_SORTABLE)
-	*col=*tree\AddCol("Test 3",500,rowImageSub2,#MYTABLE_COL_FLAGS_NO_SORTABLE)
+	*col=*tree\AddCol("Test 3",500,rowImageSub2,#MYTABLE_COL_FLAGS_NO_SORTABLE|#MYTABLE_COL_FLAGS_EDITABLE)
 	
 	*tree\SetFixedCols(1)
 	#Rows=10
@@ -56,7 +56,7 @@ UseModule MyTable
 	Procedure CS(*cell.MyTableCell)
 		Protected *row.MyTableRow=*cell\getRow()
 		Protected *col.MyTableCol=*cell\getCol()
-		Debug "CelSelect "+*row\GetPosition()+" / "+*col\GetPosition()
+		Debug "CellSelect "+*row\GetPosition()+" / "+*col\GetPosition()
 	EndProcedure
 	Procedure RE(*row.MyTableRow)
 		Debug "RowExpand "+*row\GetPosition()
@@ -64,8 +64,14 @@ UseModule MyTable
 	Procedure RCo(*row.MyTableRow)
 		Debug "RowCollpased "+*row\GetPosition()
 	EndProcedure
+	Procedure RCt(*cell.MyTableCell,old.s)
+		Protected *row.MyTableRow=*cell\getRow()
+		Protected *col.MyTableCol=*cell\getCol()
+		Debug "ChangeText "+*row\GetPosition()+" / "+*col\GetPosition()+"  ("+old+"->"+*cell\GetText()+")"
+	EndProcedure
 	
 	*tree\RegisterEventCellSelected(@CS())
+	*tree\RegisterEventCellChangedText(@RCt())
 	*tree\RegisterEventRowChangedChecked(@RC())
 	*tree\RegisterEventRowChangedUnChecked(@RU())
 	*tree\RegisterEventRowChangedExpanded(@RE())

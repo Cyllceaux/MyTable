@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-16 15:48" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-16 18:38" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -20,14 +20,14 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="f7e66f6152e56665219fb634e831d94c"/>
+      <fingerprint md5="effe7957ec02f32b8db76b64703d5031"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="662b45f32d33a90a7ed06ac5ea4317b5"/>
+      <fingerprint md5="597eee3e2266968ec7d6271386082b15"/>
     </file>
     <file name="mytableapplication.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="233b5329ac8b01053bb9ffc77dc7c745"/>
     </file>
     <file name="mytablecell.pb">
@@ -40,7 +40,7 @@
     </file>
     <file name="mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="029eec50b3f4e1e83da24ffe77c88afa"/>
+      <fingerprint md5="b187349d7e19dd73f35543ca839259f6"/>
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -48,15 +48,15 @@
     </file>
     <file name="mytablestructures.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="2b20e57e869884c2480a917860fd7b8b"/>
+      <fingerprint md5="584dbc4ff5e60aca7c904a29e03be393"/>
     </file>
     <file name="mytablestyle.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="8a7e66fc049b940f36ba528bfc4ed790"/>
     </file>
     <file name="mytabletable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="a453df9437927316303664f461799ccb"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="8efbd6778c5cefd5e42fc29b43f6da06"/>
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -67,7 +67,7 @@
       <fingerprint md5="e9cb68b56a294f2f592d415cdd168a6c"/>
     </file>
     <file name="Test\declare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="c4aed6b0751473bfb8c601e6a302bfd7"/>
     </file>
     <file name="Test\kontakte.pb">
@@ -160,7 +160,7 @@
     </file>
     <file name="Test\tabletree4.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="fcc7a1e5cc2cb4eb4b28faf27a5ae490"/>
+      <fingerprint md5="6a362f99ca4661cf941042866480e346"/>
     </file>
     <file name="Test\tabletree5.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -381,7 +381,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="TableTree4 (FixedCols)" enabled="0" default="0">
+    <target name="TableTree4 (FixedCols, Events, Editable col 3)" enabled="0" default="0">
       <inputfile value="Test\tabletree4.pb"/>
       <outputfile value=""/>
       <executable value="Test\tabletree4.exe"/>

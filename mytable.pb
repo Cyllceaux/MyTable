@@ -145,6 +145,11 @@ DataSection
 	_MyTableDataSectionMethode(Table,AutosizeCols)
 	_MyTableDataSectionMethode(Table,AutosizeHeader)
 	
+	_MyTableDataSectionMethode(Table,RegisterEventColLeftClick)
+	_MyTableDataSectionMethode(Table,RegisterEventColLeftDoubleClick)
+	_MyTableDataSectionMethode(Table,RegisterEventColRightClick)
+	_MyTableDataSectionMethode(Table,RegisterEventColRightDoubleClick)
+	
 	_MyTableDataSectionMethode(Table,RegisterEventCellChangedChecked)
 	_MyTableDataSectionMethode(Table,RegisterEventCellChangedUnChecked)
 	_MyTableDataSectionMethode(Table,RegisterEventCellChangedText)
@@ -154,6 +159,7 @@ DataSection
 	_MyTableDataSectionMethode(Table,RegisterEventCellLeftDoubleClick)
 	_MyTableDataSectionMethode(Table,RegisterEventCellRightClick)
 	_MyTableDataSectionMethode(Table,RegisterEventCellRightDoubleClick)
+	
 	_MyTableDataSectionMethode(Table,RegisterEventRowChangedChecked)
 	_MyTableDataSectionMethode(Table,RegisterEventRowChangedUnChecked)
 	_MyTableDataSectionMethode(Table,RegisterEventRowChangedExpanded)
@@ -163,6 +169,7 @@ DataSection
 	_MyTableDataSectionMethode(Table,RegisterEventRowLeftDoubleClick)
 	_MyTableDataSectionMethode(Table,RegisterEventRowRightClick)
 	_MyTableDataSectionMethode(Table,RegisterEventRowRightDoubleClick)
+	
 	_MyTableDataSectionMethode(Table,RegisterEventCustomCellDraw)
 	_MyTableDataSectionMethode(Table,RegisterEventCustomCellEdit)
 	

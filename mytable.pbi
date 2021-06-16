@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2125
+	#MYTABLE_VERSION = 2140
 	#MYTABLE_VERSION_DATE = 20210616
 	
 	Enumeration _mytable_type
@@ -175,24 +175,32 @@
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TREE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_HIERARCHICAL
 	
-	Prototype MyTableProtoEventCellChangedChecked(*cell.MyTableCell)
-	Prototype MyTableProtoEventCellChangedUnChecked(*cell.MyTableCell)
-	Prototype MyTableProtoEventCellChangedText(*cell.MyTableCell,old.s)
-	Prototype MyTableProtoEventCellChangedValue(*cell.MyTableCell,old.d)
-	Prototype MyTableProtoEventCellSelected(*cell.MyTableCell)		
-	Prototype MyTableProtoEventCellLeftClick(*cell.MyTableCell)	
-	Prototype MyTableProtoEventCellRightClick(*cell.MyTableCell)
-	Prototype MyTableProtoEventCellLeftDoubleClick(*cell.MyTableCell)		
-	Prototype MyTableProtoEventCellRightDoubleClick(*cell.MyTableCell)
-	Prototype MyTableProtoEventRowChangedChecked(*row.MyTableRow)
-	Prototype MyTableProtoEventRowChangedUnChecked(*row.MyTableRow)
-	Prototype MyTableProtoEventRowChangedExpanded(*row.MyTableRow)
-	Prototype MyTableProtoEventRowChangedCollapsed(*row.MyTableRow)
-	Prototype MyTableProtoEventRowSelected(*row.MyTableRow)
-	Prototype MyTableProtoEventRowLeftClick(*cell.MyTableRow)	
-	Prototype MyTableProtoEventRowRightClick(*cell.MyTableRow)
-	Prototype MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
-	Prototype MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
+	
+	Prototype.b MyTableProtoEventColLeftClick(*cell.MyTableCol)	
+	Prototype.b MyTableProtoEventColRightClick(*cell.MyTableCol)
+	Prototype.b MyTableProtoEventColLeftDoubleClick(*cell.MyTableCol)		
+	Prototype.b MyTableProtoEventColRightDoubleClick(*cell.MyTableCol)
+	
+	Prototype.b MyTableProtoEventCellChangedChecked(*cell.MyTableCell)
+	Prototype.b MyTableProtoEventCellChangedUnChecked(*cell.MyTableCell)
+	Prototype.b MyTableProtoEventCellChangedText(*cell.MyTableCell,old.s)
+	Prototype.b MyTableProtoEventCellChangedValue(*cell.MyTableCell,old.d)
+	Prototype.b MyTableProtoEventCellSelected(*cell.MyTableCell)		
+	Prototype.b MyTableProtoEventCellLeftClick(*cell.MyTableCell)	
+	Prototype.b MyTableProtoEventCellRightClick(*cell.MyTableCell)
+	Prototype.b MyTableProtoEventCellLeftDoubleClick(*cell.MyTableCell)		
+	Prototype.b MyTableProtoEventCellRightDoubleClick(*cell.MyTableCell)
+	
+	Prototype.b MyTableProtoEventRowChangedChecked(*row.MyTableRow)
+	Prototype.b MyTableProtoEventRowChangedUnChecked(*row.MyTableRow)
+	Prototype.b MyTableProtoEventRowChangedExpanded(*row.MyTableRow)
+	Prototype.b MyTableProtoEventRowChangedCollapsed(*row.MyTableRow)
+	Prototype.b MyTableProtoEventRowSelected(*row.MyTableRow)
+	Prototype.b MyTableProtoEventRowLeftClick(*cell.MyTableRow)	
+	Prototype.b MyTableProtoEventRowRightClick(*cell.MyTableRow)
+	Prototype.b MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
+	Prototype.b MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
+	
 	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is drawn
 	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell); Return #True if custom cell is edited
 	
@@ -258,6 +266,11 @@
 		AutosizeCols()
 		AutosizeHeader()
 		
+
+		RegisterEventColLeftClick(event.MyTableProtoEventColLeftClick)
+		RegisterEventColLeftDoubleClick(event.MyTableProtoEventColLeftDoubleClick)
+		RegisterEventColRightClick(event.MyTableProtoEventColRightClick)
+		RegisterEventColRightDoubleClick(event.MyTableProtoEventColRightDoubleClick)
 		
 		RegisterEventCellChangedChecked(event.MyTableProtoEventCellChangedChecked)
 		RegisterEventCellChangedUnChecked(event.MyTableProtoEventCellChangedUnChecked)
@@ -268,6 +281,7 @@
 		RegisterEventCellLeftDoubleClick(event.MyTableProtoEventCellLeftDoubleClick)
 		RegisterEventCellRightClick(event.MyTableProtoEventCellRightClick)
 		RegisterEventCellRightDoubleClick(event.MyTableProtoEventCellRightDoubleClick)
+		
 		RegisterEventRowChangedChecked(event.MyTableProtoEventRowChangedChecked)
 		RegisterEventRowChangedUnChecked(event.MyTableProtoEventRowChangedUnChecked)
 		RegisterEventRowChangedExpanded(event.MyTableProtoEventRowChangedExpanded)
@@ -277,6 +291,7 @@
 		RegisterEventRowLeftDoubleClick(event.MyTableProtoEventRowLeftDoubleClick)
 		RegisterEventRowRightClick(event.MyTableProtoEventRowRightClick)
 		RegisterEventRowRightDoubleClick(event.MyTableProtoEventRowRightDoubleClick)
+		
 		RegisterEventCustomCellDraw(event.MyTableProtoEventCustomCellDraw)
 		RegisterEventCustomCellEdit(event.MyTableProtoEventCustomCellEdit)
 		

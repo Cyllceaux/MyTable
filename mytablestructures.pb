@@ -186,6 +186,11 @@ Structure strMyTableTable Extends strMyTableObject
 	*resizeRow.strMyTableRow
 	*resizeCol.strMyTableCol
 	
+	eventColLeftClick.MyTableProtoEventColLeftClick
+	eventColRightClick.MyTableProtoEventColRightClick
+	eventColLeftDoubleClick.MyTableProtoEventColLeftDoubleClick	
+	eventColRightDoubleClick.MyTableProtoEventColRightDoubleClick
+	
 	eventCellChangedChecked.MyTableProtoEventCellChangedChecked
 	eventCellChangedUnChecked.MyTableProtoEventCellChangedUnChecked
 	eventCellChangedText.MyTableProtoEventCellChangedText
@@ -195,6 +200,7 @@ Structure strMyTableTable Extends strMyTableObject
 	eventCellRightClick.MyTableProtoEventCellRightClick
 	eventCellLeftDoubleClick.MyTableProtoEventCellLeftDoubleClick	
 	eventCellRightDoubleClick.MyTableProtoEventCellRightDoubleClick
+	
 	eventRowChangedChecked.MyTableProtoEventRowChangedChecked
 	eventRowChangedUnChecked.MyTableProtoEventRowChangedUnChecked
 	eventRowChangedExpanded.MyTableProtoEventRowChangedExpanded
@@ -204,6 +210,7 @@ Structure strMyTableTable Extends strMyTableObject
 	eventRowRightClick.MyTableProtoEventRowRightClick
 	eventRowLeftDoubleClick.MyTableProtoEventRowLeftDoubleClick		
 	eventRowRightDoubleClick.MyTableProtoEventRowRightDoubleClick
+	
 	eventCustomCellDraw.MyTableProtoEventCustomCellDraw
 	eventCustomCellEdit.MyTableProtoEventCustomCellEdit
 	

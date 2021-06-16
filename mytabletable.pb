@@ -8,7 +8,10 @@ Macro _MyTableRegisterEvent(name)
 EndMacro
 
 
-
+_MyTableRegisterEvent(ColLeftClick)	
+_MyTableRegisterEvent(ColRightClick)
+_MyTableRegisterEvent(ColLeftDoubleClick)		
+_MyTableRegisterEvent(ColRightDoubleClick)
 _MyTableRegisterEvent(CellChangedChecked)
 _MyTableRegisterEvent(CellChangedUnChecked)
 _MyTableRegisterEvent(CellChangedText)

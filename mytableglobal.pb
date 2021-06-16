@@ -1050,13 +1050,20 @@ Procedure _MyTableEvtCanvasMouseLeftDouble()
 		Else
 			
 			If *rc\tcell
-				_MyTable_StartEdit(*rc)
+				If *this\eventCellLeftDoubleClick
+					If Not *this\eventCellLeftDoubleClick(*rc\tcell)
+						_MyTable_StartEdit(*rc)
+					EndIf
+				Else					
+					_MyTable_StartEdit(*rc)
+				EndIf
 			Else
 				If *this\eventCellLeftDoubleClick And *rc\tcell
 					*this\eventCellLeftDoubleClick(*rc\tcell)
-				EndIf
-				If *this\eventRowLeftDoubleClick And *rc\trow
+				ElseIf *this\eventRowLeftDoubleClick And *rc\trow
 					*this\eventRowLeftDoubleClick(*rc\trow)
+				ElseIf *this\eventColLeftDoubleClick And *rc\tcol			
+					*this\eventColLeftDoubleClick(*rc\tcol)
 				EndIf		
 			EndIf		
 			
@@ -1094,9 +1101,10 @@ Procedure _MyTableEvtCanvasMouseRightDouble()
 		If Not *rc\bottom And Not *rc\check And Not *rc\exp And Not *rc\right
 			If *this\eventCellRightDoubleClick And *rc\tcell
 				*this\eventCellRightDoubleClick(*rc\tcell)
-			EndIf
-			If *this\eventRowRightDoubleClick And *rc\trow
+			ElseIf *this\eventRowRightDoubleClick And *rc\trow
 				*this\eventRowRightDoubleClick(*rc\trow)
+			ElseIf *this\eventColRightDoubleClick And *rc\tcol
+				*this\eventColRightDoubleClick(*rc\tcol)
 			EndIf		
 		EndIf
 		FreeStructure(*rc)
@@ -1112,9 +1120,10 @@ Procedure _MyTableEvtCanvasMouseRightClick()
 		If Not *rc\bottom And Not *rc\check And Not *rc\exp And Not *rc\right
 			If *this\eventCellRightClick And *rc\tcell
 				*this\eventCellRightClick(*rc\tcell)
-			EndIf
-			If *this\eventRowRightClick And *rc\trow
+			ElseIf *this\eventRowRightClick And *rc\trow
 				*this\eventRowRightClick(*rc\trow)
+			ElseIf *this\eventColRightClick And *rc\tcol
+				*this\eventColRightClick(*rc\tcol)
 			EndIf		
 		EndIf
 		
@@ -1130,9 +1139,10 @@ Procedure _MyTableEvtCanvasMouseLeftClick()
 		If Not *rc\bottom And Not *rc\check And Not *rc\exp And Not *rc\right
 			If *this\eventCellLeftClick And *rc\tcell
 				*this\eventCellLeftClick(*rc\tcell)
-			EndIf
-			If *this\eventRowLeftClick And *rc\trow
+			ElseIf *this\eventRowLeftClick And *rc\trow
 				*this\eventRowLeftClick(*rc\trow)
+			ElseIf *this\eventColLeftClick And *rc\tcol
+				*this\eventColLeftClick(*rc\tcol)
 			EndIf		
 		EndIf
 		
@@ -1490,11 +1500,15 @@ Procedure _MyTable_KeyEdit()
 	Protected *this.strMyTableTable=GetWindowData(EventWindow())
 	With *this\edit\cell
 		If \text<>GetGadgetText(*this\edit\gadget)
+			Protected old.s=\text
 			\text=GetGadgetText(*this\edit\gadget)
 			\textheight=0
 			\textwidth=0
 			\dirty=#True
 			\table\dirty=#True
+			If \table\eventCellChangedText
+				\table\eventCellChangedText(*this\edit\cell,old)
+			EndIf
 			_MyTable_Table_Redraw(*this)
 		EndIf
 	EndWith
