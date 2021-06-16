@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-16 09:52" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-16 14:58" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
@@ -24,7 +24,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="388258b453942625a25f3edd2d7702d3"/>
+      <fingerprint md5="2be9ef92bec2f5ae88a0450713564840"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -103,7 +103,7 @@
       <fingerprint md5="0e98eb2a6d640a9805bfdd076258d76d"/>
     </file>
     <file name="Test\table15.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="0059d4e33a0734d12e16ea4511dde75b"/>
     </file>
     <file name="Test\table16.pb">
@@ -186,221 +186,232 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="ffc959beccc695f92e5daf491214da36"/>
     </file>
+    <file name="Test\complete.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="e9cb68b56a294f2f592d415cdd168a6c"/>
+    </file>
   </section>
   <section name="targets">
     <target name="Backend (Only functions)" enabled="1" default="0">
       <inputfile value="Test\backend.pb"/>
-      <outputfile value="Test\backend.exe"/>
+      <outputfile value=""/>
       <executable value="Test\backend.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree" enabled="1" default="0">
       <inputfile value="Test\tree.pb"/>
-      <outputfile value="Test\tree.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tree.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree2" enabled="1" default="0">
       <inputfile value="Test\tree2.pb"/>
-      <outputfile value="Test\tree2.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tree2.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree3" enabled="1" default="0">
       <inputfile value="Test\tree3.pb"/>
-      <outputfile value="Test\tree3.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tree3.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree4" enabled="1" default="0">
       <inputfile value="Test\tree4.pb"/>
-      <outputfile value="Test\tree4.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tree4.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree5" enabled="1" default="0">
       <inputfile value="Test\tree5.pb"/>
-      <outputfile value="Test\tree5.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tree5.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Tree6 (Checkbox, Border, Multiselect, No Header)" enabled="1" default="0">
       <inputfile value="Test\tree6.pb"/>
-      <outputfile value="Test\tree6.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tree6.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table0 (empty Message)" enabled="1" default="0">
       <inputfile value="Test\table0.pb"/>
-      <outputfile value="Test\table0.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table0.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table1 (halign, valign)" enabled="1" default="0">
       <inputfile value="Test\table1.pb"/>
-      <outputfile value="Test\table1.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table1.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table2" enabled="1" default="0">
       <inputfile value="Test\table2.pb"/>
-      <outputfile value="Test\table2.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table2.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table3" enabled="1" default="0">
       <inputfile value="Test\table3.pb"/>
-      <outputfile value="Test\table3.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table3.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table4" enabled="1" default="0">
       <inputfile value="Test\table4.pb"/>
-      <outputfile value="Test\table4.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table4.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table5" enabled="1" default="0">
       <inputfile value="Test\table5.pb"/>
-      <outputfile value="Test\table5.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table5.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table6" enabled="1" default="0">
       <inputfile value="Test\table6.pb"/>
-      <outputfile value="Test\table6.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table6.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table7 (Blue)" enabled="1" default="0">
       <inputfile value="Test\table7.pb"/>
-      <outputfile value="Test\table7.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table7.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table8 (Colspan)" enabled="1" default="0">
       <inputfile value="Test\table8.pb"/>
-      <outputfile value="Test\table8.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table8.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table9 (ScrollToCellPos)" enabled="1" default="0">
       <inputfile value="Test\table9.pb"/>
-      <outputfile value="Test\table9.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table9.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table10 (SetImageLeft,SetImageRight, Title, Zebra)" enabled="1" default="0">
       <inputfile value="Test\table10.pb"/>
-      <outputfile value="Test\table10.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table10.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table11 (Callback, 1 Million)" enabled="1" default="0">
       <inputfile value="Test\table11.pb"/>
-      <outputfile value="Test\table11.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table11.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table12 (no Scrollbars)" enabled="1" default="0">
       <inputfile value="Test\table12.pb"/>
-      <outputfile value="Test\table12.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table12.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table13 (Fonts, Borders, Colors)" enabled="1" default="0">
       <inputfile value="Test\table13.pb"/>
-      <outputfile value="Test\table13.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table13.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table14 (FixedCols, Zebra)" enabled="1" default="0">
       <inputfile value="Test\table14.pb"/>
-      <outputfile value="Test\table14.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table14.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Table15 (Page, Zebra)" enabled="1" default="0">
       <inputfile value="Test\table15.pb"/>
-      <outputfile value="Test\table15.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table15.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Table16 (Editable)" enabled="1" default="1">
+    <target name="Table16 (Editable)" enabled="1" default="0">
       <inputfile value="Test\table16.pb"/>
-      <outputfile value="Test\table16.exe"/>
+      <outputfile value=""/>
       <executable value="Test\table16.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree" enabled="1" default="0">
       <inputfile value="Test\tabletree.pb"/>
-      <outputfile value="Test\tabletree.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tabletree.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree2" enabled="1" default="0">
       <inputfile value="Test\tabletree2.pb"/>
-      <outputfile value="Test\tabletree2.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tabletree2.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree3" enabled="1" default="0">
       <inputfile value="Test\tabletree3.pb"/>
-      <outputfile value="Test\tabletree3.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tabletree3.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree4 (FixedCols)" enabled="1" default="0">
       <inputfile value="Test\tabletree4.pb"/>
-      <outputfile value="Test\tabletree4.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tabletree4.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="TableTree5 (always Expanded)" enabled="1" default="0">
       <inputfile value="Test\tabletree5.pb"/>
-      <outputfile value="Test\tabletree5.exe"/>
+      <outputfile value=""/>
       <executable value="Test\tabletree5.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Outlook" enabled="1" default="0">
+    <target name="Outlook" enabled="1" default="1">
       <inputfile value="Test\outlook.pb"/>
-      <outputfile value="Test\outlook.exe"/>
+      <outputfile value=""/>
       <executable value="Test\outlook.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
     <target name="Kontakte" enabled="1" default="0">
       <inputfile value="Test\kontakte.pb"/>
-      <outputfile value="Test\kontakte.exe"/>
+      <outputfile value=""/>
+      <executable value="Test\kontakte.exe"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="Complete" enabled="1" default="0">
+      <inputfile value="Test\complete.pb"/>
+      <outputfile value=""/>
       <executable value="Test\kontakte.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
