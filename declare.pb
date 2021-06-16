@@ -128,6 +128,7 @@ Declare _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
 Declare _MyTable_StartEdit(*rc.strMyTableRowCol)
 Declare _MyTable_StartEditCell(*cll.strMyTableCell)
 Declare _MyTable_StopEdit(*this.strMyTableTable)
+Declare _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 
 ;- Application
 Declare.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
@@ -144,6 +145,7 @@ Declare _MyTable_Table_Autosize(*this.strMyTableTable)
 
 Declare _MyTableEvtResize()
 Declare _MyTableEvtCanvasKeyDown()
+Declare _MyTableEvtCanvasKeyUp()
 Declare _MyTableEvtCanvasMouseMove()
 Declare _MyTableEvtCanvasMouseLeftDown()
 Declare _MyTableEvtCanvasMouseLeftUp()
@@ -158,7 +160,7 @@ Declare _MyTableEvtScroll()
 Declare _MyTable_Row_Delete(*this.strMyTableRow)
 Declare _MyTable_Row_Autosize(*this.strMyTableRow)
 Declare _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False,redraw.b=#True)
-
+Declare _MyTable_Row_Expand(*this.strMyTableRow,value.b)
 
 ;-Cols
 Declare _MyTable_Col_Delete(*this.strMyTableCol)

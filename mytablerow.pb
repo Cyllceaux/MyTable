@@ -225,6 +225,18 @@ Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,lastfont)
 	ProcedureReturn result
 EndProcedure
 
+Procedure _MyTable_Row_Expand(*this.strMyTableRow,value.b)
+	If *this
+		*this\expanded=value
+		*this\dirty=#True
+		If *this\rows
+			ForEach *this\rows\rows()
+				_MyTable_Row_Expand(*this\rows\rows(),value)
+			Next
+		EndIf
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
 	If *this
 		If Not *this\table\drawing

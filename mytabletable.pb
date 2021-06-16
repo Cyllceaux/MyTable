@@ -995,15 +995,22 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 	EndIf
 EndProcedure
 
-Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow)
+Procedure.i _MyTable_Table_PredrawSub(*this.strMyTableTable,*row.strMyTableRow,pages.b)
 	Protected result.i=0
 	If *row\rows
 		ForEach *row\rows\rows()
-			AddElement(*this\expRows())
-			*this\expRows()=*row\rows\rows()
+			If pages
+				AddElement(*this\expRowsPage())
+				*this\expRowsPage()=*row\rows\rows()
+				*row\rows\rows()\explistindex=ListIndex(*this\expRowsPage())
+			Else
+				AddElement(*this\expRows())
+				*this\expRows()=*row\rows\rows()
+				*row\rows\rows()\explistindex=ListIndex(*this\expRows())
+			EndIf
 			result+*row\rows\rows()\height			
 			If *row\rows\rows()\expanded And *row\rows\rows()\rows And ListSize(*row\rows\rows()\rows\rows())>0
-				result+_MyTable_Table_PredrawSub(*this,*row\rows\rows())
+				result+_MyTable_Table_PredrawSub(*this,*row\rows\rows(),pages)
 			EndIf
 		Next
 	EndIf
@@ -1082,20 +1089,24 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				AddElement(*this\expRows())
 				*this\expRows()=*this\rows()
 				
+				
 				h+*this\rows()\height
 				If pages
 					If cc And max And *this\page And ListIndex(*this\rows())>=((*this\page-1) * cc)
 						ph+*this\rows()\height
 						AddElement(*this\expRowsPage())
 						*this\expRowsPage()=*this\rows()
+						*this\rows()\explistindex=ListIndex(*this\expRowsPage())
 						cc-1
 					EndIf
+				Else
+					*this\rows()\explistindex=ListIndex(*this\expRows())
 				EndIf
 				If hierarchical
 					If *this\rows()\expanded And *this\rows()\rows And ListSize(*this\rows()\rows\rows())>0
-						h+_MyTable_Table_PredrawSub(*this,*this\rows())
+						h+_MyTable_Table_PredrawSub(*this,*this\rows(),pages)
 						If pages
-							ph+_MyTable_Table_PredrawSub(*this,*this\expRowsPage())
+							ph+_MyTable_Table_PredrawSub(*this,*this\expRowsPage(),pages)
 						EndIf
 					EndIf
 				EndIf

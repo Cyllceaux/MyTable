@@ -12,7 +12,7 @@ UseModule MyTable
 	Global pages=SpinGadget(#PB_Any,4,WindowHeight(window)-24,100,20,1,1,#PB_Spin_Numeric)
 	
 	
-	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_PAGES)
+	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_PAGES)
 	*table\SetRedraw(#False)
 	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*rowStyle.MyTableStyle,*tablestyle.MyTableStyle
 	*col=*table\AddCol("Test 1 (fix)",120,rowImage):*style=*col\GetDefaultStyle():*style\SetHAlign(#MYTABLE_STYLE_HALIGN_LEFT)

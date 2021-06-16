@@ -116,6 +116,8 @@ Structure strMyTableRow Extends strMyTableObject
 	
 	sorts.s
 	sortd.d
+	
+	explistindex.i
 EndStructure
 
 Structure strMyTableTableEdit
@@ -173,6 +175,7 @@ Structure strMyTableTable Extends strMyTableObject
 	mxd.i
 	myd.i
 	*lastcell.strMyTableCell
+	*shiftcell.strMyTableCell
 	*lastrow.strMyTableRow
 	*lastcol.strMyTableCol
 	

@@ -308,6 +308,35 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	ProcedureReturn *rc
 EndProcedure
 
+Procedure _MyTableEvtCanvasKeyUp()
+	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
+	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
+	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)	
+	
+	If IsGadget(*this\canvas)
+		
+		If Not shift
+			If multiselect
+				ForEach *this\tempselectedCells()
+					*this\selectedCells(MapKey(*this\tempselectedCells()))=*this\tempselectedCells()
+				Next
+				ForEach *this\tempselectedCols()
+					*this\selectedCols(MapKey(*this\tempselectedCols()))=*this\tempselectedCols()
+				Next			
+				ForEach *this\tempselectedRows()
+					*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()						
+				Next
+			EndIf
+			ClearMap(*this\tempselectedCells())
+			ClearMap(*this\tempselectedRows())
+			ClearMap(*this\tempselectedCols())
+			
+			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndIf
+EndProcedure
+
 Procedure _MyTableEvtCanvasKeyDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	_MyTable_StopEdit(*this)
@@ -316,7 +345,136 @@ Procedure _MyTableEvtCanvasKeyDown()
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		Protected alt.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Alt)
 		Protected key=GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
+		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
+		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+		Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+		Protected alwaysexpanded.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+		Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+		Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
+		Protected *cell.strMyTableCell=*this\lastcell
+		If *this\shiftcell
+			*cell=*this\shiftcell
+		EndIf
+		Protected *row.strMyTableRow=*this\lastrow
+		Protected *col.strMyTableCol=*this\lastcol
+		
+		Protected editable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_EDITABLE)
+		
+		
+		If *cell
+			editable=Bool(editable Or *cell\col\flags & #MYTABLE_COL_FLAGS_EDITABLE)
+			editable=Bool(editable Or *cell\row\flags & #MYTABLE_ROW_FLAGS_EDITABLE)
+			editable=Bool(editable Or *cell\flags & #MYTABLE_CELL_FLAGS_EDITABLE)	
+			editable=Bool(editable And Not Bool(*cell\col\flags & #MYTABLE_COL_FLAGS_NO_EDITABLE))
+			editable=Bool(editable And Not Bool(*cell\row\flags & #MYTABLE_ROW_FLAGS_NO_EDITABLE))
+			editable=Bool(editable And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_EDITABLE))
+			
+			checkboxes=Bool(checkboxes Or *cell\col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES)
+			checkboxes=Bool(checkboxes Or *cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES)
+			If Not *col
+				*col=*cell\col
+			EndIf
+			If Not *row
+				*row=*cell\row
+			EndIf
+		EndIf
+		If *row
+			alwaysexpanded=Bool(alwaysexpanded Or *row\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+		EndIf
+		
 		Select key
+			Case #PB_Shortcut_Add
+				If hierarchical And *row And Not alwaysexpanded
+					*row\expanded=#True
+					*this\dirty=#True
+					*row\dirty=#True
+					_MyTable_Table_Predraw(*this)
+					_MyTable_Table_Redraw(*this)
+				EndIf
+			Case #PB_Shortcut_Subtract 
+				If hierarchical And *row And Not alwaysexpanded
+					*row\expanded=#False
+					*row\dirty=#True
+					*this\dirty=#True
+					_MyTable_Table_Predraw(*this)
+					_MyTable_Table_Redraw(*this)
+				EndIf
+			Case #PB_Shortcut_Multiply
+				If hierarchical And *row And Not alwaysexpanded
+					_MyTable_Row_Expand(*row,#True)
+					*this\dirty=#True
+					_MyTable_Table_Predraw(*this)
+					_MyTable_Table_Redraw(*this)
+				EndIf
+			Case #PB_Shortcut_Divide
+				If hierarchical And *row And Not alwaysexpanded
+					_MyTable_Row_Expand(*row,#False)										
+					*this\dirty=#True
+					_MyTable_Table_Predraw(*this)
+					_MyTable_Table_Redraw(*this)
+				EndIf
+			Case #PB_Shortcut_Left
+				If Not fullrow And *cell And *cell\col\listindex>0
+					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex-1)
+					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
+				EndIf
+			Case #PB_Shortcut_Right
+				If Not fullrow And *cell And *cell\col\listindex<ListSize(*this\cols())
+					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex+1)
+					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
+				EndIf
+			Case #PB_Shortcut_Up
+				If *row
+					If *row\explistindex>0
+						If pages
+							SelectElement(*this\expRowsPage(),*row\explistindex-1)								
+							*row=*this\expRowsPage()
+						Else
+							SelectElement(*this\expRows(),*row\explistindex-1)								
+							*row=*this\expRows()
+						EndIf				
+						
+						If fullrow					
+							_MyTableSelectObject(*row,Bool(shift And multiselect),pages)
+						Else
+							*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex)
+							_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
+						EndIf
+					EndIf
+				EndIf
+			Case #PB_Shortcut_Down
+				If *row
+					If Pages
+						If (*row\explistindex+1)<ListSize(*this\expRowsPage())
+							SelectElement(*this\expRowsPage(),*row\explistindex+1)			
+							*row=*this\expRowsPage()
+						EndIf							
+					Else
+						If (*row\explistindex+1)<ListSize(*this\expRows())
+							SelectElement(*this\expRows(),*row\explistindex+1)			
+							*row=*this\expRows()
+						EndIf
+					EndIf
+					
+					If fullrow
+						_MyTableSelectObject(*row,Bool(shift And multiselect),pages)
+					Else
+						*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex)
+						_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
+					EndIf
+				EndIf
+			Case #PB_Shortcut_Space
+				If checkboxes And *row
+					*row\checked=Bool(*row\checked=#False)
+					*row\dirty=#True
+					*this\dirty=#True					
+					_MyTable_Table_Redraw(*this)
+				ElseIf editable And *cell
+					*cell\checked=Bool(*cell\checked=#False)
+					*cell\dirty=#True
+					*this\dirty=#True					
+					_MyTable_Table_Redraw(*this)
+				EndIf
 			Case #PB_Shortcut_Return
 				_MyTable_StartEditCell(*this\lastcell)
 			Case #PB_Shortcut_PageDown
@@ -342,6 +500,91 @@ Procedure _MyTableEvtCanvasKeyDown()
 	EndIf
 EndProcedure
 
+Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
+	Protected *row.strMyTableRow=0
+	Protected *cell.strMyTableCell=0
+	Protected *col.strMyTableCol=0
+	Protected *this.strMyTableTable=0
+	If *obj
+		If *obj\type=#MYTABLE_TYPE_CELL
+			*cell=*obj
+			*row=*cell\row
+			*col=*cell\col
+			*this=*cell\table		
+			ClearMap(*this\tempselectedCells())
+			ClearMap(*this\tempselectedRows())
+			ClearMap(*this\tempselectedCols())	
+			If Not shift
+				ClearMap(*this\selectedCells())
+				ClearMap(*this\selectedRows())
+				ClearMap(*this\selectedCols())			
+			EndIf
+			
+			If shift
+				*this\shiftcell=*cell				
+				Protected rmin,cmin,rmax,cmax,r,c				
+				If *this\shiftcell<>*this\lastcell
+					rmin=*this\shiftcell\row\explistindex
+					rmax=*this\lastcell\row\explistindex
+					If rmin>rmax
+						Swap rmin,rmax
+					EndIf
+					
+					cmin=*this\shiftcell\col\listindex
+					cmax=*this\lastcell\col\listindex
+					
+					If cmin>cmax
+						Swap cmin,cmax
+					EndIf
+					
+					For r=rmin To rmax
+						If pages
+							SelectElement(*this\expRowsPage(),r)
+							*row=*this\expRowsPage()
+						Else
+							SelectElement(*this\expRows(),r)
+							*row=*this\expRows()
+						EndIf
+						For c=cmin To cmax
+							*cell=_MyTableGetOrAddCell(*row,c)
+							*this\tempselectedCells(Str(*cell))=#True
+						Next
+					Next
+				EndIf				
+			Else
+				*this\lastcell=*cell
+				*this\selectedCells(Str(*obj))=#True
+			EndIf			
+		ElseIf *obj\type=#MYTABLE_TYPE_COL
+			*col=*obj
+			*this=*col\table
+			If Not shift
+				ClearMap(*this\selectedCells())
+				ClearMap(*this\selectedRows())
+				ClearMap(*this\selectedCols())			
+			EndIf
+			*this\selectedCols(Str(*obj))=#True
+			*this\lastcol=*obj
+		ElseIf *obj\type=#MYTABLE_TYPE_ROW
+			*row=*obj
+			*this=*row\table
+			If Not shift
+				ClearMap(*this\selectedCells())
+				ClearMap(*this\selectedRows())
+				ClearMap(*this\selectedCols())			
+			EndIf
+			*this\selectedRows(Str(*obj))=#True
+			*this\lastrow=*obj
+		EndIf
+		
+		If *this
+			*this\dirty=#True
+			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndIf
+	
+EndProcedure
+
 Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
 	
@@ -349,9 +592,9 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 	Protected sortable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE)
-	
 	Protected rf,rt,cf,ct,r,c
 	
+	*this\shiftcell=0
 	If *rc\row=-1 And *rc\col>-1
 		If Not *this\resizeCol			
 			Protected *tcol.strMyTableCol=*rc\tcol
@@ -732,11 +975,13 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 					*this\lastcell=0
 					*this\lastrow=0
 					*this\lastcol=0
+					*this\shiftcell=0
 				EndIf
 				If control
 					*this\lastcell=0
 					*this\lastrow=0
 					*this\lastcol=0
+					*this\shiftcell=0
 				EndIf
 				ClearMap(*this\tempselectedCells())
 				ClearMap(*this\tempselectedRows())
@@ -969,6 +1214,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightDouble(),#PB_EventType_RightDoubleClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightClick(),#PB_EventType_RightClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyUp(),#PB_EventType_KeyUp)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)			
 		EndIf
 		If IsGadget(vscroll)
