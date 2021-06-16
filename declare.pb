@@ -125,6 +125,9 @@ Declare _MyTableTextWidth(text.s)
 Declare _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 Declare _MyTableDrawTextCompleteCenter(by,text.s,color.q,maxlen.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
+Declare _MyTable_StartEdit(*rc.strMyTableRowCol)
+Declare _MyTable_StartEditCell(*cll.strMyTableCell)
+Declare _MyTable_StopEdit(*this.strMyTableTable)
 
 ;- Application
 Declare.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
@@ -288,7 +291,7 @@ Macro _MyTable_GetStyleApplication(name)
 EndMacro
 
 Macro _MyTable_GetStylesApplication()
-	_MyTable_GetStyleApplication(Default)
+_MyTable_GetStyleApplication(Default)
 	_MyTable_GetStyleApplication(Selected)
 	_MyTable_GetStyleApplication(Fixed)
 	_MyTable_GetStyleApplication(MouseOver)
@@ -299,7 +302,7 @@ Macro _MyTable_GetStylesApplication()
 EndMacro
 
 Macro _MyTable_GetStylesTable()
-	_MyTable_GetStyleTable(Default)
+_MyTable_GetStyleTable(Default)
 	_MyTable_GetStyleTable(Selected)
 	_MyTable_GetStyleTable(Fixed)
 	_MyTable_GetStyleTable(MouseOver)
@@ -310,7 +313,7 @@ Macro _MyTable_GetStylesTable()
 EndMacro
 
 Macro _MyTable_GetStylesRow()
-	_MyTable_GetStyleRow(Default)
+_MyTable_GetStyleRow(Default)
 	_MyTable_GetStyleRow(Selected)
 	_MyTable_GetStyleRow(Fixed)
 	_MyTable_GetStyleRow(MouseOver)
@@ -321,7 +324,7 @@ Macro _MyTable_GetStylesRow()
 EndMacro
 
 Macro _MyTable_GetStylesCol()
-	_MyTable_GetStyleCol(Default)
+_MyTable_GetStyleCol(Default)
 	_MyTable_GetStyleCol(Selected)
 	_MyTable_GetStyleCol(Fixed)
 	_MyTable_GetStyleCol(MouseOver)
@@ -332,7 +335,7 @@ Macro _MyTable_GetStylesCol()
 EndMacro
 
 Macro _MyTable_GetStylesCell()
-	_MyTable_GetStyleCell(Default)
+_MyTable_GetStyleCell(Default)
 	_MyTable_GetStyleCell(Selected)
 	_MyTable_GetStyleCell(Fixed)
 	_MyTable_GetStyleCell(MouseOver)

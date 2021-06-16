@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 1977
-	#MYTABLE_VERSION_DATE = 20210615
+	#MYTABLE_VERSION = 2057
+	#MYTABLE_VERSION_DATE = 20210616
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -89,6 +89,8 @@
 		GetCell(row.i)
 		CountCells()
 		ScrollTo(setSelect.b=#False,redraw.b=#True)
+		StartEdit()
+		StopEdit()
 	EndInterface
 	
 	EnumerationBinary _mytable_col
@@ -192,6 +194,7 @@
 	Prototype MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
 	Prototype MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
 	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is drawn
+	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell); Return #True if custom cell is edited
 	
 	
 	Prototype MyTableProtoCallback(*row.MyTableRow)
@@ -275,6 +278,7 @@
 		RegisterEventRowRightClick(event.MyTableProtoEventRowRightClick)
 		RegisterEventRowRightDoubleClick(event.MyTableProtoEventRowRightDoubleClick)
 		RegisterEventCustomCellDraw(event.MyTableProtoEventCustomCellDraw)
+		RegisterEventCustomCellEdit(event.MyTableProtoEventCustomCellEdit)
 		
 		RegisterCallback(callback.MyTableProtoCallback)
 	EndInterface

@@ -74,6 +74,9 @@ Structure strMyTableCell Extends strMyTableObject
 	
 	textwidth.i
 	textheight.i
+	
+	startx.i
+	starty.i
 EndStructure
 
 Structure strMyTableCol Extends strMyTableObject
@@ -113,6 +116,13 @@ Structure strMyTableRow Extends strMyTableObject
 	
 	sorts.s
 	sortd.d
+EndStructure
+
+Structure strMyTableTableEdit
+	*cell.strMyTableCell
+	window.i
+	gadget.i
+	menu.i
 EndStructure
 
 Structure strMyTableTable Extends strMyTableObject		
@@ -192,6 +202,7 @@ Structure strMyTableTable Extends strMyTableObject
 	eventRowLeftDoubleClick.MyTableProtoEventRowLeftDoubleClick		
 	eventRowRightDoubleClick.MyTableProtoEventRowRightDoubleClick
 	eventCustomCellDraw.MyTableProtoEventCustomCellDraw
+	eventCustomCellEdit.MyTableProtoEventCustomCellEdit
 	
 	
 	callback.MyTableProtoCallback
@@ -208,6 +219,8 @@ Structure strMyTableTable Extends strMyTableObject
 	pageElements.i
 	page.i
 	List expRowsPage.i()
+	
+	edit.strMyTableTableEdit
 EndStructure
 
 Structure strMyTableApplication Extends strMyTableObject
@@ -229,6 +242,8 @@ Structure strMyTableRowCol
 	*tcell.strMyTableCell
 	mx.i
 	my.i
+	startx.i
+	starty.i
 EndStructure
 
 Structure strMyTableCellList

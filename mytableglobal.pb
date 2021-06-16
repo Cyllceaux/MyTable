@@ -116,6 +116,7 @@ EndProcedure
 
 Procedure _MyTableEvtScroll()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	*this\dirty=#True
 	_MyTable_Table_Redraw(*this)
 EndProcedure
@@ -170,6 +171,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	Protected my=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 	Protected vsc=0
 	Protected hsc=0
+	Protected startx=0,starty=0
 	Protected *rc.strMyTableRowCol=AllocateStructure(strMyTableRowCol)
 	*rc\col=-2
 	*rc\row=-2
@@ -239,6 +241,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		Else				
 			hsc+*col\calcwidth
 		EndIf
+		startx=hsc
 	Next
 	
 	
@@ -262,6 +265,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 				vsc+*row\calcheight
 			EndIf
 		Next
+		starty=vsc
 	EndIf
 	
 	If *rc\row>-1 And *rc\col>-1
@@ -270,6 +274,8 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 			*rc\trow=*this\expRows()
 		EndIf
 		*rc\tcell=_MyTableGetOrAddCell(*rc\trow,*rc\col)
+		*rc\starty=starty
+		*rc\startx=startx
 		If Not *rc\tcol
 			*rc\tcol=*rc\tcell\col
 		EndIf
@@ -304,12 +310,15 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasKeyDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	If IsGadget(*this\canvas)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		Protected alt.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Alt)
 		Protected key=GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
 		Select key
+			Case #PB_Shortcut_Return
+				_MyTable_StartEditCell(*this\lastcell)
 			Case #PB_Shortcut_PageDown
 				If IsGadget(*this\vscroll)
 					SetGadgetState(*this\vscroll,GetGadgetState(*this\vscroll)+100)						
@@ -542,6 +551,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseMove()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	
 	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 	Protected markmouseover.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
@@ -654,6 +664,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseLeftDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
@@ -669,6 +680,7 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 		*this\mxd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 		If *rc\trow
 			alwaysexpanded=Bool(alwaysexpanded Or Bool(*rc\trow\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
+			alwaysexpanded=Bool(alwaysexpanded Or Not *rc\trow\rows Or ListSize(*rc\trow\rows\rows())=0)
 		EndIf
 		If *rc\check
 			*rc\trow\checked=Bool(Not *rc\trow\checked)
@@ -779,6 +791,9 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseLeftDouble()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
+	
+	
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		If *rc\bottom And *rc\right
@@ -789,11 +804,15 @@ Procedure _MyTableEvtCanvasMouseLeftDouble()
 			_MyTable_Col_Autosize(*rc\tcol)
 		Else
 			
-			If *this\eventCellLeftDoubleClick And *rc\tcell
-				*this\eventCellLeftDoubleClick(*rc\tcell)
-			EndIf
-			If *this\eventRowLeftDoubleClick And *rc\trow
-				*this\eventRowLeftDoubleClick(*rc\trow)
+			If *rc\tcell
+				_MyTable_StartEdit(*rc)
+			Else
+				If *this\eventCellLeftDoubleClick And *rc\tcell
+					*this\eventCellLeftDoubleClick(*rc\tcell)
+				EndIf
+				If *this\eventRowLeftDoubleClick And *rc\trow
+					*this\eventRowLeftDoubleClick(*rc\trow)
+				EndIf		
 			EndIf		
 			
 		EndIf
@@ -803,6 +822,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -812,6 +832,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightUp()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -821,6 +842,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightDouble()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -838,6 +860,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightClick()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -874,6 +897,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasScroll()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	_MyTable_StopEdit(*this)
 	Protected mw=GetGadgetAttribute(*this\canvas,#PB_Canvas_WheelDelta)
 	If mw
 		
@@ -945,7 +969,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightDouble(),#PB_EventType_RightDoubleClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightClick(),#PB_EventType_RightClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
-			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)			
 		EndIf
 		If IsGadget(vscroll)
 			SetGadgetData(vscroll,*table)
@@ -1207,6 +1231,90 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 	EndIf	
 EndProcedure
 
+Procedure _MyTable_StopEdit(*this.strMyTableTable)
+	If *this
+		If IsWindow(*this\edit\window)
+			CloseWindow(*this\edit\window)
+			*this\edit\window=0
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_KeyEdit()
+	Protected *this.strMyTableTable=GetWindowData(EventWindow())
+	With *this\edit\cell
+		If \text<>GetGadgetText(*this\edit\gadget)
+			\text=GetGadgetText(*this\edit\gadget)
+			\textheight=0
+			\textwidth=0
+			\dirty=#True
+			\table\dirty=#True
+			_MyTable_Table_Redraw(*this)
+		EndIf
+	EndWith
+	_MyTable_StopEdit(*this)
+EndProcedure
+
+Procedure _MyTableEditSetPos(Gadget, Position)
+	CompilerSelect #PB_Compiler_OS
+		CompilerCase #PB_OS_Windows
+			SendMessage_(GadgetID(Gadget), #EM_SETSEL, Position, Position)
+	CompilerEndSelect
+EndProcedure
+
+Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
+	If *cell
+		Protected *this.strMyTableTable=*cell\table
+		
+		Protected editable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_EDITABLE)
+		editable=Bool(editable Or *cell\col\flags & #MYTABLE_COL_FLAGS_EDITABLE)
+		editable=Bool(editable Or *cell\row\flags & #MYTABLE_ROW_FLAGS_EDITABLE)
+		editable=Bool(editable Or *cell\flags & #MYTABLE_CELL_FLAGS_EDITABLE)	
+		editable=Bool(editable And Not Bool(*cell\col\flags & #MYTABLE_COL_FLAGS_NO_EDITABLE))
+		editable=Bool(editable And Not Bool(*cell\row\flags & #MYTABLE_ROW_FLAGS_NO_EDITABLE))
+		editable=Bool(editable And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_EDITABLE))
+		
+		
+		If editable
+			Protected custom.b=#False
+			If *this\eventCustomCellEdit
+				custom=*this\eventCustomCellEdit(*cell)
+			EndIf
+			If Not custom
+				_MyTable_StopEdit(*this)
+				*this\edit\window=OpenWindow(#PB_Any,
+				                             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\startx,
+				                             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\starty,
+				                             *cell\col\calcwidth,
+				                             *cell\row\calcheight,
+				                             "",
+				                             #PB_Window_BorderLess,
+				                             GadgetID(*this\canvas))
+				*this\edit\menu=CreateMenu(#PB_Any,WindowID(*this\edit\window))
+				AddKeyboardShortcut(*this\edit\window,#PB_Shortcut_Return,0)
+				BindMenuEvent(*this\edit\menu,0,@_MyTable_KeyEdit())
+				*this\edit\gadget=EditorGadget(#PB_Any,
+				                               0,
+				                               0,
+				                               *cell\col\calcwidth,
+				                               *cell\row\calcheight)
+				*this\edit\cell=*cell
+				SetGadgetText(*this\edit\gadget,*cell\text)
+				SetActiveGadget(*this\edit\gadget)
+				SetGadgetData(*this\edit\gadget,*this)
+				SetWindowData(*this\edit\window,*this)
+				_MyTableEditSetPos(*this\edit\gadget,Len(*cell\text))
+			EndIf
+		EndIf
+	EndIf
+EndProcedure
+
+Procedure _MyTable_StartEdit(*rc.strMyTableRowCol)
+	If *rc
+		_MyTable_StartEditCell(*rc\tcell)
+	EndIf
+EndProcedure
+
 Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 	
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
@@ -1301,7 +1409,7 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 	
 	Procedure.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\border\border#pos\name
-	
+		
 		If Not result
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL

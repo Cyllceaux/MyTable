@@ -28,6 +28,7 @@ _MyTableRegisterEvent(RowRightClick)
 _MyTableRegisterEvent(RowLeftDoubleClick)		
 _MyTableRegisterEvent(RowRightDoubleClick)
 _MyTableRegisterEvent(CustomCellDraw)
+_MyTableRegisterEvent(CustomCellEdit)
 
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetterPredraw(Table,Title,s)
@@ -588,6 +589,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,font.i,width.i,hei
 		Protected *col.strMyTableCol=*cell\col
 		If *col\calcwidth>0			
 			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
+			*cell\startx=bx
+			*cell\starty=by
 			If *this\table\eventCustomCellDraw
 				customdraw=*this\table\eventCustomCellDraw(*cell,bx,by,*col\calcwidth,*this\calcheight)
 			EndIf

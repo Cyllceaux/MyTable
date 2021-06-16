@@ -164,6 +164,7 @@ DataSection
 	_MyTableDataSectionMethode(Table,RegisterEventRowRightClick)
 	_MyTableDataSectionMethode(Table,RegisterEventRowRightDoubleClick)
 	_MyTableDataSectionMethode(Table,RegisterEventCustomCellDraw)
+	_MyTableDataSectionMethode(Table,RegisterEventCustomCellEdit)
 	
 	_MyTableDataSectionMethode(Table,RegisterCallback)
 	
@@ -221,6 +222,8 @@ DataSection
 	_MyTableDataSectionMethode(Cell,GetCell)
 	_MyTableDataSectionMethode(Cell,CountCells)
 	_MyTableDataSectionMethode(Cell,ScrollTo)
+	_MyTableDataSectionMethode(Cell,StartEdit)
+	_MyTableDataSectionMethode(Cell,StopEdit)
 	
 EndDataSection	
 EndModule

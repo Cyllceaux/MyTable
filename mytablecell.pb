@@ -18,6 +18,18 @@ Procedure _MyTable_Cell_GetApplication(*this.strMyTableCell)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Cell_StartEdit(*this.strMyTableCell)
+	If *this
+		_MyTable_StartEditCell(*this)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_StopEdit(*this.strMyTableCell)
+	If *this
+		_MyTable_StopEdit(*this\table)
+	EndIf
+EndProcedure
+
 
 Procedure _MyTable_Cell_SetSelected(*this.strMyTableCell,value.b)
 	If *this
