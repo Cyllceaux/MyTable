@@ -37,7 +37,8 @@ If dir
 	FinishDirectory(dir)
 EndIf
 If errorlines<>""
+	errorlines+#CRLF$+compiler
 	MessageRequester("Fehler",errorlines,#PB_MessageRequester_Error)
 Else
-	MessageRequester("OK","OK",#PB_MessageRequester_Info)
+	MessageRequester("OK","OK"+#CRLF$+compiler,#PB_MessageRequester_Info)
 EndIf
