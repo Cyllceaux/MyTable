@@ -10,7 +10,7 @@ UseModule MyTable
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 	CloseGadgetList()
 	
-	Global *tree.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_CHECKBOXES|#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE)
+	Global *tree.MyTableTable=MyTableCreateTree(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_CHECKBOXES|#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE)
 	*tree\SetRedraw(#False)
 	Define *col.MyTableCol,*stamm.MyTableRow,*ast.MyTableRow,*zweig.MyTableRow,*blatt.MyTableRow
 	*col=*tree\AddCol("Test 1 (fix)",200,rowImage)

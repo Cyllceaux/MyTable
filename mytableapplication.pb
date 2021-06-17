@@ -40,6 +40,14 @@ Procedure _MyTable_Application_AddTable(*this.strMyTableApplication,window.i,can
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Application_AddTree(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
+	ProcedureReturn _MyTable_Application_AddTable(*this,window,canvas,vscroll,hscroll,name,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|flags)
+EndProcedure
+
+Procedure _MyTable_Application_AddGrid(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+	ProcedureReturn _MyTable_Application_AddTable(*this,window,canvas,vscroll,hscroll,name,#MYTABLE_TABLE_FLAGS_GRID|flags)
+EndProcedure
+
 
 Procedure _MyTable_Application_Redraw(*this.strMyTableApplication)
 	If *this

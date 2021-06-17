@@ -73,12 +73,12 @@ UseModule MyTable
 	Define *colstyle.MyTableStyle=0
 	Define *cellstyle.MyTableStyle=0
 	*appstyle\SetFont(normal)
-	Global *favoriten.MyTableTable=*app\AddTable(window,favoriten,vscrollfavoriten,hscrollfavoriten,"favoriten",#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-	Global *ordner.MyTableTable=*app\AddTable(window,ordner,vscrollordner,hscrollordner,"ordner",#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-	Global *mails.MyTableTable=*app\AddTable(window,mails,vscrollmails,hscrollmails,"mails",#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_BORDER)
-	Global *termine.MyTableTable=*app\AddTable(window,termine,vscrolltermine,hscrolltermine,"termine",#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-	Global *kontakte.MyTableTable=*app\AddTable(window,kontakte,vscrollkontakte,hscrollkontakte,"kontakte",#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-	Global *aufgaben.MyTableTable=*app\AddTable(window,aufgaben,vscrollaufgaben,hscrollaufgaben,"aufgaben",#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Global *favoriten.MyTableTable=*app\AddTree(window,favoriten,vscrollfavoriten,hscrollfavoriten,"favoriten",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Global *ordner.MyTableTable=*app\AddTree(window,ordner,vscrollordner,hscrollordner,"ordner",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Global *mails.MyTableTable=*app\AddTree(window,mails,vscrollmails,hscrollmails,"mails",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_BORDER)
+	Global *termine.MyTableTable=*app\AddTree(window,termine,vscrolltermine,hscrolltermine,"termine",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Global *kontakte.MyTableTable=*app\AddTree(window,kontakte,vscrollkontakte,hscrollkontakte,"kontakte",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Global *aufgaben.MyTableTable=*app\AddTree(window,aufgaben,vscrollaufgaben,hscrollaufgaben,"aufgaben",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 	
 	*favoriten\SetDefaultImagePlusArrow(MyTableDefaultImagePlusArrow)
 	*favoriten\SetDefaultImageMinusArrow(MyTableDefaultImageMinusArrow)

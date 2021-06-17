@@ -10,6 +10,14 @@ Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTA
 	ProcedureReturn *this
 EndProcedure
 
+Procedure MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
+	ProcedureReturn MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|flags)
+EndProcedure
+
+Procedure MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+	ProcedureReturn MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_GRID|flags)
+EndProcedure
+
 Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
 	With *style
 		\font=GetGadgetFont(#PB_Default)

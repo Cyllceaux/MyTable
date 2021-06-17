@@ -82,6 +82,8 @@ DataSection
 	_MyTableDataSectionSetterGetter(Application,Recalc)
 	
 	_MyTableDataSectionMethode(Application,AddTable)
+	_MyTableDataSectionMethode(Application,AddTree)
+	_MyTableDataSectionMethode(Application,AddGrid)
 	_MyTableDataSectionMethode(Application,ClearTables)
 	_MyTableDataSectionMethode(Application,Redraw)
 	_MyTableDataSectionMethode(Application,Recalc)

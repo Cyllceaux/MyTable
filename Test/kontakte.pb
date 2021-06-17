@@ -13,7 +13,7 @@ UseModule MyTable
 	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 	CloseGadgetList()
 	
-	Global *tree.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
+	Global *tree.MyTableTable=MyTableCreateTree(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
 	*tree\SetRedraw(#False)
 	Define *col.MyTableCol,*rowStyle.MyTableStyle,*tableStyle.MyTableStyle,*colStyle.MyTableStyle
 	Define i,g

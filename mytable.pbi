@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2148
+	#MYTABLE_VERSION = 2164
 	#MYTABLE_VERSION_DATE = 20210617
 	
 	Enumeration _mytable_type
@@ -170,10 +170,12 @@
 		#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER ; MouseOver marks the cell
 		#MYTABLE_TABLE_FLAGS_EDITABLE ; Editable
 		#MYTABLE_TABLE_FLAGS_ZEBRA ; Zebra Layout
+		#MYTABLE_TABLE_FLAGS_GRID ; Grid (Excel-like) Layout
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TREE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_HIERARCHICAL
+	#MYTABLE_TABLE_FLAGS_DEFAULT_GRID=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_GRID
 	
 	
 	Prototype.b MyTableProtoEventColLeftClick(*cell.MyTableCol)	
@@ -308,6 +310,8 @@
 		SetRecalc(value.b):GetRecalc.b()
 		
 		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
+		AddTree(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)			
+		AddGrid(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)			
 		ClearTables()
 		Redraw()
 		Recalc()
@@ -316,6 +320,8 @@
 	
 	Declare MyTableCreateApplication(flags.i=0)	
 	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
+	Declare MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
+	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
 	
 EndDeclareModule
 
