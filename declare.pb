@@ -175,8 +175,10 @@ Declare _MyTable_Col_SetSort(*this.strMyTableCol,value.i)
 Declare _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.b=#True)
 Declare _MyTable_Cell_Autosize(*this.strMyTableCell)
 
-;- Styled
+;- Style
 Declare _MyTable_Style_Redraw(*this.strMyTableStyleObject)
+
+;- Fonts
 
 ;- Macros
 
@@ -427,6 +429,15 @@ Macro _MyTableSimpleSetterPointer(gruppe,name)
 	EndProcedure
 EndMacro
 
+Macro _MyTableSimpleSetterPointerStructure(gruppe,name,typ)
+	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value.typ)
+		If *this
+			*this\name=*value
+			*this\dirty=#True
+		EndIf
+	EndProcedure
+EndMacro
+
 Macro _MyTableSimpleSetterRedraw(gruppe,name,typ)
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
@@ -485,6 +496,11 @@ EndMacro
 Macro _MyTableSimpleSetterGetterPointer(gruppe,name)
 	_MyTableSimpleGetterPointer(gruppe,name)
 	_MyTableSimpleSetterPointer(gruppe,name)
+EndMacro
+
+Macro _MyTableSimpleSetterGetterPointerStructure(gruppe,name,typ)
+	_MyTableSimpleGetterPointer(gruppe,name)
+	_MyTableSimpleSetterPointerStructure(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetterGetterSubRedraw(gruppe,name,typ)

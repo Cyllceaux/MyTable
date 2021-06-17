@@ -4,8 +4,8 @@ XIncludeFile "declare.pb"
 
 UseModule MyTable
 	
-	Global titel=LoadFont(#PB_Any,"Arial",14,#PB_Font_Bold)
-	Global header=LoadFont(#PB_Any,"Arial",12)
+	Global titel=MyTableCreateFont("Arial",14,#PB_Font_Bold)
+	Global header=MyTableCreateFont("Arial",12)
 	
 	Global window=OpenWindow(#PB_Any,0,0,800,600,"Kontakte (lookalike)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)

@@ -4,7 +4,7 @@ XIncludeFile "declare.pb"
 
 UseModule MyTable
 	
-	Global titleFont=LoadFont(#PB_Any,"Arial",14,#PB_Font_HighQuality|#PB_Font_Italic|#PB_Font_Underline)
+	Global *titleFont=MyTableCreateFont("Arial",14,#PB_Font_HighQuality|#PB_Font_Italic|#PB_Font_Underline)
 	
 	Global window=OpenWindow(#PB_Any,0,0,800,600,"Table 10 (SetImageLeft, SetImageRight, Title, Zebra)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
@@ -23,7 +23,7 @@ UseModule MyTable
 	*tablestyle\SetBackColor(RGBA(220,220,220,255))
 	*tablestyle=*table\GetTitleStyle()
 	
-	*tablestyle\SetFont(titleFont)
+	*tablestyle\SetFont(*titleFont)
 	*tablestyle\SetBackColor(RGBA(250,250,220,255))
 	*tablestyle\SetForeColor(RGBA(50,50,220,255))
 	*table\SetTitle(GetWindowTitle(window))

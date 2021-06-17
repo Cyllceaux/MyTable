@@ -5,7 +5,7 @@
 
 UsePNGImageDecoder()
 
-XIncludeFile "..\mytable.pbi"
+XIncludeFile "../mytable.pbi"
 
 Global MyTableW1=DesktopScaledX(1)
 Global MyTableW2=DesktopScaledX(2)
@@ -102,8 +102,8 @@ CompilerIf #MYTABLE_UPDATE_VERSION And #PB_Compiler_Debugger
 			CloseFile(file)
 		EndIf
 	EndProcedure
-	updateVersion("..\mytable.pbi")
-	updateVersion("..\README.md")
+	updateVersion("../mytable.pbi")
+	updateVersion("../README.md")
 CompilerEndIf
 
 DataSection

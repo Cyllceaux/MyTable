@@ -4,10 +4,10 @@ XIncludeFile "declare.pb"
 
 UseModule MyTable
 	
-	Global treeTitel=LoadFont(#PB_Any,"Arial",12)
-	Global normal=LoadFont(#PB_Any,"Arial",10)
-	Global mail=LoadFont(#PB_Any,"Arial",9)
-	Global cursiv=LoadFont(#PB_Any,"Arial",10,#PB_Font_Italic)
+	Global treeTitel=MyTableCreateFont("Arial",12)
+	Global normal=MyTableCreateFont("Arial",10)
+	Global mail=MyTableCreateFont("Arial",9)
+	Global cursiv=MyTableCreateFont("Arial",10,#PB_Font_Italic)
 	
 	Global window=OpenWindow(#PB_Any,0,0,1000,800,"Outlook (lookalike)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	SmartWindowRefresh(window,#True)

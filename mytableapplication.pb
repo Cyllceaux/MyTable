@@ -141,3 +141,7 @@ Procedure _MyTable_Application_Autosize(*this.strMyTableApplication)
 		Next
 	EndIf
 EndProcedure
+
+Procedure.b _MyTable_Application_Save(*this.strMyTableApplication,file.s)
+	
+EndProcedure

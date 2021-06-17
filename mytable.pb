@@ -7,6 +7,7 @@ Module MyTable
 	XIncludeFile "mytablestructures.pb"
 	XIncludeFile "declare.pb"
 	XIncludeFile "mytableglobal.pb"
+	XIncludeFile "mytablefont.pb"
 	XIncludeFile "mytablestyle.pb"
 	XIncludeFile "mytableapplication.pb"
 	XIncludeFile "mytabletable.pb"
@@ -49,6 +50,7 @@ Module MyTable
 	
 	
 	Macro _MyTableDataSectionStyleDefault(gruppe)
+		_MyTableDataSectionGetter(gruppe,Type)
 		_MyTableDataSectionGetter(gruppe,Object)
 		
 		_MyTableDataSectionSetterGetter(gruppe,Font)
@@ -68,6 +70,12 @@ EndMacro
 
 
 DataSection
+	vtable_font: ;- Font
+	_MyTableDataSectionGetter(Font,Type)
+	_MyTableDataSectionGetter(Font,Flags)
+	_MyTableDataSectionGetter(Font,Name)
+	_MyTableDataSectionGetter(Font,Size)
+	
 	vtable_style: ;- Style
 	_MyTableDataSectionStyleDefault(Style)
 	
@@ -88,6 +96,7 @@ DataSection
 	_MyTableDataSectionMethode(Application,Redraw)
 	_MyTableDataSectionMethode(Application,Recalc)
 	_MyTableDataSectionMethode(Application,Free)
+	_MyTableDataSectionMethode(Application,Save)
 	
 	vtable_table:;- Table
 	_MyTableDataSectionDefault(Table)

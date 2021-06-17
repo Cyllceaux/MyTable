@@ -4,6 +4,12 @@
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Style_GetType(*this.strMyTableStyleObject)
+	If *this
+		ProcedureReturn *this\type
+	EndIf
+EndProcedure
+
 Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 	Select *this\obj\type
 		Case #MYTABLE_TYPE_APPLICATION
@@ -81,6 +87,25 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 	EndProcedure
 EndMacro
 
+Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
+	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ)
+		If *this
+			*this\style\sub#name=*value
+			_MyTable_Style_Redraw(*this)
+		EndIf
+	EndProcedure
+	
+	Procedure _MyTable_Style_Get#name(*this.strMyTableStyleObject)
+		If *this
+			Protected *result.typ=*this\style\sub#name
+			If Not *result
+				*result=*this\obj\defaultStyle\sub#name
+			EndIf
+			ProcedureReturn *result
+		EndIf
+	EndProcedure
+EndMacro
+
 Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 	Procedure _MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ)
 		If *this
@@ -109,7 +134,7 @@ Macro _MyTable_Style_GetterSetterBorders(name,typ)
 EndMacro
 
 
-_MyTable_Style_GetterSetter(Font,i)
+_MyTable_Style_GetterSetterPointer(Font,strMyTableFont)
 _MyTable_Style_GetterSetter(HAlign,i)
 _MyTable_Style_GetterSetter(VAlign,i)
 _MyTable_Style_GetterSetter(BackColor,q)

@@ -11,10 +11,10 @@ UseModule MyTable
 	CloseGadgetList()
 	
 	Define Dim fonts(3)
-	fonts(0)=LoadFont(#PB_Any,"Arial",12,#PB_Font_HighQuality|#PB_Font_Bold)
-	fonts(1)=LoadFont(#PB_Any,"Arial",12,#PB_Font_HighQuality|#PB_Font_Italic)
-	fonts(2)=LoadFont(#PB_Any,"Arial",12,#PB_Font_HighQuality|#PB_Font_StrikeOut)
-	fonts(3)=LoadFont(#PB_Any,"Arial",12,#PB_Font_HighQuality|#PB_Font_Underline)
+	fonts(0)=MyTableCreateFont("Arial",12,#PB_Font_HighQuality|#PB_Font_Bold)
+	fonts(1)=MyTableCreateFont("Arial",12,#PB_Font_HighQuality|#PB_Font_Italic)
+	fonts(2)=MyTableCreateFont("Arial",12,#PB_Font_HighQuality|#PB_Font_StrikeOut)
+	fonts(3)=MyTableCreateFont("Arial",12,#PB_Font_HighQuality|#PB_Font_Underline)
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	*table\SetRedraw(#False)

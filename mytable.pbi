@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2186
+	#MYTABLE_VERSION = 2220
 	#MYTABLE_VERSION_DATE = 20210617
 	
 	Enumeration _mytable_type
@@ -11,12 +11,21 @@
 		#MYTABLE_TYPE_TABLE
 		#MYTABLE_TYPE_APPLICATION
 		#MYTABLE_TYPE_STYLE
+		#MYTABLE_TYPE_FONT
 	EndEnumeration
 	
+	Interface MyTableFont
+		GetType()
+		GetFlags()
+		GetName.s()
+		GetSize()
+	EndInterface
+	
 	Interface MyTableStyle
+		GetType()
 		GetObject()
 		
-		SetFont(value.i):GetFont()
+		SetFont(*font.MyTableFont):GetFont()
 		SetBackColor(value.q):GetBackColor.q()
 		SetFrontColor(value.q):GetFrontColor.q()
 		SetForeColor(value.q):GetForeColor.q()
@@ -316,12 +325,15 @@
 		Redraw()
 		Recalc()
 		Free()
+		Save.b(file.s)
 	EndInterface
 	
 	Declare MyTableCreateApplication(flags.i=0)	
+	Declare MyTableLoadApplication(file.s)	
 	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	Declare MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
 	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
+	Declare MyTableCreateFont(name.s,size.i,flags.i=0)	
 	
 EndDeclareModule
 

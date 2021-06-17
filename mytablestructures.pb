@@ -3,6 +3,15 @@
 	type.i
 EndStructure
 
+Structure strMyTableFont Extends strMyTableVTable
+	name.s
+	size.i
+	flags.i
+		
+	font.i
+	fontid.i
+EndStructure
+
 Structure strMyTableStyleBorderStyle
 	color.q
 	width.i
@@ -18,7 +27,7 @@ Structure strMyTableStyleBorder
 EndStructure
 
 Structure strMyTableStyle		
-	font.i
+	*font.strMyTableFont
 	backcolor.q
 	frontcolor.q
 	forecolor.q
@@ -262,4 +271,50 @@ EndStructure
 
 Structure strMyTableRowList
 	List rows.strMyTableRow()
+EndStructure
+
+Structure strMyTableSaveStyleBorder
+	color.q
+	width.i
+EndStructure
+
+Structure strMyTableSaveStyle
+	border.i	
+	boderDefault.strMyTableSaveStyleBorder
+	boderTop.strMyTableSaveStyleBorder
+	boderBottom.strMyTableSaveStyleBorder
+	boderLeft.strMyTableSaveStyleBorder
+	boderRight.strMyTableSaveStyleBorder
+EndStructure
+
+Structure strMyTableSaveObject
+	flags.i
+EndStructure
+
+Structure strMyTableSaveCell Extends strMyTableSaveObject
+	text.s
+	value.d
+	checked.b
+	selected.b
+EndStructure
+
+Structure strMyTableSaveRow Extends strMyTableSaveObject
+	checked.b
+	selected.b
+EndStructure
+
+Structure strMyTableSaveCol Extends strMyTableSaveObject
+	text.s
+	selected.b
+EndStructure
+
+Structure strMyTableSaveTable Extends strMyTableSaveObject
+	name.s
+	title.s
+	List cols.strMyTableSaveCol()
+	List rows.strMyTableSaveRow()
+EndStructure
+
+Structure strMyTableSaveApplication Extends strMyTableSaveObject
+	List tables.strMyTableSaveTable()
 EndStructure

@@ -22,7 +22,7 @@ UseModule MyTable
 	
 	*table\SetEmptyText("Keine Einträge vorhanden")
 	*tableStyle=*table\GetEmptyStyle()
-	*tableStyle\SetFont(LoadFont(#PB_Any,"Arial",16,#PB_Font_Italic))
+	*tableStyle\SetFont(MyTableCreateFont("Arial",16,#PB_Font_Italic))
 	
 	*table\SetRedraw(#True)
 	

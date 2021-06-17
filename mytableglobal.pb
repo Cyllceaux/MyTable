@@ -6,6 +6,10 @@ Procedure MyTableCreateApplication(flags.i=0)
 	ProcedureReturn *this
 EndProcedure
 
+Procedure MyTableLoadApplication(file.s)
+	
+EndProcedure
+
 Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
 	_MyTableInitTable(0,*this,window,canvas,vscroll,hscroll,flags)
@@ -20,9 +24,36 @@ Procedure MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTAB
 	ProcedureReturn MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_GRID|flags)
 EndProcedure
 
+Global NewList fonts.strMyTableFont()
+
+Procedure MyTableCreateFont(name.s,size.i,flags.i=0)
+	ForEach fonts()
+		If fonts()\name=name And 
+		   fonts()\size=size And 
+		   fonts()\flags=flags
+			ProcedureReturn fonts()
+		EndIf
+	Next
+	
+	Protected font=LoadFont(#PB_Any,name,size,flags)
+	If font
+		Protected *this.strMyTableFont=AddElement(fonts())
+		With *this
+			\vtable=?vtable_font
+			\name=name
+			\size=size
+			\flags=flags
+			\font=font
+			\fontid=FontID(font)
+			\type=#MYTABLE_TYPE_FONT
+		EndWith
+	EndIf
+	ProcedureReturn *this
+EndProcedure
+
 Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
 	With *style
-		\font=GetGadgetFont(#PB_Default)
+		\font=MyTableCreateFont("Arial",10,#PB_Font_HighQuality)
 		\backcolor=RGBA(250,250,250,255)
 		\frontcolor=RGBA(230,230,230,255)
 		\forecolor=RGBA(50,50,50,255)
@@ -1669,6 +1700,36 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 	EndProcedure
 EndMacro
 
+Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
+	
+	Procedure _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
+		Protected *result.typ=*obj\gruppe#Style\sub#name
+		
+		If Not *result
+			Select *obj\type
+				Case #MYTABLE_TYPE_CELL
+					Protected *cell.strMyTableCell=*obj					
+					*result=_MyTable_Get#gruppe#name(*cell\row,#False)
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*obj					
+					*result=_MyTable_Get#gruppe#name(*row\table,#False)
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*obj					
+					*result=_MyTable_Get#gruppe#name(*col\table,#False)					
+				Case #MYTABLE_TYPE_TABLE
+					Protected *table.strMyTableTable=*obj
+					If *table\application
+						*result=_MyTable_Get#gruppe#name(*table\application,#False)
+					EndIf
+			EndSelect
+		EndIf
+		If root And Not *result
+			*result=_MyTable_GetDefault#name(*obj,#False)
+		EndIf
+		ProcedureReturn *result
+	EndProcedure
+EndMacro
+
 Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 	
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
@@ -1741,7 +1802,7 @@ Macro _MyTable_StylesMethods(gruppe)
 	_MyTable_StyleMethodsRow(gruppe,BackColor,q)
 	_MyTable_StyleMethodsRow(gruppe,FrontColor,q)
 	_MyTable_StyleMethodsRow(gruppe,ForeColor,q)
-	_MyTable_StyleMethodsRow(gruppe,Font,i)
+	_MyTable_StyleMethodsRowPointer(gruppe,Font,strMyTableFont)
 	_MyTable_StyleMethodsRow(gruppe,Border,i,border\)
 	_MyTable_StyleMethodsCol(gruppe,HAlign,i)
 	_MyTable_StyleMethodsRow(gruppe,VAlign,i)

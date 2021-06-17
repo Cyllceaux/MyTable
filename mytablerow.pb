@@ -200,16 +200,13 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False,redraw.b=
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,lastfont)
+Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,*lastfont.strMyTableFont)
 	Protected result.i=*cell\table\calcdefaultrowheight
 	If (*cell\textheight=0 And *cell\text<>"") Or *cell\dirty
-		Protected nfont=_MyTable_GetDefaultFont(*cell)
-		If nfont<>lastfont
-			If IsFont(nfont)
-				nfont=FontID(nfont)
-			EndIf
-			DrawingFont(nfont)
-			lastfont=nfont
+		Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*cell)
+		If *nfont<>*lastfont
+			DrawingFont(*nfont\fontid)
+			*lastfont=*nfont
 		EndIf
 		*cell\textheight=_MyTableTextHeight(*cell\text)
 		*cell\textwidth=_MyTableTextWidth(*cell\text)
@@ -219,7 +216,7 @@ Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,lastfont)
 	EndIf
 	If *cell\cells
 		ForEach *cell\cells\cells()
-			result+_MyTable_Row_Autosize_CellHeight(*cell\cells\cells(),lastfont)
+			result+_MyTable_Row_Autosize_CellHeight(*cell\cells\cells(),*lastfont)
 		Next
 	EndIf
 	ProcedureReturn result
@@ -248,11 +245,11 @@ Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
 			EndIf
 		EndIf
 		Protected result.i=*this\table\calcdefaultrowheight
-		Protected lastfont.i=0
+		Protected *lastfont.strMyTableFont=0
 		If *this\cells
 			ForEach *this\cells\cells()
 				Protected *cell.strMyTableCell=*this\cells\cells()
-				Protected t=_MyTable_Row_Autosize_CellHeight(*cell,lastfont)
+				Protected t=_MyTable_Row_Autosize_CellHeight(*cell,*lastfont)
 				If (t+MyTableH4)>result
 					result=t
 				EndIf
