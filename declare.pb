@@ -83,6 +83,11 @@ StopDrawing()
 
 
 ;- Global
+Declare _MyTableInitFont(*font.strMyTableFont,
+                         name.s,
+                         size.i,
+                         flags.i,
+                         font.i)
 Declare _MyTableInitStyleTable(*style.strMyTableStyle)
 Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
                                 *this.strMyTableObject,
@@ -129,6 +134,8 @@ Declare _MyTable_StartEdit(*rc.strMyTableRowCol)
 Declare _MyTable_StartEditCell(*cll.strMyTableCell)
 Declare _MyTable_StopEdit(*this.strMyTableTable)
 Declare _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
+Declare _MyTableLoadApp(*save.strMyTableSaveApplication,*app.strMyTableApplication)
+Declare _MyTableSaveApp(*app.strMyTableApplication,*save.strMyTableSaveApplication)
 
 ;- Application
 Declare.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)

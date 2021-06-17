@@ -273,6 +273,12 @@ Structure strMyTableRowList
 	List rows.strMyTableRow()
 EndStructure
 
+Structure strMyTableSaveStyleFont
+	name.s
+	size.i
+	flags.i	
+EndStructure
+
 Structure strMyTableSaveStyleBorder
 	color.q
 	width.i
@@ -285,6 +291,10 @@ Structure strMyTableSaveStyle
 	boderBottom.strMyTableSaveStyleBorder
 	boderLeft.strMyTableSaveStyleBorder
 	boderRight.strMyTableSaveStyleBorder
+	font.strMyTableSaveStyleFont
+	backcolor.q
+	frontcolor.q
+	forecolor.q
 EndStructure
 
 Structure strMyTableSaveObject

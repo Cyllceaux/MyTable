@@ -143,5 +143,14 @@ Procedure _MyTable_Application_Autosize(*this.strMyTableApplication)
 EndProcedure
 
 Procedure.b _MyTable_Application_Save(*this.strMyTableApplication,file.s)
-	
+	Protected xml=CreateXML(#PB_Any,#PB_UTF8)
+	Protected *save.strMyTableSaveApplication=AllocateStructure(strMyTableSaveApplication)
+	_MyTableSaveApp(*this,*save)
+	InsertXMLStructure(RootXMLNode(xml),*save,strMyTableSaveApplication)
+	SetXMLEncoding(xml,#PB_UTF8)
+	SetXMLStandalone(xml,#PB_XML_StandaloneYes)
+	FormatXML(xml,#PB_XML_ReFormat|#PB_XML_ReIndent)
+	Protected result.b=Bool(SaveXML(xml,file)<>#False)
+	FreeXML(xml)
+	ProcedureReturn result
 EndProcedure

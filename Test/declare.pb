@@ -73,33 +73,35 @@ EndMacro
 
 CompilerIf #MYTABLE_UPDATE_VERSION And #PB_Compiler_Debugger
 	Procedure updateVersion(pfad.s)
-		Protected file=OpenFile(#PB_Any,pfad)
-		If file
-			Protected inhalt.s=ReadString(file,#PB_File_IgnoreEOL,Lof(file))
-			Protected regexversion=CreateRegularExpression(#PB_Any,"VERSION\s*=\s*(\d+)")
-			Protected regexversiondate=CreateRegularExpression(#PB_Any,"VERSION_DATE\s*=\s*(\d+)")
-			If ExamineRegularExpression(regexversion,inhalt)
-				While NextRegularExpressionMatch(regexversion)
-					Protected line.s=RegularExpressionMatchString(regexversion)
-					Protected op.s=RegularExpressionGroup(regexversion,1)
-					Protected newline.s=ReplaceString(line,op,Str(Val(op)+1))
-					inhalt=ReplaceString(inhalt,line,newline)
-				Wend
+		If FileSize("../update")=0
+			Protected file=OpenFile(#PB_Any,pfad)
+			If file
+				Protected inhalt.s=ReadString(file,#PB_File_IgnoreEOL,Lof(file))
+				Protected regexversion=CreateRegularExpression(#PB_Any,"VERSION\s*=\s*(\d+)")
+				Protected regexversiondate=CreateRegularExpression(#PB_Any,"VERSION_DATE\s*=\s*(\d+)")
+				If ExamineRegularExpression(regexversion,inhalt)
+					While NextRegularExpressionMatch(regexversion)
+						Protected line.s=RegularExpressionMatchString(regexversion)
+						Protected op.s=RegularExpressionGroup(regexversion,1)
+						Protected newline.s=ReplaceString(line,op,Str(Val(op)+1))
+						inhalt=ReplaceString(inhalt,line,newline)
+					Wend
+				EndIf
+				If ExamineRegularExpression(regexversiondate,inhalt)
+					While NextRegularExpressionMatch(regexversiondate)
+						line=RegularExpressionMatchString(regexversiondate)
+						op=RegularExpressionGroup(regexversiondate,1)
+						newline=ReplaceString(line,op,FormatDate("%yyyy%mm%dd",Date()))
+						inhalt=ReplaceString(inhalt,line,newline)
+					Wend
+				EndIf
+				FreeRegularExpression(regexversion)
+				FreeRegularExpression(regexversiondate)
+				CloseFile(file)
+				file=CreateFile(#PB_Any,pfad)
+				WriteString(file,inhalt)
+				CloseFile(file)
 			EndIf
-			If ExamineRegularExpression(regexversiondate,inhalt)
-				While NextRegularExpressionMatch(regexversiondate)
-					line=RegularExpressionMatchString(regexversiondate)
-					op=RegularExpressionGroup(regexversiondate,1)
-					newline=ReplaceString(line,op,FormatDate("%yyyy%mm%dd",Date()))
-					inhalt=ReplaceString(inhalt,line,newline)
-				Wend
-			EndIf
-			FreeRegularExpression(regexversion)
-			FreeRegularExpression(regexversiondate)
-			CloseFile(file)
-			file=CreateFile(#PB_Any,pfad)
-			WriteString(file,inhalt)
-			CloseFile(file)
 		EndIf
 	EndProcedure
 	updateVersion("../mytable.pbi")

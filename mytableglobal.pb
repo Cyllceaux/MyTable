@@ -7,7 +7,19 @@ Procedure MyTableCreateApplication(flags.i=0)
 EndProcedure
 
 Procedure MyTableLoadApplication(file.s)
-	
+	Protected xml=LoadXML(#PB_Any,file,#PB_UTF8)
+	Protected *app.strMyTableApplication=AllocateStructure(strMyTableApplication)
+	_MyTableInitApplication(*app,0)
+	If xml And XMLStatus(xml)=#PB_XML_Success
+		Protected *save.strMyTableSaveApplication=AllocateStructure(strMyTableSaveApplication)
+		_MyTableLoadApp(*save,*app)
+		ExtractXMLStructure(MainXMLNode(xml),*save,strMyTableSaveApplication)
+	Else
+		FreeStructure(*app)
+		*app=0
+	EndIf
+	FreeXML(xml)
+	ProcedureReturn *app
 EndProcedure
 
 Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
@@ -38,17 +50,9 @@ Procedure MyTableCreateFont(name.s,size.i,flags.i=0)
 	Protected font=LoadFont(#PB_Any,name,size,flags)
 	If font
 		Protected *this.strMyTableFont=AddElement(fonts())
-		With *this
-			\vtable=?vtable_font
-			\name=name
-			\size=size
-			\flags=flags
-			\font=font
-			\fontid=FontID(font)
-			\type=#MYTABLE_TYPE_FONT
-		EndWith
+		_MyTableInitFont(*this,name,size,flags,font)
+		ProcedureReturn *this
 	EndIf
-	ProcedureReturn *this
 EndProcedure
 
 Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
@@ -853,6 +857,14 @@ Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
 	ProcedureReturn result
 EndProcedure
 
+Procedure _MyTableLoadApp(*save.strMyTableSaveApplication,*app.strMyTableApplication)
+	;TODO _MyTableLoadApp
+EndProcedure
+
+Procedure _MyTableSaveApp(*app.strMyTableApplication,*save.strMyTableSaveApplication)
+	;TODO _MyTableSaveApp
+EndProcedure
+
 Procedure _MyTableEvtCanvasMouseMove()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	
@@ -1382,6 +1394,23 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\listindex=ListSize(*table\cols())-1
 	EndWith
 	
+	
+EndProcedure
+
+Procedure _MyTableInitFont(*font.strMyTableFont,
+                           name.s,
+                           size.i,
+                           flags.i,
+                           font.i)
+	With *font
+		\vtable=?vtable_font
+		\name=name
+		\size=size
+		\flags=flags
+		\font=font
+		\fontid=FontID(font)
+		\type=#MYTABLE_TYPE_FONT
+	EndWith
 	
 EndProcedure
 
