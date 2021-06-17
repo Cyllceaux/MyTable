@@ -144,6 +144,7 @@ Declare _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 Declare _MyTable_Table_Autosize(*this.strMyTableTable)
 
 Declare _MyTableEvtResize()
+Declare _MyTableEvtMove()
 Declare _MyTableEvtCanvasKeyDown()
 Declare _MyTableEvtCanvasKeyUp()
 Declare _MyTableEvtCanvasMouseMove()

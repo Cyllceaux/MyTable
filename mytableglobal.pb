@@ -1,4 +1,6 @@
-﻿Procedure MyTableCreateApplication(flags.i=0)
+﻿Global NewMap MyTableWindowTables.i()
+
+Procedure MyTableCreateApplication(flags.i=0)
 	Protected *this.strMyTableApplication=AllocateStructure(strMyTableApplication)
 	_MyTableInitApplication(*this,flags)
 	ProcedureReturn *this
@@ -159,10 +161,30 @@ Procedure _MyTableEvtResizeExp(*this.strMyTableTable)
 	_MyTable_Table_Redraw(*this)
 EndProcedure
 
+Procedure _MyTableEvtMoveExp(*this.strMyTableTable)
+	If *this
+		If IsWindow(*this\edit\window)
+			ResizeWindow(*this\edit\window,
+			             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*this\edit\cell\startx,
+			             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*this\edit\cell\starty,
+			             *this\edit\cell\col\calcwidth,
+			             *this\edit\cell\row\calcheight)
+		EndIf
+	EndIf
+EndProcedure
 
 Procedure _MyTableEvtResize()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	_MyTableEvtResizeExp(*this)
+EndProcedure
+
+Procedure _MyTableEvtMove()
+	ForEach MyTableWindowTables()
+		If MyTableWindowTables()=EventWindow()
+			_MyTableEvtMoveExp(Val(MapKey(MyTableWindowTables())))
+		EndIf
+	Next
+	
 EndProcedure
 
 Procedure _MyTableGetRowCol(*this.strMyTableTable)
@@ -1180,6 +1202,8 @@ Procedure _MyTableEvtCanvasScroll()
 	
 EndProcedure
 
+
+
 Procedure _MyTableInitTable(*application.strMyTableApplication,
                             *table.strMyTableTable,
                             window.i,
@@ -1221,6 +1245,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		If IsGadget(canvas)
 			SetGadgetData(canvas,*table)
 			BindGadgetEvent(canvas,@_MyTableEvtResize(),#PB_EventType_Resize)
+			BindEvent(#PB_Event_MoveWindow,@_MyTableEvtMove(),window)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasScroll(),#PB_EventType_MouseWheel)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseMove(),#PB_EventType_MouseMove)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftDown(),#PB_EventType_LeftButtonDown)
@@ -1234,6 +1259,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyUp(),#PB_EventType_KeyUp)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)			
+			MyTableWindowTables(Str(*table))=window
 		EndIf
 		If IsGadget(vscroll)
 			SetGadgetData(vscroll,*table)

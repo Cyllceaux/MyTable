@@ -151,6 +151,7 @@ EndProcedure
 
 Procedure _MyTable_Table_Delete(*this.strMyTableTable)
 	If *this
+		DeleteMapElement(MyTableWindowTables(),Str(*this))
 		If IsGadget(*this\canvas)				
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtResize(),#PB_EventType_Resize)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasScroll(),#PB_EventType_MouseWheel)
