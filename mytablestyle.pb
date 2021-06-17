@@ -16,7 +16,7 @@ Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 			Protected *application.strMyTableApplication=*this\obj
 			*application\dirty=#True
 			_MyTable_Application_Redraw(*application)
-		Case #MYTABLE_TYPE_TABLE
+		Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 			Protected *table.strMyTableTable=*this\obj
 			*table\dirty=#True
 			_MyTable_Table_Redraw(*table)

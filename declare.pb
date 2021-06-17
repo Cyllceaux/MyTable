@@ -101,6 +101,22 @@ Declare _MyTableInitTable(*application.strMyTableApplication,
                           vscroll.i,
                           hscroll.i,
                           flags.i)
+Declare _MyTableInitTree(*application.strMyTableApplication,
+                          *table.strMyTableTable,
+                          window.i,
+                          canvas.i,
+                          vscroll.i,
+                          hscroll.i,
+                          flags.i)
+Declare _MyTableInitGrid(*application.strMyTableApplication,
+                         *table.strMyTableTable,
+                         window.i,
+                         canvas.i,
+                         vscroll.i,
+                         hscroll.i,
+                         rows.i,
+                         cols.i,
+                          flags.i)
 Declare _MyTableInitRow(*application.strMyTableApplication,
                         *table.strMyTableTable,
                         *parent.strMyTableRow,
@@ -132,7 +148,7 @@ Declare _MyTableDrawTextCompleteCenter(by,text.s,color.q,maxlen.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
 Declare _MyTable_StartEdit(*rc.strMyTableRowCol)
 Declare _MyTable_StartEditCell(*cll.strMyTableCell)
-Declare _MyTable_StopEdit(*this.strMyTableTable)
+Declare _MyTable_StopEdit(*this.strMyTableTable,save.b)
 Declare _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 Declare _MyTableLoadApp(*save.strMyTableSaveApplication,*app.strMyTableApplication)
 Declare _MyTableSaveApp(*app.strMyTableApplication,*save.strMyTableSaveApplication)
@@ -150,6 +166,7 @@ Declare.b _MyTable_Table_GetSelected(*this.strMyTableTable)
 Declare _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 Declare _MyTable_Table_Autosize(*this.strMyTableTable)
 Declare _MyTable_Table_Delete(*this.strMyTableTable)
+Declare _MyTable_Table_AddCol(*this.strMyTableTable,text.s,width.i,image.i=0,flags.i=0)
 
 Declare _MyTableEvtResize()
 Declare _MyTableEvtMove()
@@ -164,6 +181,13 @@ Declare _MyTableEvtCanvasMouseRightUp()
 Declare _MyTableEvtCanvasMouseRightDouble()
 Declare _MyTableEvtCanvasScroll()
 Declare _MyTableEvtScroll()
+
+;- Trees
+
+;- Grids
+Declare _MyTable_Grid_ResizeGrid(*this.strMyTableTable,rows.i=#PB_Ignore,cols.i=#PB_Ignore)
+Declare.s _MyTableGridColumnName(col.i)
+Declare _MyTableGridColumnFromColumnName(col.s)
 
 ;- Rows
 Declare _MyTable_Row_Delete(*this.strMyTableRow)
@@ -205,7 +229,7 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 			Case #MYTABLE_TYPE_COL
 				Protected *col.strMyTableCol=*this
 				ProcedureReturn *col\table\name
-			Case #MYTABLE_TYPE_TABLE
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 				Protected *table.strMyTableTable=*this
 				ProcedureReturn *table\name
 			Case #MYTABLE_TYPE_APPLICATION
@@ -227,7 +251,7 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 			Case #MYTABLE_TYPE_COL
 				Protected *col.strMyTableCol=*this
 				ProcedureReturn *col\table\canvas
-			Case #MYTABLE_TYPE_TABLE
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 				Protected *table.strMyTableTable=*this
 				ProcedureReturn *table\canvas
 			Case #MYTABLE_TYPE_APPLICATION

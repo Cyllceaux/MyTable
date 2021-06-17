@@ -559,29 +559,31 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 		
 		DrawingMode(#PB_2DDrawing_Default)			
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
-		Protected customdraw.b=#False
-		
-		
-		
-		checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
-		Protected tborder=_MyTable_GetDefaultBorder(*cell)
-		
-		selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
-		selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
-		selected=Bool(selected Or *this\table\selectedcells(Str(*cell)))
-		selected=Bool(selected Or *this\table\tempselectedrows(Str(*this)))
-		selected=Bool(selected Or *this\table\tempselectedcols(Str(*cell\col)))
-		selected=Bool(selected Or *this\table\tempselectedcells(Str(*cell)))
-		
-		mselected=#False
-		If markmouseover And Not selected
-			mselected=Bool(mselected Or Bool(*this\table\mvcell=*cell))			
-			mselected=Bool(mselected Or Bool(*this\table\mvrow=*this))
-		EndIf
-		
-		
 		Protected *col.strMyTableCol=*cell\col
-		If *col\calcwidth>0			
+		If *col\calcwidth>0 And (bx+*col\calcwidth)>=0
+			Protected customdraw.b=#False
+			
+			
+			
+			
+			checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+			Protected tborder=_MyTable_GetDefaultBorder(*cell)
+			
+			selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
+			selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
+			selected=Bool(selected Or *this\table\selectedcells(Str(*cell)))
+			selected=Bool(selected Or *this\table\tempselectedrows(Str(*this)))
+			selected=Bool(selected Or *this\table\tempselectedcols(Str(*cell\col)))
+			selected=Bool(selected Or *this\table\tempselectedcells(Str(*cell)))
+			
+			mselected=#False
+			If markmouseover And Not selected
+				mselected=Bool(mselected Or Bool(*this\table\mvcell=*cell))			
+				mselected=Bool(mselected Or Bool(*this\table\mvrow=*this))
+			EndIf
+			
+			
+			
 			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
 			*cell\startx=bx
 			*cell\starty=by
@@ -794,12 +796,12 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					EndIf
 				EndIf
 			EndIf
-			UnclipOutput()
-			bx+*col\calcwidth
-			If bx>=width
-				Break
-			EndIf
+			UnclipOutput()						
 		EndIf
+		bx+*col\calcwidth
+		If bx>=width
+			Break
+		EndIf		
 	Next
 	*this\dirty=#False
 	ProcedureReturn *this\calcheight
@@ -868,13 +870,13 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			
 			Protected *row.strMyTableRow=0
 			
-			If ListSize(*this\expRows())>0
+			If ListSize(*this\expRows())>0 Or ListSize(*this\expRowsPage())>0
 				Protected c=ListSize(*this\cols())
 				If pages
 					ForEach *this\expRowsPage()
 						*row=*this\expRowsPage()
 						
-						If by+*row\calcheight>0
+						If by+*row\calcheight>=0
 							DrawingFont(*font\fontid)
 							_MyTable_Table_Draw_Row(*row,by,c,*font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRowsPage()) % 2 = 1),#False)
 							If *this\fixedcols
@@ -892,7 +894,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 					ForEach *this\expRows()
 						*row=*this\expRows()
 						
-						If by+*row\calcheight>0
+						If by+*row\calcheight>=0
 							DrawingFont(*font\fontid)
 							Protected tz.b=zebra
 							If tz
@@ -904,7 +906,6 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 							EndIf
 						EndIf
 						by+*row\calcheight
-						
 						
 						If by>height
 							Break

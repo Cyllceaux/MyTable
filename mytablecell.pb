@@ -26,7 +26,7 @@ EndProcedure
 
 Procedure _MyTable_Cell_StopEdit(*this.strMyTableCell)
 	If *this
-		_MyTable_StopEdit(*this\table)
+		_MyTable_StopEdit(*this\table,#True)
 	EndIf
 EndProcedure
 

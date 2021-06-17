@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2236
+	#MYTABLE_VERSION = 2386
 	#MYTABLE_VERSION_DATE = 20210617
 	
 	Enumeration _mytable_type
@@ -9,6 +9,8 @@
 		#MYTABLE_TYPE_ROW
 		#MYTABLE_TYPE_COL
 		#MYTABLE_TYPE_TABLE
+		#MYTABLE_TYPE_TREE
+		#MYTABLE_TYPE_GRID
 		#MYTABLE_TYPE_APPLICATION
 		#MYTABLE_TYPE_STYLE
 		#MYTABLE_TYPE_FONT
@@ -184,7 +186,7 @@
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TREE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_HIERARCHICAL
-	#MYTABLE_TABLE_FLAGS_DEFAULT_GRID=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_GRID
+	#MYTABLE_TABLE_FLAGS_DEFAULT_GRID=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_RESIZABLE|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_EDITABLE
 	
 	
 	Prototype.b MyTableProtoEventColLeftClick(*cell.MyTableCol)	
@@ -309,6 +311,14 @@
 		RegisterCallback(callback.MyTableProtoCallback)
 	EndInterface
 	
+	Interface MyTableTree Extends MyTableTable
+		
+	EndInterface
+	
+	Interface MyTableGrid Extends MyTableTable
+		ResizeGrid(rows.i=#PB_Ignore,cols.i=#PB_Ignore)
+	EndInterface
+	
 	Interface MyTableApplication Extends MyTableObject
 		GetElementSelectedStyle()
 		GetZebraStyle()
@@ -320,7 +330,7 @@
 		
 		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
 		AddTree(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)			
-		AddGrid(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)			
+		AddGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)			
 		ClearTables()
 		Redraw()
 		Recalc()
@@ -332,7 +342,7 @@
 	Declare MyTableLoadApplication(file.s)	
 	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	Declare MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
-	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
+	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
 	Declare MyTableCreateFont(name.s,size.i,flags.i=0)	
 	
 EndDeclareModule

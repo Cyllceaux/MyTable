@@ -175,6 +175,12 @@ Procedure _MyTable_Col_Delete(*this.strMyTableCol)
 			Else
 				*this\table\cols()\listindex=idx
 				idx+1
+				If *this\table\datagrid
+					*this\table\cols()\text=_MyTableGridColumnName(idx)
+					*this\table\cols()\dirty=#True
+					*this\table\cols()\textheight=0
+					*this\table\cols()\textwidth=0
+				EndIf
 			EndIf
 		Next		
 		*table\dirty=#True
@@ -337,7 +343,7 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 EndProcedure
 
 Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
-	If *this And Not *this\stretched 		
+	If *this And Not *this\stretched
 		
 		If Not *this\table\drawing
 			If IsImage(*this\table\canvas)
@@ -356,34 +362,39 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 			*this\textwidth=_MyTableTextWidth(*this\text)
 		EndIf
 		
-		
-		Protected result.i=*this\textwidth+MyTableW8
-		If *this\image\orig
-			If Not *this\image\sized
-				*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
-				If *this\image\resize
-					ResizeImage(*this\image\sized,*this\table\calcdefaultheaderheight-MyTableW8,*this\table\calcdefaultheaderheight-MyTableH8)
-				Else
-					ResizeImage(*this\image\sized,*this\table\calcheaderheight-MyTableW8,*this\table\calcheaderheight-MyTableH8)
-				EndIf
-			EndIf
-			result+ImageWidth(*this\image\sized)
-			result+MyTableW8			
-		EndIf
-		If *this\sort
-			result+MyTableW20
-		EndIf		
-		
-		ForEach *this\table\rows()
-			If *this\table\rows()\cells
-				If ListSize(*this\table\rows()\cells\cells())>*this\listindex					
-					Protected tresult=_MyTable_Col_AutosizeSubRow(*this,*this\table\rows())					
-					If tresult>result
-						result=tresult
+		Protected result.i=0
+		If *this\table\datagrid And *this\listindex=0
+			result=MyTableW8+_MyTableTextWidth(Str(ListSize(*this\table\rows())))+MyTableW8
+		Else
+			result=*this\textwidth+MyTableW8
+			
+			If *this\image\orig
+				If Not *this\image\sized
+					*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
+					If *this\image\resize
+						ResizeImage(*this\image\sized,*this\table\calcdefaultheaderheight-MyTableW8,*this\table\calcdefaultheaderheight-MyTableH8)
+					Else
+						ResizeImage(*this\image\sized,*this\table\calcheaderheight-MyTableW8,*this\table\calcheaderheight-MyTableH8)
 					EndIf
 				EndIf
+				result+ImageWidth(*this\image\sized)
+				result+MyTableW8			
 			EndIf
-		Next
+			If *this\sort
+				result+MyTableW20
+			EndIf		
+			
+			ForEach *this\table\rows()
+				If *this\table\rows()\cells
+					If ListSize(*this\table\rows()\cells\cells())>*this\listindex					
+						Protected tresult=_MyTable_Col_AutosizeSubRow(*this,*this\table\rows())					
+						If tresult>result
+							result=tresult
+						EndIf
+					EndIf
+				EndIf
+			Next
+		EndIf
 		*this\calcwidth=result+MyTableW8
 		*this\width=DesktopUnscaledX(*this\calcwidth)
 		*this\dirty=#True

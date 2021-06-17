@@ -29,11 +29,15 @@ Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTA
 EndProcedure
 
 Procedure MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
-	ProcedureReturn MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|flags)
+	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
+	_MyTableInitTree(0,*this,window,canvas,vscroll,hscroll,flags)
+	ProcedureReturn *this
 EndProcedure
 
-Procedure MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
-	ProcedureReturn MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_GRID|flags)
+Procedure MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
+	_MyTableInitGrid(0,*this,window,canvas,vscroll,hscroll,rows,cols,flags)
+	ProcedureReturn *this
 EndProcedure
 
 Global NewList fonts.strMyTableFont()
@@ -161,7 +165,7 @@ EndProcedure
 
 Procedure _MyTableEvtScroll()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	*this\dirty=#True
 	_MyTable_Table_Redraw(*this)
 EndProcedure
@@ -347,6 +351,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	EndIf
 	
 	If *rc\row>-1 And *rc\col=0
+		
 		If hierarchical Or checkboxes
 			Protected ex=*row\level*MyTableW20
 			If mx>ex
@@ -368,6 +373,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 				EndIf
 			EndIf
 		EndIf
+		
 	EndIf
 	
 	ProcedureReturn *rc
@@ -404,7 +410,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasKeyDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	If IsGadget(*this\canvas)
 		Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
@@ -479,14 +485,20 @@ Procedure _MyTableEvtCanvasKeyDown()
 					_MyTable_Table_Redraw(*this)
 				EndIf
 			Case #PB_Shortcut_Left
-				If Not fullrow And *cell And *cell\col\listindex>0
+				If *this\datagrid And *cell\col\listindex=1
+					_MyTableSelectObject(*cell\row,Bool(shift And multiselect),pages)
+					*this\lastcell=0
+				ElseIf Not fullrow And *cell And *cell\col\listindex>0
 					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex-1)
 					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
 				EndIf
 			Case #PB_Shortcut_Right
-				If Not fullrow And *cell And *cell\col\listindex<ListSize(*this\cols())
-					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex+1)
+				If *this\datagrid And (*cell=0 Or *cell\col\listindex=0)
+					*cell=_MyTableGetOrAddCell(*row,1)
 					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
+				ElseIf Not fullrow And *cell And *cell\col\listindex<ListSize(*this\cols())
+					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex+1)
+					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)									
 				EndIf
 			Case #PB_Shortcut_Up
 				If *row
@@ -499,7 +511,7 @@ Procedure _MyTableEvtCanvasKeyDown()
 							*row=*this\expRows()
 						EndIf				
 						
-						If fullrow					
+						If fullrow Or (*this\datagrid And (*col=0 Or *col\listindex=0))		
 							_MyTableSelectObject(*row,Bool(shift And multiselect),pages)
 						Else
 							*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex)
@@ -521,7 +533,7 @@ Procedure _MyTableEvtCanvasKeyDown()
 						EndIf
 					EndIf
 					
-					If fullrow
+					If fullrow Or (*this\datagrid And (*col=0 Or *col\listindex=0))		
 						_MyTableSelectObject(*row,Bool(shift And multiselect),pages)
 					Else
 						*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex)
@@ -657,7 +669,10 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 	Protected sortable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE)
+	Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
 	Protected rf,rt,cf,ct,r,c
+	
+	Protected *row.strMyTableRow=0
 	
 	*this\shiftcell=0
 	If *rc\row=-1 And *rc\col>-1
@@ -679,11 +694,41 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 				EndSelect		
 				*this\dirty=#True
 				*this\md=#False
-			EndIf			
+			Else
+				If multiselect And 
+				   (shift Or *this\md) And 
+				   *this\lastcol <>0 And 
+				   *rc\tcol<>*this\lastcol 
+					cf=-1
+					ct=-1
+					cf=*rc\tcol\listindex
+					
+					cf=*rc\tcol\listindex
+					ct=*this\lastcol\listindex
+					If cf>ct
+						Swap cf,ct
+					EndIf
+					For c=cf To ct
+						SelectElement(*this\cols(),c)
+						If temp
+							*this\tempselectedCols(Str(*this\cols()))=#True
+							*this\selectedCols(Str(*this\cols()))=#True
+						EndIf
+					Next
+				Else
+					If temp
+						*this\tempselectedCols(Str(*rc\tcol))=#True
+					Else
+						*this\lastcol=*this\cols()
+						*this\selectedCols(Str(*rc\tcol))=#True
+					EndIf
+				EndIf
+			EndIf
+			*this\dirty=#True		
 		EndIf			
 		ProcedureReturn 0
 	Else
-		If fullrow
+		If fullrow Or (*rc\col=0 And *this\datagrid)
 			If *rc\row>-1 And *rc\col>-1
 				
 				If multiselect And 
@@ -695,35 +740,68 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 					
 					rf=-1
 					rt=-1
-					ForEach *this\expRows()
-						If *this\expRows()=*rc\trow
-							rf=ListIndex(*this\expRows())
-						EndIf
-						If *this\expRows()=*this\lastrow
-							rt=ListIndex(*this\expRows())
-						EndIf
-						If rf>-1 And rt>-1
-							Break
-						EndIf
-					Next
-					If rf>-1 And rt>-1
-						If rt<rf
-							Swap rt,rf									
-						EndIf
-						For r=rf To rt								
-							SelectElement(*this\expRows(),r)
-							Protected *row.strMyTableRow=*this\expRows()
-							If temp
-								*this\tempselectedRows(Str(*row))=#True
-							Else									
-								If Not *this\selectedRows(Str(*row))
-									If *this\eventRowSelected
-										*this\eventRowSelected(*row)
-									EndIf
-								EndIf
-								*this\selectedRows(Str(*row))=#True
+					If pages
+						ForEach *this\expRowsPage()
+							If *this\expRowsPage()=*rc\trow
+								rf=ListIndex(*this\expRowsPage())
+							EndIf
+							If *this\expRowsPage()=*this\lastrow
+								rt=ListIndex(*this\expRowsPage())
+							EndIf
+							If rf>-1 And rt>-1
+								Break
 							EndIf
 						Next
+						If rf>-1 And rt>-1
+							If rt<rf
+								Swap rt,rf									
+							EndIf
+							For r=rf To rt								
+								SelectElement(*this\expRowsPage(),r)
+								*row=*this\expRowsPage()
+								If temp
+									*this\tempselectedRows(Str(*row))=#True
+								Else									
+									If Not *this\selectedRows(Str(*row))
+										If *this\eventRowSelected
+											*this\eventRowSelected(*row)
+										EndIf
+									EndIf
+									*this\selectedRows(Str(*row))=#True
+								EndIf
+							Next
+						EndIf
+					Else
+						ForEach *this\expRows()
+							If *this\expRows()=*rc\trow
+								rf=ListIndex(*this\expRows())
+							EndIf
+							If *this\expRows()=*this\lastrow
+								rt=ListIndex(*this\expRows())
+							EndIf
+							If rf>-1 And rt>-1
+								Break
+							EndIf
+						Next
+						If rf>-1 And rt>-1
+							If rt<rf
+								Swap rt,rf									
+							EndIf
+							For r=rf To rt								
+								SelectElement(*this\expRows(),r)
+								*row=*this\expRows()
+								If temp
+									*this\tempselectedRows(Str(*row))=#True
+								Else									
+									If Not *this\selectedRows(Str(*row))
+										If *this\eventRowSelected
+											*this\eventRowSelected(*row)
+										EndIf
+									EndIf
+									*this\selectedRows(Str(*row))=#True
+								EndIf
+							Next
+						EndIf
 					EndIf
 				Else
 					If temp
@@ -821,7 +899,7 @@ Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
 		Select *this\type
 			Case #MYTABLE_TYPE_APPLICATION
 				*application=*this
-			Case #MYTABLE_TYPE_TABLE
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 				*table=*this
 				*application=*table\application
 			Case #MYTABLE_TYPE_ROW
@@ -980,7 +1058,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseLeftDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
 	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
@@ -1040,7 +1118,7 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 			ElseIf *rc\bottom
 				*this\resizeRow=*rc\trow
 			Else
-				If Not multiselect Or (Not shift And Not control) And *rc\col>-1 And *rc\row>-1
+				If Not multiselect Or (Not shift And Not control) And (*rc\col>-1 Or *rc\row>-1)
 					ClearMap(*this\selectedCells())
 					ClearMap(*this\selectedRows())
 					ClearMap(*this\selectedCols())
@@ -1109,7 +1187,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseLeftDouble()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	
 	
 	If IsGadget(*this\canvas)
@@ -1147,7 +1225,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -1157,7 +1235,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightUp()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -1167,7 +1245,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightDouble()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -1186,7 +1264,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasMouseRightClick()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
 		
@@ -1225,7 +1303,7 @@ EndProcedure
 
 Procedure _MyTableEvtCanvasScroll()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 	Protected mw=GetGadgetAttribute(*this\canvas,#PB_Canvas_WheelDelta)
 	If mw
 		
@@ -1255,8 +1333,17 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
                             hscroll.i,
                             flags.i)
 	With *table
-		\vtable=?vtable_table
-		\type=#MYTABLE_TYPE_TABLE
+		If Bool(flags & #MYTABLE_TABLE_FLAGS_GRID)
+			\vtable=?vtable_grid
+			\type=#MYTABLE_TYPE_GRID
+			\datagrid=#True
+		ElseIf Bool(flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+			\vtable=?vtable_tree
+			\type=#MYTABLE_TYPE_TREE
+		Else
+			\vtable=?vtable_table
+			\type=#MYTABLE_TYPE_TABLE
+		EndIf
 		\flags=flags
 		\application=*application
 		\redraw=Bool(Not Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_REDRAW))
@@ -1321,6 +1408,48 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 	EndWith
 	
 	_MyTableEvtResizeExp(*table)
+EndProcedure
+
+Procedure _MyTableInitTree(*application.strMyTableApplication,
+                           *table.strMyTableTable,
+                           window.i,
+                           canvas.i,
+                           vscroll.i,
+                           hscroll.i,
+                           flags.i)
+	_MyTableInitTable(*application,
+	                  *table,
+	                  window,
+	                  canvas,
+	                  vscroll,
+	                  hscroll,
+	                  flags|#MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+EndProcedure
+
+Procedure _MyTableInitGrid(*application.strMyTableApplication,
+                           *table.strMyTableTable,
+                           window.i,
+                           canvas.i,
+                           vscroll.i,
+                           hscroll.i,
+                           rows.i,
+                           cols.i,
+                           flags.i)
+	_MyTableInitTable(*application,
+	                  *table,
+	                  window,
+	                  canvas,
+	                  vscroll,
+	                  hscroll,
+	                  flags|#MYTABLE_TABLE_FLAGS_GRID)
+	Protected redraw.b=*table\redraw
+	*table\redraw=#False
+	Protected *col.strMyTableCol=_MyTable_Table_AddCol(*table,"",100,0,#MYTABLE_COL_FLAGS_NO_RESIZABLE|#MYTABLE_COL_FLAGS_NO_EDITABLE)
+	*col\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_RIGHT
+	*table\fixedcols=1
+	_MyTable_Grid_ResizeGrid(*table,rows,cols)
+	_MyTable_Col_Autosize(*col)
+	*table\redraw=redraw
 EndProcedure
 
 Procedure _MyTableInitRow(*application.strMyTableApplication,
@@ -1392,6 +1521,10 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\defaultStyle\border\borderDefault\color=RGBA(250,250,250,255)
 		\calcwidth=DesktopScaledX(\width)
 		\listindex=ListSize(*table\cols())-1
+		If \table\datagrid And text="" And \listindex>0
+			\text=_MyTableGridColumnName(ListSize(*table\cols())-1)
+			\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_CENTER
+		EndIf
 	EndWith
 	
 	
@@ -1466,6 +1599,7 @@ EndProcedure
 
 Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
 	If *row
+		
 		If ListSize(*row\table\cols())>idx
 			Protected *col.strMyTableCol=SelectElement(*row\table\cols(),idx)
 			Protected *cell.strMyTableCell=0
@@ -1581,9 +1715,22 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 	EndIf	
 EndProcedure
 
-Procedure _MyTable_StopEdit(*this.strMyTableTable)
+Procedure _MyTable_StopEdit(*this.strMyTableTable,save.b)
 	If *this
 		If IsWindow(*this\edit\window)
+			If save
+				With *this\edit\cell
+					Protected old.s=\text
+					\text=GetGadgetText(*this\edit\gadget)
+					\textheight=0
+					\textwidth=0
+					\dirty=#True
+					\table\dirty=#True
+					If \table\eventCellChangedText
+						\table\eventCellChangedText(*this\edit\cell,old)
+					EndIf
+				EndWith
+			EndIf
 			CloseWindow(*this\edit\window)
 			*this\edit\window=0
 		EndIf
@@ -1594,19 +1741,12 @@ Procedure _MyTable_KeyEdit()
 	Protected *this.strMyTableTable=GetWindowData(EventWindow())
 	With *this\edit\cell
 		If \text<>GetGadgetText(*this\edit\gadget)
-			Protected old.s=\text
-			\text=GetGadgetText(*this\edit\gadget)
-			\textheight=0
-			\textwidth=0
-			\dirty=#True
-			\table\dirty=#True
-			If \table\eventCellChangedText
-				\table\eventCellChangedText(*this\edit\cell,old)
-			EndIf
-			_MyTable_Table_Redraw(*this)
+			_MyTable_StopEdit(*this,#True)
+		Else
+			_MyTable_StopEdit(*this,#False)
 		EndIf
 	EndWith
-	_MyTable_StopEdit(*this)
+	_MyTable_StopEdit(*this,#True)
 EndProcedure
 
 Procedure _MyTableEditSetPos(Gadget, Position)
@@ -1635,7 +1775,7 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 				custom=*this\eventCustomCellEdit(*cell)
 			EndIf
 			If Not custom
-				_MyTable_StopEdit(*this)
+				_MyTable_StopEdit(*this,#True)
 				*this\edit\window=OpenWindow(#PB_Any,
 				                             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\startx,
 				                             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\starty,
@@ -1685,7 +1825,7 @@ Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 				Case #MYTABLE_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE
+				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -1715,7 +1855,7 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 				Case #MYTABLE_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE
+				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -1745,7 +1885,7 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 				Case #MYTABLE_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					*result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE
+				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						*result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -1767,15 +1907,19 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 		If Not result
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
-					Protected *cell.strMyTableCell=*obj					
-					result=_MyTable_Get#gruppe#name(*cell\col,#False)
+					Protected *cell.strMyTableCell=*obj		
+					If *cell\table\datagrid And *cell\col\listindex>0
+						result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					Else
+						result=_MyTable_Get#gruppe#name(*cell\col,#False)
+					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result=_MyTable_Get#gruppe#name(*row\table,#False)
 				Case #MYTABLE_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE
+				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -1805,7 +1949,7 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 				Case #MYTABLE_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result= _MyTable_Get#gruppe#Border#name#pos(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE
+				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result= _MyTable_Get#gruppe#Border#name#pos(*table\application,#False)

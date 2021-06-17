@@ -7,12 +7,12 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-17 08:18" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-17 16:53" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="4f888b34b2c55909393d01f75aa3796c"/>
+      <fingerprint md5="1d97846944c627ffb32d0de2bc0824c2"/>
     </file>
     <file name="global.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -20,67 +20,67 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="a450e62d05ba6b6474e1a2ae5663c19e"/>
+      <fingerprint md5="cbdf90d79b5c050fd3d13a8f66517355"/>
     </file>
     <file name="mytable.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="19e20b7966a6bf74011cc01284b817be"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="13b80ecab07b4b4d9e9207cc2055a1c4"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="4b426bcb469eaff6c48cdfa03abb5899"/>
+      <fingerprint md5="0e049a7dc6038b329b200ecf4672e0ab"/>
     </file>
     <file name="mytablecell.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="78d1fae063b273a1dce14015aacfb8ee"/>
+      <fingerprint md5="03f27e4595da7c27c316b5235c9a55e0"/>
     </file>
     <file name="mytablecol.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="0b9a6b044d898f709493901352ffbd1b"/>
+      <fingerprint md5="de5f35253a42c47d275ef8ddc5b75194"/>
     </file>
     <file name="mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="22409a997e5ff09b5b0eefb30b4d7524"/>
+      <fingerprint md5="0882e000340edad657e0c6c0960655a3"/>
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="539d3dda6ec19e4c099d17878594a967"/>
+      <fingerprint md5="dbc9e62dcbd7427e27f2869f5dcf48b4"/>
     </file>
     <file name="mytablestructures.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="584dbc4ff5e60aca7c904a29e03be393"/>
+      <fingerprint md5="00bab484e85b39f45722b3b310d911f2"/>
     </file>
     <file name="mytablestyle.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="8a7e66fc049b940f36ba528bfc4ed790"/>
+      <fingerprint md5="420cc062a7bc705dce677afe28afdb29"/>
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="7757dabd290e7b8b72b855651291a6df"/>
+      <fingerprint md5="c5793a27f677ad2bd4a0518881a31240"/>
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="709d5c641aadbf1608f64dce73e1d3ed"/>
     </file>
     <file name="Test\complete.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="281115479ba03381ab28953e8296a51e"/>
     </file>
     <file name="Test\declare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="c4aed6b0751473bfb8c601e6a302bfd7"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="6e08ca6a1d33b296e8369073586b37c3"/>
     </file>
     <file name="Test\kontakte.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="159dce9a54de3315020853279793145c"/>
+      <fingerprint md5="00c582d6f42cf322bdc4ffa44f74b12c"/>
     </file>
     <file name="Test\outlook.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="893d4cbcb07bc97649b7e2b3fb42c3da"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="07058bd41fe6a270f312b11ada8a6214"/>
     </file>
     <file name="Test\table0.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="5144d4495e169fe3502d16eccf2239f0"/>
+      <fingerprint md5="f74b21960564277a4d24d86cc98e3d25"/>
     </file>
     <file name="Test\table1.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -88,7 +88,7 @@
     </file>
     <file name="Test\table10.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="1e0dea0093dbc88afa3496671dfd18c6"/>
+      <fingerprint md5="9161338de9666102ed19a84ac1974134"/>
     </file>
     <file name="Test\table11.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -100,7 +100,7 @@
     </file>
     <file name="Test\table13.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="676cc0be3debf0f6bed6a03435ba6836"/>
+      <fingerprint md5="739d640ac2e0b011d85e12534354f976"/>
     </file>
     <file name="Test\table14.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -189,6 +189,22 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="6bd5ba56b6f0046df7d202bad1087e82"/>
+    </file>
+    <file name="mytablefont.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="57177335b5234c29cc01f7cf1d76dcd4"/>
+    </file>
+    <file name="Test\grid.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="1c6a91c5fc10b374fbe1d9a132e24a18"/>
+    </file>
+    <file name="mytabletree.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="mytablegrid.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="01606542d1068ec3bcf7e4e2630de8e1"/>
     </file>
   </section>
   <section name="targets">
@@ -395,7 +411,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Outlook" enabled="0" default="1">
+    <target name="Outlook" enabled="0" default="0">
       <inputfile value="Test\outlook.pb"/>
       <outputfile value=""/>
       <executable value="Test\outlook.exe"/>
@@ -413,6 +429,13 @@
       <inputfile value="Test\complete.pb"/>
       <outputfile value=""/>
       <executable value="Test\kontakte.exe"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="grid" enabled="0" default="1">
+      <inputfile value="Test\grid.pb"/>
+      <outputfile value=""/>
+      <executable value="Test\backend.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1" optimizer="0"/>
       <format exe="default" cpu="1"/>
     </target>

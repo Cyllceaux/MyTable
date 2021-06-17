@@ -150,6 +150,7 @@ Structure strMyTableTable Extends strMyTableObject
 	calctitleHeight.i
 	redraw.b
 	recalc.b
+	datagrid.b
 	
 	emptytext.s
 	
@@ -240,6 +241,14 @@ Structure strMyTableTable Extends strMyTableObject
 	List expRowsPage.i()
 	
 	edit.strMyTableTableEdit
+EndStructure
+
+Structure strMyTableTree Extends strMyTableTable
+	
+EndStructure
+
+Structure strMyTableGrid Extends strMyTableTable
+	
 EndStructure
 
 Structure strMyTableApplication Extends strMyTableObject

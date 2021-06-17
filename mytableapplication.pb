@@ -9,7 +9,7 @@ Procedure.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
 	ForEach *this\tables()
 		If LCase(*this\tables()\name)=LCase(name)
 			ProcedureReturn #True
-		EndIf
+		EndIf		
 	Next
 	ProcedureReturn #False
 EndProcedure
@@ -41,11 +41,55 @@ Procedure _MyTable_Application_AddTable(*this.strMyTableApplication,window.i,can
 EndProcedure
 
 Procedure _MyTable_Application_AddTree(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
-	ProcedureReturn _MyTable_Application_AddTable(*this,window,canvas,vscroll,hscroll,name,#MYTABLE_TABLE_FLAGS_HIERARCHICAL|flags)
+	If *this
+		*this\lastindex+1
+		Protected *table.strMyTableTree=AddElement(*this\tables())
+		_MyTableInitTree(*this,*table,window,canvas,vscroll,hscroll,flags)
+		Protected nname.s=_MyTableCleanName(name)
+		
+		If nname=""
+			While _MyTable_Application_HasName(*this,"Tree"+*this\lastindex)
+				*this\lastindex+1
+			Wend
+			*table\name="Tree"+*this\lastindex
+		Else
+			If _MyTable_Application_HasName(*this,nname)
+				While _MyTable_Application_HasName(*this,"Tree"+*this\lastindex)
+					*this\lastindex+1
+				Wend
+				*table\name="Tree"+*this\lastindex
+			Else
+				*table\name=nname
+			EndIf
+		EndIf
+		ProcedureReturn *table
+	EndIf
 EndProcedure
 
-Procedure _MyTable_Application_AddGrid(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
-	ProcedureReturn _MyTable_Application_AddTable(*this,window,canvas,vscroll,hscroll,name,#MYTABLE_TABLE_FLAGS_GRID|flags)
+Procedure _MyTable_Application_AddGrid(*this.strMyTableApplication,window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+	If *this
+		*this\lastindex+1
+		Protected *table.strMyTableGrid=AddElement(*this\tables())
+		_MyTableInitGrid(*this,*table,window,canvas,vscroll,hscroll,rows,cols,flags)
+		Protected nname.s=_MyTableCleanName(name)
+		
+		If nname=""
+			While _MyTable_Application_HasName(*this,"Grid"+*this\lastindex)
+				*this\lastindex+1
+			Wend
+			*table\name="Grid"+*this\lastindex
+		Else
+			If _MyTable_Application_HasName(*this,nname)
+				While _MyTable_Application_HasName(*this,"Grid"+*this\lastindex)
+					*this\lastindex+1
+				Wend
+				*table\name="Grid"+*this\lastindex
+			Else
+				*table\name=nname
+			EndIf
+		EndIf
+		ProcedureReturn *table
+	EndIf
 EndProcedure
 
 
@@ -99,9 +143,10 @@ EndProcedure
 
 Procedure _MyTable_Application_ClearTables(*this.strMyTableApplication)
 	If *this
-		ClearList(*this\tables())
+		ClearList(*this\tables())		
 	EndIf
 EndProcedure
+
 
 _MyTable_GetStylesApplication()
 
