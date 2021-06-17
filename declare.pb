@@ -348,20 +348,20 @@ _MyTable_GetStyleCell(Default)
 EndMacro
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
-	Macro _callcountStart(sname)
+	Macro _callcountStart()
 		Static NewMap callcount.i()
 		Static NewMap callms.i()
 		Static NewMap callmssum.i()					
-		callms(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))=ElapsedMilliseconds()		
+		callms(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))=ElapsedMilliseconds()		
 		
 		
 	EndMacro
 	
-	Macro _callcountEnde(sname)
+	Macro _callcountEnde()
 		
-		Protected _#sname#ms=ElapsedMilliseconds()-callms(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))
-		callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))+1
-		callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))+_#sname#ms
+		Protected _callcountms=ElapsedMilliseconds()-callms(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))
+		callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))+1
+		callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))+_callcountms
 		
 		Protected tname.s=""
 		If _MyTableDebugGetName(*this)=""
@@ -370,15 +370,15 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 			tname=_MyTableDebugGetName(*this)
 		EndIf
 		
-		Protected debugline.s=LSet(tname+":",16," ")
-		debugline + LSet(MM#sname#MM+": "+callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))),20," ")
+		Protected debugline.s=LSet(tname+":",20," ")
+		debugline + LSet(#PB_Compiler_Procedure+":   "+callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))),40," ")
 		
 		CompilerIf Defined(MYTABLE_DEBUG_MS_MAX,#PB_Module)
-			If _#sname#ms>MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX
-				DebuggerWarning(MM#sname#MM+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_#sname#ms)+" )")
+			If _callcountms>MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX
+				DebuggerWarning(#PB_Compiler_Procedure+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_callcountms)+" )")
 			EndIf
 		CompilerEndIf
-		debugline + Str(_#sname#ms)+"ms / "+Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(MM#sname#MM+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
+		debugline + Str(_callcountms)+"ms / "+Str(callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
 		CompilerIf Defined(MYTABLE_DEBUG_LEVEL,#PB_Module)
 			Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
 		CompilerElse
@@ -386,8 +386,8 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 		CompilerEndIf
 	EndMacro
 CompilerElse
-	Macro _callcountStart(sname):EndMacro
-	Macro _callcountEnde(sname):EndMacro
+	Macro _callcountStart():EndMacro
+	Macro _callcountEnde():EndMacro
 CompilerEndIf
 
 

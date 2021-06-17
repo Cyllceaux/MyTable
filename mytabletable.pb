@@ -124,7 +124,7 @@ EndProcedure
 
 Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 	If *this
-		_callcountStart(table_adddirtyrows)
+		_callcountStart()
 		Protected idx
 		LastElement(*this\rows())
 		For idx=1 To rows
@@ -132,7 +132,7 @@ Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 			_MyTableInitRow(*this\application,*this,0,*row,"","",0,0)
 			*this\dirty=#True
 		Next
-		_callcountEnde(table_adddirtyrows)
+		_callcountEnde()
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
 	EndIf
@@ -829,7 +829,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 		EndIf
 		redraw=Bool(redraw And Not *this\drawing)
 		If redraw
-			_callcountStart(Redraw)
+			_callcountStart()
 			If IsImage(*this\canvas)
 				StartDrawing(ImageOutput(*this\canvas))
 			EndIf
@@ -993,7 +993,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			*this\dirty=#False
 			*this\drawing=#False
 			StopDrawing()
-			_callcountEnde(Redraw)
+			_callcountEnde()
 		EndIf
 	EndIf
 EndProcedure
@@ -1024,7 +1024,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 	Protected result.i=0
 	If *this
 		If ((*this\redraw And *this\dirty) Or force) And Not *this\drawing
-			_callcountStart(Predraw)
+			_callcountStart()
 			ClearList(*this\expRows())
 			ClearList(*this\expRowsPage())
 			Protected h=0
@@ -1224,7 +1224,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			EndIf
 			
 			
-			_callcountEnde(Predraw)
+			_callcountEnde()
 		EndIf
 	EndIf
 	ProcedureReturn result
@@ -1254,10 +1254,10 @@ Procedure _MyTable_Table_Recalc(*this.strMyTableTable)
 			recalc=Bool(recalc And *this\application\recalc)
 		EndIf
 		If recalc And Not *this\drawing
-			_callcountStart(Recalc)
+			_callcountStart()
 			
 			
-			_callcountEnde(Recalc)
+			_callcountEnde()
 		EndIf
 		
 		_MyTable_Table_Redraw(*this)
@@ -1529,7 +1529,7 @@ EndProcedure
 
 Procedure _MyTable_Table_AutosizeRows(*this.strMyTableTable)
 	If *this
-		_callcountStart(AutosizeRows)
+		_callcountStart()
 		Protected thisdrawing.b=#False
 		If Not *this\drawing
 			If IsImage(*this\canvas)
@@ -1550,7 +1550,7 @@ Procedure _MyTable_Table_AutosizeRows(*this.strMyTableTable)
 			StopDrawing()
 			*this\drawing=#False
 		EndIf
-		_callcountEnde(AutosizeRows)
+		_callcountEnde()
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
@@ -1559,7 +1559,7 @@ EndProcedure
 
 Procedure _MyTable_Table_AutosizeCols(*this.strMyTableTable)
 	If *this
-		_callcountStart(AutosizeCols)
+		_callcountStart()
 		Protected thisdrawing.b=#False
 		If Not *this\drawing
 			If IsImage(*this\canvas)
@@ -1584,7 +1584,7 @@ Procedure _MyTable_Table_AutosizeCols(*this.strMyTableTable)
 			StopDrawing()
 			*this\drawing=#False
 		EndIf
-		_callcountEnde(AutosizeCols)
+		_callcountEnde()
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
@@ -1593,7 +1593,7 @@ EndProcedure
 
 Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable)
 	If *this
-		_callcountStart(AutosizeHeader)
+		_callcountStart()
 		Protected thisdrawing.b=#False
 		If Not *this\drawing
 			If IsImage(*this\canvas)
@@ -1637,7 +1637,7 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable)
 			StopDrawing()
 			*this\drawing=#False
 		EndIf
-		_callcountEnde(AutosizeHeader)
+		_callcountEnde()
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
@@ -1646,7 +1646,7 @@ EndProcedure
 
 Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 	If *this
-		_callcountStart(AutosizeTable)
+		_callcountStart()
 		Protected thisdrawing.b=#False
 		If Not *this\drawing
 			If IsImage(*this\canvas)
@@ -1665,7 +1665,7 @@ Procedure _MyTable_Table_Autosize(*this.strMyTableTable)
 			StopDrawing()
 			*this\drawing=#False
 		EndIf
-		_callcountEnde(AutosizeRows)
+		_callcountEnde()
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)

@@ -35,7 +35,7 @@ Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,text.s,rows.i)
 	If *this
 		
 		Protected idx
-		_callcountStart(row_adddirtyrows)
+		_callcountStart()
 		If Not *this\rows
 			*this\rows=AllocateStructure(strMyTableRowList)
 		EndIf
@@ -45,7 +45,7 @@ Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,text.s,rows.i)
 			_MyTableInitRow(*this\table\application,*this\table,*this,*row,"","",0,0)
 			*this\dirty=#True
 		Next
-		_callcountEnde(row_adddirtyrows)
+		_callcountEnde()
 		*this\table\dirty=#True
 		_MyTable_Table_Redraw(*this\table)		
 	EndIf

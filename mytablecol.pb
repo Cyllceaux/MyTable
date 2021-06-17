@@ -62,7 +62,7 @@ Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 		Next
 		*this\sort=sort
 		Protected numeric.b=Bool(*this\flags & #MYTABLE_COL_FLAGS_CHECKBOXES)
-		_callcountStart(sort)
+		_callcountStart()
 		Protected *table.strMyTableTable=*this\table
 		Protected *row.strMyTableRow=0
 		
@@ -86,7 +86,7 @@ Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 				EndIf
 		EndSelect
 		_MyTable_Table_Predraw(*table)
-		_callcountEnde(sort)
+		_callcountEnde()
 	EndIf
 EndProcedure
 
@@ -350,7 +350,7 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 				StartDrawing(CanvasOutput(*this\table\canvas))
 			EndIf
 		EndIf
-		_callcountStart(AutosizeCol)
+		_callcountStart()
 		
 		If (*this\textheight=0 And *this\text<>"") Or *this\dirty
 			Protected nfont=_MyTable_GetDefaultFont(*this)
@@ -397,7 +397,7 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		If Not *this\table\drawing
 			StopDrawing()
 		EndIf
-		_callcountEnde(AutosizeCol)
+		_callcountEnde()
 		_MyTable_Table_Predraw(*this\table)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
