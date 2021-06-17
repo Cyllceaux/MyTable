@@ -445,4 +445,6 @@ UseModule MyTable
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	
+	*app\Free()
+	
 UnuseModule MyTable

@@ -108,6 +108,10 @@ _MyTable_GetStylesApplication()
 
 Procedure _MyTable_Application_Free(*this.strMyTableApplication)
 	If *this
+		While ListSize(*this\tables())>0
+			FirstElement(*this\tables())
+			_MyTable_Table_Delete(*this\tables())
+		Wend
 		FreeStructure(*this)
 	EndIf
 EndProcedure

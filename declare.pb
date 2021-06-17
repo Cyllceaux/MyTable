@@ -142,6 +142,7 @@ Declare _MyTable_Table_ClearMaps(*this.strMyTableTable)
 Declare.b _MyTable_Table_GetSelected(*this.strMyTableTable)
 Declare _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 Declare _MyTable_Table_Autosize(*this.strMyTableTable)
+Declare _MyTable_Table_Delete(*this.strMyTableTable)
 
 Declare _MyTableEvtResize()
 Declare _MyTableEvtMove()
