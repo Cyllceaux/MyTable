@@ -1518,7 +1518,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 			Protected idx=0
 			For idx=1 To c
 				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,idx-1,#True)
-				*cell\text=StringField(text,idx,sep)
+				_MyTable_Cell_SetText(*cell,StringField(text,idx,sep))				
 			Next
 		EndIf
 		If *parent

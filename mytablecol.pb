@@ -30,11 +30,19 @@ EndProcedure
 
 Procedure _MyTable_Col_SetDatatype(*this.strMyTableCol,value.i)
 	If *this
+		If value=#MYTABLE_DATATYPE_NUMBER
+			*this\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_RIGHT
+		ElseIf value=#MYTABLE_DATATYPE_DATE
+			*this\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_CENTER
+		Else
+			*this\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_LEFT
+		EndIf
 		ForEach *this\table\rows()
 			If *this\table\rows()\cells And ListSize(*this\table\rows()\cells\cells())>*this\listindex
 				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),*this\listindex,#True)
 				If *cell\datatype=*this\datatype
 					*cell\datatype=value
+					*cell\defaultStyle\halign=*this\defaultStyle\halign
 					*cell\dirty=#True
 				EndIf
 			EndIf
