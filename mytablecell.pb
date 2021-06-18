@@ -2,10 +2,10 @@
 _MyTableSimpleSetterGetterSubRedraw(Cell,Dirty,b)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Flags,i)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Datatype,i)
-_MyTableSimpleSetterGetterSubRedraw(Cell,Text,s)
-_MyTableSimpleSetterGetterSubRedraw(Cell,Value,d)
+_MyTableSimpleGetter(Cell,Text,s)
+_MyTableSimpleGetter(Cell,Value,d)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Checked,b)
-_MyTableSimpleSetterGetterSubRedraw(Cell,Formula,s)
+_MyTableSimpleGetter(Cell,Formula,s)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Mask,s)
 _MyTableSimpleSetterGetterPointer(Cell,Data)
 _MyTableSimpleGetter(Cell,Type,i)
@@ -14,6 +14,55 @@ _MyTableSimpleGetterPointer(Cell,Row)
 _MyTableSimpleGetterPointer(Cell,Col)
 _MyTableSimpleGetterPointer(Cell,Table)
 
+
+Procedure _MyTable_Cell_SetFormula(*this.strMyTableCell,value.s)
+	If *this
+		*this\formula=value
+		*this\text=value
+		*this\value=0
+		*this\textheight=0
+		*this\textwidth=0
+		*this\dirty=#True
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_SetText(*this.strMyTableCell,value.s)
+	If *this
+		*this\text=value
+		If *this\datatype=#MYTABLE_DATATYPE_NUMBER
+			*this\value=ValD(value)
+		ElseIf *this\datatype=#MYTABLE_DATATYPE_DATE
+			*this\value=ParseDate(*this\mask,Value)
+		Else
+			*this\value=0
+		EndIf
+		*this\textheight=0
+		*this\textwidth=0
+		*this\dirty=#True
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
+	If *this
+		*this\value=value
+		If *this\datatype=#MYTABLE_DATATYPE_NUMBER
+			*this\text=StrD(value)
+		ElseIf *this\datatype=#MYTABLE_DATATYPE_DATE
+			*this\text=FormatDate(*this\mask,Value)
+		Else
+			*this\text=FormatNumber(value)
+		EndIf
+		*this\textheight=0
+		*this\textwidth=0
+		*this\dirty=#True
+		*this\table\dirty=#True
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
 
 Procedure _MyTable_Cell_GetApplication(*this.strMyTableCell)
 	If *this

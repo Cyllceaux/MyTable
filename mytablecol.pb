@@ -99,7 +99,9 @@ Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 			*this\table\cols()\sort=#MYTABLE_COL_SORT_NONE
 		Next
 		*this\sort=sort
-		Protected numeric.b=Bool(*this\flags & #MYTABLE_COL_FLAGS_CHECKBOXES)
+		Protected numeric.b=Bool(*this\flags & #MYTABLE_COL_FLAGS_CHECKBOXES Or 
+		                         *this\datatype & #MYTABLE_DATATYPE_NUMBER Or 
+		                         *this\datatype & #MYTABLE_DATATYPE_DATE)
 		_callcountStart()
 		Protected *table.strMyTableTable=*this\table
 		Protected *row.strMyTableRow=0

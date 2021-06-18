@@ -206,6 +206,9 @@ Declare _MyTable_Col_SetSort(*this.strMyTableCol,value.i)
 ;- Cells
 Declare _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.b=#True)
 Declare _MyTable_Cell_Autosize(*this.strMyTableCell)
+Declare _MyTable_Cell_SetText(*this.strMyTableCell,value.s)
+Declare _MyTable_Cell_SetFormula(*this.strMyTableCell,value.s)
+Declare _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
 
 ;- Style
 Declare _MyTable_Style_Redraw(*this.strMyTableStyleObject)

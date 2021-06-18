@@ -1776,11 +1776,7 @@ Procedure _MyTable_StopEdit(*this.strMyTableTable,save.b)
 			If save
 				With *this\edit\cell
 					Protected old.s=\text
-					\text=GetGadgetText(*this\edit\gadget)
-					\textheight=0
-					\textwidth=0
-					\dirty=#True
-					\table\dirty=#True
+					_MyTable_Cell_SetText(*this\edit\cell,GetGadgetText(*this\edit\gadget))					
 					If \table\eventCellChangedText
 						\table\eventCellChangedText(*this\edit\cell,old)
 					EndIf
