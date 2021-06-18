@@ -167,6 +167,7 @@ Declare _MyTable_Table_SetSelected(*this.strMyTableTable,value.b)
 Declare _MyTable_Table_Autosize(*this.strMyTableTable)
 Declare _MyTable_Table_Delete(*this.strMyTableTable)
 Declare _MyTable_Table_AddCol(*this.strMyTableTable,text.s,width.i,image.i=0,flags.i=0)
+Declare.b _MyTable_IsSelected(*obj.strMyTableObject)
 
 Declare _MyTableEvtResize()
 Declare _MyTableEvtMove()

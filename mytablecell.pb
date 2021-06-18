@@ -43,10 +43,9 @@ EndProcedure
 Procedure.b _MyTable_Cell_GetSelected(*this.strMyTableCell)
 	If *this
 		Protected result.b=#False
-		result=Bool(result Or *this\table\selectedcells(Str(*this)))
-		result=Bool(result Or *this\table\selectedrows(Str(*this\row)))
-		result=Bool(result Or *this\table\selectedcols(Str(*this\col)))
-		result=Bool(result Or *this\table\selectall)
+		result=Bool(result Or _MyTable_IsSelected(*this))
+		result=Bool(result Or _MyTable_IsSelected(*this\row))
+		result=Bool(result Or _MyTable_IsSelected(*this\col))
 		
 		ProcedureReturn result
 	EndIf

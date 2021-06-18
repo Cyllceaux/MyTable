@@ -766,7 +766,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 								If temp
 									*this\tempselectedRows(Str(*row))=#True
 								Else									
-									If Not *this\selectedRows(Str(*row))
+									If Not _MyTable_IsSelected(*row)
 										If *this\eventRowSelected
 											*this\eventRowSelected(*row)
 										EndIf
@@ -797,7 +797,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 								If temp
 									*this\tempselectedRows(Str(*row))=#True
 								Else									
-									If Not *this\selectedRows(Str(*row))
+									If Not _MyTable_IsSelected(*row)
 										If *this\eventRowSelected
 											*this\eventRowSelected(*row)
 										EndIf
@@ -812,7 +812,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 						*this\tempselectedRows(Str(*rc\trow))=#True
 					Else
 						*this\lastrow=*rc\trow							
-						If Not *this\selectedRows(Str(*rc\trow))
+						If Not _MyTable_IsSelected(*rc\trow)
 							If *this\eventRowSelected
 								*this\eventRowSelected(*rc\trow)
 							EndIf
@@ -861,7 +861,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 								If temp
 									*this\tempselectedCells(Str(*cell))=#True
 								Else										
-									If Not *this\selectedCells(Str(*cell))
+									If Not _MyTable_IsSelected(*cell)
 										If *this\eventCellSelected
 											*this\eventCellSelected(*cell)
 										EndIf
@@ -877,7 +877,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 						*this\tempselectedCells(Str(*rc\tcell))=#True
 					Else
 						*this\lastcell=*rc\tcell
-						If Not *this\selectedCells(Str(*rc\tcell))
+						If Not _MyTable_IsSelected(*rc\tcell)
 							If *this\eventCellSelected
 								*this\eventCellSelected(*rc\tcell)
 							EndIf

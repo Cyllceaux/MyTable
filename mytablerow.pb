@@ -145,11 +145,8 @@ _MyTable_GetStylesRow()
 
 Procedure.b _MyTable_Row_GetSelected(*this.strMyTableRow)
 	If *this
-		Protected result.b=#False
-		result=Bool(result Or *this\table\selectedrows(Str(*this)))
-		result=Bool(result Or *this\table\selectall)
 		
-		ProcedureReturn result
+		ProcedureReturn _MyTable_IsSelected(*this)
 	EndIf
 EndProcedure
 

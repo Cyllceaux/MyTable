@@ -51,6 +51,38 @@ _MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)
 _MyTableSimpleSetterGetterPredraw(Table,Page,i)
 _MyTableSimpleSetterGetterPredraw(Table,PageElements,i)
 
+Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
+	Select *obj\type
+		Case #MYTABLE_TYPE_CELL
+			Protected *cell.strMyTableCell=*obj
+			If FindMapElement(*cell\table\selectedCells(),Str(*obj))
+				ProcedureReturn *cell\table\selectedCells()
+			EndIf
+			If FindMapElement(*cell\table\tempselectedCells(),Str(*obj))
+				ProcedureReturn *cell\table\tempselectedCells()
+			EndIf
+			ProcedureReturn *cell\table\selectall
+		Case #MYTABLE_TYPE_COL
+			Protected *col.strMyTableCol=*obj
+			If FindMapElement(*col\table\selectedCols(),Str(*obj))
+				ProcedureReturn *col\table\selectedCols()
+			EndIf
+			If FindMapElement(*col\table\tempselectedCols(),Str(*obj))
+				ProcedureReturn *col\table\tempselectedCols()
+			EndIf
+			ProcedureReturn *col\table\selectall
+		Case #MYTABLE_TYPE_ROW			
+			Protected *row.strMyTableRow=*obj
+			If FindMapElement(*row\table\selectedRows(),Str(*obj))
+				ProcedureReturn *row\table\selectedRows()
+			EndIf
+			If FindMapElement(*row\table\tempselectedRows(),Str(*obj))
+				ProcedureReturn *row\table\tempselectedRows()
+			EndIf
+			ProcedureReturn *row\table\selectall
+	EndSelect
+	ProcedureReturn #False
+EndProcedure
 
 Procedure _MyTable_Table_GetPages(*this.strMyTableTable)
 	If *this
@@ -270,7 +302,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	For idx=start To cc
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),idx-1)
 		Protected calcwidth.i=*col\calcwidth
-		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
+		Protected selected.b=_MyTable_IsSelected(*col)
 		Protected tborder=_MyTable_GetDefaultBorder(*col)
 		Protected ElementSelected.b=#False
 		Protected *cell.strMyTableCell=0
@@ -626,12 +658,10 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
 			Protected tborder=_MyTable_GetDefaultBorder(*cell)
 			
-			selected=Bool(*this\table\selectedrows(Str(*this)) Or *this\table\selectall)
-			selected=Bool(selected Or *this\table\selectedcols(Str(*cell\col)))
-			selected=Bool(selected Or *this\table\selectedcells(Str(*cell)))
-			selected=Bool(selected Or *this\table\tempselectedrows(Str(*this)))
-			selected=Bool(selected Or *this\table\tempselectedcols(Str(*cell\col)))
-			selected=Bool(selected Or *this\table\tempselectedcells(Str(*cell)))
+			selected=Bool(_MyTable_IsSelected(*this))
+			selected=Bool(selected Or _MyTable_IsSelected(*cell))
+			selected=Bool(selected Or _MyTable_IsSelected(*cell\col))
+			
 			
 			mselected=#False
 			If markmouseover And Not selected
@@ -1456,6 +1486,9 @@ Procedure _MyTable_Table_ClearMaps(*this.strMyTableTable)
 			ClearMap(*this\selectedcells())
 			ClearMap(*this\selectedrows())
 			ClearMap(*this\selectedcols())
+			ClearMap(*this\tempselectedcells())
+			ClearMap(*this\tempselectedrows())
+			ClearMap(*this\tempselectedcols())
 		Else
 			ForEach *this\selectedcells()
 				If Not *this\selectedcells()
@@ -1470,6 +1503,21 @@ Procedure _MyTable_Table_ClearMaps(*this.strMyTableTable)
 			ForEach *this\selectedcols()
 				If Not *this\selectedcols()
 					DeleteMapElement(*this\selectedcols())
+				EndIf
+			Next
+			ForEach *this\tempselectedcells()
+				If Not *this\tempselectedcells()
+					DeleteMapElement(*this\tempselectedcells())
+				EndIf
+			Next
+			ForEach *this\tempselectedrows()
+				If Not *this\tempselectedrows()
+					DeleteMapElement(*this\tempselectedrows())
+				EndIf
+			Next
+			ForEach *this\tempselectedcols()
+				If Not *this\tempselectedcols()
+					DeleteMapElement(*this\tempselectedcols())
 				EndIf
 			Next
 		EndIf

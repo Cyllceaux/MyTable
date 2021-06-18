@@ -214,11 +214,7 @@ _MyTable_GetStylesCol()
 
 Procedure.b _MyTable_Col_GetSelected(*this.strMyTableCol)
 	If *this
-		Protected result.b=#False
-		result=Bool(result Or *this\table\selectedcols(Str(*this)))
-		result=Bool(result Or *this\table\selectall)
-		
-		ProcedureReturn result
+		ProcedureReturn _MyTable_IsSelected(*this)
 	EndIf
 EndProcedure
 
