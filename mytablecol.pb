@@ -5,7 +5,9 @@ _MyTableSimpleGetterPointer(Col,Table)
 _MyTableSimpleGetter(Col,Type,i)
 _MyTableSimpleSetterGetterPointer(Col,Data)
 _MyTableSimpleSetterGetterSubRedraw(Col,Text,s)
+_MyTableSimpleSetterGetterSubRedraw(Col,Mask,s)
 _MyTableSimpleSetterGetterSubPredraw(Col,Colspan,i)
+_MyTableSimpleSetterGetterSubPredraw(Col,Datatype,i)
 
 
 Procedure _MyTable_Col_GetApplication(*this.strMyTableCol)

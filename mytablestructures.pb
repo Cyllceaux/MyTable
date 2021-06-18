@@ -77,6 +77,9 @@ Structure strMyTableCell Extends strMyTableObject
 	text.s
 	value.d
 	checked.b
+	formula.s
+	mask.s
+	datatype.i
 	*cells.strMyTableCellList
 	imageLeft.strMyTableImage
 	imageRight.strMyTableImage
@@ -107,6 +110,9 @@ Structure strMyTableCol Extends strMyTableObject
 	
 	sort.i
 	colspan.i
+	
+	mask.s
+	datatype.i
 EndStructure
 
 Structure strMyTableRow Extends strMyTableObject

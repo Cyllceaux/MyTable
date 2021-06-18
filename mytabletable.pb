@@ -51,38 +51,7 @@ _MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)
 _MyTableSimpleSetterGetterPredraw(Table,Page,i)
 _MyTableSimpleSetterGetterPredraw(Table,PageElements,i)
 
-Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
-	Select *obj\type
-		Case #MYTABLE_TYPE_CELL
-			Protected *cell.strMyTableCell=*obj
-			If FindMapElement(*cell\table\selectedCells(),Str(*obj))
-				ProcedureReturn *cell\table\selectedCells()
-			EndIf
-			If FindMapElement(*cell\table\tempselectedCells(),Str(*obj))
-				ProcedureReturn *cell\table\tempselectedCells()
-			EndIf
-			ProcedureReturn *cell\table\selectall
-		Case #MYTABLE_TYPE_COL
-			Protected *col.strMyTableCol=*obj
-			If FindMapElement(*col\table\selectedCols(),Str(*obj))
-				ProcedureReturn *col\table\selectedCols()
-			EndIf
-			If FindMapElement(*col\table\tempselectedCols(),Str(*obj))
-				ProcedureReturn *col\table\tempselectedCols()
-			EndIf
-			ProcedureReturn *col\table\selectall
-		Case #MYTABLE_TYPE_ROW			
-			Protected *row.strMyTableRow=*obj
-			If FindMapElement(*row\table\selectedRows(),Str(*obj))
-				ProcedureReturn *row\table\selectedRows()
-			EndIf
-			If FindMapElement(*row\table\tempselectedRows(),Str(*obj))
-				ProcedureReturn *row\table\tempselectedRows()
-			EndIf
-			ProcedureReturn *row\table\selectall
-	EndSelect
-	ProcedureReturn #False
-EndProcedure
+
 
 Procedure _MyTable_Table_GetPages(*this.strMyTableTable)
 	If *this

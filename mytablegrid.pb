@@ -49,7 +49,8 @@ Procedure _MyTable_Grid_ResizeGrid(*this.strMyTableTable,rows.i=#PB_Ignore,cols.
 			_MyTable_Table_AddDirtyRows(*this,cc)
 			ForEach *this\rows()
 				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\rows(),0)
-				*cell\text=Str(ListIndex(*this\rows())+1)
+				*cell\value=ListIndex(*this\rows())+1
+				*cell\text=Str(*cell\value)
 				*cell\textwidth=0
 				*cell\textheight=0
 				*cell\dirty=#True
