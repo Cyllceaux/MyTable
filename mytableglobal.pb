@@ -80,8 +80,8 @@ EndProcedure
 
 Procedure  _MyTableInitStyleTableElementSelected(*style.strMyTableStyle)
 	With *style
-		\backcolor=RGBA(230,230,250,255)
-		\forecolor=RGBA(20,20,20,255)
+		\backcolor=RGBA(130,50,50,255)
+		\forecolor=RGBA(200,200,200,255)
 		\border\borderDefault\color=RGBA(200,200,250,255)
 	EndWith
 EndProcedure

@@ -272,6 +272,30 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		Protected calcwidth.i=*col\calcwidth
 		Protected selected.b=Bool(*this\selectedcols(Str(*col)) Or *this\selectall)
 		Protected tborder=_MyTable_GetDefaultBorder(*col)
+		Protected ElementSelected.b=#False
+		Protected *cell.strMyTableCell=0
+		
+		ForEach *this\selectedCells()
+			If *this\selectedCells()
+				*cell=Val(MapKey(*this\selectedCells()))
+				If *cell\col=*col
+					ElementSelected=#True
+					Break
+				EndIf
+			EndIf
+		Next
+		
+		If Not ElementSelected
+			ForEach *this\tempselectedCells()
+				If *this\tempselectedCells()
+					*cell=Val(MapKey(*this\tempselectedCells()))
+					If *cell\col=*col
+						ElementSelected=#True
+						Break
+					EndIf
+				EndIf
+			Next
+		EndIf
 		
 		If *col\colspan>1
 			Protected i=0
@@ -309,6 +333,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 			ClipOutput(bx,by,calcwidth,*this\calcheaderheight)
 			If selected
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetSelectedBackColor(*col))
+			ElseIf ElementSelected
+				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetElementSelectedBackColor(*col))
 			Else
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
 			EndIf
@@ -502,7 +528,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	EndIf
 	
 	If *cell\text<>""
-
+		
 		If fixed
 			_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),*cell\col\calcwidth-addx-tw)
 		Else
@@ -533,7 +559,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 	Protected alwaysexpanded.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 	alwaysexpanded=Bool(alwaysexpanded Or Bool(*this\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
 	Protected markmouseover.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
-	
+	Protected *cell.strMyTableCell=0
 	
 	Protected idx=0
 	Protected start=1	
@@ -548,7 +574,31 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 		Next
 	EndIf
 	
+	Protected ElementSelected.b=#False
 	If fixed
+		
+		
+		ForEach *this\table\selectedCells()
+			If *this\table\selectedCells()
+				*cell=Val(MapKey(*this\table\selectedCells()))
+				If *cell\row=*this
+					ElementSelected=#True
+					Break
+				EndIf
+			EndIf
+		Next
+		
+		If Not ElementSelected
+			ForEach *this\table\tempselectedCells()
+				If *this\table\tempselectedCells()
+					*cell=Val(MapKey(*this\table\tempselectedCells()))
+					If *cell\row=*this
+						ElementSelected=#True
+						Break
+					EndIf
+				EndIf
+			Next
+		EndIf
 		bx=0		
 	Else
 		bx+fwidth
@@ -565,7 +615,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 		
 		
 		DrawingMode(#PB_2DDrawing_Default)			
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this,idx-1)
+		*cell=_MyTableGetOrAddCell(*this,idx-1)
 		Protected *col.strMyTableCol=*cell\col
 		If *col\calcwidth>0 And (bx+*col\calcwidth)>=0
 			Protected customdraw.b=#False
@@ -599,7 +649,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			EndIf
 			
 			If Not customdraw
-				If selected
+				If ElementSelected
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetElementSelectedBackColor(*cell))
+				ElseIf selected
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
 				Else
 					If mselected
