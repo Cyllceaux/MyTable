@@ -74,7 +74,7 @@ Procedure  _MyTableInitStyleTableSelected(*style.strMyTableStyle)
 	With *style
 		\backcolor=RGBA(230,230,250,255)
 		\forecolor=RGBA(20,20,20,255)
-		\border\borderDefault\color=RGBA(200,200,250,255)
+		\border\borderDefault\color=RGBA(200,200,200,255)		
 	EndWith
 EndProcedure
 
@@ -673,6 +673,10 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 	Protected rf,rt,cf,ct,r,c
 	
 	Protected *row.strMyTableRow=0
+	
+	If *this\datagrid And *rc\col=0 And *rc\row=-1
+		ProcedureReturn #False
+	EndIf
 	
 	*this\shiftcell=0
 	If *rc\row=-1 And *rc\col>-1
@@ -1519,6 +1523,10 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\defaultStyle\forecolor=RGBA(250,250,250,255)
 		\defaultStyle\backcolor=RGBA(150,150,150,255)
 		\defaultStyle\border\borderDefault\color=RGBA(250,250,250,255)
+		
+		\selectedStyle\forecolor=RGBA(250,250,250,255)
+		\selectedStyle\backcolor=RGBA(100,100,100,255)
+		
 		\calcwidth=DesktopScaledX(\width)
 		\listindex=ListSize(*table\cols())-1
 		If \table\datagrid And text="" And \listindex>0
@@ -1567,7 +1575,7 @@ Procedure _MyTableInitCell(*application.strMyTableApplication,
 		\defaultStyle\font=\row\defaultStyle\font
 		\defaultStyle\backcolor=\row\defaultStyle\backcolor
 		\defaultStyle\frontcolor=\row\defaultStyle\frontcolor
-		\defaultStyle\forecolor=\row\defaultStyle\forecolor
+		\defaultStyle\forecolor=\row\defaultStyle\forecolor		
 		\defaultStyle\valign=#MYTABLE_STYLE_VALIGN_TOP
 		\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_LEFT
 		If *parent
@@ -1685,6 +1693,7 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 		Protected h=0
 		If c>0
 			Protected idx=0
+			DrawingMode(#PB_2DDrawing_Transparent)
 			For idx=0 To c
 				tt=StringField(text,idx+1,#CRLF$)
 				tw=TextWidth(tt)
@@ -1695,19 +1704,21 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 					Wend
 					tt+"..."
 				EndIf
+				
 				DrawText(x,y+h,tt,color)	
 				h+TextHeight(tt)
 			Next
 		Else
 			tt=text
 			tw=TextWidth(tt)
+			DrawingMode(#PB_2DDrawing_Transparent)
 			If tw>maxlen
 				While tw>maxlen
 					tt=Mid(tt,1,Len(tt)-1)
 					tw=TextWidth(tt+"...")						
 				Wend
 				tt+"..."
-			EndIf			
+			EndIf		
 			DrawText(x,y,tt,color)
 			h+TextHeight(tt)
 		EndIf
@@ -1783,7 +1794,7 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 				                             *cell\row\calcheight,
 				                             "",
 				                             #PB_Window_BorderLess,
-				                             GadgetID(*this\canvas))
+				                             WindowID(*this\window))
 				*this\edit\menu=CreateMenu(#PB_Any,WindowID(*this\edit\window))
 				AddKeyboardShortcut(*this\edit\window,#PB_Shortcut_Return,0)
 				BindMenuEvent(*this\edit\menu,0,@_MyTable_KeyEdit())
@@ -1847,8 +1858,12 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 		If Not result
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
-					Protected *cell.strMyTableCell=*obj					
-					result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					Protected *cell.strMyTableCell=*obj			
+					If *cell\table\datagrid And *cell\col\listindex=0
+						result=_MyTable_Get#gruppe#name(*cell\col,#False)
+					Else
+						result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result=_MyTable_Get#gruppe#name(*row\table,#False)
@@ -1877,8 +1892,12 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 		If Not *result
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
-					Protected *cell.strMyTableCell=*obj					
-					*result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					Protected *cell.strMyTableCell=*obj			
+					If *cell\table\datagrid And *cell\col\listindex=0
+						*result=_MyTable_Get#gruppe#name(*cell\col,#False)
+					Else
+						*result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					*result=_MyTable_Get#gruppe#name(*row\table,#False)
@@ -1937,12 +1956,15 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 	
 	Procedure.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\border\border#pos\name
-		
 		If Not result
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj					
-					result= _MyTable_Get#gruppe#Border#name#pos(*cell\row,#False)
+					If *cell\table\datagrid And *cell\col\listindex=0
+						result= _MyTable_Get#gruppe#Border#name#pos(*cell\col,#False)
+					Else
+						result= _MyTable_Get#gruppe#Border#name#pos(*cell\row,#False)
+					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result= _MyTable_Get#gruppe#Border#name#pos(*row\table,#False)
@@ -1956,8 +1978,12 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 					EndIf
 			EndSelect
 		EndIf
+		
 		If root And Not result
-			result=_MyTable_Get#gruppe#Border#name#Default(*obj,#False)
+			result=_MyTable_Get#gruppe#Border#name#Default(*obj,#False)	
+		EndIf
+		If root And Not result
+			result=_MyTable_GetDefaultBorder#name#pos(*obj,#False)	
 		EndIf
 		ProcedureReturn result
 	EndProcedure

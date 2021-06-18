@@ -307,7 +307,11 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 			BackColor(_MyTable_GetDefaultBackColor(*col))
 			FrontColor(_MyTable_GetDefaultFrontColor(*col))
 			ClipOutput(bx,by,calcwidth,*this\calcheaderheight)
-			Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
+			If selected
+				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetSelectedBackColor(*col))
+			Else
+				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
+			EndIf
 			
 			If *col\image\orig And IsImage(*col\image\orig)
 				addx+DesktopScaledX(2)
@@ -358,7 +362,12 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 				ta=MyTableW20
 			EndIf
 			
-			_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetDefaultForeColor(*col),calcwidth-addx-ta)
+			If selected
+				_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetSelectedForeColor(*col),calcwidth-addx-ta)
+			Else
+				_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetDefaultForeColor(*col),calcwidth-addx-ta)
+			EndIf
+			
 			If border
 				Protected bw=0
 				Protected c=0
@@ -493,9 +502,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	EndIf
 	
 	If *cell\text<>""
-		
-		DrawingMode(#PB_2DDrawing_Transparent)	
-		
+
 		If fixed
 			_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),*cell\col\calcwidth-addx-tw)
 		Else
@@ -590,6 +597,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			If *this\table\eventCustomCellDraw
 				customdraw=*this\table\eventCustomCellDraw(*cell,bx,by,*col\calcwidth,*this\calcheight)
 			EndIf
+			
 			If Not customdraw
 				If selected
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
