@@ -83,24 +83,64 @@ CompilerIf #PB_Compiler_Debugger
 			While FindString(result,"  ")
 				result=ReplaceString(result,"  "," ")
 			Wend			
-			Protected fif=FindString(result,"\#")
+			Protected fif,fef,fek,fel,ll
+			fif=FindString(result,~"\"")
 			While fif
-				Protected fef=FindString(result,",",fif)
-				Protected fek=FindString(result," ",fif)
+				fef=FindString(result,~"\"",fif+1)
+				If fef>0
+					ll=Len(result)
+					result=InsertString(result,~"</span>",fef+1)
+					result=InsertString(result,~"<span style=\"color:#AAFFAA\">",fif)
+					fif=FindString(result,~"\"",fef+(Len(result)-ll)+1)
+				Else
+					result+~"</span>"
+					result=InsertString(result,~"<span style=\"color:#AAFFAA\">",fif)
+					fif=0
+				EndIf
+			Wend
+			
+			fif=FindString(result,~"*")
+			While fif
+				fef=FindString(result,",",fif+1)
+				fek=FindString(result," ",fif+1)
+				fel=FindString(result,".",fif+1)
+				If fek<fef And fek>0
+					fef=fek
+				EndIf
+				If fel<fef And fel>0
+					fef=fel
+				EndIf
+				If fef>0
+					ll=Len(result)
+					result=InsertString(result,~"</span>",fef+1)
+					result=InsertString(result,~"<span style=\"color:#FFFFAA\">",fif)
+					fif=FindString(result,~"*",fef+(Len(result)-ll)+1)
+				Else
+					result+~"</span>"
+					result=InsertString(result,~"<span style=\"color:#FFFFAA\">",fif)
+					fif=0
+				EndIf
+			Wend
+			
+			fif=FindString(result,"\#")
+			While fif
+				fef=FindString(result,",",fif+1)
+				fek=FindString(result," ",fif+1)
 				If fek<fef And fek>0
 					fef=fek
 				EndIf
 				If fef>0
-					Protected ll=Len(result)
+					ll=Len(result)
 					result=InsertString(result,~"</span>",fef)
 					result=InsertString(result,~"<span style=\"color:#AAAAFF\">",fif)
-					fif=FindString(result,"\#",fef+(Len(result)-ll))
+					fif=FindString(result,"\#",fef+(Len(result)-ll)+1)
 				Else
 					result+~"</span>"
 					result=InsertString(result,~"<span style=\"color:#AAAAFF\">",fif)
 					fif=0
 				EndIf
 			Wend
+			
 			ProcedureReturn result
 		EndProcedure
 		
@@ -154,7 +194,11 @@ CompilerIf #PB_Compiler_Debugger
 						ElseIf  FindString(inhalt,"EndDeclareModule",0,#PB_String_NoCase)
 							bmoduless=#False
 						ElseIf FindString(inhalt,"Interface ",0,#PB_String_NoCase) And Not FindString(inhalt,"EndInterface",0,#PB_String_NoCase)
-							interfaces+#CRLF$+"### "+Trim(StringField(inhalt,2," "))+#CRLF$
+							interfaces+#CRLF$+"### "+Trim(StringField(inhalt,2," "))
+							If Trim(StringField(inhalt,3," "))="Extends"
+								interfaces+" : ["+Trim(StringField(inhalt,4," "))+"](#"+Trim(StringField(inhalt,4," "))+")"
+							EndIf
+							interfaces+#CRLF$
 							Interfaces+"|Procedure|Return|Parameter|Comment|"+#CRLF$
 							Interfaces+"| --- | --- | --- | --- |"+#CRLF$
 							binterfaces=#True

@@ -17,7 +17,7 @@
 | --- | --- | --- | --- |
 |GetType||||
 |GetObject||||
-|SetFont||*font.[MyTableFont](#MyTableFont)||
+|SetFont||<span style="color:#FFFFAA">*font.[MyTableFont](#MyTableFont)</span>||
 |SetBackColor||value.q||
 |SetFrontColor||value.q||
 |SetForeColor||value.q||
@@ -38,13 +38,13 @@
 |GetMouseOverStyle||||
 |GetFixedStyle||||
 |SetFlags||value.i||
-|SetData||*value||
+|SetData||<span style="color:#FFFFAA">*value</span>||
 |SetDirty||value.b||
 |SetSelected||value.b||
 |SetTooltip||value.s||
 |Autosize||||
 
-### MyTableCell
+### MyTableCell : [MyTableObject](#MyTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetApplication||||
@@ -68,7 +68,7 @@
 |StartEdit||||
 |StopEdit||||
 
-### MyTableCol
+### MyTableCol : [MyTableObject](#MyTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
@@ -85,7 +85,7 @@
 |Delete||||
 |ScrollTo||setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||
 
-### MyTableRow
+### MyTableRow : [MyTableObject](#MyTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
@@ -98,7 +98,7 @@
 |SetImage||value.i||
 |SetChecked||value.b||
 |AddDirtyRows||rows.i||
-|AddRow||text.s , sep.s = " \| " , image.i = 0 , flags.i = 0||
+|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
 |DeleteRow||row.i||
 |GetRow||row.i||
 |RowCount||||
@@ -106,7 +106,7 @@
 |Delete||||
 |ScrollTo||setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||
 
-### MyTableTable
+### MyTableTable : [MyTableObject](#MyTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
@@ -140,7 +140,7 @@
 |GetCalcHeight||||
 |GetCalcWidth||||
 |AddDirtyRows||rows.i||
-|AddRow||text.s , sep.s = " \| " , image.i = 0 , flags.i = 0||
+|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
 |DeleteRow||row.i||
 |GetRow||row.i||
 |RowCount||||
@@ -187,16 +187,16 @@
 |RegisterEventCustomCellEdit||event.MyTableProtoEventCustomCellEdit||
 |RegisterCallback||callback.MyTableProtoCallback||
 
-### MyTableTree
+### MyTableTree : [MyTableTable](#MyTableTable)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 
-### MyTableGrid
+### MyTableGrid : [MyTableTable](#MyTableTable)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |ResizeGrid||rows.i = <span style="color:#AAAAFF">\#PB\_Ignore</span> , cols.i = <span style="color:#AAAAFF">\#PB\_Ignore</span>||
 
-### MyTableApplication
+### MyTableApplication : [MyTableObject](#MyTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
@@ -205,9 +205,9 @@
 |GetEmptyStyle||||
 |SetRedraw||value.b||
 |SetRecalc||value.b||
-|AddTable||window.i , canvas.i , vscroll.i , hscroll.i , name.s = "" , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
-|AddTree||window.i , canvas.i , vscroll.i , hscroll.i , name.s = "" , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
-|AddGrid||window.i , canvas.i , vscroll.i , hscroll.i , rows.i , cols.i , name.s = "" , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
+|AddTable||window.i , canvas.i , vscroll.i , hscroll.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
+|AddTree||window.i , canvas.i , vscroll.i , hscroll.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
+|AddGrid||window.i , canvas.i , vscroll.i , hscroll.i , rows.i , cols.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
 |ClearTables||||
 |Redraw||||
 |Recalc||||
@@ -326,7 +326,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2577||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2586||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210618||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
