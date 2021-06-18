@@ -378,7 +378,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 			SelectElement(*this\expRows(),*rc\row)
 			*rc\trow=*this\expRows()
 		EndIf
-		*rc\tcell=_MyTableGetOrAddCell(*rc\trow,*rc\col)
+		*rc\tcell=_MyTableGetOrAddCell(*rc\trow,*rc\col,#True)
 		*rc\starty=starty
 		*rc\startx=startx
 		If Not *rc\tcol
@@ -525,15 +525,15 @@ Procedure _MyTableEvtCanvasKeyDown()
 					_MyTableSelectObject(*cell\row,Bool(shift And multiselect),pages)
 					*this\lastcell=0
 				ElseIf Not fullrow And *cell And *cell\col\listindex>0
-					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex-1)
+					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex-1,#True)
 					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
 				EndIf
 			Case #PB_Shortcut_Right
 				If *this\datagrid And (*cell=0 Or *cell\col\listindex=0)
-					*cell=_MyTableGetOrAddCell(*row,1)
+					*cell=_MyTableGetOrAddCell(*row,1,#True)
 					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
 				ElseIf Not fullrow And *cell And *cell\col\listindex<ListSize(*this\cols())
-					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex+1)
+					*cell=_MyTableGetOrAddCell(*cell\row,*cell\col\listindex+1,#True)
 					_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)									
 				EndIf
 			Case #PB_Shortcut_Up
@@ -550,7 +550,7 @@ Procedure _MyTableEvtCanvasKeyDown()
 						If fullrow Or (*this\datagrid And (*col=0 Or *col\listindex=0))		
 							_MyTableSelectObject(*row,Bool(shift And multiselect),pages)
 						Else
-							*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex)
+							*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex,#True)
 							_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
 						EndIf
 					EndIf
@@ -572,7 +572,7 @@ Procedure _MyTableEvtCanvasKeyDown()
 					If fullrow Or (*this\datagrid And (*col=0 Or *col\listindex=0))		
 						_MyTableSelectObject(*row,Bool(shift And multiselect),pages)
 					Else
-						*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex)
+						*cell=_MyTableGetOrAddCell(*row,*cell\col\listindex,#True)
 						_MyTableSelectObject(*cell,Bool(shift And multiselect),pages)
 					EndIf
 				EndIf
@@ -659,7 +659,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 							*row=*this\expRows()
 						EndIf
 						For c=cmin To cmax
-							*cell=_MyTableGetOrAddCell(*row,c)
+							*cell=_MyTableGetOrAddCell(*row,c,#True)
 							*this\tempselectedCells(Str(*cell))=#True
 						Next
 					Next
@@ -893,7 +893,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 							SelectElement(*this\expRows(),r)
 							*row=*this\expRows()
 							For c=cf To ct
-								Protected *cell.strMyTablecell=_MyTableGetOrAddCell(*row,c)									
+								Protected *cell.strMyTablecell=_MyTableGetOrAddCell(*row,c,#True)									
 								If temp
 									*this\tempselectedCells(Str(*cell))=#True
 								Else										
@@ -1485,7 +1485,6 @@ Procedure _MyTableInitGrid(*application.strMyTableApplication,
 	Protected redraw.b=*table\redraw
 	*table\redraw=#False
 	Protected *col.strMyTableCol=_MyTable_Table_AddCol(*table,"",100,0,#MYTABLE_COL_FLAGS_NO_RESIZABLE|#MYTABLE_COL_FLAGS_NO_EDITABLE)
-	*col\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_RIGHT
 	*table\fixedcols=1
 	_MyTable_Grid_ResizeGrid(*table,rows,cols)
 	_MyTable_Col_Autosize(*col)
@@ -1518,7 +1517,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 			Protected c=CountString(text,sep)+1
 			Protected idx=0
 			For idx=1 To c
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,idx-1)
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,idx-1,#True)
 				*cell\text=StringField(text,idx,sep)
 			Next
 		EndIf
@@ -1553,6 +1552,7 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\width=width
 		\image\orig=image
 		\sort=#MYTABLE_COL_SORT_NONE
+		\datatype=#MYTABLE_DATATYPE_DEFAULT
 		If width=#PB_Ignore
 			\stretched=#True
 		EndIf
@@ -1568,6 +1568,10 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		If \table\datagrid And text="" And \listindex>0
 			\text=_MyTableGridColumnName(ListSize(*table\cols())-1)
 			\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_CENTER
+		ElseIf \table\datagrid And text="" And \listindex=0
+			\text=""
+			\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_RIGHT
+			\datatype=#MYTABLE_DATATYPE_NUMBER
 		EndIf
 	EndWith
 	
@@ -1611,9 +1615,9 @@ Procedure _MyTableInitCell(*application.strMyTableApplication,
 		\defaultStyle\font=\row\defaultStyle\font
 		\defaultStyle\backcolor=\row\defaultStyle\backcolor
 		\defaultStyle\frontcolor=\row\defaultStyle\frontcolor
-		\defaultStyle\forecolor=\row\defaultStyle\forecolor		
-		\defaultStyle\valign=#MYTABLE_STYLE_VALIGN_TOP
-		\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_LEFT
+		\defaultStyle\forecolor=\row\defaultStyle\forecolor				
+		\datatype=*cell\col\datatype
+		\mask=*cell\col\mask
 		If *parent
 			\listindex=ListSize(*parent\cells\cells())-1
 		Else
@@ -1641,16 +1645,20 @@ Procedure.s _MyTableCleanName(name.s)
 	ProcedureReturn result
 EndProcedure
 
-Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
+Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i,force.b)
 	If *row
+		Protected tidx=idx
+		If *row\table\datagrid And Not force
+			tidx+1
+		EndIf
 		
-		If ListSize(*row\table\cols())>idx
-			Protected *col.strMyTableCol=SelectElement(*row\table\cols(),idx)
+		If ListSize(*row\table\cols())>tidx
+			Protected *col.strMyTableCol=SelectElement(*row\table\cols(),tidx)
 			Protected *cell.strMyTableCell=0
 			If Not *row\cells
 				*row\cells=AllocateStructure(strMyTableCellList)
 			EndIf
-			While ListSize(*row\cells\cells())<=idx
+			While ListSize(*row\cells\cells())<=tidx
 				LastElement(*row\cells\cells())
 				*cell=AddElement(*row\cells\cells())
 				_MyTableInitCell(*row\table\application,*row\table,*row,*col,0,*cell,0)
@@ -1658,7 +1666,7 @@ Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i)
 			If *cell
 				ProcedureReturn *cell
 			Else
-				ProcedureReturn SelectElement(*row\cells\cells(),idx)
+				ProcedureReturn SelectElement(*row\cells\cells(),tidx)
 			EndIf
 		EndIf
 	EndIf

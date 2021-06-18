@@ -5,10 +5,46 @@ _MyTableSimpleGetterPointer(Col,Table)
 _MyTableSimpleGetter(Col,Type,i)
 _MyTableSimpleSetterGetterPointer(Col,Data)
 _MyTableSimpleSetterGetterSubRedraw(Col,Text,s)
-_MyTableSimpleSetterGetterSubRedraw(Col,Mask,s)
+_MyTableSimpleGetter(Col,Mask,s)
 _MyTableSimpleSetterGetterSubPredraw(Col,Colspan,i)
-_MyTableSimpleSetterGetterSubPredraw(Col,Datatype,i)
+_MyTableSimpleGetter(Col,Datatype,i)
 
+
+Procedure _MyTable_Col_SetMask(*this.strMyTableCol,value.s)
+	If *this
+		ForEach *this\table\rows()
+			If *this\table\rows()\cells And ListSize(*this\table\rows()\cells\cells())>*this\listindex
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),*this\listindex,#True)
+				If *cell\mask=*this\mask
+					*cell\mask=value
+					*cell\dirty=#True
+				EndIf
+			EndIf
+		Next
+		*this\mask=value
+		*this\dirty=#True
+		*this\table\dirty=#True		
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Col_SetDatatype(*this.strMyTableCol,value.i)
+	If *this
+		ForEach *this\table\rows()
+			If *this\table\rows()\cells And ListSize(*this\table\rows()\cells\cells())>*this\listindex
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),*this\listindex,#True)
+				If *cell\datatype=*this\datatype
+					*cell\datatype=value
+					*cell\dirty=#True
+				EndIf
+			EndIf
+		Next
+		*this\datatype=value
+		*this\dirty=#True
+		*this\table\dirty=#True		
+		_MyTable_Table_Redraw(*this\table)
+	EndIf
+EndProcedure
 
 Procedure _MyTable_Col_GetApplication(*this.strMyTableCol)
 	If *this
@@ -30,7 +66,7 @@ Procedure _MyTable_Col_GetSort(*this.strMyTableCol)
 EndProcedure
 
 Procedure _MyTable_Col_CreateSort(*row.strMyTableRow,col.i,sort.i,numeric.b)
-	Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col)
+	Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,col,#True)
 	*row\sorts=*cell\text
 	*row\sortd=*cell\value
 	
@@ -295,7 +331,7 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 		EndIf
 	EndIf
 	If *row\cells And ListSize(*row\cells\cells())>*this\listindex	
-		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,*this\listindex)
+		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,*this\listindex,#True)
 		If (*cell\textwidth=0 And *cell\text<>"") Or *cell\dirty
 			Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*cell)
 			If *nfont<>*lastfont

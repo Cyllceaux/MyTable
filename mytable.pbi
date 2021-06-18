@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2467
+	#MYTABLE_VERSION = 2480
 	#MYTABLE_VERSION_DATE = 20210618
 	
 	Enumeration _mytable_type
@@ -83,6 +83,13 @@
 		#MYTABLE_CELL_FLAGS_NO_EDITABLE
 	EndEnumeration
 	
+	Enumeration _mytable_datatype
+		#MYTABLE_DATATYPE_DEFAULT
+		#MYTABLE_DATATYPE_NUMBER
+		#MYTABLE_DATATYPE_DATE
+		#MYTABLE_DATATYPE_TEXT
+	EndEnumeration
+	
 	Interface MyTableCell Extends MyTableObject
 		GetApplication()
 		GetTable()
@@ -90,6 +97,9 @@
 		GetCol()
 		GetParent()
 		SetText(value.s):GetText.s()
+		SetFormula(value.s):GetFormula.s()
+		SetMask(value.s):GetMask.s()
+		SetDatatype(value.i):GetDatatype.i()
 		SetValue(value.d):GetValue.d()
 		SetImageLeft(value.i):GetImageLeft.i()
 		SetImageRight(value.i):GetImageRight.i()
@@ -126,6 +136,8 @@
 		GetTable()
 		GetPosition()
 		SetText(value.s):GetText.s()
+		SetMask(value.s):GetMask.s()
+		SetDatatype(value.i):GetDatatype.i()
 		SetImage(value.i):GetImage.i()
 		SetWidth(value.i):GetWidth.i()
 		SetSort(value.i):GetSort.i()

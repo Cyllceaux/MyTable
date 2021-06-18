@@ -616,7 +616,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 		
 		
 		DrawingMode(#PB_2DDrawing_Default)			
-		*cell=_MyTableGetOrAddCell(*this,idx-1)
+		*cell=_MyTableGetOrAddCell(*this,idx-1,#True)
 		Protected *col.strMyTableCol=*cell\col
 		If *col\calcwidth>0 And (bx+*col\calcwidth)>=0
 			Protected customdraw.b=#False
@@ -1423,7 +1423,7 @@ EndProcedure
 Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	If *this
 		If ListSize(*this\cols())>col And ListSize(*this\rows())>row
-			ProcedureReturn _MyTableGetOrAddCell(SelectElement(*this\rows(),row),col)
+			ProcedureReturn _MyTableGetOrAddCell(SelectElement(*this\rows(),row),col,#False)
 		EndIf
 	EndIf
 EndProcedure
@@ -1570,7 +1570,7 @@ Procedure _MyTable_Table_ScrollToCellPos(*this.strMyTableTable,row.i,col.i,setSe
 			_MyTable_Table_Predraw(*this,#True)
 			If ListSize(*this\expRows())>row And ListSize(*this\cols())>col
 				SelectElement(*this\expRows(),row)
-				_MyTable_Cell_ScrollTo(_MyTableGetOrAddCell(*this\expRows(),col),setSelect,#False)
+				_MyTable_Cell_ScrollTo(_MyTableGetOrAddCell(*this\expRows(),col,#False),setSelect,#False)
 				*this\dirty=#True
 				_MyTable_Table_Redraw(*this)
 			EndIf

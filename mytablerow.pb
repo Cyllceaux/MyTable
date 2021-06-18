@@ -107,7 +107,7 @@ EndProcedure
 Procedure _MyTable_Row_GetCell(*this.strMyTableRow,col.i)
 	If *this
 		If ListSize(*this\table\cols())>col
-			ProcedureReturn _MyTableGetOrAddCell(*this,col)
+			ProcedureReturn _MyTableGetOrAddCell(*this,col,#False)
 		EndIf
 	EndIf
 EndProcedure
