@@ -18,7 +18,7 @@ UseModule MyTable
 	*grid\ResizeGrid(#PB_Ignore,5)
 	*grid\ResizeGrid(3,3)
 	*grid\ResizeGrid(100,10)
-	*grid\ResizeGrid(100000,1000)
+	*grid\ResizeGrid(10000,100)
 	
 	*grid\SetRedraw(#True)
 	

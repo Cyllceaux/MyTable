@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2586
-	#MYTABLE_VERSION_DATE = 20210618
+	#MYTABLE_VERSION = 2597
+	#MYTABLE_VERSION_DATE = 20210619
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -179,21 +179,21 @@
 	EnumerationBinary _mytable_table		
 		#MYTABLE_TABLE_FLAGS_HIERARCHICAL ; Tree
 		#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED ; always expanded rows in tree
-		#MYTABLE_TABLE_FLAGS_CHECKBOXES ; rows woth checkboxes
-		#MYTABLE_TABLE_FLAGS_FULLROWSELECT ; select always rows
-		#MYTABLE_TABLE_FLAGS_MULTISELECT ; can select more rows/cells/cols		
-		#MYTABLE_TABLE_FLAGS_BORDER ; draw a grid
-		#MYTABLE_TABLE_FLAGS_NO_HEADER ; no header will drawn
-		#MYTABLE_TABLE_FLAGS_NO_REDRAW ; stops redrawing. setRedraw(#True) will activate it again
-		#MYTABLE_TABLE_FLAGS_CALLBACK	; Table has callbacks for dynamic loads	
-		#MYTABLE_TABLE_FLAGS_SORTABLE ; Table is sortable		
-		#MYTABLE_TABLE_FLAGS_RESIZABLE ; Cols and Rows are Resizeable
-		#MYTABLE_TABLE_FLAGS_PAGES ; Table can have pages
-		#MYTABLE_TABLE_FLAGS_TITLE ; draw the title
-		#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER ; MouseOver marks the cell
-		#MYTABLE_TABLE_FLAGS_EDITABLE ; Editable
-		#MYTABLE_TABLE_FLAGS_ZEBRA ; Zebra Layout
-		#MYTABLE_TABLE_FLAGS_GRID ; Grid (Excel-like) Layout
+		#MYTABLE_TABLE_FLAGS_CHECKBOXES										; rows woth checkboxes
+		#MYTABLE_TABLE_FLAGS_FULLROWSELECT								; select always rows
+		#MYTABLE_TABLE_FLAGS_MULTISELECT									; can select more rows/cells/cols		
+		#MYTABLE_TABLE_FLAGS_BORDER												; draw a grid
+		#MYTABLE_TABLE_FLAGS_NO_HEADER										; no header will drawn
+		#MYTABLE_TABLE_FLAGS_NO_REDRAW										; stops redrawing. setRedraw(#True) will activate it again
+		#MYTABLE_TABLE_FLAGS_CALLBACK											; Table has callbacks for dynamic loads	
+		#MYTABLE_TABLE_FLAGS_SORTABLE											; Table is sortable		
+		#MYTABLE_TABLE_FLAGS_RESIZABLE										; Cols and Rows are Resizeable
+		#MYTABLE_TABLE_FLAGS_PAGES												; Table can have pages
+		#MYTABLE_TABLE_FLAGS_TITLE												; draw the title
+		#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER							; MouseOver marks the cell
+		#MYTABLE_TABLE_FLAGS_EDITABLE											; Editable
+		#MYTABLE_TABLE_FLAGS_ZEBRA												; Zebra Layout
+		#MYTABLE_TABLE_FLAGS_GRID													; Grid (Excel-like) Layout
 	EndEnumeration
 	
 	#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_SORTABLE|#MYTABLE_TABLE_FLAGS_RESIZABLE
@@ -227,13 +227,12 @@
 	Prototype.b MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
 	
 	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is drawn
-	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell); Return #True if custom cell is edited
+	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell)				; Return #True if custom cell is edited
 	
 	
 	Prototype MyTableProtoCallback(*row.MyTableRow)
 	
-	
-	Interface MyTableTable Extends MyTableObject
+	Interface MyTableTableObject Extends MyTableObject
 		GetElementSelectedStyle()
 		GetZebraStyle()
 		GetTitleStyle()
@@ -253,35 +252,12 @@
 		SetPage(value.i):GetPage.i()
 		SetPageElements(value.i):GetPageElements.i()
 		
-		SetDefaultImageSortAsc(value.i):GeDefaultImageSortAsc.i()
-		SetDefaultImageSortDesc(value.i):GeDefaultImageSortDesc.i()
-		SetDefaultImagePlus(value.i):GeDefaultImagePlus.i()
-		SetDefaultImageMinus(value.i):GeDefaultImageMinus.i()
-		SetDefaultImageCheckBox(value.i):GeDefaultImageCheckBox.i()
-		SetDefaultImageCheckBoxChecked(value.i):GeDefaultImageCheckBoxChecked.i()
-		SetDefaultImagePlusArrow(value.i):GeDefaultImagePlusArrow.i()
-		SetDefaultImageMinusArrow(value.i):GeDefaultImageMinusArrow.i()
-		
 		GetSelectedRows(List rows.MyTableRow())
 		GetSelectedCells(List cells.MyTableCell())
 		GetSelectedCols(List cols.MyTableCol())		
 		GetCalcHeight()
 		GetCalcWidth()
 		
-		AddDirtyRows(rows.i)
-		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
-		DeleteRow(row.i)
-		GetRow(row.i)
-		RowCount()
-		VisibleRowCount()
-		AddCol(text.s,width.i,image.i=0,flags.i=0)
-		DeleteCol(col.i)
-		GetCol(col.i)
-		ColCount()
-		GetCell(row.i,col.i)
-		Delete()
-		ClearRows()
-		ClearCols()
 		Redraw()
 		Recalc()
 		Free()
@@ -291,7 +267,7 @@
 		AutosizeCols()
 		AutosizeHeader()
 		
-
+		
 		RegisterEventColLeftClick(event.MyTableProtoEventColLeftClick)
 		RegisterEventColLeftDoubleClick(event.MyTableProtoEventColLeftDoubleClick)
 		RegisterEventColRightClick(event.MyTableProtoEventColRightClick)
@@ -321,13 +297,47 @@
 		RegisterEventCustomCellEdit(event.MyTableProtoEventCustomCellEdit)
 		
 		RegisterCallback(callback.MyTableProtoCallback)
+		
+		GetCell(row.i,col.i)
+		Delete()
+		
+		GetRow(row.i)
+		RowCount()
+		VisibleRowCount()
+		GetCol(col.i)
+		ColCount()
+	EndInterface
+	
+	Interface MyTableTable Extends MyTableTableObject
+		
+		SetDefaultImageSortAsc(value.i):GeDefaultImageSortAsc.i()
+		SetDefaultImageSortDesc(value.i):GeDefaultImageSortDesc.i()
+		SetDefaultImagePlus(value.i):GeDefaultImagePlus.i()
+		SetDefaultImageMinus(value.i):GeDefaultImageMinus.i()
+		SetDefaultImageCheckBox(value.i):GeDefaultImageCheckBox.i()
+		SetDefaultImageCheckBoxChecked(value.i):GeDefaultImageCheckBoxChecked.i()
+		SetDefaultImagePlusArrow(value.i):GeDefaultImagePlusArrow.i()
+		SetDefaultImageMinusArrow(value.i):GeDefaultImageMinusArrow.i()
+		
+		
+		AddDirtyRows(rows.i)
+		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
+		DeleteRow(row.i)
+		
+		AddCol(text.s,width.i,image.i=0,flags.i=0)
+		DeleteCol(col.i)
+		
+		
+		ClearRows()
+		ClearCols()
+		
 	EndInterface
 	
 	Interface MyTableTree Extends MyTableTable
 		
 	EndInterface
 	
-	Interface MyTableGrid Extends MyTableTable
+	Interface MyTableGrid Extends MyTableTableObject
 		ResizeGrid(rows.i=#PB_Ignore,cols.i=#PB_Ignore)
 	EndInterface
 	

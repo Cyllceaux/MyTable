@@ -106,7 +106,7 @@
 |Delete||||
 |ScrollTo||setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||
 
-### MyTableTable : [MyTableObject](#MyTableObject)
+### MyTableTableObject : [MyTableObject](#MyTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
@@ -126,33 +126,11 @@
 |SetEmptyText||value.s||
 |SetPage||value.i||
 |SetPageElements||value.i||
-|SetDefaultImageSortAsc||value.i||
-|SetDefaultImageSortDesc||value.i||
-|SetDefaultImagePlus||value.i||
-|SetDefaultImageMinus||value.i||
-|SetDefaultImageCheckBox||value.i||
-|SetDefaultImageCheckBoxChecked||value.i||
-|SetDefaultImagePlusArrow||value.i||
-|SetDefaultImageMinusArrow||value.i||
 |GetSelectedRows||List rows.[MyTableRow](#MyTableRow)||
 |GetSelectedCells||List cells.[MyTableCell](#MyTableCell)||
 |GetSelectedCols||List cols.[MyTableCol](#MyTableCol)||
 |GetCalcHeight||||
 |GetCalcWidth||||
-|AddDirtyRows||rows.i||
-|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
-|DeleteRow||row.i||
-|GetRow||row.i||
-|RowCount||||
-|VisibleRowCount||||
-|AddCol||text.s , width.i , image.i = 0 , flags.i = 0||
-|DeleteCol||col.i||
-|GetCol||col.i||
-|ColCount||||
-|GetCell||row.i , col.i||
-|Delete||||
-|ClearRows||||
-|ClearCols||||
 |Redraw||||
 |Recalc||||
 |Free||||
@@ -186,12 +164,38 @@
 |RegisterEventCustomCellDraw||event.MyTableProtoEventCustomCellDraw||
 |RegisterEventCustomCellEdit||event.MyTableProtoEventCustomCellEdit||
 |RegisterCallback||callback.MyTableProtoCallback||
+|GetCell||row.i , col.i||
+|Delete||||
+|GetRow||row.i||
+|RowCount||||
+|VisibleRowCount||||
+|GetCol||col.i||
+|ColCount||||
+
+### MyTableTable : [MyTableTableObject](#MyTableTableObject)
+|Procedure|Return|Parameter|Comment|
+| --- | --- | --- | --- |
+|SetDefaultImageSortAsc||value.i||
+|SetDefaultImageSortDesc||value.i||
+|SetDefaultImagePlus||value.i||
+|SetDefaultImageMinus||value.i||
+|SetDefaultImageCheckBox||value.i||
+|SetDefaultImageCheckBoxChecked||value.i||
+|SetDefaultImagePlusArrow||value.i||
+|SetDefaultImageMinusArrow||value.i||
+|AddDirtyRows||rows.i||
+|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
+|DeleteRow||row.i||
+|AddCol||text.s , width.i , image.i = 0 , flags.i = 0||
+|DeleteCol||col.i||
+|ClearRows||||
+|ClearCols||||
 
 ### MyTableTree : [MyTableTable](#MyTableTable)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 
-### MyTableGrid : [MyTableTable](#MyTableTable)
+### MyTableGrid : [MyTableTableObject](#MyTableTableObject)
 |Procedure|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |ResizeGrid||rows.i = <span style="color:#AAAAFF">\#PB\_Ignore</span> , cols.i = <span style="color:#AAAAFF">\#PB\_Ignore</span>||
@@ -326,8 +330,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2586||
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210618||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2597||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210619||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_GRID \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE \| \#MYTABLE\_TABLE\_FLAGS\_MULTISELECT \| \#MYTABLE\_TABLE\_FLAGS\_EDITABLE</span>||

@@ -145,7 +145,7 @@ CompilerIf #PB_Compiler_Debugger
 		EndProcedure
 		
 		Procedure.s splitProcedure(line.s)
-					
+			
 			Protected result.s="|"
 			Protected prk.s=StringField(line,1,"(")
 			Protected typ.s=StringField(prk,2,".")
@@ -319,17 +319,19 @@ CompilerIf #PB_Compiler_Debugger
 				EndIf
 			EndIf
 		EndProcedure
-
+		
 	CompilerEndIf
 CompilerEndIf
 
-CompilerIf #MYTABLE_UPDATE_VERSION 
-updateVersion("../mytable.pbi")
-updateVersion("../README.md")
-CompilerEndIf
-
-CompilerIf #MYTABLE_UPDATE_DOC
-	updateDoc("../mytable.pbi","../README.md")
+CompilerIf #PB_Compiler_Debugger
+	CompilerIf #MYTABLE_UPDATE_VERSION 
+		updateVersion("../mytable.pbi")
+		updateVersion("../README.md")
+	CompilerEndIf
+	
+	CompilerIf #MYTABLE_UPDATE_DOC
+		updateDoc("../mytable.pbi","../README.md")
+	CompilerEndIf
 CompilerEndIf
 
 DataSection

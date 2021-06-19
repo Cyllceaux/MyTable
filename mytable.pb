@@ -69,14 +69,16 @@ Module MyTable
 		_MyTableDataSectionMethode(gruppe,Delete)
 	EndMacro
 	
-	Macro _MyTableDataSectionDefaultTable(gruppe)
+	Macro _MyTableDataSectionDefaultTableObject(gruppe)
 		_MyTableDataSectionDefault(gruppe)
 		_MyTableDataSectionGetter(gruppe,ElementSelectedStyle)
 		_MyTableDataSectionGetter(gruppe,ZebraStyle)
 		_MyTableDataSectionGetter(gruppe,TitleStyle)
 		_MyTableDataSectionGetter(gruppe,EmptyStyle)
 		_MyTableDataSectionGetter(gruppe,Application)
+		
 		_MyTableDataSectionGetter(gruppe,Pages)
+		
 		_MyTableDataSectionSetterGetter(gruppe,Name)
 		_MyTableDataSectionSetterGetter(gruppe,Title)
 		_MyTableDataSectionSetterGetter(gruppe,Redraw)
@@ -89,35 +91,12 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(gruppe,Page)
 		_MyTableDataSectionSetterGetter(gruppe,PageElements)
 		
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImageSortAsc)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImageSortDesc)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImagePlus)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImageMinus)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImageCheckBox)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImageCheckBoxChecked)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImagePlusArrow)
-		_MyTableDataSectionSetterGetter(gruppe,DefaultImageMinusArrow)
-		
 		_MyTableDataSectionGetter(gruppe,SelectedRows)
 		_MyTableDataSectionGetter(gruppe,SelectedCells)
 		_MyTableDataSectionGetter(gruppe,SelectedCols)
 		_MyTableDataSectionGetter(gruppe,CalcHeight)
 		_MyTableDataSectionGetter(gruppe,CalcWidth)
 		
-		_MyTableDataSectionMethode(gruppe,AddDirtyRows)
-		_MyTableDataSectionMethode(gruppe,AddRow)
-		_MyTableDataSectionMethode(gruppe,DeleteRow)
-		_MyTableDataSectionGetter(gruppe,Row)
-		_MyTableDataSectionMethode(gruppe,RowCount)
-		_MyTableDataSectionMethode(gruppe,VisibleRowCount)
-		_MyTableDataSectionMethode(gruppe,AddCol)
-		_MyTableDataSectionMethode(gruppe,DeleteCol)
-		_MyTableDataSectionGetter(gruppe,Col)
-		_MyTableDataSectionMethode(gruppe,ColCount)
-		_MyTableDataSectionGetter(gruppe,Cell)
-		_MyTableDataSectionMethode(gruppe,Delete)
-		_MyTableDataSectionMethode(gruppe,ClearRows)
-		_MyTableDataSectionMethode(gruppe,ClearCols)
 		_MyTableDataSectionMethode(gruppe,Redraw)
 		_MyTableDataSectionMethode(gruppe,Recalc)
 		_MyTableDataSectionMethode(gruppe,Free)
@@ -156,6 +135,44 @@ Module MyTable
 		_MyTableDataSectionMethode(gruppe,RegisterEventCustomCellEdit)
 		
 		_MyTableDataSectionMethode(gruppe,RegisterCallback)
+		
+		_MyTableDataSectionGetter(gruppe,Cell)
+		_MyTableDataSectionMethode(gruppe,Delete)
+		
+		_MyTableDataSectionGetter(gruppe,Row)
+		_MyTableDataSectionMethode(gruppe,RowCount)
+		_MyTableDataSectionMethode(gruppe,VisibleRowCount)
+		
+		_MyTableDataSectionGetter(gruppe,Col)
+		_MyTableDataSectionMethode(gruppe,ColCount)
+	EndMacro
+	
+	Macro _MyTableDataSectionDefaultTable(gruppe)
+		_MyTableDataSectionDefaultTableObject(gruppe)
+		
+		
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImageSortAsc)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImageSortDesc)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImagePlus)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImageMinus)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImageCheckBox)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImageCheckBoxChecked)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImagePlusArrow)
+		_MyTableDataSectionSetterGetter(gruppe,DefaultImageMinusArrow)
+		
+		
+		_MyTableDataSectionMethode(gruppe,AddDirtyRows)
+		_MyTableDataSectionMethode(gruppe,AddRow)
+		_MyTableDataSectionMethode(gruppe,DeleteRow)
+		
+		_MyTableDataSectionMethode(gruppe,AddCol)
+		_MyTableDataSectionMethode(gruppe,DeleteCol)
+		
+		
+		
+		_MyTableDataSectionMethode(gruppe,ClearRows)
+		_MyTableDataSectionMethode(gruppe,ClearCols)
+		
 	EndMacro
 	
 	
@@ -196,7 +213,7 @@ Module MyTable
 		_MyTableDataSectionDefaultTable(Table)
 		
 		vtable_grid:;- Grid
-		_MyTableDataSectionDefaultTable(Table)
+		_MyTableDataSectionDefaultTableObject(Table)
 		_MyTableDataSectionMethode(Grid,ResizeGrid)
 		
 		vtable_row:;- Row
