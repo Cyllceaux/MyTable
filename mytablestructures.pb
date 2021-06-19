@@ -247,6 +247,9 @@ Structure strMyTableTable Extends strMyTableObject
 	List expRowsPage.i()
 	
 	edit.strMyTableTableEdit
+	
+	oldwith.i
+	oldheight.i
 EndStructure
 
 Structure strMyTableTree Extends strMyTableTable

@@ -231,9 +231,13 @@ Procedure _MyTableEvtResizeExp(*this.strMyTableTable)
 		             w-GadgetWidth(*this\vscroll),
 		             #PB_Ignore)
 	EndIf
-	*this\dirty=#True
-	_MyTable_Table_Predraw(*this)
-	_MyTable_Table_Redraw(*this)
+	If *this\oldheight<>h Or *this\oldwith<>w
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+	EndIf
+	*this\oldheight=h
+	*this\oldwith=w
 EndProcedure
 
 Procedure _MyTableEvtMoveExp(*this.strMyTableTable)

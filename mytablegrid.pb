@@ -40,6 +40,7 @@ EndProcedure
 Procedure _MyTable_Grid_ResizeGrid(*this.strMyTableTable,rows.i=#PB_Ignore,cols.i=#PB_Ignore)
 	If *this
 		Protected cc
+		_callcountStart()
 		If rows<>#PB_Ignore
 			While ListSize(*this\rows())>rows
 				LastElement(*this\rows())
@@ -74,6 +75,7 @@ Procedure _MyTable_Grid_ResizeGrid(*this.strMyTableTable,rows.i=#PB_Ignore,cols.
 				EndIf
 			Next
 		EndIf
+		_callcountEnde()
 		_MyTable_Col_Autosize(FirstElement(*this\cols()))
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)

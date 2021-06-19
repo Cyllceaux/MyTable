@@ -2,34 +2,77 @@
 
 XIncludeFile "declare.pb"
 
+
 UseModule MyTable
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"Grid",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
-	Global canvas=CanvasGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),#PB_Canvas_Container|#PB_Canvas_Keyboard)
-	Global hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
-	Global vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	Structure Element
+		canvas.i
+		string.i
+		vscroll.i
+		hscroll.i	
+		*grid.MyTableGrid
+	EndStructure
+	
+	Global NewList elemente.Element()
+	
+	Global window=OpenWindow(#PB_Any,0,0,800,600,"Excel (lookalike)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	
+	Global panel=PanelGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window))
 	CloseGadgetList()
 	
-	Global *grid.MyTableGrid=MyTableCreateGrid(window,canvas,vscroll,hscroll,0,0)
-	*grid\SetRedraw(#False)
-	*grid\ResizeGrid(2,2)
-	*grid\ResizeGrid(4,4)
-	*grid\ResizeGrid(5,#PB_Ignore)
-	*grid\ResizeGrid(#PB_Ignore,5)
-	*grid\ResizeGrid(3,3)
-	*grid\ResizeGrid(100,10)
-	*grid\ResizeGrid(10000,100)
 	
-	*grid\SetRedraw(#True)
+	Global *app.MyTableApplication=MyTableCreateApplication()
 	
+	
+	Procedure AddGridElement()
+		Protected *element.Element=AddElement(elemente())
+		OpenGadgetList(panel)
+		AddGadgetItem(panel,-1,"Grid 1")
+		*element\string=StringGadget(#PB_Any,0,0,GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),22,"")
+		*element\canvas=CanvasGadget(#PB_Any,0,24,GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),GetGadgetAttribute(panel,#PB_Panel3D_ItemHeight)-24,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+		*element\hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+		*element\vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+		CloseGadgetList()
+		CloseGadgetList()
+		SetGadgetData(*element\string,*element)
+		*element\grid=*app\AddGrid(window,
+		                           *element\canvas,
+		                           *element\vscroll,
+		                           *element\hscroll,
+		                           1000,
+		                           100,
+		                           "",
+		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
+		*element\grid\SetData(*element)
+		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
+		*element\grid\SetRedraw(#True)
+	EndProcedure
 	
 	Procedure Resize()
-		ResizeGadget(canvas,
+		ResizeGadget(panel,
 		             #PB_Ignore,
 		             #PB_Ignore,
 		             WindowWidth(window),
 		             WindowHeight(window))
+		
+		ForEach elemente()
+			ResizeGadget(elemente()\string,
+			             #PB_Ignore,
+			             #PB_Ignore,
+			             GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),
+			             #PB_Ignore)
+			ResizeGadget(elemente()\canvas,
+			             #PB_Ignore,
+			             #PB_Ignore,
+			             GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),
+			             GetGadgetAttribute(panel,#PB_Panel3D_ItemHeight)-24)
+		Next
 	EndProcedure
+	
+	AddGridElement()
+	AddGridElement()
+	AddGridElement()
+
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
 	BindEvent(#PB_Event_RestoreWindow,@Resize(),window)
@@ -38,5 +81,5 @@ UseModule MyTable
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	
-	*grid\Free()
+	*app\Free()
 UnuseModule MyTable

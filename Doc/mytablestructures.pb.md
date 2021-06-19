@@ -236,6 +236,8 @@
 |page|i||
 |List expRowsPage|i()||
 |edit|[strMyTableTableEdit](#strMyTableTableEdit)||
+|oldwith|i||
+|oldheight|i||
 
 ### strMyTableTree : [strMyTableTable](#strMyTableTable)
 |Field|Type|Comment|
