@@ -12,6 +12,8 @@
 |\_MyTable\_IsTableColNo||name||
 |\_MyTable\_IsTableRow||name||
 |\_MyTable\_IsTableRowColNo||name||
+|\_MyTable\_IsTableAllNo||name||
+|\_MyTable\_IsTableAll||name||
 |\_MyTable\_IsTableNo||name||
 |\_MyTable\_StylesBordersMethods||gruppe , name , typ||
 |\_MyTable\_StylesMethods||gruppe||

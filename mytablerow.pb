@@ -164,12 +164,12 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False,redraw.b=
 		_MyTable_Table_Predraw(*this\table,#True)
 		Protected h=0
 		Protected idy=0
+		Protected multiselect.b=_MyTable_IsMultiselect(*this\table)
+		Protected fullrow.b=_MyTable_IsFullrowselect(*this\table)
 		ForEach *this\table\expRows()			
 			Protected *row.strMyTableRow=*this\table\expRows()
 			If *row=*this
 				If setSelect
-					Protected multiselect.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
-					Protected fullrow.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 					If fullrow
 						If Not multiselect
 							ClearMap(*this\table\selectedRows())															

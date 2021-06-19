@@ -148,7 +148,7 @@ Procedure _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.
 	If *this			
 		_MyTable_Row_ScrollTo(*this\row,#False,#False)
 		_MyTable_Col_ScrollTo(*this\col,#False,#False)
-		Protected multiselect.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+		Protected multiselect.b=_MyTable_IsMultiselect(*this\table)
 		If Not multiselect
 			ClearMap(*this\table\selectedCells())
 		EndIf

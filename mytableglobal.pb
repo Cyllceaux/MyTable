@@ -263,12 +263,12 @@ Procedure _MyTableEvtMove()
 EndProcedure
 
 Procedure _MyTableGetRowCol(*this.strMyTableTable)
-	Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
-	Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
-	Protected resizable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_RESIZABLE)
-	Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
-	Protected header.b=Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
-	Protected alwaysexpanded.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+	Protected checkboxes.b=_MyTable_IsCheckboxes(*this)
+	Protected hierarchical.b=_MyTable_IsHierarchical(*this)
+	Protected resizable.b=_MyTable_IsResizable(*this)
+	Protected title.b=_MyTable_IsTitle(*this)
+	Protected header.b=_MyTable_IsHeader(*this)
+	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
 	
 	Protected *row.strMyTableRow=0
 	Protected *cell.strMyTableCell=0
@@ -330,8 +330,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	
 	ForEach *this\cols()
 		Protected *col.strMyTableCol=*this\cols()
-		Protected colresize.b=Bool(resizable Or *col\flags & #MYTABLE_COL_FLAGS_RESIZABLE)
-		colresize=Bool(colresize And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_RESIZABLE))
+		Protected colresize.b=_MyTable_IsResizable(*col)
 		
 		If mx>(hsc+*col\calcwidth-MyTableW2) And mx<(hsc+*col\calcwidth+MyTableW2)
 			*rc\col=ListIndex(*this\cols())
@@ -353,8 +352,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	If *rc\row=-2	
 		ForEach *this\expRows()
 			*row=*this\expRows()
-			Protected rowresize.b=Bool(resizable Or *row\flags & #MYTABLE_ROW_FLAGS_RESIZABLE)
-			rowresize=Bool(rowresize And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_RESIZABLE))
+			Protected rowresize.b=_MyTable_IsResizable(*row)			
 			
 			If my>(vsc+*row\calcheight-MyTableH2) And my<(vsc+*row\calcheight+MyTableH2)
 				*rc\row=ListIndex(*this\expRows())
@@ -419,7 +417,7 @@ Procedure _MyTableEvtCanvasKeyUp()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
-	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)	
+	Protected multiselect.b=_MyTable_IsMultiselect(*this)
 	
 	If IsGadget(*this\canvas)
 		
@@ -452,12 +450,13 @@ Procedure _MyTableEvtCanvasKeyDown()
 		Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 		Protected alt.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Alt)
 		Protected key=GetGadgetAttribute(*this\canvas,#PB_Canvas_Key)
-		Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
-		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-		Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
-		Protected alwaysexpanded.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
-		Protected checkboxes.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
-		Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
+		
+		Protected multiselect.b=_MyTable_IsMultiselect(*this)		
+		Protected fullrow.b=_MyTable_IsFullrowselect(*this)
+		Protected hierarchical.b=_MyTable_IsHierarchical(*this)
+		Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
+		Protected checkboxes.b=_MyTable_IsCheckboxes(*this)
+		Protected pages.b=_MyTable_IsPages(*this)
 		Protected *cell.strMyTableCell=*this\lastcell
 		If *this\shiftcell
 			*cell=*this\shiftcell
@@ -465,19 +464,13 @@ Procedure _MyTableEvtCanvasKeyDown()
 		Protected *row.strMyTableRow=*this\lastrow
 		Protected *col.strMyTableCol=*this\lastcol
 		
-		Protected editable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_EDITABLE)
+		Protected editable.b=_MyTable_IsEditable(*this)
 		
 		
 		If *cell
-			editable=Bool(editable Or *cell\col\flags & #MYTABLE_COL_FLAGS_EDITABLE)
-			editable=Bool(editable Or *cell\row\flags & #MYTABLE_ROW_FLAGS_EDITABLE)
-			editable=Bool(editable Or *cell\flags & #MYTABLE_CELL_FLAGS_EDITABLE)	
-			editable=Bool(editable And Not Bool(*cell\col\flags & #MYTABLE_COL_FLAGS_NO_EDITABLE))
-			editable=Bool(editable And Not Bool(*cell\row\flags & #MYTABLE_ROW_FLAGS_NO_EDITABLE))
-			editable=Bool(editable And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_EDITABLE))
+			editable=_MyTable_IsEditable(*cell)			
+			checkboxes=_MyTable_IsCheckboxes(*cell)
 			
-			checkboxes=Bool(checkboxes Or *cell\col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES)
-			checkboxes=Bool(checkboxes Or *cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES)
 			If Not *col
 				*col=*cell\col
 			EndIf
@@ -486,7 +479,7 @@ Procedure _MyTableEvtCanvasKeyDown()
 			EndIf
 		EndIf
 		If *row
-			alwaysexpanded=Bool(alwaysexpanded Or *row\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+			alwaysexpanded=_MyTable_IsHierarchical_Always_Expanded(*row)
 		EndIf
 		
 		Select key
@@ -699,13 +692,14 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 EndProcedure
 
 Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
-	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
+	Protected multiselect.b=_MyTable_IsMultiselect(*this)
 	
-	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Protected fullrow.b=_MyTable_IsFullrowselect(*this)
+	Protected sortable.b=_MyTable_IsSortable(*this)
+	Protected pages.b=_MyTable_IsPages(*this)
+	
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
-	Protected sortable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_SORTABLE)
-	Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
 	Protected rf,rt,cf,ct,r,c
 	
 	Protected *row.strMyTableRow=0
@@ -721,8 +715,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 			If *tcol\parent
 				*tcol=*tcol\parent
 			EndIf
-			sortable=Bool(sortable Or Bool(*tcol\flags & #MYTABLE_COL_FLAGS_SORTABLE))
-			sortable=Bool(sortable And Not Bool(*tcol\flags & #MYTABLE_COL_FLAGS_NO_SORTABLE))
+			sortable=_MyTable_IsSortable(*tcol)
 			If sortable
 				Select *tcol\sort
 					Case #MYTABLE_COL_SORT_NONE
@@ -986,9 +979,10 @@ EndProcedure
 Procedure _MyTableEvtCanvasMouseMove()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	
-	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
-	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-	Protected markmouseover.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
+	Protected multiselect.b=_MyTable_IsMultiselect(*this)		
+	Protected fullrow.b=_MyTable_IsFullrowselect(*this)
+	Protected markmouseover.b=_MyTable_IsMark_Mouse_Over(*this)
+	
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
 	
@@ -1099,11 +1093,12 @@ EndProcedure
 Procedure _MyTableEvtCanvasMouseLeftDown()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	_MyTable_StopEdit(*this,#True)
-	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)		
-	Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+	Protected multiselect.b=_MyTable_IsMultiselect(*this)		
+	Protected fullrow.b=_MyTable_IsFullrowselect(*this)
+	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
+	
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
-	Protected alwaysexpanded.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 	
 	Protected redraw.b=#False
 	*this\md=#True
@@ -1113,8 +1108,7 @@ Procedure _MyTableEvtCanvasMouseLeftDown()
 		*this\myd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 		*this\mxd=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 		If *rc\trow
-			alwaysexpanded=Bool(alwaysexpanded Or Bool(*rc\trow\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
-			alwaysexpanded=Bool(alwaysexpanded Or Not *rc\trow\rows Or ListSize(*rc\trow\rows\rows())=0)
+			alwaysexpanded=_MyTable_IsHierarchical_Always_Expanded(*rc\trow)
 		EndIf
 		If *rc\check
 			*rc\trow\checked=Bool(Not *rc\trow\checked)
@@ -1193,7 +1187,8 @@ Procedure _MyTableEvtCanvasMouseLeftUp()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
 	Protected control.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Control)
-	Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)	
+	
+	Protected multiselect.b=_MyTable_IsMultiselect(*this)
 	
 	*this\md=#False
 	*this\resizeCol=0
@@ -1373,20 +1368,21 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
                             hscroll.i,
                             flags.i)
 	With *table
-		If Bool(flags & #MYTABLE_TABLE_FLAGS_GRID)
+		\flags=flags
+		If _MyTable_IsGrid(*table)
 			\vtable=?vtable_grid
 			\type=#MYTABLE_TYPE_GRID
 			\datagrid=#True
-		ElseIf Bool(flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+		ElseIf _MyTable_IsHierarchical(*table)
 			\vtable=?vtable_tree
 			\type=#MYTABLE_TYPE_TREE
 		Else
 			\vtable=?vtable_table
 			\type=#MYTABLE_TYPE_TABLE
 		EndIf
-		\flags=flags
+		
 		\application=*application
-		\redraw=Bool(Not Bool(\flags & #MYTABLE_TABLE_FLAGS_NO_REDRAW))
+		\redraw=_MyTable_IsRedraw(*table)
 		\recalc=#True
 		\dirty=#True
 		\window=window
@@ -1500,7 +1496,6 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
                           image.i,
                           flags.i)
 	
-	Protected alwaysexpanded.b=Bool(*table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 	With *row
 		\vtable=?vtable_row
 		\type=#MYTABLE_TYPE_ROW
@@ -1512,7 +1507,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 		\height=*table\defaultrowheight
 		\calcheight=*table\calcdefaultrowheight
 		\image\orig=image		
-		\expanded=alwaysexpanded
+		\expanded=_MyTable_IsHierarchical_Always_Expanded(*table)
 		If text<>""
 			Protected c=CountString(text,sep)+1
 			Protected idx=0
@@ -1811,14 +1806,7 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 	If *cell
 		Protected *this.strMyTableTable=*cell\table
 		
-		Protected editable.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_EDITABLE)
-		editable=Bool(editable Or *cell\col\flags & #MYTABLE_COL_FLAGS_EDITABLE)
-		editable=Bool(editable Or *cell\row\flags & #MYTABLE_ROW_FLAGS_EDITABLE)
-		editable=Bool(editable Or *cell\flags & #MYTABLE_CELL_FLAGS_EDITABLE)	
-		editable=Bool(editable And Not Bool(*cell\col\flags & #MYTABLE_COL_FLAGS_NO_EDITABLE))
-		editable=Bool(editable And Not Bool(*cell\row\flags & #MYTABLE_ROW_FLAGS_NO_EDITABLE))
-		editable=Bool(editable And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_EDITABLE))
-		
+		Protected editable.b=_MyTable_IsEditable(*cell)		
 		
 		If editable
 			Protected custom.b=#False
@@ -2051,8 +2039,10 @@ Macro _MyTable_IsTableColNo(name)
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
-			Default
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+			Default
+				DebuggerError("Unbekannt Typ")
 		EndSelect		
 		
 		ProcedureReturn result
@@ -2067,8 +2057,10 @@ Macro _MyTable_IsTableRow(name)
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*row\table))
-			Default
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+			Default
+				DebuggerError("Unbekannt Typ")
 		EndSelect		
 		
 		ProcedureReturn result
@@ -2089,8 +2081,69 @@ Macro _MyTable_IsTableRowColNo(name)
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
-			Default
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+			Default
+				DebuggerError("Unbekannt Typ")
+		EndSelect		
+		
+		ProcedureReturn result
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTableAllNo(name)	
+	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
+		Protected result.b=#False
+		Select *obj\type
+			Case #MYTABLE_TYPE_CELL
+				Protected *cell.strMyTableCell=*obj
+				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*cell\table))
+				result=Bool(result Or _Mytable_Is#name(*cell\row))
+				result=Bool(result Or _Mytable_Is#name(*cell\col))
+				result=Bool(result And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*obj
+				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*obj
+				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+			Default
+				DebuggerError("Unbekannt Typ")
+		EndSelect		
+		
+		ProcedureReturn result
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTableAll(name)	
+	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
+		Protected result.b=#False
+		Select *obj\type
+			Case #MYTABLE_TYPE_CELL
+				Protected *cell.strMyTableCell=*obj
+				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*cell\table))
+				result=Bool(result Or _Mytable_Is#name(*cell\row))
+				result=Bool(result Or _Mytable_Is#name(*cell\col))
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*obj
+				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*row\table))
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*obj
+				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*col\table))
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+			Default
+				DebuggerError("Unbekannt Typ")
 		EndSelect		
 		
 		ProcedureReturn result
@@ -2105,12 +2158,12 @@ EndMacro
 
 
 _MyTable_IsTableNoGrid(Hierarchical)
-_MyTable_IsTable(Checkboxes)
+_MyTable_IsTableAll(Checkboxes)
 _MyTable_IsTableColNo(Sortable)
 _MyTable_IsTableRowColNo(Resizable)
 _MyTable_IsTable(Title)
 _MyTable_IsTable(Pages)
-_MyTable_IsTable(Editable)
+_MyTable_IsTableAllNo(Editable)
 _MyTable_IsTable(Zebra)
 _MyTable_IsTable(Grid)
 _MyTable_IsTable(Callback)

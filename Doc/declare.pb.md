@@ -63,6 +63,23 @@
 |\_MyTableSelectObject||<span style="color:#FFFFAA">*obj.</span>strMyTableObject , shift.b , pages.b||
 |\_MyTableLoadApp||<span style="color:#FFFFAA">*save.</span>strMyTableSaveApplication , <span style="color:#FFFFAA">*app.strMyTableApplication</span>||
 |\_MyTableSaveApp||<span style="color:#FFFFAA">*app.</span>strMyTableApplication , <span style="color:#FFFFAA">*save.strMyTableSaveApplication</span>||
+|\_MyTable\_IsHierarchical|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsCheckboxes|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsSortable|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsResizable|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsTitle|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsPages|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsEditable|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsZebra|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsGrid|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsCallback|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsBorder|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsMultiselect|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsFullrowselect|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsMark\_Mouse\_Over|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsHierarchical\_Always\_Expanded|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsHeader|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsRedraw|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_Application\_HasName|b|<span style="color:#FFFFAA">*this.</span>strMyTableApplication , name.s||
 |\_MyTable\_Application\_Redraw||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Table\_Redraw||<span style="color:#FFFFAA">*this.strMyTableTable</span>||

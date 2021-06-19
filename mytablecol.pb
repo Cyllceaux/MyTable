@@ -107,9 +107,10 @@ Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 			*this\table\cols()\sort=#MYTABLE_COL_SORT_NONE
 		Next
 		*this\sort=sort
-		Protected numeric.b=Bool(*this\flags & #MYTABLE_COL_FLAGS_CHECKBOXES Or 
+		Protected numeric.b=Bool(_MyTable_IsCheckboxes(*this) Or 
 		                         *this\datatype & #MYTABLE_DATATYPE_NUMBER Or 
 		                         *this\datatype & #MYTABLE_DATATYPE_DATE)
+		
 		_callcountStart()
 		Protected *table.strMyTableTable=*this\table
 		Protected *row.strMyTableRow=0
@@ -285,8 +286,8 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=
 			Protected *col.strMyTableCol=*this\table\cols()			
 			If *col=*this
 				If setSelect
-					Protected multiselect.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_MULTISELECT)
-					Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+					Protected multiselect.b=_MyTable_IsMultiselect(*this)
+					Protected fullrow.b=_MyTable_IsFullrowselect(*this)
 					If fullrow
 						If Not multiselect
 							ClearMap(*this\table\selectedCols())															
@@ -315,8 +316,8 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=
 EndProcedure
 
 Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
-	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
-	Protected checkboxes.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
+	Protected checkboxes.b=_MyTable_IsCheckboxes(*this\table)
 	Protected *lastfont.strMyTableFont=0
 	Protected tresult.i=0
 	If *this\listindex=0

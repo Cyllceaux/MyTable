@@ -234,7 +234,7 @@ EndProcedure
 
 
 Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFont,width.i,height.i,scrollx.i,scrolly.i,fixed.b)
-	Protected border.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_BORDER)
+	Protected border.b=_MyTable_IsBorder(*this)
 	Protected bx=-scrollx
 	Protected *lastfont.strMyTableFont=*font
 	Protected idx=0
@@ -553,13 +553,12 @@ EndProcedure
 Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFont,width.i,height.i,scrollx.i,scrolly.i,zebra.b,fixed.b)	
 	Protected *lastfont.strMyTableFont=*font.strMyTableFont
 	Protected bx=-scrollx
-	Protected hierarchical.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
+	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
 	Protected checkboxes.b=#False
-	Protected border.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_BORDER)
-	Protected callback.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CALLBACK)
-	Protected alwaysexpanded.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
-	alwaysexpanded=Bool(alwaysexpanded Or Bool(*this\flags & #MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED))
-	Protected markmouseover.b=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)
+	Protected border.b=_MyTable_IsBorder(*this\table)
+	Protected callback.b=_MyTable_IsCallback(*this\table)
+	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
+	Protected markmouseover.b=_MyTable_IsMark_Mouse_Over(*this\table)
 	Protected *cell.strMyTableCell=0
 	
 	Protected idx=0
@@ -624,7 +623,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			
 			
 			
-			checkboxes=Bool(*this\table\flags & #MYTABLE_TABLE_FLAGS_CHECKBOXES)
+			checkboxes=_MyTable_IsCheckboxes(*this)
 			Protected tborder=_MyTable_GetDefaultBorder(*cell)
 			
 			selected=Bool(_MyTable_IsSelected(*this))
@@ -705,8 +704,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					EndIf
 					
 				EndIf
-				checkboxes=#False
-				checkboxes=Bool(checkboxes Or Bool(*cell\flags & #MYTABLE_CELL_FLAGS_CHECKBOXES) Or Bool(*col\flags & #MYTABLE_COL_FLAGS_CHECKBOXES))
+				checkboxes=_MyTable_IsCheckboxes(*cell)
 				
 				If idx=1
 					If *this\image\orig And IsImage(*this\image\orig)
@@ -870,10 +868,10 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 	If *this And *this\canvas
 		_MyTable_Table_ClearMaps(*this)
 		Protected redraw.b=Bool(*this\dirty And *this\redraw)
-		Protected header.b=Bool(Not (*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
-		Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
-		Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
-		Protected zebra.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_ZEBRA)
+		Protected header.b=_MyTable_IsHeader(*this)
+		Protected pages.b=_MyTable_IsPages(*this)
+		Protected title.b=_MyTable_IsTitle(*this)
+		Protected zebra.b=_MyTable_IsZebra(*this)
 		
 		
 		If *this\application
@@ -1071,10 +1069,10 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			Protected w=0
 			Protected cc=0
 			Protected ph=0
-			Protected hierarchical.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL)
-			Protected header.b=Bool(Not(*this\flags & #MYTABLE_TABLE_FLAGS_NO_HEADER))
-			Protected pages.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_PAGES)
-			Protected title.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_TITLE)
+			Protected hierarchical.b=_MyTable_IsHierarchical(*this)
+			Protected header.b=_MyTable_IsHeader(*this)
+			Protected pages.b=_MyTable_IsPages(*this)
+			Protected title.b=_MyTable_IsTitle(*this)
 			
 			If title
 				If *this\title=""
@@ -1563,7 +1561,7 @@ EndProcedure
 
 Procedure _MyTable_Table_ScrollToCellPos(*this.strMyTableTable,row.i,col.i,setSelect.b=#False)
 	If *this	
-		Protected fullrow.b=Bool(*this\flags & #MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+		Protected fullrow.b=_MyTable_IsFullrowselect(*this)
 		If fullrow
 			_MyTable_Table_ScrollToPos(*this,row,setSelect)
 		Else
