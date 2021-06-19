@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2597
+	#MYTABLE_VERSION = 2665
 	#MYTABLE_VERSION_DATE = 20210619
 	
 	Enumeration _mytable_type
@@ -153,6 +153,7 @@
 		#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED ; always expand the row
 		#MYTABLE_ROW_FLAGS_EDITABLE
 		#MYTABLE_ROW_FLAGS_NO_EDITABLE
+		#MYTABLE_ROW_FLAGS_CHECKBOXES
 	EndEnumeration
 	
 	Interface MyTableRow Extends MyTableObject

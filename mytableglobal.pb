@@ -2029,6 +2029,101 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 	EndProcedure
 EndMacro
 
+
+Macro _MyTable_IsTableNoGrid(name)
+	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
+		ProcedureReturn Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name) And Not *this\datagrid)
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTable(name)
+	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
+		ProcedureReturn Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name)
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTableColNo(name)	
+	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
+		Protected result.b=#False
+		Select *obj\type
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*obj
+				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
+			Default
+				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+		EndSelect		
+		
+		ProcedureReturn result
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTableRow(name)	
+	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
+		Protected result.b=#False
+		Select *obj\type
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*obj
+				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*row\table))
+			Default
+				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+		EndSelect		
+		
+		ProcedureReturn result
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTableRowColNo(name)	
+	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
+		Protected result.b=#False
+		Select *obj\type
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*obj
+				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*obj
+				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
+			Default
+				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+		EndSelect		
+		
+		ProcedureReturn result
+	EndProcedure	
+EndMacro
+
+Macro _MyTable_IsTableNo(name)
+	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
+		ProcedureReturn Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_#name))
+	EndProcedure	
+EndMacro
+
+
+_MyTable_IsTableNoGrid(Hierarchical)
+_MyTable_IsTable(Checkboxes)
+_MyTable_IsTableColNo(Sortable)
+_MyTable_IsTableRowColNo(Resizable)
+_MyTable_IsTable(Title)
+_MyTable_IsTable(Pages)
+_MyTable_IsTable(Editable)
+_MyTable_IsTable(Zebra)
+_MyTable_IsTable(Grid)
+_MyTable_IsTable(Callback)
+_MyTable_IsTable(Border)
+_MyTable_IsTable(Multiselect)
+_MyTable_IsTable(Fullrowselect)
+_MyTable_IsTable(Mark_Mouse_Over)
+_MyTable_IsTableRow(Hierarchical_Always_Expanded)
+
+_MyTable_IsTableNo(Header)
+_MyTable_IsTableNo(Redraw)
+
+
 Macro _MyTable_StylesBordersMethods(gruppe,name,typ)
 _MyTable_StyleBorderMethods(gruppe,name,Default,i)
 	_MyTable_StyleBorderMethods(gruppe,name,Top,i)
