@@ -215,6 +215,7 @@ Module MyTable
 		vtable_grid:;- Grid
 		_MyTableDataSectionDefaultTableObject(Table)
 		_MyTableDataSectionMethode(Grid,ResizeGrid)
+		_MyTableDataSectionMethode(Table,RegisterEventColSelected)
 		
 		vtable_row:;- Row
 		_MyTableDataSectionDefault(Row)

@@ -206,6 +206,7 @@ Structure strMyTableTable Extends strMyTableObject
 	eventColRightClick.MyTableProtoEventColRightClick
 	eventColLeftDoubleClick.MyTableProtoEventColLeftDoubleClick	
 	eventColRightDoubleClick.MyTableProtoEventColRightDoubleClick
+	eventColSelected.MyTableProtoEventColSelected
 	
 	eventCellChangedChecked.MyTableProtoEventCellChangedChecked
 	eventCellChangedUnChecked.MyTableProtoEventCellChangedUnChecked

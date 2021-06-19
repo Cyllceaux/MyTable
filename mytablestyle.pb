@@ -80,7 +80,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 		If *this
 			Protected result.typ=*this\style\sub#name
 			If Not result
-				result=*this\obj\defaultStyle\sub#name
+				result=_mytable_getDefault#name(*this\obj)
 			EndIf
 			ProcedureReturn result
 		EndIf
@@ -99,7 +99,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 		If *this
 			Protected *result.typ=*this\style\sub#name
 			If Not *result
-				*result=*this\obj\defaultStyle\sub#name
+				*result=_mytable_getDefault#name(*this\obj)
 			EndIf
 			ProcedureReturn *result
 		EndIf
@@ -118,7 +118,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 		If *this
 			Protected result.typ=*this\style\border\border#pos\name
 			If Not result
-				result=*this\style\border\borderDefault\name
+				result=_mytable_getDefaultBorder#name#pos(*this\obj)
 			EndIf
 			ProcedureReturn result
 		EndIf

@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2727||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2753||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210619||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
@@ -124,10 +124,11 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|MyTableProtoEventColLeftClick|b|<span style="color:#FFFFAA">*cell.[MyTableCol](#MyTableCol)</span>||
-|MyTableProtoEventColRightClick|b|<span style="color:#FFFFAA">*cell.[MyTableCol](#MyTableCol)</span>||
-|MyTableProtoEventColLeftDoubleClick|b|<span style="color:#FFFFAA">*cell.[MyTableCol](#MyTableCol)</span>||
-|MyTableProtoEventColRightDoubleClick|b|<span style="color:#FFFFAA">*cell.[MyTableCol](#MyTableCol)</span>||
+|MyTableProtoEventColLeftClick|b|<span style="color:#FFFFAA">*col.[MyTableCol](#MyTableCol)</span>||
+|MyTableProtoEventColRightClick|b|<span style="color:#FFFFAA">*col.[MyTableCol](#MyTableCol)</span>||
+|MyTableProtoEventColLeftDoubleClick|b|<span style="color:#FFFFAA">*col.[MyTableCol](#MyTableCol)</span>||
+|MyTableProtoEventColRightDoubleClick|b|<span style="color:#FFFFAA">*col.[MyTableCol](#MyTableCol)</span>||
+|MyTableProtoEventColSelected|b|<span style="color:#FFFFAA">*col.[MyTableCol](#MyTableCol)</span>||
 |MyTableProtoEventCellChangedChecked|b|<span style="color:#FFFFAA">*cell.[MyTableCell](#MyTableCell)</span>||
 |MyTableProtoEventCellChangedUnChecked|b|<span style="color:#FFFFAA">*cell.[MyTableCell](#MyTableCell)</span>||
 |MyTableProtoEventCellChangedText|b|<span style="color:#FFFFAA">*cell.</span>MyTableCell , old.s||
@@ -400,6 +401,7 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |ResizeGrid||rows.i = <span style="color:#AAAAFF">\#PB\_Ignore</span> , cols.i = <span style="color:#AAAAFF">\#PB\_Ignore</span>||
+|RegisterEventColSelected||event.MyTableProtoEventColSelected||
 
 ### MyTableApplication : [MyTableObject](#MyTableObject)
 |Name|Return|Parameter|Comment|

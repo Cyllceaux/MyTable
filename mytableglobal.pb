@@ -765,7 +765,6 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 						SelectElement(*this\cols(),c)
 						If temp
 							*this\tempselectedCols(Str(*this\cols()))=#True
-							*this\selectedCols(Str(*this\cols()))=#True
 						EndIf
 					Next
 				Else
@@ -773,6 +772,11 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 						*this\tempselectedCols(Str(*rc\tcol))=#True
 					Else
 						*this\lastcol=*this\cols()
+						If Not _MyTable_IsSelected(*rc\tcol)
+							If *this\eventColSelected
+								*this\eventColSelected(*rc\tcol)
+							EndIf
+						EndIf
 						*this\selectedCols(Str(*rc\tcol))=#True
 					EndIf
 				EndIf
@@ -1942,8 +1946,11 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
-					If *cell\table\datagrid And *cell\col\listindex=0
-						*result=_MyTable_Get#gruppe#name(*cell\col,#False)
+					If *cell\table\datagrid
+						*result=_MyTable_Get#gruppe#name(*cell\col,#False)						
+						If Not *result Or *result=_MyTable_Get#gruppe#name(*cell\table)
+							*result=_MyTable_Get#gruppe#name(*cell\row,#False)
+						EndIf
 					Else
 						*result=_MyTable_Get#gruppe#name(*cell\row,#False)
 					EndIf

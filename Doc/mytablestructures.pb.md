@@ -203,6 +203,7 @@
 |eventColRightClick|MyTableProtoEventColRightClick||
 |eventColLeftDoubleClick|MyTableProtoEventColLeftDoubleClick||
 |eventColRightDoubleClick|MyTableProtoEventColRightDoubleClick||
+|eventColSelected|MyTableProtoEventColSelected||
 |eventCellChangedChecked|MyTableProtoEventCellChangedChecked||
 |eventCellChangedUnChecked|MyTableProtoEventCellChangedUnChecked||
 |eventCellChangedText|MyTableProtoEventCellChangedText||

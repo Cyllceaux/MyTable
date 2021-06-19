@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2727
+	#MYTABLE_VERSION = 2753
 	#MYTABLE_VERSION_DATE = 20210619
 	
 	Enumeration _mytable_type
@@ -202,10 +202,11 @@
 	#MYTABLE_TABLE_FLAGS_DEFAULT_GRID=#MYTABLE_TABLE_FLAGS_BORDER|#MYTABLE_TABLE_FLAGS_GRID|#MYTABLE_TABLE_FLAGS_RESIZABLE|#MYTABLE_TABLE_FLAGS_MULTISELECT|#MYTABLE_TABLE_FLAGS_EDITABLE
 	
 	
-	Prototype.b MyTableProtoEventColLeftClick(*cell.MyTableCol)	
-	Prototype.b MyTableProtoEventColRightClick(*cell.MyTableCol)
-	Prototype.b MyTableProtoEventColLeftDoubleClick(*cell.MyTableCol)		
-	Prototype.b MyTableProtoEventColRightDoubleClick(*cell.MyTableCol)
+	Prototype.b MyTableProtoEventColLeftClick(*col.MyTableCol)	
+	Prototype.b MyTableProtoEventColRightClick(*col.MyTableCol)
+	Prototype.b MyTableProtoEventColLeftDoubleClick(*col.MyTableCol)		
+	Prototype.b MyTableProtoEventColRightDoubleClick(*col.MyTableCol)
+	Prototype.b MyTableProtoEventColSelected(*col.MyTableCol)
 	
 	Prototype.b MyTableProtoEventCellChangedChecked(*cell.MyTableCell)
 	Prototype.b MyTableProtoEventCellChangedUnChecked(*cell.MyTableCell)
@@ -340,6 +341,8 @@
 	
 	Interface MyTableGrid Extends MyTableTableObject
 		ResizeGrid(rows.i=#PB_Ignore,cols.i=#PB_Ignore)
+		
+		RegisterEventColSelected(event.MyTableProtoEventColSelected)
 	EndInterface
 	
 	Interface MyTableApplication Extends MyTableObject
