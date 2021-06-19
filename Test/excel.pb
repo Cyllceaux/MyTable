@@ -45,6 +45,12 @@ UseModule MyTable
 		EndIf
 	EndProcedure
 	
+	Procedure change()
+		ForEach elemente()
+			elemente()\grid\SetRedraw(Bool(GetGadgetState(panel)=ListIndex(elemente())))
+		Next
+	EndProcedure
+	
 	
 	Procedure AddGridElement()
 		Protected *element.Element=AddElement(elemente())
@@ -67,9 +73,10 @@ UseModule MyTable
 		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
 		*element\grid\SetData(*element)
 		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
-		*element\grid\SetRedraw(#True)
 		*element\grid\RegisterEventCellSelected(@EvtCellSelect())
 		*element\grid\RegisterEventCellChangedText(@EvtCellSelectTextChange())
+		SetGadgetState(panel,ListSize(elemente())-1)
+		change()
 	EndProcedure
 	
 	Procedure Resize()
@@ -93,15 +100,18 @@ UseModule MyTable
 		Next
 	EndProcedure
 	
-	AddGridElement()
-	AddGridElement()
-	AddGridElement()
 
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
 	BindEvent(#PB_Event_RestoreWindow,@Resize(),window)
 	BindEvent(#PB_Event_MaximizeWindow,@Resize(),window)
 	BindEvent(#PB_Event_MinimizeWindow,@Resize(),window)
+	BindGadgetEvent(panel,@change(),#PB_EventType_Change)
+	
+	
+	AddGridElement()
+	AddGridElement()
+	AddGridElement()
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	
