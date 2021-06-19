@@ -2,6 +2,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
+|\_MyTable\_Cell\_SetTextExp||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetFormula||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetText||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetValue||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.d||

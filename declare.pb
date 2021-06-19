@@ -227,6 +227,8 @@ Declare _MyTable_Cell_Autosize(*this.strMyTableCell)
 Declare _MyTable_Cell_SetText(*this.strMyTableCell,value.s)
 Declare _MyTable_Cell_SetFormula(*this.strMyTableCell,value.s)
 Declare _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
+Declare _MyTable_Cell_SetTextExp(*this.strMyTableCell,value.s)
+
 
 ;- Style
 Declare _MyTable_Style_Redraw(*this.strMyTableStyleObject)

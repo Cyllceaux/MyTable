@@ -23,6 +23,28 @@ UseModule MyTable
 	
 	Global *app.MyTableApplication=MyTableCreateApplication()
 	
+	Procedure.b EvtCellSelect(*cell.MyTableCell)
+		Protected *grid.MyTableGrid=*cell\GetTable()
+		Protected *element.Element=*grid\GetData()
+		
+		If *cell\GetFormula()<>""
+			SetGadgetText(*element\string,*cell\GetFormula())
+		Else
+			SetGadgetText(*element\string,*cell\GetText())
+		EndIf
+	EndProcedure
+	
+	Procedure.b EvtCellSelectTextChange(*cell.MyTableCell,old.s)
+		Protected *grid.MyTableGrid=*cell\GetTable()
+		Protected *element.Element=*grid\GetData()
+		
+		If *cell\GetFormula()<>""
+			SetGadgetText(*element\string,*cell\GetFormula())
+		Else
+			SetGadgetText(*element\string,*cell\GetText())
+		EndIf
+	EndProcedure
+	
 	
 	Procedure AddGridElement()
 		Protected *element.Element=AddElement(elemente())
@@ -39,13 +61,15 @@ UseModule MyTable
 		                           *element\canvas,
 		                           *element\vscroll,
 		                           *element\hscroll,
-		                           1000,
+		                           10000,
 		                           100,
 		                           "",
 		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
 		*element\grid\SetData(*element)
 		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
 		*element\grid\SetRedraw(#True)
+		*element\grid\RegisterEventCellSelected(@EvtCellSelect())
+		*element\grid\RegisterEventCellChangedText(@EvtCellSelectTextChange())
 	EndProcedure
 	
 	Procedure Resize()

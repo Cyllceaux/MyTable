@@ -122,6 +122,7 @@
 |\_MyTable\_Cell\_SetText||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetFormula||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetValue||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.d||
+|\_MyTable\_Cell\_SetTextExp||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Style\_Redraw||<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
 
 

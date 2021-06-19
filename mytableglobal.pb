@@ -585,8 +585,21 @@ Procedure _MyTableEvtCanvasKeyDown()
 					*this\dirty=#True					
 					_MyTable_Table_Redraw(*this)
 				EndIf
+			Case #PB_Shortcut_Delete
+				If Editable
+					ForEach *this\selectedCells()
+						If *this\selectedCells()
+							Protected *tcell.strMyTableCell=Val(MapKey(*this\selectedCells()))
+							Protected old.s=*tcell\text
+							_MyTable_Cell_SetTextExp(*tcell,"")
+							If *this\eventCellChangedText
+								*this\eventCellChangedText(*tcell,old)
+							EndIf
+						EndIf
+					Next
+				EndIf
 			Case #PB_Shortcut_Return
-				_MyTable_StartEditCell(*this\lastcell)
+				_MyTable_StartEditCell(*this\lastcell)			
 			Case #PB_Shortcut_PageDown
 				If IsGadget(*this\vscroll)
 					SetGadgetState(*this\vscroll,GetGadgetState(*this\vscroll)+100)						
@@ -664,6 +677,9 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 			Else
 				*this\lastcell=*cell
 				*this\selectedCells(Str(*obj))=#True
+				If *this\eventCellSelected
+					*this\eventCellSelected(*cell)
+				EndIf
 			EndIf			
 		ElseIf *obj\type=#MYTABLE_TYPE_COL
 			*col=*obj
@@ -850,7 +866,7 @@ Procedure _MyTableSelect(*this.strMyTableTable,*rc.strMyTableRowCol,temp.b)
 								*this\eventRowSelected(*rc\trow)
 							EndIf
 						EndIf
-						*this\selectedRows(Str(*rc\trow))=#True
+						*this\selectedRows(Str(*rc\trow))=#True						
 					EndIf
 				EndIf
 				*this\dirty=#True
@@ -1427,8 +1443,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightDouble(),#PB_EventType_RightDoubleClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightClick(),#PB_EventType_RightClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
-			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyUp(),#PB_EventType_KeyUp)
-			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LostFocus)			
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyUp(),#PB_EventType_KeyUp)	
 			MyTableWindowTables(Str(*table))=window
 		EndIf
 		If IsGadget(vscroll)
@@ -1819,6 +1834,7 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 			EndIf
 			If Not custom
 				_MyTable_StopEdit(*this,#True)
+				
 				*this\edit\window=OpenWindow(#PB_Any,
 				                             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\startx,
 				                             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\starty,
@@ -1827,6 +1843,7 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 				                             "",
 				                             #PB_Window_BorderLess,
 				                             WindowID(*this\window))
+				
 				*this\edit\menu=CreateMenu(#PB_Any,WindowID(*this\edit\window))
 				AddKeyboardShortcut(*this\edit\window,#PB_Shortcut_Return,0)
 				BindMenuEvent(*this\edit\menu,0,@_MyTable_KeyEdit())

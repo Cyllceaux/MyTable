@@ -15,6 +15,25 @@ _MyTableSimpleGetterPointer(Cell,Col)
 _MyTableSimpleGetterPointer(Cell,Table)
 
 
+Procedure _MyTable_Cell_SetTextExp(*this.strMyTableCell,value.s)
+	If *this
+		*this\text=value
+		If *this\datatype=#MYTABLE_DATATYPE_NUMBER
+			*this\value=ValD(value)
+		ElseIf *this\datatype=#MYTABLE_DATATYPE_DATE
+			*this\value=ParseDate(*this\mask,Value)
+		Else
+			*this\value=0
+		EndIf
+		*this\textheight=0
+		*this\textwidth=0
+		*this\dirty=#True
+		*this\table\dirty=#True
+	EndIf
+EndProcedure
+
+
+
 Procedure _MyTable_Cell_SetFormula(*this.strMyTableCell,value.s)
 	If *this
 		*this\formula=value
@@ -30,18 +49,7 @@ EndProcedure
 
 Procedure _MyTable_Cell_SetText(*this.strMyTableCell,value.s)
 	If *this
-		*this\text=value
-		If *this\datatype=#MYTABLE_DATATYPE_NUMBER
-			*this\value=ValD(value)
-		ElseIf *this\datatype=#MYTABLE_DATATYPE_DATE
-			*this\value=ParseDate(*this\mask,Value)
-		Else
-			*this\value=0
-		EndIf
-		*this\textheight=0
-		*this\textwidth=0
-		*this\dirty=#True
-		*this\table\dirty=#True
+		_MyTable_Cell_SetTextExp(*this,value)
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure
