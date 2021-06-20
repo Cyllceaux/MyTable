@@ -466,7 +466,15 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	Protected tw=0
 	
 	
-	Protected *tfont.strMyTableFont=_MyTable_GetDefaultFont(*cell)
+	Protected *tfont.strMyTableFont=0
+	If fixed
+		*tfont=_MyTable_GetFixedFont(*cell)
+	ElseIf selected
+		*tfont=_MyTable_GetSelectedFont(*cell)
+	Else
+		*tfont=_MyTable_GetDefaultFont(*cell)
+	EndIf
+	
 	
 	If *tfont
 		DrawingFont(*tfont\fontid)		
@@ -543,6 +551,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 	Protected callback.b=_MyTable_IsCallback(*this\table)
 	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
 	Protected markmouseover.b=_MyTable_IsMark_Mouse_Over(*this\table)
+	Protected Fullrowselect.b=_MyTable_IsFullrowselect(*this\table)
 	Protected *cell.strMyTableCell=0
 	
 	Protected idx=0
@@ -617,8 +626,10 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			
 			mselected=#False
 			If markmouseover And Not selected
-				mselected=Bool(mselected Or Bool(*this\table\mvcell=*cell))			
-				mselected=Bool(mselected Or Bool(*this\table\mvrow=*this))
+				mselected=Bool(mselected Or Bool(*this\table\mvcell=*cell))		
+				If Fullrowselect
+					mselected=Bool(mselected Or Bool(*this\table\mvrow=*this))
+				EndIf
 			EndIf
 			
 			

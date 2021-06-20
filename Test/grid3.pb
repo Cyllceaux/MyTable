@@ -19,13 +19,23 @@ UseModule MyTable
 	Global window=OpenWindow(#PB_Any,0,0,800,600,"Grid3 (fonts, Borders, Editable)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global menu=CreateMenu(#PB_Any,WindowID(window))
 	Global bx=0
-	Global btnBold=ButtonGadget(#PB_Any,bx,0,22,22,"B",#PB_Button_Toggle):bx+22
-	Global btnItalic=ButtonGadget(#PB_Any,bx,0,22,22,"I",#PB_Button_Toggle):bx+22
-	Global btnStrike=ButtonGadget(#PB_Any,bx,0,22,22,"S",#PB_Button_Toggle):bx+22
-	Global btnUnder=ButtonGadget(#PB_Any,bx,0,22,22,"U",#PB_Button_Toggle):bx+22
+	Global by=0
+	
+	Global pmGruppe=ComboBoxGadget(#PB_Any,bx,by,150,22):bx+150
+	AddGadgetItem(pmGruppe,-1,"Default")
+	AddGadgetItem(pmGruppe,-1,"Selected")
+	AddGadgetItem(pmGruppe,-1,"Fixed")	
+	AddGadgetItem(pmGruppe,-1,"Mouse Over")	
+	SetGadgetState(pmGruppe,0)
 	
 	bx+4
-	Global pmFont=ComboBoxGadget(#PB_Any,bx,0,150,22,#PB_ComboBox_Editable):bx+150
+	Global btnBold=ButtonGadget(#PB_Any,bx,by,22,22,"B",#PB_Button_Toggle):bx+22
+	Global btnItalic=ButtonGadget(#PB_Any,bx,by,22,22,"I",#PB_Button_Toggle):bx+22
+	Global btnStrike=ButtonGadget(#PB_Any,bx,by,22,22,"S",#PB_Button_Toggle):bx+22
+	Global btnUnder=ButtonGadget(#PB_Any,bx,by,22,22,"U",#PB_Button_Toggle):bx+22
+	
+	bx+4
+	Global pmFont=ComboBoxGadget(#PB_Any,bx,by,150,22,#PB_ComboBox_Editable):bx+150
 	AddGadgetItem(pmFont,-1,"Arial")
 	AddGadgetItem(pmFont,-1,"Calibri")
 	AddGadgetItem(pmFont,-1,"Cambria")
@@ -35,18 +45,42 @@ UseModule MyTable
 	AddGadgetItem(pmFont,-1,"Times New Roman")
 	SetGadgetState(pmFont,0)
 	
-	Global spSize=SpinGadget(#PB_Any,bx,0,50,22,0,100,#PB_Spin_Numeric):bx+50
+	Global spSize=SpinGadget(#PB_Any,bx,by,50,22,0,100,#PB_Spin_Numeric):bx+50
 	SetGadgetState(spSize,12)
 	
 	bx+4
 	
-	Global btnLeft=ButtonGadget(#PB_Any,bx,0,22,22,"L",#PB_Button_Toggle):bx+22
-	Global btnTop=ButtonGadget(#PB_Any,bx,0,22,22,"T",#PB_Button_Toggle):bx+22
-	Global btnRight=ButtonGadget(#PB_Any,bx,0,22,22,"R",#PB_Button_Toggle):bx+22
-	Global btnBottom=ButtonGadget(#PB_Any,bx,0,22,22,"B",#PB_Button_Toggle):bx+22
+	Global btnLeft=ButtonGadget(#PB_Any,bx,by,22,22,"L",#PB_Button_Toggle):bx+22
+	Global btnTop=ButtonGadget(#PB_Any,bx,by,22,22,"T",#PB_Button_Toggle):bx+22
+	Global btnRight=ButtonGadget(#PB_Any,bx,by,22,22,"R",#PB_Button_Toggle):bx+22
+	Global btnBottom=ButtonGadget(#PB_Any,bx,by,22,22,"B",#PB_Button_Toggle):bx+22
 	
-	Global panel=PanelGadget(#PB_Any,0,24,WindowWidth(window),WindowHeight(window)-24)
+	
+	by+24
+	bx=0
+	Global btnFront=ButtonGadget(#PB_Any,bx,by,50,22,"Front"):bx+50
+	Global btnBack=ButtonGadget(#PB_Any,bx,by,50,22,"Back"):bx+50
+	Global btnFore=ButtonGadget(#PB_Any,bx,by,50,22,"Fore"):bx+50
+	
+	
+	by+24
+	
+	Global panel=PanelGadget(#PB_Any,0,by,WindowWidth(window),WindowHeight(window)-by)
 	CloseGadgetList()
+	
+	
+	Procedure getStyle(*obj.MyTableObject)
+		Select GetGadgetState(pmGruppe)
+			Case 0
+				ProcedureReturn *obj\GetDefaultStyle()
+			Case 1
+				ProcedureReturn *obj\GetSelectedStyle()
+			Case 2
+				ProcedureReturn *obj\GetFixedStyle()
+			Case 3
+				ProcedureReturn *obj\GetMouseOverStyle()			
+		EndSelect		
+	EndProcedure
 	
 	Procedure changeBorder(fl)
 		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
@@ -78,7 +112,7 @@ UseModule MyTable
 		Next
 		ForEach rows()
 			found=#True
-			*style=rows()\GetDefaultStyle()
+			*style=getStyle(rows())
 			flags=*style\GetBorder()
 			If GetGadgetState(EventGadget())
 				flags|fl
@@ -89,7 +123,7 @@ UseModule MyTable
 		Next
 		ForEach cols()
 			found=#True
-			*style=cols()\GetDefaultStyle()
+			*style=getStyle(cols())
 			flags=*style\GetBorder()
 			If GetGadgetState(EventGadget())
 				flags|fl
@@ -102,7 +136,7 @@ UseModule MyTable
 			*style\SetBorder(flags)
 		Next
 		If Not found
-			*style=*element\grid\GetDefaultStyle()
+			*style=getStyle(*element\grid)
 			flags=*style\GetBorder()
 			If GetGadgetState(EventGadget())
 				flags|fl
@@ -138,7 +172,7 @@ UseModule MyTable
 		*element\grid\SetRedraw(#False)
 		ForEach cells()
 			found=#True
-			*style=cells()\GetDefaultStyle()
+			*style=getStyle(cells())
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			If GetGadgetState(EventGadget())
@@ -151,7 +185,7 @@ UseModule MyTable
 		Next
 		ForEach rows()
 			found=#True
-			*style=rows()\GetDefaultStyle()
+			*style=getStyle(rows())
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			If GetGadgetState(EventGadget())
@@ -164,7 +198,7 @@ UseModule MyTable
 		Next
 		ForEach cols()
 			found=#True
-			*style=cols()\GetDefaultStyle()
+			*style=getStyle(cols())
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			If GetGadgetState(EventGadget())
@@ -176,7 +210,7 @@ UseModule MyTable
 			*style\SetFont(*nfont)		
 		Next
 		If Not found
-			*style=*element\grid\GetDefaultStyle()
+			*style=getStyle(*element\grid)
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			If GetGadgetState(EventGadget())
@@ -211,7 +245,7 @@ UseModule MyTable
 		*element\grid\SetRedraw(#False)
 		ForEach cells()
 			found=#True
-			*style=cells()\GetDefaultStyle()
+			*style=getStyle(cells())
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			*nfont=MyTableCreateFont(font,size,flags)
@@ -219,7 +253,7 @@ UseModule MyTable
 		Next
 		ForEach rows()
 			found=#True
-			*style=rows()\GetDefaultStyle()
+			*style=getStyle(rows())
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			*nfont=MyTableCreateFont(font,size,flags)
@@ -227,14 +261,14 @@ UseModule MyTable
 		Next
 		ForEach cols()
 			found=#True
-			*style=cols()\GetDefaultStyle()
+			*style=getStyle(cols())
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			*nfont=MyTableCreateFont(font,size,flags)
 			*style\SetFont(*nfont)		
 		Next
 		If Not found
-			*style=*element\grid\GetDefaultStyle()
+			*style=getStyle(*element\grid)
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
 			*nfont=MyTableCreateFont(font,size,flags)
@@ -245,6 +279,143 @@ UseModule MyTable
 		FreeList(cols())
 		FreeList(rows())
 	EndProcedure
+	
+		
+	Procedure front()
+		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
+		Protected NewList cells.MyTableCell()
+		Protected NewList cols.MyTableCol()
+		Protected NewList rows.MyTableRow()
+		
+		
+		Protected found.b=#False
+		
+		Protected *nfont.MyTableFont=0
+		Protected *font.MyTableFont=0
+		Protected *style.MyTableStyle=0
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\GetSelectedRows(rows())
+		*element\grid\GetSelectedCols(cols())
+		*element\grid\SetRedraw(#False)
+		
+		*style=getStyle(*element\grid)
+		Protected flags.q=ColorRequester(*style\GetFrontColor())
+		
+		ForEach cells()
+			found=#True
+			*style=getStyle(cells())
+			*style\SetFrontColor(flags)
+		Next
+		ForEach rows()
+			found=#True
+			*style=getStyle(rows())
+			*style\SetFrontColor(flags)
+		Next
+		ForEach cols()
+			found=#True
+			*style=getStyle(cols())
+			*style\SetFrontColor(flags)
+		Next
+		If Not found
+			*style=getStyle(*element\grid)
+			*style\SetFrontColor(flags)
+		EndIf
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+		FreeList(cols())
+		FreeList(rows())
+	EndProcedure:BindGadgetEvent(btnfront,@front())
+	
+	Procedure back()
+		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
+		Protected NewList cells.MyTableCell()
+		Protected NewList cols.MyTableCol()
+		Protected NewList rows.MyTableRow()
+		
+		
+		Protected found.b=#False
+		
+		Protected *nfont.MyTableFont=0
+		Protected *font.MyTableFont=0
+		Protected *style.MyTableStyle=0
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\GetSelectedRows(rows())
+		*element\grid\GetSelectedCols(cols())
+		*element\grid\SetRedraw(#False)
+		
+		*style=getStyle(*element\grid)
+		Protected flags.q=ColorRequester(*style\GetBackColor())
+		
+		ForEach cells()
+			found=#True
+			*style=getStyle(cells())
+			*style\SetBackColor(flags)
+		Next
+		ForEach rows()
+			found=#True
+			*style=getStyle(rows())
+			*style\SetBackColor(flags)
+		Next
+		ForEach cols()
+			found=#True
+			*style=getStyle(cols())
+			*style\SetBackColor(flags)
+		Next
+		If Not found
+			*style=getStyle(*element\grid)
+			*style\SetBackColor(flags)
+		EndIf
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+		FreeList(cols())
+		FreeList(rows())
+	EndProcedure:BindGadgetEvent(btnBack,@back())
+	
+	Procedure fore()
+		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
+		Protected NewList cells.MyTableCell()
+		Protected NewList cols.MyTableCol()
+		Protected NewList rows.MyTableRow()
+		
+		
+		Protected found.b=#False
+		
+		Protected *nfont.MyTableFont=0
+		Protected *font.MyTableFont=0
+		Protected *style.MyTableStyle=0
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\GetSelectedRows(rows())
+		*element\grid\GetSelectedCols(cols())
+		*element\grid\SetRedraw(#False)
+		
+		*style=getStyle(*element\grid)
+		Protected flags.q=ColorRequester(*style\GetForeColor())
+		
+		ForEach cells()
+			found=#True
+			*style=getStyle(cells())
+			*style\SetForeColor(flags)
+		Next
+		ForEach rows()
+			found=#True
+			*style=getStyle(rows())
+			*style\SetForeColor(flags)
+		Next
+		ForEach cols()
+			found=#True
+			*style=getStyle(cols())
+			*style\SetForeColor(flags)
+		Next
+		If Not found
+			*style=getStyle(*element\grid)
+			*style\SetForeColor(flags)
+		EndIf
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+		FreeList(cols())
+		FreeList(rows())
+	EndProcedure:BindGadgetEvent(btnfore,@fore())
+	
 	
 	Procedure bold():changeFlags(#PB_Font_Bold):EndProcedure:BindGadgetEvent(btnBold,@bold())
 	Procedure italic():changeFlags(#PB_Font_Italic):EndProcedure:BindGadgetEvent(btnItalic,@italic())
@@ -379,7 +550,7 @@ UseModule MyTable
 		                           10000,
 		                           100,
 		                           "",
-		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW)		
+		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)		
 		*element\grid\SetData(*element)
 		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
 		*element\grid\RegisterEventCellSelected(@EvtCellSelect())
@@ -394,7 +565,7 @@ UseModule MyTable
 		             #PB_Ignore,
 		             #PB_Ignore,
 		             WindowWidth(window),
-		             WindowHeight(window)-24)
+		             WindowHeight(window)-by)
 		
 		ForEach elemente()
 			ResizeGadget(elemente()\string,
@@ -406,7 +577,7 @@ UseModule MyTable
 			             #PB_Ignore,
 			             #PB_Ignore,
 			             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
-			             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-24)
+			             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-by)
 			
 		Next
 	EndProcedure
