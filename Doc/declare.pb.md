@@ -104,6 +104,8 @@
 |\_MyTableEvtCanvasMouseRightUp||||
 |\_MyTableEvtCanvasMouseRightDouble||||
 |\_MyTableEvtCanvasScroll||||
+|\_MyTableEvtCanvasGotFocus||||
+|\_MyTableEvtCanvasLostFocus||||
 |\_MyTableEvtScroll||||
 |\_MyTable\_Grid\_ResizeGrid||<span style="color:#FFFFAA">*this.</span>strMyTableTable , rows.i = <span style="color:#AAAAFF">\#PB\_Ignore</span> , cols.i = <span style="color:#AAAAFF">\#PB\_Ignore</span>||
 |\_MyTableGridColumnName|s|col.i||

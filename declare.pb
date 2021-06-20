@@ -199,6 +199,8 @@ Declare _MyTableEvtCanvasMouseRightDown()
 Declare _MyTableEvtCanvasMouseRightUp()
 Declare _MyTableEvtCanvasMouseRightDouble()
 Declare _MyTableEvtCanvasScroll()
+Declare _MyTableEvtCanvasGotFocus()
+Declare _MyTableEvtCanvasLostFocus()
 Declare _MyTableEvtScroll()
 
 ;- Trees

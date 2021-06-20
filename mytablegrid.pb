@@ -76,9 +76,9 @@ Procedure _MyTable_Grid_ResizeGrid(*this.strMyTableTable,rows.i=#PB_Ignore,cols.
 			Next
 		EndIf
 		_callcountEnde()
-		_MyTable_Col_Autosize(FirstElement(*this\cols()))
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
+		_MyTable_Col_Autosize(FirstElement(*this\cols()))
 		_MyTable_Table_Redraw(*this)
 	EndIf
 EndProcedure

@@ -19,21 +19,25 @@ Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 		Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
 			Protected *table.strMyTableTable=*this\obj
 			*table\dirty=#True
+			_MyTable_Table_Predraw(*table)
 			_MyTable_Table_Redraw(*table)
 		Case #MYTABLE_TYPE_ROW
 			Protected *row.strMyTableRow=*this\obj
 			*row\dirty=#True
 			*row\table\dirty=#True
+			_MyTable_Table_Predraw(*row\table)
 			_MyTable_Table_Redraw(*row\table)
 		Case #MYTABLE_TYPE_COL
 			Protected *col.strMyTableCol=*this\obj
 			*col\dirty=#True
 			*col\table\dirty=#True
+			_MyTable_Table_Predraw(*col\table)
 			_MyTable_Table_Redraw(*col\table)
 		Case #MYTABLE_TYPE_CELL
 			Protected *cell.strMyTableCell=*this\obj
 			*cell\dirty=#True
 			*cell\table\dirty=#True
+			_MyTable_Table_Predraw(*cell\table)
 			_MyTable_Table_Redraw(*cell\table)
 	EndSelect
 EndProcedure
@@ -70,8 +74,31 @@ EndProcedure
 
 Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ)
+		Protected *cell.strMyTableCell=0
+		Protected idx=0
 		If *this
-			*this\style\sub#name=value
+			Select *this\obj\type
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*this\obj
+					*this\style\sub#name=value
+					If *col\table\datagrid
+						ForEach *col\table\rows()
+							*cell=_MyTableGetOrAddCell(*col\table\rows(),*col\listindex,#True)
+							*cell\defaultStyle\sub#name=value
+						Next
+					EndIf					
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*this\obj					
+					If *row\table\datagrid
+						For idx=1 To ListSize(*row\table\cols())
+							*cell=_MyTableGetOrAddCell(*col\table\rows(),idx-1,#True)
+							*cell\defaultStyle\sub#name=value
+						Next
+					EndIf					
+					*this\style\sub#name=value
+				Default
+					*this\style\sub#name=value
+			EndSelect
 			_MyTable_Style_Redraw(*this)
 		EndIf
 	EndProcedure
@@ -89,8 +116,31 @@ EndMacro
 
 Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ)
+		Protected *cell.strMyTableCell=0
+		Protected idx=0
 		If *this
-			*this\style\sub#name=*value
+			Select *this\obj\type
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*this\obj
+					*this\style\sub#name=*value
+					If *col\table\datagrid
+						ForEach *col\table\rows()							
+							*cell=_MyTableGetOrAddCell(*col\table\rows(),*col\listindex,#True)
+							*cell\defaultStyle\sub#name=*value							
+						Next
+					EndIf					
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*this\obj					
+					If *row\table\datagrid 
+						For idx=1 To ListSize(*row\table\cols())
+							*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
+							*cell\defaultStyle\sub#name=*value
+						Next
+					EndIf					
+					*this\style\sub#name=*value
+				Default
+					*this\style\sub#name=*value
+			EndSelect
 			_MyTable_Style_Redraw(*this)
 		EndIf
 	EndProcedure
@@ -126,7 +176,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterBorders(name,typ)
-	_MyTable_Style_GetterSetterBorder(name,typ,Default)
+_MyTable_Style_GetterSetterBorder(name,typ,Default)
 	_MyTable_Style_GetterSetterBorder(name,typ,Top)
 	_MyTable_Style_GetterSetterBorder(name,typ,Bottom)
 	_MyTable_Style_GetterSetterBorder(name,typ,Left)

@@ -23,7 +23,7 @@ UseModule MyTable
 	Global btnStrike=ButtonGadget(#PB_Any,bx,0,22,22,"S",#PB_Button_Toggle):bx+22
 	Global btnUnder=ButtonGadget(#PB_Any,bx,0,22,22,"U",#PB_Button_Toggle):bx+22
 	
-	Global panel=PanelGadget(#PB_Any,0,24,WindowWidth(window),WindowHeight(window))
+	Global panel=PanelGadget(#PB_Any,0,24,WindowWidth(window),WindowHeight(window)-24)
 	CloseGadgetList()
 	
 	Procedure changeFlags(fl)
@@ -150,17 +150,21 @@ UseModule MyTable
 		Next
 	EndProcedure
 	
+
 	
 	Procedure AddGridElement()
 		Protected *element.Element=AddElement(elemente())
 		OpenGadgetList(panel)
-		AddGadgetItem(panel,-1,"Grid 1")
-		*element\string=StringGadget(#PB_Any,0,0,GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),22,"")
-		*element\canvas=CanvasGadget(#PB_Any,0,24,GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),GetGadgetAttribute(panel,#PB_Panel3D_ItemHeight)-24,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+		AddGadgetItem(panel,-1,"Grid")
+		Protected pw=GetGadgetAttribute(panel,#PB_Panel_ItemWidth)
+		Protected ph=GetGadgetAttribute(panel,#PB_Panel_ItemHeight)
+		*element\string=StringGadget(#PB_Any,0,0,pw,22,"")
+		*element\canvas=CanvasGadget(#PB_Any,0,24,pw,ph-24,#PB_Canvas_Container|#PB_Canvas_Keyboard)
 		*element\hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 		*element\vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 		CloseGadgetList()
-		CloseGadgetList()
+		CloseGadgetList()	
+		
 		SetGadgetData(*element\string,*element)
 		*element\grid=*app\AddGrid(window,
 		                           *element\canvas,
@@ -169,7 +173,7 @@ UseModule MyTable
 		                           10000,
 		                           100,
 		                           "",
-		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
+		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW)		
 		*element\grid\SetData(*element)
 		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
 		*element\grid\RegisterEventCellSelected(@EvtCellSelect())
@@ -190,16 +194,21 @@ UseModule MyTable
 			ResizeGadget(elemente()\string,
 			             #PB_Ignore,
 			             #PB_Ignore,
-			             GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),
+			             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
 			             #PB_Ignore)
 			ResizeGadget(elemente()\canvas,
 			             #PB_Ignore,
 			             #PB_Ignore,
-			             GetGadgetAttribute(panel,#PB_Panel3D_ItemWidth),
-			             GetGadgetAttribute(panel,#PB_Panel3D_ItemHeight)-24)
+			             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
+			             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-24)
+
 		Next
 	EndProcedure
 	
+		
+	;AddGridElement()
+	;AddGridElement()
+	AddGridElement()
 	
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
@@ -208,10 +217,7 @@ UseModule MyTable
 	BindEvent(#PB_Event_MinimizeWindow,@Resize(),window)
 	BindGadgetEvent(panel,@change(),#PB_EventType_Change)
 	
-	
-	AddGridElement()
-	AddGridElement()
-	AddGridElement()
+
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	

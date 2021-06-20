@@ -58,6 +58,8 @@
 |\_MyTableEvtResize||||
 |\_MyTableEvtMove||||
 |\_MyTableGetRowCol||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
+|\_MyTableEvtCanvasGotFocus||||
+|\_MyTableEvtCanvasLostFocus||||
 |\_MyTableEvtCanvasKeyUp||||
 |\_MyTableEvtCanvasKeyDown||||
 |\_MyTableSelectObject||<span style="color:#FFFFAA">*obj.</span>strMyTableObject , shift.b , pages.b||

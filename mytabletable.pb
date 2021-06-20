@@ -161,10 +161,15 @@ Procedure _MyTable_Table_Delete(*this.strMyTableTable)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftDown(),#PB_EventType_LeftButtonDown)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftUp(),#PB_EventType_LeftButtonUp)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftDouble(),#PB_EventType_LeftDoubleClick)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseLeftClick(),#PB_EventType_LeftClick)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightDown(),#PB_EventType_RightButtonDown)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightUp(),#PB_EventType_RightButtonUp)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightDouble(),#PB_EventType_RightDoubleClick)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasMouseRightClick(),#PB_EventType_RightClick)
 			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasKeyUp(),#PB_EventType_KeyUp)	
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasGotFocus(),#PB_EventType_Focus)	
+			UnbindGadgetEvent(*this\canvas,@_MyTableEvtCanvasLostFocus(),#PB_EventType_LostFocus)	
 		EndIf
 		If IsGadget(*this\vscroll)
 			UnbindGadgetEvent(*this\vscroll,@_MyTableEvtScroll())
@@ -235,8 +240,7 @@ EndProcedure
 
 Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFont,width.i,height.i,scrollx.i,scrolly.i,fixed.b)
 	Protected border.b=_MyTable_IsBorder(*this)
-	Protected bx=-scrollx
-	Protected *lastfont.strMyTableFont=*font
+	Protected bx=-scrollx	
 	Protected idx=0
 	Protected start=1	
 	Protected fwidth.i=0
@@ -244,7 +248,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	
 	ForEach *this\cols()
 		*this\cols()\parent=0
-		If *this\cols()\dirty
+		If *this\cols()\dirty Or *this\cols()\textheight=0 Or *this\cols()\textwidth=0
 			Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*this\cols())
 			DrawingFont(*nfont\fontid)
 			*this\cols()\calcwidth=DesktopScaledX(*this\cols()\width)			
@@ -310,15 +314,9 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		If calcwidth>0
 			Protected *tfont.strMyTableFont=_MyTable_GetDefaultFont(*col)
 			If *tfont
-				If *lastfont<>*tfont
-					DrawingFont(*tfont\fontid)
-					*lastfont=*tfont
-				EndIf
+					DrawingFont(*tfont\fontid)					
 			Else
-				If *lastfont<>*font
 					DrawingFont(*font\fontid)
-					*lastfont=*font
-				EndIf
 			EndIf
 			
 			Protected addx=DesktopScaledX(2)
@@ -983,6 +981,10 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				by=*this\calctitleHeight
 			EndIf
 			
+			*font=_MyTable_GetDefaultFont(*this)
+			If *font
+					DrawingFont(*font\fontid)
+			EndIf
 			If header				
 				_MyTable_Table_Draw_Header(*this,by,*font,width,height,scrollx,scrolly,#False)
 				If *this\fixedcols
@@ -1079,7 +1081,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 					*this\textheight=0
 					*this\textwidth=0
 				Else
-					If *this\dirty Or *this\textheight=0
+					If *this\dirty Or *this\textheight=0 Or *this\textwidth=0
 						If Not *this\drawing
 							If IsGadget(*this\canvas)
 								StartDrawing(CanvasOutput(*this\canvas))
@@ -1161,7 +1163,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				cw=ImageWidth(*this\canvas)
 				ch=ImageHeight(*this\canvas)
 			EndIf
-			
+		
 			
 			Protected cs.i=0
 			ForEach *this\cols()
@@ -1183,6 +1185,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				*this\maxhscroll=0
 			EndIf
 			
+	
 			If IsGadget(*this\hscroll)
 				If h>0
 					w+GadgetWidth(*this\vscroll)

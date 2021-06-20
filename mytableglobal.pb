@@ -417,6 +417,16 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	ProcedureReturn *rc
 EndProcedure
 
+Procedure _MyTableEvtCanvasGotFocus()
+	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	
+EndProcedure
+
+Procedure _MyTableEvtCanvasLostFocus()
+	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
+	
+EndProcedure
+
 Procedure _MyTableEvtCanvasKeyUp()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	Protected shift.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Modifiers) & #PB_Canvas_Shift)
@@ -1434,8 +1444,9 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		
 		If IsGadget(canvas)
 			SetGadgetData(canvas,*table)
-			BindGadgetEvent(canvas,@_MyTableEvtResize(),#PB_EventType_Resize)
+			UnbindEvent(#PB_Event_MoveWindow,@_MyTableEvtMove(),window)
 			BindEvent(#PB_Event_MoveWindow,@_MyTableEvtMove(),window)
+			BindGadgetEvent(canvas,@_MyTableEvtResize(),#PB_EventType_Resize)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasScroll(),#PB_EventType_MouseWheel)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseMove(),#PB_EventType_MouseMove)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseLeftDown(),#PB_EventType_LeftButtonDown)
@@ -1448,6 +1459,8 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasMouseRightClick(),#PB_EventType_RightClick)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyDown(),#PB_EventType_KeyDown)
 			BindGadgetEvent(canvas,@_MyTableEvtCanvasKeyUp(),#PB_EventType_KeyUp)	
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasGotFocus(),#PB_EventType_Focus)	
+			BindGadgetEvent(canvas,@_MyTableEvtCanvasLostFocus(),#PB_EventType_LostFocus)	
 			MyTableWindowTables(Str(*table))=window
 		EndIf
 		If IsGadget(vscroll)
@@ -1912,10 +1925,10 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
-					If *cell\table\datagrid And *cell\col\listindex=0
-						result=_MyTable_Get#gruppe#name(*cell\col,#False)
-					Else
+					If Not *cell\table\datagrid						
 						result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					Else
+						result=_MyTable_Get#gruppe#name(*cell\table,#False)
 					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
@@ -1946,13 +1959,10 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
-					If *cell\table\datagrid
-						*result=_MyTable_Get#gruppe#name(*cell\col,#False)						
-						If Not *result Or *result=_MyTable_Get#gruppe#name(*cell\table)
-							*result=_MyTable_Get#gruppe#name(*cell\row,#False)
-						EndIf
-					Else
+					If Not *cell\table\datagrid
 						*result=_MyTable_Get#gruppe#name(*cell\row,#False)
+					Else
+						*result=_MyTable_Get#gruppe#name(*cell\table,#False)
 					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
@@ -1983,10 +1993,10 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj		
-					If *cell\table\datagrid And *cell\col\listindex>0
-						result=_MyTable_Get#gruppe#name(*cell\row,#False)
-					Else
+					If Not *cell\table\datagrid						
 						result=_MyTable_Get#gruppe#name(*cell\col,#False)
+					Else
+						result=_MyTable_Get#gruppe#name(*cell\table,#False)
 					EndIf
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
@@ -2016,11 +2026,7 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 			Select *obj\type
 				Case #MYTABLE_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj					
-					If *cell\table\datagrid And *cell\col\listindex=0
-						result= _MyTable_Get#gruppe#Border#name#pos(*cell\col,#False)
-					Else
-						result= _MyTable_Get#gruppe#Border#name#pos(*cell\row,#False)
-					EndIf
+					result= _MyTable_Get#gruppe#Border#name#pos(*cell\table,#False)
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result= _MyTable_Get#gruppe#Border#name#pos(*row\table,#False)
