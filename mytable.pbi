@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2938
+	#MYTABLE_VERSION = 2949
 	#MYTABLE_VERSION_DATE = 20210620
 	
 	Enumeration _mytable_type

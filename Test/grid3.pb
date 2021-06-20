@@ -668,14 +668,14 @@ UseModule MyTable
 			             #PB_Ignore,
 			             #PB_Ignore,
 			             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
-			             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-by)
+			             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-24)
 			
 		Next
 	EndProcedure
 	
 	
-	;AddGridElement()
-	;AddGridElement()
+	AddGridElement()
+	AddGridElement()
 	AddGridElement()
 	
 	

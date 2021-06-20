@@ -89,12 +89,12 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 					EndIf					
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
-					If *row\table\datagrid
-						For idx=1 To ListSize(*row\table\cols())
-							*cell=_MyTableGetOrAddCell(*col\table\rows(),idx-1,#True)
-							*cell\defaultStyle\sub#name=value
-						Next
-					EndIf					
+					
+					For idx=1 To ListSize(*row\table\cols())
+						*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
+						*cell\defaultStyle\sub#name=value
+					Next
+					
 					*this\style\sub#name=value
 				Default
 					*this\style\sub#name=value
@@ -131,12 +131,12 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 					EndIf					
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
-					If *row\table\datagrid 
-						For idx=1 To ListSize(*row\table\cols())
-							*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
-							*cell\defaultStyle\sub#name=*value
-						Next
-					EndIf					
+					
+					For idx=1 To ListSize(*row\table\cols())
+						*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
+						*cell\defaultStyle\sub#name=*value
+					Next
+					
 					*this\style\sub#name=*value
 				Default
 					*this\style\sub#name=*value
@@ -173,12 +173,12 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 					*this\style\border\border#pos\name=value
 				Case #MYTABLE_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
-					If *row\table\datagrid
-						For idx=1 To ListSize(*row\table\cols())
-							*cell=_MyTableGetOrAddCell(*col\table\rows(),idx-1,#True)
-							*cell\defaultStyle\border\border#pos\name=value
-						Next
-					EndIf					
+					
+					For idx=1 To ListSize(*row\table\cols())
+						*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
+						*cell\defaultStyle\border\border#pos\name=value
+					Next
+					
 					*this\style\border\border#pos\name=value
 				Default
 					*this\style\border\border#pos\name=value
