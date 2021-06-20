@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2951||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2962||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210620||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
@@ -29,6 +29,7 @@
 |<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_APPLICATION</span>|7||
 |<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_STYLE</span>|8||
 |<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_FONT</span>|9||
+|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_BORDER</span>|10||
 
 ### \_mytable\_style\_valign
 |Name|Value|Comment|
@@ -165,11 +166,29 @@
 |GetName|s|||
 |GetSize||||
 
+### MyTableBorder
+|Name|Return|Parameter|Comment|
+| --- | --- | --- | --- |
+|GetType||||
+|GetObject||||
+|GetStyle||||
+|SetColor||value.q||
+|GetColor|q|||
+|SetWidth||value.i||
+|GetWidth|i|||
+|Free||||
+|Delete||||
+
 ### MyTableStyle
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetType||||
 |GetObject||||
+|getBorderDefault||||
+|getBorderTop||||
+|getBorderLeft||||
+|getBorderRight||||
+|getBorderBottom||||
 |SetFont||<span style="color:#FFFFAA">*font.[MyTableFont](#MyTableFont)</span>||
 |GetFont||||
 |SetBackColor||value.q||
@@ -184,10 +203,6 @@
 |GetVAlign||||
 |SetBorder||value.i||
 |GetBorder||||
-|SetBorderColor||value.q||
-|GetBorderColor|q|||
-|SetBorderWidth||value.i||
-|GetBorderWidth|i|||
 |Free||||
 |Delete||||
 

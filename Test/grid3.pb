@@ -54,15 +54,24 @@ UseModule MyTable
 	Global btnTop=ButtonGadget(#PB_Any,bx,by,22,22,"T",#PB_Button_Toggle):bx+22
 	Global btnRight=ButtonGadget(#PB_Any,bx,by,22,22,"R",#PB_Button_Toggle):bx+22
 	Global btnBottom=ButtonGadget(#PB_Any,bx,by,22,22,"B",#PB_Button_Toggle):bx+22
+	Global pmBorder=ComboBoxGadget(#PB_Any,bx,by,100,22,#PB_ComboBox_Editable):bx+100
+	AddGadgetItem(pmBorder,-1,"Default")
+	AddGadgetItem(pmBorder,-1,"Top")
+	AddGadgetItem(pmBorder,-1,"Left")
+	AddGadgetItem(pmBorder,-1,"Bottom")
+	AddGadgetItem(pmBorder,-1,"Right")
+	SetGadgetState(pmBorder,0)
 	Global spwidth=SpinGadget(#PB_Any,bx,by,50,22,0,10,#PB_Spin_Numeric):bx+50
 	SetGadgetState(spwidth,1)
+	Global btnBorder=ButtonGadget(#PB_Any,bx,by,50,22,"Border"):bx+50
+	
 	
 	by+24
 	bx=0
 	Global btnFront=ButtonGadget(#PB_Any,bx,by,50,22,"Front"):bx+50
 	Global btnBack=ButtonGadget(#PB_Any,bx,by,50,22,"Back"):bx+50
 	Global btnFore=ButtonGadget(#PB_Any,bx,by,50,22,"Fore"):bx+50
-	Global btnBorder=ButtonGadget(#PB_Any,bx,by,50,22,"Border"):bx+50
+	
 	
 	
 	by+24
@@ -81,6 +90,23 @@ UseModule MyTable
 				ProcedureReturn *obj\GetFixedStyle()
 			Case 3
 				ProcedureReturn *obj\GetMouseOverStyle()			
+		EndSelect		
+	EndProcedure
+	
+	Procedure getBorder(*obj.MyTableObject)
+		Protected *style.MyTableStyle=getStyle(*obj)
+		
+		Select GetGadgetState(pmBorder)
+			Case 0
+				ProcedureReturn *style\getBorderDefault()
+			Case 1
+				ProcedureReturn *style\getBorderTop()
+			Case 2
+				ProcedureReturn *style\getBorderLeft()
+			Case 3
+				ProcedureReturn *style\getBorderBottom()		
+			Case 4
+				ProcedureReturn *style\getBorderRight()		
 		EndSelect		
 	EndProcedure
 	
@@ -430,32 +456,38 @@ UseModule MyTable
 		Protected *nfont.MyTableFont=0
 		Protected *font.MyTableFont=0
 		Protected *style.MyTableStyle=0
+		Protected *border.MyTableBorder=0
 		*element\grid\GetSelectedCells(cells())
 		*element\grid\GetSelectedRows(rows())
 		*element\grid\GetSelectedCols(cols())
 		*element\grid\SetRedraw(#False)
 		
 		*style=getStyle(*element\grid)
-		Protected flags.q=ColorRequester(*style\GetBorderColor())
+		*border=getBorder(*element\grid)
+		Protected flags.q=ColorRequester(*border\GetColor())
 		
 		ForEach cells()
 			found=#True
 			*style=getStyle(cells())
-			*style\SetBorderColor(flags)
+			*border=getBorder(cells())
+			*border\SetColor(flags)
 		Next
 		ForEach rows()
 			found=#True
 			*style=getStyle(rows())
-			*style\SetBorderColor(flags)
+			*border=getBorder(rows())
+			*border\SetColor(flags)
 		Next
 		ForEach cols()
 			found=#True
 			*style=getStyle(cols())
-			*style\SetBorderColor(flags)
+			*border=getBorder(cols())
+			*border\SetColor(flags)
 		Next
 		If Not found
 			*style=getStyle(*element\grid)
-			*style\SetBorderColor(flags)
+			*border=getBorder(*element\grid)
+			*border\SetColor(flags)
 		EndIf
 		*element\grid\SetRedraw(#True)
 		FreeList(cells())
@@ -475,31 +507,36 @@ UseModule MyTable
 		Protected *nfont.MyTableFont=0
 		Protected *font.MyTableFont=0
 		Protected *style.MyTableStyle=0
+		Protected *border.MyTableBorder
 		*element\grid\GetSelectedCells(cells())
 		*element\grid\GetSelectedRows(rows())
 		*element\grid\GetSelectedCols(cols())
 		*element\grid\SetRedraw(#False)
 		
 		*style=getStyle(*element\grid)
-		
+		*border=getBorder(*element\grid)
 		ForEach cells()
 			found=#True
 			*style=getStyle(cells())
-			*style\SetBorderWidth(GetGadgetState(spwidth))
+			*border=getBorder(cells())
+			*border\SetWidth(GetGadgetState(spwidth))
 		Next
 		ForEach rows()
 			found=#True
 			*style=getStyle(rows())
-			*style\SetBorderWidth(GetGadgetState(spwidth))
+			*border=getBorder(rows())
+			*border\SetWidth(GetGadgetState(spwidth))
 		Next
 		ForEach cols()
 			found=#True
 			*style=getStyle(cols())
-			*style\SetBorderWidth(GetGadgetState(spwidth))
+			*border=getBorder(cols())
+			*border\SetWidth(GetGadgetState(spwidth))
 		Next
 		If Not found
 			*style=getStyle(*element\grid)
-			*style\SetBorderWidth(GetGadgetState(spwidth))
+			*border=getBorder(*element\grid)
+			*border\SetWidth(GetGadgetState(spwidth))
 		EndIf
 		*element\grid\SetRedraw(#True)
 		FreeList(cells())
@@ -549,6 +586,8 @@ UseModule MyTable
 	
 	Procedure ButtonUpdate(*element.Element,*style.MyTableStyle)
 		Protected *font.MyTableFont=*style\GetFont()
+		Protected *border.MyTableBorder=*style\getBorderDefault()
+		
 		SetGadgetState(btnBold,Bool(*font\GetFlags() & #PB_Font_Bold))
 		SetGadgetState(btnItalic,Bool(*font\GetFlags() & #PB_Font_Italic))
 		SetGadgetState(btnStrike,Bool(*font\GetFlags() & #PB_Font_StrikeOut))
@@ -559,8 +598,10 @@ UseModule MyTable
 		
 		SetGadgetState(btnLeft,Bool(*style\GetBorder() & #MYTABLE_STYLE_BORDER_LEFT))
 		SetGadgetState(btnRight,Bool( *style\GetBorder() & #MYTABLE_STYLE_BORDER_RIGHT))
-		SetGadgetState(btnTop,Bool( *style\GetBorder() & #MYTABLE_STYLE_BORDER_TOP))
-		SetGadgetState(btnBottom,Bool( *style\GetBorder() & #MYTABLE_STYLE_BORDER_BOTTOM))
+		SetGadgetState(btnTop,Bool(*style\GetBorder() & #MYTABLE_STYLE_BORDER_TOP))
+		SetGadgetState(btnBottom,Bool(*style\GetBorder() & #MYTABLE_STYLE_BORDER_BOTTOM))
+		
+		SetGadgetState(spwidth,*border\GetWidth())
 	EndProcedure
 	
 	Procedure.b EvtCellSelect(*cell.MyTableCell)

@@ -61,6 +61,18 @@ Structure strMyTableStyleObject Extends strMyTableVTable
 	*style.strMyTableStyle
 EndStructure
 
+Structure strMyTableBorderObject Extends strMyTableVTable
+	*style.strMyTableStyleObject
+	*border.strMyTableStyleBorderStyle
+	
+	*borderDefault.strMyTableStyleBorderStyle
+	*borderTop.strMyTableStyleBorderStyle
+	*borderLeft.strMyTableStyleBorderStyle
+	*borderRight.strMyTableStyleBorderStyle
+	*borderBottom.strMyTableStyleBorderStyle
+		
+EndStructure
+
 Structure strMyTableImage
 	orig.i
 	sized.i

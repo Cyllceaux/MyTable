@@ -7,6 +7,7 @@
 |\_MyTableDataSectionGetter||gruppe , name||
 |\_MyTableDataSectionSetterGetter||gruppe , name||
 |\_MyTableDataSectionDefault||gruppe||
+|\_MyTableDataSectionBorderDefault||gruppe||
 |\_MyTableDataSectionStyleDefault||gruppe||
 |\_MyTableDataSectionDefaultTableObject||gruppe||
 |\_MyTableDataSectionDefaultTable||gruppe||

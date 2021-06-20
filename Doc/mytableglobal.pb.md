@@ -51,6 +51,7 @@
 |\_MyTableInitStyleTableEmpty||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleObject||<span style="color:#FFFFAA">*style.</span>strMyTableStyleObject , <span style="color:#FFFFAA">*this.</span>strMyTableObject , <span style="color:#FFFFAA">*s.strMyTableStyle</span>||
 |\_MyTableInitStyles||<span style="color:#FFFFAA">*this.strMyTableObject</span>||
+|\_MyTableInitBorderObject||<span style="color:#FFFFAA">*border.</span>strMyTableBorderObject , ||
 |\_MyTableInitApplication||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableEvtScroll||||
 |\_MyTableEvtResizeExp||<span style="color:#FFFFAA">*this.strMyTableTable</span>||

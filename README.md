@@ -1,6 +1,6 @@
 # MyTable
 
-VERSION = 2950
+VERSION = 2961
 
 VERSION_DATE = 20210620
 
@@ -13,6 +13,8 @@ VERSION_DATE = 20210620
 [mytable.pbi](Doc/mytable.pbi.md)
 
 [mytableapplication.pb](Doc/mytableapplication.pb.md)
+
+[mytableborder.pb](Doc/mytableborder.pb.md)
 
 [mytablecell.pb](Doc/mytablecell.pb.md)
 

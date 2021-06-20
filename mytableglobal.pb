@@ -193,6 +193,17 @@ Procedure _MyTableInitStyles(*this.strMyTableObject)
 	EndWith
 EndProcedure
 
+Procedure _MyTableInitBorderObject(*border.strMyTableBorderObject,
+                                   *style.strMyTableStyleObject,
+                                   *b.strMyTableStyleBorderStyle)
+	With *border
+		\vtable=?vtable_border
+		\type=#MYTABLE_TYPE_BORDER
+		\style=*style		
+		\border=*b
+	EndWith
+EndProcedure
+
 Procedure _MyTableInitApplication(*application.strMyTableApplication,
                                   flags.i)
 	With *application

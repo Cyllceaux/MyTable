@@ -10,6 +10,25 @@ Procedure _MyTable_Style_GetType(*this.strMyTableStyleObject)
 	EndIf
 EndProcedure
 
+Macro _MyTableStyleBorder(name)
+	Procedure _MyTable_Style_GetBorder#name(*this.strMyTableStyleObject)
+		If *this
+			Protected *border.strMyTableBorderObject=AllocateStructure(strMyTableBorderObject)
+			_MyTableInitBorderObject(*border,*this,*this\style\border\border#name)
+			*border\border#name=*this\style\border\border#name
+			ProcedureReturn *border
+		EndIf
+	EndProcedure
+	
+EndMacro
+
+_MyTableStyleBorder(Default);}
+_MyTableStyleBorder(Top)
+_MyTableStyleBorder(Left)
+_MyTableStyleBorder(Right)
+_MyTableStyleBorder(Bottom)
+
+
 Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 	Select *this\obj\type
 		Case #MYTABLE_TYPE_APPLICATION

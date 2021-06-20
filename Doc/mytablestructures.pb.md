@@ -70,6 +70,17 @@
 |<span style="color:#FFFFAA">*applicationStyle|[strMyTableStyle](#strMyTableStyle)</span>||
 |<span style="color:#FFFFAA">*style|[strMyTableStyle](#strMyTableStyle)</span>||
 
+### strMyTableBorderObject : [strMyTableVTable](#strMyTableVTable)
+|Field|Type|Comment|
+| --- | --- | --- |
+|<span style="color:#FFFFAA">*style|[strMyTableStyle](#strMyTableStyle)Object</span>||
+|<span style="color:#FFFFAA">*border|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
+|<span style="color:#FFFFAA">*borderDefault|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
+|<span style="color:#FFFFAA">*borderTop|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
+|<span style="color:#FFFFAA">*borderLeft|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
+|<span style="color:#FFFFAA">*borderRight|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
+|<span style="color:#FFFFAA">*borderBottom|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
+
 ### strMyTableImage
 |Field|Type|Comment|
 | --- | --- | --- |

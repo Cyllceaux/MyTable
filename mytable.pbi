@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 2951
+	#MYTABLE_VERSION = 2962
 	#MYTABLE_VERSION_DATE = 20210620
 	
 	Enumeration _mytable_type
@@ -14,6 +14,7 @@
 		#MYTABLE_TYPE_APPLICATION
 		#MYTABLE_TYPE_STYLE
 		#MYTABLE_TYPE_FONT
+		#MYTABLE_TYPE_BORDER
 	EndEnumeration
 	
 	Interface MyTableFont
@@ -23,9 +24,27 @@
 		GetSize()
 	EndInterface
 	
+	Interface MyTableBorder
+		GetType()
+		GetObject()
+		GetStyle()
+		
+		SetColor(value.q):GetColor.q()
+		SetWidth(value.i):GetWidth.i()
+		
+		Free()
+		Delete()
+	EndInterface
+	
 	Interface MyTableStyle
 		GetType()
 		GetObject()
+		
+		getBorderDefault()
+		getBorderTop()
+		getBorderLeft()
+		getBorderRight()
+		getBorderBottom()
 		
 		SetFont(*font.MyTableFont):GetFont()
 		SetBackColor(value.q):GetBackColor.q()
@@ -33,10 +52,7 @@
 		SetForeColor(value.q):GetForeColor.q()
 		SetHAlign(value.i):GetHAlign()
 		SetVAlign(value.i):GetVAlign()	
-		SetBorder(value.i):GetBorder()		
-		SetBorderColor(value.q):GetBorderColor.q()
-		SetBorderWidth(value.i):GetBorderWidth.i()
-		
+		SetBorder(value.i):GetBorder()	
 		
 		Free()
 		Delete()

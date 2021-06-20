@@ -9,6 +9,7 @@ Module MyTable
 	XIncludeFile "mytableglobal.pb"
 	XIncludeFile "mytablefont.pb"
 	XIncludeFile "mytablestyle.pb"
+	XIncludeFile "mytableborder.pb"
 	XIncludeFile "mytableapplication.pb"
 	XIncludeFile "mytabletable.pb"
 	XIncludeFile "mytabletree.pb"
@@ -50,10 +51,27 @@ Module MyTable
 		_MyTableDataSectionMethode(gruppe,Autosize)
 	EndMacro
 	
+	Macro _MyTableDataSectionBorderDefault(gruppe)
+		_MyTableDataSectionGetter(gruppe,Type)
+		_MyTableDataSectionGetter(gruppe,Object)
+		_MyTableDataSectionGetter(gruppe,Style)
+		
+		_MyTableDataSectionSetterGetter(gruppe,Color)
+		_MyTableDataSectionSetterGetter(gruppe,Width)
+		
+		_MyTableDataSectionMethode(gruppe,Free)
+		_MyTableDataSectionMethode(gruppe,Delete)
+	EndMacro
 	
 	Macro _MyTableDataSectionStyleDefault(gruppe)
 		_MyTableDataSectionGetter(gruppe,Type)
 		_MyTableDataSectionGetter(gruppe,Object)
+		
+		_MyTableDataSectionGetter(gruppe,BorderDefault)
+		_MyTableDataSectionGetter(gruppe,BorderTop)
+		_MyTableDataSectionGetter(gruppe,BorderLeft)
+		_MyTableDataSectionGetter(gruppe,BorderRight)
+		_MyTableDataSectionGetter(gruppe,BorderBottom)
 		
 		_MyTableDataSectionSetterGetter(gruppe,Font)
 		_MyTableDataSectionSetterGetter(gruppe,BackColor)
@@ -62,8 +80,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(gruppe,HAlign)
 		_MyTableDataSectionSetterGetter(gruppe,VAlign)
 		_MyTableDataSectionSetterGetter(gruppe,Border)
-		_MyTableDataSectionSetterGetter(gruppe,BorderColorDefault)
-		_MyTableDataSectionSetterGetter(gruppe,BorderWidthDefault)
+		
 		
 		_MyTableDataSectionMethode(gruppe,Free)
 		_MyTableDataSectionMethode(gruppe,Delete)
@@ -186,6 +203,9 @@ Module MyTable
 		
 		vtable_style: ;- Style
 		_MyTableDataSectionStyleDefault(Style)
+		
+		vtable_border: ;- Border
+		_MyTableDataSectionBorderDefault(Border)
 		
 		
 		vtable_application:;- Application

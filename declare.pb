@@ -92,6 +92,9 @@ Declare _MyTableInitStyleTable(*style.strMyTableStyle)
 Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
                                 *this.strMyTableObject,
                                 *s.strMyTableStyle)
+Declare _MyTableInitBorderObject(*border.strMyTableBorderObject,
+                                 *style.strMyTableStyleObject,
+                                 *b.strMyTableStyleBorderStyle)
 Declare _MyTableInitApplication(*application.strMyTableApplication,
                                 flags.i)
 Declare _MyTableInitTable(*application.strMyTableApplication,

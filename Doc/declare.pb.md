@@ -44,6 +44,7 @@
 |\_MyTableInitFont||<span style="color:#FFFFAA">*font.</span>strMyTableFont , ||
 |\_MyTableInitStyleTable||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleObject||<span style="color:#FFFFAA">*style.</span>strMyTableStyleObject , ||
+|\_MyTableInitBorderObject||<span style="color:#FFFFAA">*border.</span>strMyTableBorderObject , ||
 |\_MyTableInitApplication||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitTable||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitTree||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
