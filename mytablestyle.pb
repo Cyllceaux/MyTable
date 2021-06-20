@@ -158,8 +158,32 @@ EndMacro
 
 Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 	Procedure _MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ)
+		Protected *cell.strMyTableCell=0
+		Protected idx=0
 		If *this
-			*this\style\border\border#pos\name=value
+			Select *this\obj\type
+				Case #MYTABLE_TYPE_COL
+					Protected *col.strMyTableCol=*this\obj
+					If *col\table\datagrid
+						ForEach *col\table\rows()
+							*cell=_MyTableGetOrAddCell(*col\table\rows(),*col\listindex,#True)
+							*cell\defaultStyle\border\border#pos\name=value
+						Next
+					EndIf					
+					*this\style\border\border#pos\name=value
+				Case #MYTABLE_TYPE_ROW
+					Protected *row.strMyTableRow=*this\obj					
+					If *row\table\datagrid
+						For idx=1 To ListSize(*row\table\cols())
+							*cell=_MyTableGetOrAddCell(*col\table\rows(),idx-1,#True)
+							*cell\defaultStyle\border\border#pos\name=value
+						Next
+					EndIf					
+					*this\style\border\border#pos\name=value
+				Default
+					*this\style\border\border#pos\name=value
+			EndSelect
+			
 			_MyTable_Style_Redraw(*this)
 		EndIf
 	EndProcedure

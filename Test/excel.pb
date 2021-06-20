@@ -11,12 +11,13 @@ UseModule MyTable
 		vscroll.i
 		hscroll.i	
 		*grid.MyTableGrid
+		menu.i
 	EndStructure
 	
 	Global NewList elemente.Element()
 	
 	Global window=OpenWindow(#PB_Any,0,0,800,600,"Excel (lookalike)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
-	
+	Global menu=CreateMenu(#PB_Any,WindowID(window))
 	Global bx=0
 	Global btnBold=ButtonGadget(#PB_Any,bx,0,22,22,"B",#PB_Button_Toggle):bx+22
 	Global btnItalic=ButtonGadget(#PB_Any,bx,0,22,22,"I",#PB_Button_Toggle):bx+22
@@ -39,7 +40,7 @@ UseModule MyTable
 		*element\grid\GetSelectedCells(cells())
 		*element\grid\GetSelectedRows(rows())
 		*element\grid\GetSelectedCols(cols())
-		
+		*element\grid\SetRedraw(#False)
 		ForEach cells()
 			*style=cells()\GetDefaultStyle()
 			*font=*style\GetFont()
@@ -76,7 +77,7 @@ UseModule MyTable
 			*nfont=MyTableCreateFont(*font\GetName(),*font\GetSize(),flags)
 			*style\SetFont(*nfont)		
 		Next
-		
+		*element\grid\SetRedraw(#True)
 		FreeList(cells())
 		FreeList(cols())
 		FreeList(rows())
@@ -89,6 +90,31 @@ UseModule MyTable
 	
 	Global *app.MyTableApplication=MyTableCreateApplication()
 	
+	Procedure KeyEdit()
+		Protected gadget=GetActiveGadget()
+		Protected *element.Element=GetGadgetData(gadget)
+		
+		Protected NewList cells.MyTableCell()
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\SetRedraw(#False)
+		ForEach cells()
+			cells()\SetText(GetGadgetText(*element\string))	
+		Next
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+	EndProcedure
+	
+	BindMenuEvent(menu,100,@KeyEdit())
+	
+	Procedure FF()
+		AddKeyboardShortcut(window,#PB_Shortcut_Return,100)		
+	EndProcedure
+	
+	Procedure LF()
+		RemoveKeyboardShortcut(window,#PB_Shortcut_Return)
+	EndProcedure
+	
+	
 	Procedure ButtonUpdate(*element.Element,*style.MyTableStyle)
 		Protected *font.MyTableFont=*style\GetFont()
 		SetGadgetState(btnBold,Bool(*font\GetFlags() & #PB_Font_Bold))
@@ -96,7 +122,7 @@ UseModule MyTable
 		SetGadgetState(btnStrike,Bool(*font\GetFlags() & #PB_Font_StrikeOut))
 		SetGadgetState(btnUnder,Bool(*font\GetFlags() & #PB_Font_Underline))
 	EndProcedure
-		
+	
 	Procedure.b EvtCellSelect(*cell.MyTableCell)
 		Protected *grid.MyTableGrid=*cell\GetTable()
 		Protected *element.Element=*grid\GetData()
@@ -117,7 +143,7 @@ UseModule MyTable
 		Protected *element.Element=*grid\GetData()
 		
 		Protected *style.MyTableStyle=*row\GetDefaultStyle()
-
+		
 		ButtonUpdate(*element,*style)
 	EndProcedure
 	
@@ -126,7 +152,7 @@ UseModule MyTable
 		Protected *element.Element=*grid\GetData()
 		
 		Protected *style.MyTableStyle=*col\GetDefaultStyle()
-
+		
 		ButtonUpdate(*element,*style)
 	EndProcedure
 	
@@ -150,7 +176,7 @@ UseModule MyTable
 		Next
 	EndProcedure
 	
-
+	
 	
 	Procedure AddGridElement()
 		Protected *element.Element=AddElement(elemente())
@@ -158,7 +184,9 @@ UseModule MyTable
 		AddGadgetItem(panel,-1,"Grid")
 		Protected pw=GetGadgetAttribute(panel,#PB_Panel_ItemWidth)
 		Protected ph=GetGadgetAttribute(panel,#PB_Panel_ItemHeight)
-		*element\string=StringGadget(#PB_Any,0,0,pw,22,"")
+		*element\string=EditorGadget(#PB_Any,0,0,pw,22)
+		BindGadgetEvent(*element\string,@FF(),#PB_EventType_Focus)
+		BindGadgetEvent(*element\string,@LF(),#PB_EventType_LostFocus)
 		*element\canvas=CanvasGadget(#PB_Any,0,24,pw,ph-24,#PB_Canvas_Container|#PB_Canvas_Keyboard)
 		*element\hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 		*element\vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
@@ -201,11 +229,11 @@ UseModule MyTable
 			             #PB_Ignore,
 			             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
 			             GetGadgetAttribute(panel,#PB_Panel_ItemHeight)-24)
-
+			
 		Next
 	EndProcedure
 	
-		
+	
 	;AddGridElement()
 	;AddGridElement()
 	AddGridElement()
@@ -217,7 +245,7 @@ UseModule MyTable
 	BindEvent(#PB_Event_MinimizeWindow,@Resize(),window)
 	BindGadgetEvent(panel,@change(),#PB_EventType_Change)
 	
-
+	
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	
