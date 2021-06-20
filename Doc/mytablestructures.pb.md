@@ -203,6 +203,7 @@
 |myd|i||
 |<span style="color:#FFFFAA">*lastcell|[strMyTableCell](#strMyTableCell)</span>||
 |<span style="color:#FFFFAA">*shiftcell|[strMyTableCell](#strMyTableCell)</span>||
+|<span style="color:#FFFFAA">*lastmouseovercell|[strMyTableCell](#strMyTableCell)</span>||
 |<span style="color:#FFFFAA">*lastrow|[strMyTableRow](#strMyTableRow)</span>||
 |<span style="color:#FFFFAA">*lastcol|[strMyTableCol](#strMyTableCol)</span>||
 |<span style="color:#FFFFAA">*mvcell|[strMyTableCell](#strMyTableCell)</span>||

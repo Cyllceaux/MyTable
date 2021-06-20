@@ -204,6 +204,7 @@ Structure strMyTableTable Extends strMyTableObject
 	myd.i
 	*lastcell.strMyTableCell
 	*shiftcell.strMyTableCell
+	*lastmouseovercell.strMyTableCell
 	*lastrow.strMyTableRow
 	*lastcol.strMyTableCol
 	

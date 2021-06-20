@@ -16,7 +16,7 @@ UseModule MyTable
 	
 	Global NewList elemente.Element()
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"Grid3 (fonts, Borders, Editable)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global window=OpenWindow(#PB_Any,0,0,900,600,"Grid3 (fonts, Borders, Editable)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global menu=CreateMenu(#PB_Any,WindowID(window))
 	Global bx=0
 	Global by=0
@@ -50,6 +50,21 @@ UseModule MyTable
 	
 	bx+4
 	
+	
+	Global pmvalign=ComboBoxGadget(#PB_Any,bx,by,70,22):bx+70
+	AddGadgetItem(pmvalign,-1,"Top")
+	AddGadgetItem(pmvalign,-1,"Middle")
+	AddGadgetItem(pmvalign,-1,"Bottom")
+	SetGadgetState(pmvalign,0)
+	Global pmhalign=ComboBoxGadget(#PB_Any,bx,by,70,22):bx+70
+	AddGadgetItem(pmhalign,-1,"Left")
+	AddGadgetItem(pmhalign,-1,"Center")
+	AddGadgetItem(pmhalign,-1,"Right")
+	SetGadgetState(pmhalign,0)
+	
+	by+24
+	bx=0
+	
 	Global btnLeft=ButtonGadget(#PB_Any,bx,by,22,22,"L",#PB_Button_Toggle):bx+22
 	Global btnTop=ButtonGadget(#PB_Any,bx,by,22,22,"T",#PB_Button_Toggle):bx+22
 	Global btnRight=ButtonGadget(#PB_Any,bx,by,22,22,"R",#PB_Button_Toggle):bx+22
@@ -64,10 +79,7 @@ UseModule MyTable
 	Global spwidth=SpinGadget(#PB_Any,bx,by,50,22,0,10,#PB_Spin_Numeric):bx+50
 	SetGadgetState(spwidth,1)
 	Global btnBorder=ButtonGadget(#PB_Any,bx,by,50,22,"Border"):bx+50
-	
-	
-	by+24
-	bx=0
+	bx+4
 	Global btnFront=ButtonGadget(#PB_Any,bx,by,50,22,"Front"):bx+50
 	Global btnBack=ButtonGadget(#PB_Any,bx,by,50,22,"Back"):bx+50
 	Global btnFore=ButtonGadget(#PB_Any,bx,by,50,22,"Fore"):bx+50
@@ -544,6 +556,59 @@ UseModule MyTable
 		FreeList(rows())
 	EndProcedure:BindGadgetEvent(spwidth,@borderw())
 	
+	Procedure align()
+		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
+		Protected NewList cells.MyTableCell()
+		Protected NewList cols.MyTableCol()
+		Protected NewList rows.MyTableRow()
+		
+		Protected halign=GetGadgetState(pmhalign)
+		Protected valign=GetGadgetState(pmvalign)
+		
+		Protected found.b=#False
+		
+		Protected *nfont.MyTableFont=0
+		Protected *font.MyTableFont=0
+		Protected *style.MyTableStyle=0
+		
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\GetSelectedRows(rows())
+		*element\grid\GetSelectedCols(cols())
+		*element\grid\SetRedraw(#False)
+		
+		*style=getStyle(*element\grid)
+		
+		ForEach cells()
+			found=#True
+			*style=getStyle(cells())
+			*style\SetHAlign(halign)
+			*style\SetVAlign(valign)
+		Next
+		ForEach rows()
+			found=#True
+			*style=getStyle(rows())
+			*style\SetHAlign(halign)
+			*style\SetVAlign(valign)
+		Next
+		ForEach cols()
+			found=#True
+			*style=getStyle(cols())
+			*style\SetHAlign(halign)
+			*style\SetVAlign(valign)
+		Next
+		If Not found
+			*style=getStyle(*element\grid)
+			*style\SetHAlign(halign)
+			*style\SetVAlign(valign)
+		EndIf
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+		FreeList(cols())
+		FreeList(rows())
+	EndProcedure:BindGadgetEvent(pmvalign,@align()):BindGadgetEvent(pmhalign,@align())
+	
+	
+	
 	
 	Procedure bold():changeFlags(#PB_Font_Bold):EndProcedure:BindGadgetEvent(btnBold,@bold())
 	Procedure italic():changeFlags(#PB_Font_Italic):EndProcedure:BindGadgetEvent(btnItalic,@italic())
@@ -602,6 +667,9 @@ UseModule MyTable
 		SetGadgetState(btnBottom,Bool(*style\GetBorder() & #MYTABLE_STYLE_BORDER_BOTTOM))
 		
 		SetGadgetState(spwidth,*border\GetWidth())
+		
+		SetGadgetState(pmhalign,*style\GetHAlign())
+		SetGadgetState(pmvalign,*style\GetvAlign())
 	EndProcedure
 	
 	Procedure.b EvtCellSelect(*cell.MyTableCell)

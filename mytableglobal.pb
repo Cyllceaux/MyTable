@@ -1130,11 +1130,14 @@ Procedure _MyTableEvtCanvasMouseMove()
 				*this\dirty=#True
 				_MyTable_Table_Redraw(*this)
 			ElseIf markmouseover
-				*this\dirty=#True
-				*this\mvcell=*rc\tcell
-				*this\mvcol=*rc\tcol
-				*this\mvrow=*rc\trow
+				If *this\lastmouseovercell<>*rc\tcell
+					*this\lastmouseovercell=*rc\tcell
+					*this\dirty=#True
+					*this\mvcell=*rc\tcell
+					*this\mvcol=*rc\tcol
+					*this\mvrow=*rc\trow
 				_MyTable_Table_Redraw(*this)
+				EndIf
 			EndIf				
 		EndIf
 		
