@@ -282,7 +282,7 @@ UseModule MyTable
 		FreeList(rows())
 	EndProcedure
 	
-		
+	
 	Procedure front()
 		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
 		Protected NewList cells.MyTableCell()
@@ -481,7 +481,7 @@ UseModule MyTable
 		*element\grid\SetRedraw(#False)
 		
 		*style=getStyle(*element\grid)
-	
+		
 		ForEach cells()
 			found=#True
 			*style=getStyle(cells())

@@ -7,6 +7,14 @@
 |If macros=""||||
 
 
+## Constants
+
+|Constants|Value|Comment|
+| --- | --- | --- |
+|<span style="color:#AAAAFF">\#MYTABLE\_UPDATE\_DOC</span>|0||
+|<span style="color:#AAAAFF">\#MYTABLE\_UPDATE\_VERSION</span>|0||
+
+
 ## Prototypes
 
 |Name|Return|Parameter|Comment|

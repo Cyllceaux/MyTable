@@ -314,9 +314,9 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		If calcwidth>0
 			Protected *tfont.strMyTableFont=_MyTable_GetDefaultFont(*col)
 			If *tfont
-					DrawingFont(*tfont\fontid)					
+				DrawingFont(*tfont\fontid)					
 			Else
-					DrawingFont(*font\fontid)
+				DrawingFont(*font\fontid)
 			EndIf
 			
 			Protected addx=DesktopScaledX(2)
@@ -967,7 +967,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			
 			*font=_MyTable_GetDefaultFont(*this)
 			If *font
-					DrawingFont(*font\fontid)
+				DrawingFont(*font\fontid)
 			EndIf
 			If header				
 				_MyTable_Table_Draw_Header(*this,by,*font,width,height,scrollx,scrolly,#False)
@@ -1147,7 +1147,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				cw=ImageWidth(*this\canvas)
 				ch=ImageHeight(*this\canvas)
 			EndIf
-		
+			
 			
 			Protected cs.i=0
 			ForEach *this\cols()
@@ -1169,7 +1169,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				*this\maxhscroll=0
 			EndIf
 			
-	
+			
 			If IsGadget(*this\hscroll)
 				If h>0
 					w+GadgetWidth(*this\vscroll)
