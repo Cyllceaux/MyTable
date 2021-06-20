@@ -103,6 +103,7 @@ Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
 		\forecolor=RGBA(50,50,50,255)
 		\border\borderDefault\color=RGBA(50,50,50,255)		
 		\border\borderDefault\width=1
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -110,7 +111,8 @@ Procedure  _MyTableInitStyleTableSelected(*style.strMyTableStyle)
 	With *style
 		\backcolor=RGBA(230,230,250,255)
 		\forecolor=RGBA(20,20,20,255)
-		\border\borderDefault\color=RGBA(200,200,200,255)		
+		\border\borderDefault\color=RGBA(200,200,200,255)	
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -119,6 +121,7 @@ Procedure  _MyTableInitStyleTableElementSelected(*style.strMyTableStyle)
 		\backcolor=RGBA(130,50,50,255)
 		\forecolor=RGBA(200,200,200,255)
 		\border\borderDefault\color=RGBA(200,200,250,255)
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -127,6 +130,7 @@ Procedure  _MyTableInitStyleTableZebra(*style.strMyTableStyle)
 		\backcolor=RGBA(230,230,250,255)
 		\forecolor=RGBA(20,20,20,255)
 		\border\borderDefault\color=RGBA(200,200,250,255)
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -135,6 +139,7 @@ Procedure  _MyTableInitStyleTableMouseOver(*style.strMyTableStyle)
 		\backcolor=RGBA(100,100,120,255)
 		\forecolor=RGBA(20,20,20,255)
 		\border\borderDefault\color=RGBA(200,200,250,255)
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -142,7 +147,7 @@ Procedure  _MyTableInitStyleTableFixed(*style.strMyTableStyle)
 	With *style
 		\frontcolor=RGBA(250,250,250,255)
 		\backcolor=RGBA(150,150,150,255)
-		\forecolor=RGBA(250,250,250,255)
+		\forecolor=RGBA(250,250,250,255)		
 	EndWith
 EndProcedure
 
@@ -152,6 +157,7 @@ Procedure  _MyTableInitStyleTableTitle(*style.strMyTableStyle)
 		\backcolor=RGBA(150,150,150,255)
 		\forecolor=RGBA(250,250,250,255)
 		\halign=#MYTABLE_STYLE_HALIGN_CENTER
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -161,6 +167,7 @@ Procedure  _MyTableInitStyleTableEmpty(*style.strMyTableStyle)
 		\backcolor=RGBA(150,150,150,255)
 		\forecolor=RGBA(50,50,50,255)
 		\halign=#MYTABLE_STYLE_HALIGN_CENTER
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure
 
@@ -1594,6 +1601,8 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\selectedStyle\forecolor=RGBA(250,250,250,255)
 		\selectedStyle\backcolor=RGBA(100,100,100,255)
 		
+		\defaultStyle\border\border=#MYTABLE_STYLE_BORDER_ALL
+		
 		\calcwidth=DesktopScaledX(\width)
 		\listindex=ListSize(*table\cols())-1
 		If \table\datagrid And text="" And \listindex>0
@@ -1648,6 +1657,7 @@ Procedure _MyTableInitCell(*application.strMyTableApplication,
 		\defaultStyle\frontcolor=\row\defaultStyle\frontcolor
 		\defaultStyle\forecolor=\row\defaultStyle\forecolor				
 		\datatype=*cell\col\datatype
+		\defaultStyle\border\border=#MYTABLE_STYLE_BORDER_ALL
 		\mask=*cell\col\mask
 		If *parent
 			\listindex=ListSize(*parent\cells\cells())-1

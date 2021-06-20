@@ -16,7 +16,7 @@ UseModule MyTable
 	
 	Global NewList elemente.Element()
 	
-	Global window=OpenWindow(#PB_Any,0,0,800,600,"Excel (lookalike)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
+	Global window=OpenWindow(#PB_Any,0,0,800,600,"Grid3 (fonts, Borders, Editable)",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	Global menu=CreateMenu(#PB_Any,WindowID(window))
 	Global bx=0
 	Global btnBold=ButtonGadget(#PB_Any,bx,0,22,22,"B",#PB_Button_Toggle):bx+22
@@ -24,8 +24,101 @@ UseModule MyTable
 	Global btnStrike=ButtonGadget(#PB_Any,bx,0,22,22,"S",#PB_Button_Toggle):bx+22
 	Global btnUnder=ButtonGadget(#PB_Any,bx,0,22,22,"U",#PB_Button_Toggle):bx+22
 	
+	bx+4
+	Global pmFont=ComboBoxGadget(#PB_Any,bx,0,150,22,#PB_ComboBox_Editable):bx+150
+	AddGadgetItem(pmFont,-1,"Arial")
+	AddGadgetItem(pmFont,-1,"Calibri")
+	AddGadgetItem(pmFont,-1,"Cambria")
+	AddGadgetItem(pmFont,-1,"Comic Sans MS")
+	AddGadgetItem(pmFont,-1,"Consolas")
+	AddGadgetItem(pmFont,-1,"Lucida Console")
+	AddGadgetItem(pmFont,-1,"Times New Roman")
+	SetGadgetState(pmFont,0)
+	
+	Global spSize=SpinGadget(#PB_Any,bx,0,50,22,0,100,#PB_Spin_Numeric):bx+50
+	SetGadgetState(spSize,12)
+	
+	bx+4
+	
+	Global btnLeft=ButtonGadget(#PB_Any,bx,0,22,22,"L",#PB_Button_Toggle):bx+22
+	Global btnTop=ButtonGadget(#PB_Any,bx,0,22,22,"T",#PB_Button_Toggle):bx+22
+	Global btnRight=ButtonGadget(#PB_Any,bx,0,22,22,"R",#PB_Button_Toggle):bx+22
+	Global btnBottom=ButtonGadget(#PB_Any,bx,0,22,22,"B",#PB_Button_Toggle):bx+22
+	
 	Global panel=PanelGadget(#PB_Any,0,24,WindowWidth(window),WindowHeight(window)-24)
 	CloseGadgetList()
+	
+	Procedure changeBorder(fl)
+		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
+		Protected NewList cells.MyTableCell()
+		Protected NewList cols.MyTableCol()
+		Protected NewList rows.MyTableRow()
+		
+		Protected flags=0
+		Protected found.b=#False
+		
+		Protected *style.MyTableStyle=0
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\GetSelectedRows(rows())
+		*element\grid\GetSelectedCols(cols())
+		*element\grid\SetRedraw(#False)
+		ForEach cells()
+			found=#True
+			*style=cells()\GetDefaultStyle()
+			flags=*style\GetBorder()
+			If GetGadgetState(EventGadget())
+				flags|fl
+			Else
+				flags!fl
+			EndIf			
+			If flags=0
+				flags=#MYTABLE_STYLE_BORDER_NONE
+			EndIf
+			*style\SetBorder(flags)
+		Next
+		ForEach rows()
+			found=#True
+			*style=rows()\GetDefaultStyle()
+			flags=*style\GetBorder()
+			If GetGadgetState(EventGadget())
+				flags|fl
+			Else
+				flags!fl
+			EndIf
+			*style\SetBorder(flags)
+		Next
+		ForEach cols()
+			found=#True
+			*style=cols()\GetDefaultStyle()
+			flags=*style\GetBorder()
+			If GetGadgetState(EventGadget())
+				flags|fl
+			Else
+				flags!fl
+			EndIf
+			If flags=0
+				flags=#MYTABLE_STYLE_BORDER_NONE
+			EndIf
+			*style\SetBorder(flags)
+		Next
+		If Not found
+			*style=*element\grid\GetDefaultStyle()
+			flags=*style\GetBorder()
+			If GetGadgetState(EventGadget())
+				flags|fl
+			Else
+				flags!fl
+			EndIf
+			If flags=0
+				flags=#MYTABLE_STYLE_BORDER_NONE
+			EndIf
+			*style\SetBorder(flags)
+		EndIf
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+		FreeList(cols())
+		FreeList(rows())
+	EndProcedure
 	
 	Procedure changeFlags(fl)
 		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
@@ -34,6 +127,8 @@ UseModule MyTable
 		Protected NewList rows.MyTableRow()
 		
 		Protected flags=0
+		Protected found.b=#False
+		
 		Protected *nfont.MyTableFont=0
 		Protected *font.MyTableFont=0
 		Protected *style.MyTableStyle=0
@@ -42,6 +137,7 @@ UseModule MyTable
 		*element\grid\GetSelectedCols(cols())
 		*element\grid\SetRedraw(#False)
 		ForEach cells()
+			found=#True
 			*style=cells()\GetDefaultStyle()
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
@@ -54,6 +150,7 @@ UseModule MyTable
 			*style\SetFont(*nfont)		
 		Next
 		ForEach rows()
+			found=#True
 			*style=rows()\GetDefaultStyle()
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
@@ -66,6 +163,7 @@ UseModule MyTable
 			*style\SetFont(*nfont)		
 		Next
 		ForEach cols()
+			found=#True
 			*style=cols()\GetDefaultStyle()
 			*font=*style\GetFont()
 			flags=*font\GetFlags()
@@ -77,6 +175,71 @@ UseModule MyTable
 			*nfont=MyTableCreateFont(*font\GetName(),*font\GetSize(),flags)
 			*style\SetFont(*nfont)		
 		Next
+		If Not found
+			*style=*element\grid\GetDefaultStyle()
+			*font=*style\GetFont()
+			flags=*font\GetFlags()
+			If GetGadgetState(EventGadget())
+				flags|fl
+			Else
+				flags!fl
+			EndIf
+			*nfont=MyTableCreateFont(*font\GetName(),*font\GetSize(),flags)
+			*style\SetFont(*nfont)	
+		EndIf
+		*element\grid\SetRedraw(#True)
+		FreeList(cells())
+		FreeList(cols())
+		FreeList(rows())
+	EndProcedure
+	
+	Procedure changeFont(font.s,size.i)
+		Protected *element.Element=SelectElement(elemente(),GetGadgetState(panel))
+		Protected NewList cells.MyTableCell()
+		Protected NewList cols.MyTableCol()
+		Protected NewList rows.MyTableRow()
+		
+		Protected flags=0
+		Protected found.b=#False
+		
+		Protected *nfont.MyTableFont=0
+		Protected *font.MyTableFont=0
+		Protected *style.MyTableStyle=0
+		*element\grid\GetSelectedCells(cells())
+		*element\grid\GetSelectedRows(rows())
+		*element\grid\GetSelectedCols(cols())
+		*element\grid\SetRedraw(#False)
+		ForEach cells()
+			found=#True
+			*style=cells()\GetDefaultStyle()
+			*font=*style\GetFont()
+			flags=*font\GetFlags()
+			*nfont=MyTableCreateFont(font,size,flags)
+			*style\SetFont(*nfont)		
+		Next
+		ForEach rows()
+			found=#True
+			*style=rows()\GetDefaultStyle()
+			*font=*style\GetFont()
+			flags=*font\GetFlags()
+			*nfont=MyTableCreateFont(font,size,flags)
+			*style\SetFont(*nfont)		
+		Next
+		ForEach cols()
+			found=#True
+			*style=cols()\GetDefaultStyle()
+			*font=*style\GetFont()
+			flags=*font\GetFlags()
+			*nfont=MyTableCreateFont(font,size,flags)
+			*style\SetFont(*nfont)		
+		Next
+		If Not found
+			*style=*element\grid\GetDefaultStyle()
+			*font=*style\GetFont()
+			flags=*font\GetFlags()
+			*nfont=MyTableCreateFont(font,size,flags)
+			*style\SetFont(*nfont)	
+		EndIf
 		*element\grid\SetRedraw(#True)
 		FreeList(cells())
 		FreeList(cols())
@@ -87,6 +250,13 @@ UseModule MyTable
 	Procedure italic():changeFlags(#PB_Font_Italic):EndProcedure:BindGadgetEvent(btnItalic,@italic())
 	Procedure Strike():changeFlags(#PB_Font_StrikeOut):EndProcedure:BindGadgetEvent(btnStrike,@strike())
 	Procedure under():changeFlags(#PB_Font_Underline):EndProcedure:BindGadgetEvent(btnUnder,@under())
+	
+	Procedure cfont():changeFont(GetGadgetText(pmFont),GetGadgetState(spSize)):EndProcedure:BindGadgetEvent(pmFont,@cfont()):BindGadgetEvent(spSize,@cfont())
+	
+	Procedure bleft():changeBorder(#MYTABLE_STYLE_BORDER_LEFT):EndProcedure:BindGadgetEvent(btnLeft,@bleft())
+	Procedure bright():changeBorder(#MYTABLE_STYLE_BORDER_RIGHT):EndProcedure:BindGadgetEvent(btnRight,@bright())
+	Procedure btop():changeBorder(#MYTABLE_STYLE_BORDER_TOP):EndProcedure:BindGadgetEvent(btnTop,@btop())
+	Procedure bbottom():changeBorder(#MYTABLE_STYLE_BORDER_BOTTOM):EndProcedure:BindGadgetEvent(btnBottom,@bbottom())
 	
 	Global *app.MyTableApplication=MyTableCreateApplication()
 	
@@ -121,6 +291,14 @@ UseModule MyTable
 		SetGadgetState(btnItalic,Bool(*font\GetFlags() & #PB_Font_Italic))
 		SetGadgetState(btnStrike,Bool(*font\GetFlags() & #PB_Font_StrikeOut))
 		SetGadgetState(btnUnder,Bool(*font\GetFlags() & #PB_Font_Underline))
+		
+		SetGadgetText(pmFont,*font\GetName())
+		SetGadgetState(spSize,*font\GetSize())
+		
+		SetGadgetState(btnLeft,Bool(*style\GetBorder() & #MYTABLE_STYLE_BORDER_LEFT))
+		SetGadgetState(btnRight,Bool( *style\GetBorder() & #MYTABLE_STYLE_BORDER_RIGHT))
+		SetGadgetState(btnTop,Bool( *style\GetBorder() & #MYTABLE_STYLE_BORDER_TOP))
+		SetGadgetState(btnBottom,Bool( *style\GetBorder() & #MYTABLE_STYLE_BORDER_BOTTOM))
 	EndProcedure
 	
 	Procedure.b EvtCellSelect(*cell.MyTableCell)

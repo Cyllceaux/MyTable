@@ -5,8 +5,9 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2889||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2918||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210620||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_GRID \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE \| \#MYTABLE\_TABLE\_FLAGS\_MULTISELECT \| \#MYTABLE\_TABLE\_FLAGS\_EDITABLE</span>||
@@ -65,10 +66,11 @@
 ### \_mytable\_style\_border
 |Name|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP</span>|1||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_RIGHT</span>|2||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_BOTTOM</span>|4||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_LEFT</span>|8||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_NONE</span>|1||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_RIGHT</span>|4||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_BOTTOM</span>|8||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_LEFT</span>|16||
 
 ### \_mytable\_cell
 |Name|Value|Comment|

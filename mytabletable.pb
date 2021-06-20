@@ -442,21 +442,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 					EndIf
 					c=DesktopScaledX(c)
 					Box(bx,by,c,*this\calcheaderheight,bcolor)
-				EndIf
-				If tborder=0
-					DrawingMode(#PB_2DDrawing_Outlined)					
-					If selected
-						bcolor=_MyTable_GetSelectedBorderColorDefault(*col)
-						c=_MyTable_GetSelectedBorderWidthDefault(*col)
-					Else
-						bcolor=_MyTable_GetDefaultBorderColorDefault(*col)
-						c=_MyTable_GetDefaultBorderWidthDefault(*col)
-					EndIf
-					c=DesktopScaledX(c)
-					For bw=1 To c
-						Box(bx+(bw-1),(bw-1)+by,calcwidth-(c-1),*this\calcheaderheight-(c-1),bcolor)
-					Next
-				EndIf
+				EndIf				
 			EndIf
 			UnclipOutput()
 			bx+calcwidth
@@ -835,20 +821,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 						c=DesktopScaledX(c)
 						Box(bx,by,c,*this\calcheight,bcolor)
 					EndIf
-					If tborder=0
-						DrawingMode(#PB_2DDrawing_Outlined)					
-						If selected
-							bcolor=_MyTable_GetSelectedBorderColorDefault(*cell)
-							c=_MyTable_GetSelectedBorderWidthDefault(*cell)
-						Else
-							bcolor=_MyTable_GetDefaultBorderColorDefault(*cell)
-							c=_MyTable_GetDefaultBorderWidthDefault(*cell)
-						EndIf
-						c=DesktopScaledY(c)
-						For bw=1 To c
-							Box(bx+(bw-1),by+(bw-1),*col\calcwidth-(c-1),*this\calcheight-(c-1),bcolor)
-						Next
-					EndIf
+					
 				EndIf
 			EndIf
 			UnclipOutput()						
