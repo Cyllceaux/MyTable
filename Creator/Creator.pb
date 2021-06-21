@@ -9,6 +9,10 @@ UseModule MyTable
 		#NONE
 		#TABLE_FLAGS
 		#TABLE_TEXT
+		#TABLE_BOOLEAN
+		#TABLE_BOOLEAN_REDRAW
+		#TABLE_BOOLEAN_RECALC
+		#TABLE_BOOLEAN_DISABLED
 		#TABLE_TEXT_TITLE
 		#TABLE_TEXT_EMPTY
 	EndEnumeration
@@ -16,6 +20,8 @@ UseModule MyTable
 	Procedure styleHeaderRow(*row.MyTableRow,*dat)
 		Protected *style.MyTableStyle
 		*row\SetData(*dat)
+		*row\SetFlags(#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+		*row\SetExpanded(#True)
 		*style=*row\GetDefaultStyle()
 		*style\SetBackColor(RGBA(50,50,50,255))
 		*style\SetForeColor(#White)
@@ -47,7 +53,7 @@ UseModule MyTable
 	Global *header.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle
 	*styleTree\AddCol("Name",200)
 	*styleTree\AddCol("Value",#PB_Ignore)
-	*header=*styleTree\AddRow("Table Type"):styleHeaderRow(*header,#TABLE_FLAGS):*header\SetExpanded(#True):*header\SetFlags(#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+	*header=*styleTree\AddRow("Table Type"):styleHeaderRow(*header,#TABLE_FLAGS)
 	*checkRow=*header\AddRow("Hierarchical"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_HIERARCHICAL):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Always Expanded"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Checkboxes"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_CHECKBOXES):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
@@ -66,9 +72,14 @@ UseModule MyTable
 	*checkRow=*header\AddRow("Zebra"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_ZEBRA):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Grid"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_GRID):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Element Selected"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_ELEMENT_SELECTED):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
-	*header=*styleTree\AddRow("Text"):styleHeaderRow(*header,#TABLE_TEXT):*header\SetExpanded(#True):*header\SetFlags(#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
+	*header=*styleTree\AddRow("Text"):styleHeaderRow(*header,#TABLE_TEXT)
 	*textRow=*header\AddRow("Title Text"):styleEditCell(*textRow\GetCell(1),#TABLE_TEXT_TITLE)
 	*textRow=*header\AddRow("Empty Text"):styleEditCell(*textRow\GetCell(1),#TABLE_TEXT_EMPTY)
+	*header=*styleTree\AddRow("Booleans"):styleHeaderRow(*header,#TABLE_BOOLEAN)
+	*checkRow=*header\AddRow("Disabled"):*checkRow\SetData(#TABLE_BOOLEAN_DISABLED):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("Recalc"):*checkRow\SetData(#TABLE_BOOLEAN_RECALC):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("Redraw"):*checkRow\SetData(#TABLE_BOOLEAN_REDRAW):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	
 	
 	Global panel=PanelGadget(#PB_Any,0,0,0,0)
 	AddGadgetItem(panel,-1,"Preview")
@@ -126,6 +137,7 @@ UseModule MyTable
 		Protected flags=0
 		Protected title.s=""
 		Protected empty.s=""		
+		Protected booleans.s=""
 		
 		Protected i,g
 		For i=1 To *styleTree\RowCount()
@@ -157,6 +169,27 @@ UseModule MyTable
 							EndSelect
 						EndIf
 					Next
+				Case #TABLE_BOOLEAN
+					For g=1 To *header\RowCount()
+						*row=*header\GetRow(g-1) 
+						If *row\GetChecked()
+							Select *row\GetData()
+								Case #TABLE_BOOLEAN_REDRAW
+									booleans+#CRLF$+LSet("",8," ")+"*preview\SetRedraw(#True)"
+								Case #TABLE_BOOLEAN_RECALC
+									booleans+#CRLF$+LSet("",8," ")+"*preview\SetRecalc(#True)"
+								Case #TABLE_BOOLEAN_DISABLED
+									booleans+#CRLF$+LSet("",8," ")+"*preview\SetDisabled(#True)"
+									*preview\SetDisabled(#True)
+							EndSelect
+						Else
+							Select *row\GetData()
+								Case #TABLE_BOOLEAN_DISABLED
+									booleans+#CRLF$+LSet("",8," ")+"*preview\SetDisabled(#True)"
+									*preview\SetDisabled(#False)
+							EndSelect
+						EndIf
+					Next					
 				Case #TABLE_TEXT
 					For g=1 To *header\RowCount()
 						*row=*header\GetRow(g-1) 
@@ -202,6 +235,9 @@ UseModule MyTable
 		If flags & #MYTABLE_TABLE_FLAGS_CALLBACK
 			result+LSet("",8," ")+"*preview\RegisterCallback(@TableCallback())"+#CRLF$
 		EndIf
+		If booleans<>""
+			result+booleans+#CRLF$+#CRLF$
+		EndIf
 		result+LSet("",8," ")+"ProcedureReturn *preview"+#CRLF$
 		result+LSet("",4," ")+"EndProcedure"+#CRLF$
 		result+"UnuseModule MyTable"
@@ -209,6 +245,7 @@ UseModule MyTable
 		*preview\SetTitle(title)
 		*preview\SetEmptyText(empty)
 		*preview\SetFlags(flags)
+		
 		
 		SetGadgetText(editor,result)
 	EndProcedure
