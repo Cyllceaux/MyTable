@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3109
+	#MYTABLE_VERSION = 3173
 	#MYTABLE_VERSION_DATE = 20210621
 	
 	Enumeration _mytable_type
@@ -272,6 +272,7 @@
 		SetTitle(value.s):GetTitle.s()
 		SetRedraw(value.b):GetRedraw.b()
 		SetRecalc(value.b):GetRecalc.b()
+		SetBatch(value.b):GetBatch.b()
 		SetHeaderHeight(value.i):GetHeaderHeight.i()
 		SetTitleHeight(value.i):GetTitleHeight.i()
 		SetDefaultRowHeight(value.i):GetDefaultRowHeight.i()
@@ -288,6 +289,7 @@
 		
 		Redraw()
 		Recalc()
+		ReInit()
 		Free()
 		ScrollToPos(row.i,setSelect.b=#False)
 		ScrollToCellPos(row.i,col.i,setSelect.b=#False)

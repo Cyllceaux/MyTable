@@ -37,8 +37,9 @@ _MyTableRegisterEvent(CustomCellEdit)
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetterPredraw(Table,Title,s)
 _MyTableSimpleSetterGetterRedraw(Table,Dirty,b)
+_MyTableSimpleSetterGetterRedraw(Table,Batch,b)
 _MyTableSimpleSetterGetterRedraw(Table,Disabled,b)
-_MyTableSimpleSetterGetterRedraw(Table,Flags,i)
+_MyTableSimpleGetter(Table,Flags,i)
 _MyTableSimpleSetterGetterRedraw(Table,EmptyText,s)
 _MyTableSimpleSetterGetterPredraw(Table,FixedCols,i)
 _MyTableSimpleGetter(Table,Type,i)
@@ -53,7 +54,67 @@ _MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)
 _MyTableSimpleSetterGetterPredraw(Table,Page,i)
 _MyTableSimpleSetterGetterPredraw(Table,PageElements,i)
 
+Procedure _MyTable_Table_Reinit(*this.strMyTableTable)
+	If *this
+		Protected rows=ListSize(*this\rows())
+		Protected cols=ListSize(*this\cols())
+		ClearList(*this\rows())
+		ClearList(*this\cols())
+		If _MyTable_IsGrid(*this)
+			_MyTableInitGrid(*this\application,
+			                 *this,
+			                 *this\window,
+			                 *this\canvas,
+			                 *this\vscroll,
+			                 *this\hscroll,
+			                 rows,
+			                 cols,
+			                 *this\flags)
+		ElseIf _MyTable_IsHierarchical(*this)
+			_MyTableInitTree(*this\application,
+			                 *this,
+			                 *this\window,
+			                 *this\canvas,
+			                 *this\vscroll,
+			                 *this\hscroll,			                 
+			                 *this\flags)
+		Else
+			_MyTableInitTable(*this\application,
+			                  *this,
+			                  *this\window,
+			                  *this\canvas,
+			                  *this\vscroll,
+			                  *this\hscroll,			                 
+			                  *this\flags)
+		EndIf
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+	EndIf
+EndProcedure
 
+Procedure _MyTable_Table_SetFlags(*this.strMyTableTable,value.i)
+	If *this
+		*this\flags=value
+		If _MyTable_IsGrid(*this)
+			*this\vtable=?vtable_grid
+			*this\type=#MYTABLE_TYPE_GRID
+			*this\datagrid=#True
+			
+		ElseIf _MyTable_IsHierarchical(*this)
+			*this\vtable=?vtable_tree
+			*this\type=#MYTABLE_TYPE_TREE
+			*this\datagrid=#False
+		Else
+			*this\vtable=?vtable_table
+			*this\type=#MYTABLE_TYPE_TABLE
+			*this\datagrid=#False
+		EndIf
+		*this\dirty=#True
+		_MyTable_Table_Predraw(*this)
+		_MyTable_Table_Redraw(*this)
+	EndIf
+EndProcedure
 
 Procedure _MyTable_Table_GetPages(*this.strMyTableTable)
 	If *this
@@ -928,7 +989,7 @@ EndProcedure
 Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 	If *this And *this\canvas
 		_MyTable_Table_ClearMaps(*this)
-		Protected redraw.b=Bool(*this\dirty And *this\redraw)
+		Protected redraw.b=Bool(*this\dirty And *this\redraw And Not *this\batch)
 		Protected header.b=_MyTable_IsHeader(*this)
 		Protected pages.b=_MyTable_IsPages(*this)
 		Protected title.b=_MyTable_IsTitle(*this)
@@ -1126,7 +1187,7 @@ EndProcedure
 Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 	Protected result.i=0
 	If *this
-		If ((*this\redraw And *this\dirty) Or force) And Not *this\drawing
+		If ((*this\redraw And *this\dirty) Or force) And Not *this\drawing And Not *this\batch
 			_callcountStart()
 			ClearList(*this\expRows())
 			ClearList(*this\expRowsPage())

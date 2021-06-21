@@ -102,6 +102,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(gruppe,Title)
 		_MyTableDataSectionSetterGetter(gruppe,Redraw)
 		_MyTableDataSectionSetterGetter(gruppe,Recalc)
+		_MyTableDataSectionSetterGetter(gruppe,Batch)
 		_MyTableDataSectionSetterGetter(gruppe,HeaderHeight)
 		_MyTableDataSectionSetterGetter(gruppe,TitleHeight)
 		_MyTableDataSectionSetterGetter(gruppe,DefaultRowHeight)
@@ -118,6 +119,7 @@ Module MyTable
 		
 		_MyTableDataSectionMethode(gruppe,Redraw)
 		_MyTableDataSectionMethode(gruppe,Recalc)
+		_MyTableDataSectionMethode(gruppe,ReInit)
 		_MyTableDataSectionMethode(gruppe,Free)
 		_MyTableDataSectionMethode(gruppe,ScrollToPos)
 		_MyTableDataSectionMethode(gruppe,ScrollToCellPos)

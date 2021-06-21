@@ -8,13 +8,20 @@ UseModule MyTable
 	Enumeration _mytable_creator_tree
 		#NONE
 		#TABLE_FLAGS
-		#TABLE_TEXT
+		#TABLE_FLAGS_DEFAULT
+		#TABLE_VALUES
+		#TABLE_VALUES_ROWS
+		#TABLE_VALUES_COLS
+		#TABLE_VALUES_FIXED_COLS
 		#TABLE_BOOLEAN
 		#TABLE_BOOLEAN_REDRAW
 		#TABLE_BOOLEAN_RECALC
 		#TABLE_BOOLEAN_DISABLED
+		#TABLE_BOOLEAN_BATCH
+		#TABLE_TEXT
 		#TABLE_TEXT_TITLE
 		#TABLE_TEXT_EMPTY
+		#TABLE_TEXT_NAME
 	EndEnumeration
 	
 	Procedure styleHeaderRow(*row.MyTableRow,*dat)
@@ -30,15 +37,31 @@ UseModule MyTable
 		*style\SetForeColor(#White)
 	EndProcedure
 	
-	Procedure styleEditCell(*cell.MyTableCell,*dat)
+	Procedure styleEditCell(*cell.MyTableCell,*dat,init.s="")
 		Protected *style.MyTableStyle
 		*cell\SetData(*dat)
+		*cell\SetText(init)
 		*style=*cell\GetDefaultStyle()
 		*cell\SetFlags(#MYTABLE_CELL_FLAGS_EDITABLE)
 		*style\SetBackColor(#Yellow)
 		*style=*cell\GetSelectedStyle()
 		*cell\SetFlags(#MYTABLE_CELL_FLAGS_EDITABLE)
 		*style\SetBackColor(#Yellow)
+	EndProcedure
+	
+	Procedure styleEditCellNumber(*cell.MyTableCell,*dat,init.s="")
+		Protected *style.MyTableStyle
+		*cell\SetData(*dat)
+		*cell\SetDatatype(#MYTABLE_DATATYPE_NUMBER)
+		*cell\SetText(init)
+		*style=*cell\GetDefaultStyle()
+		*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
+		*cell\SetFlags(#MYTABLE_CELL_FLAGS_EDITABLE)
+		*style\SetBackColor(#Yellow)
+		*style=*cell\GetSelectedStyle()
+		*cell\SetFlags(#MYTABLE_CELL_FLAGS_EDITABLE)
+		*style\SetBackColor(#Yellow)
+		*style\SetHAlign(#MYTABLE_STYLE_HALIGN_RIGHT)
 	EndProcedure
 	
 	
@@ -53,6 +76,10 @@ UseModule MyTable
 	Global *header.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle
 	*styleTree\AddCol("Name",200)
 	*styleTree\AddCol("Value",#PB_Ignore)
+	*header=*styleTree\AddRow("Table Default Type"):styleHeaderRow(*header,#TABLE_FLAGS_DEFAULT)
+	*checkRow=*header\AddRow("Grid"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_GRID):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("Table"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("Tree"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_TREE):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*header=*styleTree\AddRow("Table Type"):styleHeaderRow(*header,#TABLE_FLAGS)
 	*checkRow=*header\AddRow("Hierarchical"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_HIERARCHICAL):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Always Expanded"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
@@ -75,11 +102,16 @@ UseModule MyTable
 	*header=*styleTree\AddRow("Text"):styleHeaderRow(*header,#TABLE_TEXT)
 	*textRow=*header\AddRow("Title Text"):styleEditCell(*textRow\GetCell(1),#TABLE_TEXT_TITLE)
 	*textRow=*header\AddRow("Empty Text"):styleEditCell(*textRow\GetCell(1),#TABLE_TEXT_EMPTY)
+	*textRow=*header\AddRow("Name Text"):styleEditCell(*textRow\GetCell(1),#TABLE_TEXT_NAME)
 	*header=*styleTree\AddRow("Booleans"):styleHeaderRow(*header,#TABLE_BOOLEAN)
 	*checkRow=*header\AddRow("Disabled"):*checkRow\SetData(#TABLE_BOOLEAN_DISABLED):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Recalc"):*checkRow\SetData(#TABLE_BOOLEAN_RECALC):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*checkRow=*header\AddRow("Redraw"):*checkRow\SetData(#TABLE_BOOLEAN_REDRAW):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
-	
+	*checkRow=*header\AddRow("Batch"):*checkRow\SetData(#TABLE_BOOLEAN_BATCH):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*header=*styleTree\AddRow("Values"):styleHeaderRow(*header,#TABLE_VALUES)
+	*textRow=*header\AddRow("Rows"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_ROWS,"1000")
+	*textRow=*header\AddRow("Cols"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_COLS,"100")
+	*textRow=*header\AddRow("FixedCols"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_FIXED_COLS,"0")
 	
 	Global panel=PanelGadget(#PB_Any,0,0,0,0)
 	AddGadgetItem(panel,-1,"Preview")
@@ -120,6 +152,7 @@ UseModule MyTable
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
 	BindEvent(#PB_Event_RestoreWindow,@Resize(),window)
 	BindEvent(#PB_Event_MaximizeWindow,@Resize(),window)
+	BindGadgetEvent(splitter,@Resize())
 	
 	
 	Macro _codetableflags(name)
@@ -136,13 +169,30 @@ UseModule MyTable
 		Protected tableflags.s=""
 		Protected flags=0
 		Protected title.s=""
+		Protected name.s=""
 		Protected empty.s=""		
 		Protected booleans.s=""
+		Protected cols.i=0
+		Protected rows.i=0
+		Protected fixed.i=0
+		Protected idx
+		*preview\SetRedraw(#False)
 		
 		Protected i,g
 		For i=1 To *styleTree\RowCount()
 			*header=*styleTree\GetRow(i-1)
 			Select *header\GetData()
+				Case #TABLE_FLAGS_DEFAULT
+					For g=1 To *header\RowCount()
+						*row=*header\GetRow(g-1) 
+						If *row\GetChecked()
+							Select *row\GetData()
+									_codetableflags(#MYTABLE_TABLE_FLAGS_DEFAULT_GRID) 
+									_codetableflags(#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE) 
+									_codetableflags(#MYTABLE_TABLE_FLAGS_DEFAULT_TREE) 
+							EndSelect
+						EndIf
+					Next
 				Case #TABLE_FLAGS
 					For g=1 To *header\RowCount()
 						*row=*header\GetRow(g-1) 
@@ -167,6 +217,10 @@ UseModule MyTable
 									_codetableflags(#MYTABLE_TABLE_FLAGS_GRID)
 									_codetableflags(#MYTABLE_TABLE_FLAGS_ELEMENT_SELECTED)
 							EndSelect
+						Else
+							If *row\GetData() & flags
+								*row\SetChecked(#True)
+							EndIf
 						EndIf
 					Next
 				Case #TABLE_BOOLEAN
@@ -178,6 +232,8 @@ UseModule MyTable
 									booleans+#CRLF$+LSet("",8," ")+"*preview\SetRedraw(#True)"
 								Case #TABLE_BOOLEAN_RECALC
 									booleans+#CRLF$+LSet("",8," ")+"*preview\SetRecalc(#True)"
+								Case #TABLE_BOOLEAN_BATCH
+									booleans+#CRLF$+LSet("",8," ")+"*preview\SetBatch(#True)"
 								Case #TABLE_BOOLEAN_DISABLED
 									booleans+#CRLF$+LSet("",8," ")+"*preview\SetDisabled(#True)"
 									*preview\SetDisabled(#True)
@@ -185,7 +241,6 @@ UseModule MyTable
 						Else
 							Select *row\GetData()
 								Case #TABLE_BOOLEAN_DISABLED
-									booleans+#CRLF$+LSet("",8," ")+"*preview\SetDisabled(#True)"
 									*preview\SetDisabled(#False)
 							EndSelect
 						EndIf
@@ -199,6 +254,21 @@ UseModule MyTable
 								empty=*cell\GetText()
 							Case #TABLE_TEXT_TITLE
 								title=*cell\GetText()	
+							Case #TABLE_TEXT_NAME
+								name=*cell\GetText()	
+						EndSelect
+					Next
+				Case #TABLE_VALUES
+					For g=1 To *header\RowCount()
+						*row=*header\GetRow(g-1) 
+						*cell=*row\GetCell(1)
+						Select *cell\GetData()
+							Case #TABLE_VALUES_COLS
+								cols=Val(*cell\GetText())
+							Case #TABLE_VALUES_ROWS
+								rows=Val(*cell\GetText())
+							Case #TABLE_VALUES_FIXED_COLS
+								fixed=Val(*cell\GetText())
 						EndSelect
 					Next
 			EndSelect
@@ -221,13 +291,24 @@ UseModule MyTable
 			result+LSet("",4," ")+"EndProcedure"+#CRLF$+#CRLF$
 		EndIf
 		result+LSet("",4," ")+"Procedure createTable(window,canvas,hscroll,vscroll)"+#CRLF$
-		If tableflags<>""
-			result+LSet("",8," ")+"Protected *preview.MyTable=MyTableCreateTable(window,canvas,vscroll,hscroll,"+tableflags+")"+#CRLF$
+		result+LSet("",8," ")+"Protected *preview.MyTable=MyTableCreate"
+		If flags & #MYTABLE_TABLE_FLAGS_GRID
+			result+"Grid(window,canvas,vscroll,hscroll,"+rows+","+cols
+		ElseIf flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL
+			result+"Tree(window,canvas,vscroll,hscroll"
 		Else
-			result+LSet("",8," ")+"Protected *preview.MyTable=MyTableCreateTable(window,canvas,vscroll,hscroll)"+#CRLF$
+			result+"Table(window,canvas,vscroll,hscroll"
+		EndIf
+		If tableflags<>""
+			result+","+tableflags+")"+#CRLF$
+		Else
+			result+")"+#CRLF$
 		EndIf
 		If title<>""
 			result+LSet("",8," ")+"*preview\SetTitle("+#DQUOTE$+title+#DQUOTE$+")"+#CRLF$
+		EndIf
+		If name<>""
+			result+LSet("",8," ")+"*preview\SetName("+#DQUOTE$+name+#DQUOTE$+")"+#CRLF$
 		EndIf
 		If empty<>""
 			result+LSet("",8," ")+"*preview\SetEmptyText("+#DQUOTE$+empty+#DQUOTE$+")"+#CRLF$
@@ -238,19 +319,67 @@ UseModule MyTable
 		If booleans<>""
 			result+booleans+#CRLF$+#CRLF$
 		EndIf
+		If fixed>0
+			result+LSet("",8," ")+"*preview\SetFixedCols("+fixed+")"+#CRLF$
+		EndIf
 		result+LSet("",8," ")+"ProcedureReturn *preview"+#CRLF$
 		result+LSet("",4," ")+"EndProcedure"+#CRLF$
 		result+"UnuseModule MyTable"
 		
+		Protected *tree.MyTableTree
+		Protected *grid.MyTableGrid
+		Protected *table.MyTableTable
+		
+		*preview\SetBatch(#True)
+		
 		*preview\SetTitle(title)
 		*preview\SetEmptyText(empty)
+		
 		*preview\SetFlags(flags)
+		*preview\ReInit()
 		
+		Select *preview\GetType()
+			Case #MYTABLE_TYPE_TABLE
+				*table=*preview
+				*table\SetFixedCols(fixed)
+				For idx=1 To cols
+					*table\AddCol("Col "+idx,100)
+				Next
+				*preview\AddDirtyRows(rows)
+			Case #MYTABLE_TYPE_TREE
+				*tree=*preview
+				*tree\SetFixedCols(fixed)
+				For idx=1 To cols
+					*tree\AddCol("Col "+idx,100)
+				Next
+				*preview\AddDirtyRows(rows)
+			Case #MYTABLE_TYPE_GRID
+				*grid=*preview
+				*grid\ResizeGrid(rows,cols)
+		EndSelect
 		
+		*preview\SetBatch(#False)
+		*preview\SetRedraw(#True)
 		SetGadgetText(editor,result)
 	EndProcedure
 	
 	Procedure.b RowCheckChange(*row.MyTableRow)
+		Protected *parent.MyTableRow=*row\GetParent()
+		Protected i,g
+		*styleTree\SetRedraw(#False)
+		If *parent And *parent\GetData()=#TABLE_FLAGS_DEFAULT
+			For i=1 To *styleTree\RowCount()
+				*header=*styleTree\GetRow(i-1)
+				Select *header\GetData()
+					Case #TABLE_FLAGS
+						For g=1 To *header\RowCount()
+							Protected *trow.MyTableRow=*header\GetRow(g-1) 
+							*trow\SetChecked(Bool(*trow\GetData() & *row\GetData()))
+						Next
+				EndSelect
+			Next
+		EndIf
+		*styleTree\SetRedraw(#True)
 		GenerateCode()
 	EndProcedure
 	

@@ -1460,9 +1460,11 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		ElseIf _MyTable_IsHierarchical(*table)
 			\vtable=?vtable_tree
 			\type=#MYTABLE_TYPE_TREE
+			\datagrid=#False
 		Else
 			\vtable=?vtable_table
 			\type=#MYTABLE_TYPE_TABLE
+			\datagrid=#false
 		EndIf
 		
 		\application=*application

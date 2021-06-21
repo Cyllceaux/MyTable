@@ -170,6 +170,7 @@ Structure strMyTableTable Extends strMyTableObject
 	calctitleHeight.i
 	redraw.b
 	recalc.b
+	batch.b
 	datagrid.b
 	
 	emptytext.s

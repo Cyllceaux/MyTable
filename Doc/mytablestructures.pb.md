@@ -177,6 +177,7 @@
 |calctitleHeight|i||
 |redraw|b||
 |recalc|b||
+|batch|b||
 |datagrid|b||
 |emptytext|s||
 |drawing|b||
