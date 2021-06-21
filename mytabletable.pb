@@ -37,6 +37,7 @@ _MyTableRegisterEvent(CustomCellEdit)
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetterPredraw(Table,Title,s)
 _MyTableSimpleSetterGetterRedraw(Table,Dirty,b)
+_MyTableSimpleSetterGetterRedraw(Table,Disabled,b)
 _MyTableSimpleSetterGetterRedraw(Table,Flags,i)
 _MyTableSimpleSetterGetterRedraw(Table,EmptyText,s)
 _MyTableSimpleSetterGetterPredraw(Table,FixedCols,i)
@@ -278,6 +279,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		Protected *col.strMyTableCol=SelectElement(*this\cols(),idx-1)
 		Protected calcwidth.i=*col\calcwidth
 		Protected selected.b=_MyTable_IsSelected(*col)
+		Protected disabled.b=_MyTable_IsDisabled(*col)
 		Protected tborder=_MyTable_GetDefaultBorder(*col)
 		Protected bElementSelected.b=#False
 		Protected *cell.strMyTableCell=0
@@ -316,7 +318,18 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		EndIf
 		
 		If calcwidth>0
-			Protected *tfont.strMyTableFont=_MyTable_GetDefaultFont(*col)
+			
+			Protected *tfont.strMyTableFont
+			If disabled
+				*tfont=_MyTable_GetDisabledFont(*col)
+			ElseIf selected
+				*tfont=_MyTable_GetSelectedFont(*col)
+			ElseIf bElementSelected
+				*tfont=_MyTable_GetElementSelectedFont(*col)
+			Else
+				*tfont=_MyTable_GetDefaultFont(*col)
+			EndIf
+			
 			If *tfont
 				DrawingFont(*tfont\fontid)					
 			Else
@@ -334,7 +347,9 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 			BackColor(_MyTable_GetDefaultBackColor(*col))
 			FrontColor(_MyTable_GetDefaultFrontColor(*col))
 			ClipOutput(bx,by,calcwidth,*this\calcheaderheight)
-			If selected
+			If disabled
+				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDisabledBackColor(*col))
+			ElseIf selected
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetSelectedBackColor(*col))
 			ElseIf bElementSelected
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetElementSelectedBackColor(*col))
@@ -391,8 +406,12 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 				ta=MyTableW20
 			EndIf
 			
-			If selected
+			If Disabled
+				_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetDisabledForeColor(*col),calcwidth-addx-ta)
+			ElseIf selected
 				_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetSelectedForeColor(*col),calcwidth-addx-ta)
+			ElseIf bElementSelected
+				_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetelementSelectedForeColor(*col),calcwidth-addx-ta)
 			Else
 				_MyTableDrawText(bx+addx,addy+by,*col\text,_MyTable_GetDefaultForeColor(*col),calcwidth-addx-ta)
 			EndIf
@@ -403,9 +422,15 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 				Protected bcolor.q=0
 				DrawingMode(#PB_2DDrawing_Default)
 				If Bool(tborder & #MYTABLE_STYLE_BORDER_TOP)
-					If selected
+					If disabled
+						bcolor=_MyTable_GetDisabledBorderColorTop(*col)
+						c=_MyTable_GetDisabledBorderWidthTop(*col)
+					ElseIf selected
 						bcolor=_MyTable_GetSelectedBorderColorTop(*col)
 						c=_MyTable_GetSelectedBorderWidthTop(*col)
+					ElseIf elementselected
+						bcolor=_MyTable_GetElementSelectedBorderColorTop(*col)
+						c=_MyTable_GetElementSelectedBorderWidthTop(*col)
 					Else
 						bcolor=_MyTable_GetDefaultBorderColorTop(*col)
 						c=_MyTable_GetDefaultBorderWidthTop(*col)
@@ -415,9 +440,15 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 				EndIf
 				
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
-					If selected
+					If disabled
+						bcolor=_MyTable_GetDisabledBorderColorRight(*col)
+						c=_MyTable_GetDisabledBorderWidthRight(*col)
+					ElseIf selected
 						bcolor=_MyTable_GetSelectedBorderColorRight(*col)
 						c=_MyTable_GetSelectedBorderWidthRight(*col)
+					ElseIf elementselected
+						bcolor=_MyTable_GetElementSelectedBorderColorRight(*col)
+						c=_MyTable_GetElementSelectedBorderWidthRight(*col)
 					Else
 						bcolor=_MyTable_GetDefaultBorderColorRight(*col)
 						c=_MyTable_GetDefaultBorderWidthRight(*col)
@@ -426,9 +457,15 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 					Box(bx+calcwidth-c,by,calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
-					If selected
+					If disabled
+						bcolor=_MyTable_GetDisabledBorderColorBottom(*col)
+						c=_MyTable_GetDisabledBorderWidthBottom(*col)
+					ElseIf selected
 						bcolor=_MyTable_GetSelectedBorderColorBottom(*col)
 						c=_MyTable_GetSelectedBorderWidthBottom(*col)
+					ElseIf elementselected
+						bcolor=_MyTable_GetElementSelectedBorderColorBottom(*col)
+						c=_MyTable_GetElementSelectedBorderWidthBottom(*col)
 					Else
 						bcolor=_MyTable_GetDefaultBorderColorBottom(*col)
 						c=_MyTable_GetDefaultBorderWidthBottom(*col)
@@ -437,9 +474,15 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 					Box(bx,*this\calcheaderheight-c,calcwidth,c,bcolor)
 				EndIf
 				If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
-					If selected
+					If disabled
+						bcolor=_MyTable_GetDisabledBorderColorLeft(*col)
+						c=_MyTable_GetDisabledBorderWidthLeft(*col)
+					ElseIf selected
 						bcolor=_MyTable_GetSelectedBorderColorLeft(*col)
 						c=_MyTable_GetSelectedBorderWidthLeft(*col)
+					ElseIf elementselected
+						bcolor=_MyTable_GetElementSelectedBorderColorLeft(*col)
+						c=_MyTable_GetElementSelectedBorderWidthLeft(*col)
 					Else
 						bcolor=_MyTable_GetDefaultBorderColorLeft(*col)
 						c=_MyTable_GetDefaultBorderWidthLeft(*col)
@@ -461,7 +504,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
-Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,idx,*cell.strMyTableCell)
+Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell.strMyTableCell)
 	Protected result=*cell\table\calcdefaultrowheight
 	Protected valign=_MyTable_GetDefaultVAlign(*cell)
 	Protected halign=_MyTable_GetDefaultHAlign(*cell)
@@ -471,7 +514,9 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	
 	
 	Protected *tfont.strMyTableFont=0
-	If fixed
+	If disabled
+		*tfont=_MyTable_GetDisabledFont(*cell)
+	ElseIf fixed
 		*tfont=_MyTable_GetFixedFont(*cell)
 	ElseIf selected
 		*tfont=_MyTable_GetSelectedFont(*cell)
@@ -540,7 +585,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	
 	If *cell\cells
 		ForEach *cell\cells\cells()
-			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,idx,*cell\cells\cells())
+			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell\cells\cells())
 		Next
 	EndIf
 	ProcedureReturn result
@@ -628,7 +673,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			selected=Bool(_MyTable_IsSelected(*this))
 			selected=Bool(selected Or _MyTable_IsSelected(*cell))
 			selected=Bool(selected Or _MyTable_IsSelected(*cell\col))
+			selected=Bool(selected Or _MyTable_IsSelected(*cell\row))
 			
+			Protected Disabled.b=_MyTable_IsDisabled(*cell)
 			
 			mselected=#False
 			If markmouseover And Not selected
@@ -648,7 +695,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			EndIf
 			
 			If Not customdraw
-				If bElementSelected
+				If disabled
+					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetDisabledBackColor(*cell))
+				ElseIf bElementSelected
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetElementSelectedBackColor(*cell))
 				ElseIf selected
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
@@ -775,7 +824,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 				EndIf
 				
 				
-				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,idx,*cell)
+				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell)
 				
 				
 				If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
@@ -794,9 +843,15 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					Protected bcolor.q=0
 					DrawingMode(#PB_2DDrawing_Default)
 					If Bool(tborder & #MYTABLE_STYLE_BORDER_TOP)
-						If selected
+						If disabled
+							bcolor=_MyTable_GetDisabledBorderColorTop(*cell)
+							c=_MyTable_GetDisabledBorderWidthTop(*cell)
+						ElseIf selected
 							bcolor=_MyTable_GetSelectedBorderColorTop(*cell)
 							c=_MyTable_GetSelectedBorderWidthTop(*cell)
+						ElseIf elementselected
+							bcolor=_MyTable_GetElementSelectedBorderColorTop(*cell)
+							c=_MyTable_GetElementSelectedBorderWidthTop(*cell)
 						Else
 							bcolor=_MyTable_GetDefaultBorderColorTop(*cell)
 							c=_MyTable_GetDefaultBorderWidthTop(*cell)
@@ -806,9 +861,15 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					EndIf
 					
 					If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
-						If selected
+						If disabled
+							bcolor=_MyTable_GetDisabledBorderColorRight(*cell)
+							c=_MyTable_GetDisabledBorderWidthRight(*cell)
+						ElseIf selected
 							bcolor=_MyTable_GetSelectedBorderColorRight(*cell)
 							c=_MyTable_GetSelectedBorderWidthRight(*cell)
+						ElseIf elementselected
+							bcolor=_MyTable_GetElementSelectedBorderColorRight(*cell)
+							c=_MyTable_GetElementSelectedBorderWidthRight(*cell)
 						Else
 							bcolor=_MyTable_GetDefaultBorderColorRight(*cell)
 							c=_MyTable_GetDefaultBorderWidthRight(*cell)
@@ -817,9 +878,15 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 						Box(bx+*col\calcwidth-c,by,*col\calcwidth,*this\calcheight,bcolor)
 					EndIf
 					If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
-						If selected
+						If disabled
+							bcolor=_MyTable_GetDisabledBorderColorBottom(*cell)
+							c=_MyTable_GetDisabledBorderWidthBottom(*cell)
+						ElseIf selected
 							bcolor=_MyTable_GetSelectedBorderColorBottom(*cell)
 							c=_MyTable_GetSelectedBorderWidthBottom(*cell)
+						ElseIf elementselected
+							bcolor=_MyTable_GetElementSelectedBorderColorBottom(*cell)
+							c=_MyTable_GetElementSelectedBorderWidthBottom(*cell)
 						Else
 							bcolor=_MyTable_GetDefaultBorderColorBottom(*cell)
 							c=_MyTable_GetDefaultBorderWidthBottom(*cell)
@@ -828,9 +895,15 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 						Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
 					EndIf
 					If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
-						If selected
+						If disabled
+							bcolor=_MyTable_GetDisabledBorderColorLeft(*cell)
+							c=_MyTable_GetDisabledBorderWidthLeft(*cell)
+						ElseIf selected
 							bcolor=_MyTable_GetSelectedBorderColorLeft(*cell)
 							c=_MyTable_GetSelectedBorderWidthLeft(*cell)
+						ElseIf elementselected
+							bcolor=_MyTable_GetElementSelectedBorderColorLeft(*cell)
+							c=_MyTable_GetElementSelectedBorderWidthLeft(*cell)
 						Else
 							bcolor=_MyTable_GetDefaultBorderColorLeft(*cell)
 							c=_MyTable_GetDefaultBorderWidthLeft(*cell)

@@ -41,12 +41,14 @@ Module MyTable
 		_MyTableDataSectionGetter(gruppe,DefaultStyle)
 		_MyTableDataSectionGetter(gruppe,SelectedStyle)
 		_MyTableDataSectionGetter(gruppe,MouseOverStyle)
+		_MyTableDataSectionGetter(gruppe,DisabledStyle)
 		_MyTableDataSectionGetter(gruppe,FixedStyle)
 		_MyTableDataSectionSetterGetter(gruppe,Flags)
 		_MyTableDataSectionSetterGetter(gruppe,Data)
 		_MyTableDataSectionSetterGetter(gruppe,Dirty)
 		_MyTableDataSectionSetterGetter(gruppe,Selected)		
 		_MyTableDataSectionSetterGetter(gruppe,Tooltip)
+		_MyTableDataSectionSetterGetter(gruppe,Disabled)
 		
 		_MyTableDataSectionMethode(gruppe,Autosize)
 	EndMacro

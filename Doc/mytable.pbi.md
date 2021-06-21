@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3008||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3091||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210621||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
@@ -76,20 +76,22 @@
 ### \_mytable\_cell
 |Name|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_CHECKBOXES</span>|1||
-|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_EDITABLE</span>|2||
-|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_NO\_EDITABLE</span>|4||
+|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_NO\_CHECKBOXES</span>|1||
+|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_CHECKBOXES</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_EDITABLE</span>|4||
+|<span style="color:#AAAAFF">\#MYTABLE\_CELL\_FLAGS\_NO\_EDITABLE</span>|8||
 
 ### \_mytable\_col
 |Name|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_CHECKBOXES</span>|1||
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_SORTABLE</span>|2||
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_SORTABLE</span>|4||
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_RESIZABLE</span>|8||
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_RESIZABLE</span>|16||
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_EDITABLE</span>|32||
-|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_EDITABLE</span>|64||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_CHECKBOXES</span>|1||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_CHECKBOXES</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_SORTABLE</span>|4||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_SORTABLE</span>|8||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_RESIZABLE</span>|16||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_RESIZABLE</span>|32||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_EDITABLE</span>|64||
+|<span style="color:#AAAAFF">\#MYTABLE\_COL\_FLAGS\_NO\_EDITABLE</span>|128||
 
 ### \_mytable\_row
 |Name|Value|Comment|
@@ -99,7 +101,8 @@
 |<span style="color:#AAAAFF">\#MYTABLE\_ROW\_FLAGS\_HIERARCHICAL\_ALWAYS\_EXPANDED</span>|4|always expand the row|
 |<span style="color:#AAAAFF">\#MYTABLE\_ROW\_FLAGS\_EDITABLE</span>|8||
 |<span style="color:#AAAAFF">\#MYTABLE\_ROW\_FLAGS\_NO\_EDITABLE</span>|16||
-|<span style="color:#AAAAFF">\#MYTABLE\_ROW\_FLAGS\_CHECKBOXES</span>|32||
+|<span style="color:#AAAAFF">\#MYTABLE\_ROW\_FLAGS\_NO\_CHECKBOXES</span>|32||
+|<span style="color:#AAAAFF">\#MYTABLE\_ROW\_FLAGS\_CHECKBOXES</span>|64||
 
 ### \_mytable\_table
 |Name|Value|Comment|
@@ -214,6 +217,7 @@
 |GetDefaultStyle||||
 |GetSelectedStyle||||
 |GetMouseOverStyle||||
+|GetDisabledStyle||||
 |GetFixedStyle||||
 |SetFlags||value.i||
 |GetFlags||||
@@ -225,6 +229,8 @@
 |GetSelected|b|||
 |SetTooltip||value.s||
 |GetTooltip|s|||
+|SetDisabled||value.b||
+|GetDisabled|b|||
 |Autosize||||
 
 ### MyTableCell : [MyTableObject](#MyTableObject)

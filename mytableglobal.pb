@@ -143,6 +143,15 @@ Procedure  _MyTableInitStyleTableMouseOver(*style.strMyTableStyle)
 	EndWith
 EndProcedure
 
+Procedure  _MyTableInitStyleTableDisabled(*style.strMyTableStyle)
+	With *style
+		\backcolor=RGBA(100,100,120,255)
+		\forecolor=RGBA(20,20,20,255)
+		\border\borderDefault\color=RGBA(200,200,250,255)
+		\border\border=#MYTABLE_STYLE_BORDER_ALL
+	EndWith
+EndProcedure
+
 Procedure  _MyTableInitStyleTableFixed(*style.strMyTableStyle)
 	With *style
 		\frontcolor=RGBA(250,250,250,255)
@@ -190,6 +199,7 @@ Procedure _MyTableInitStyles(*this.strMyTableObject)
 		_MyTableInitStyleTableEmpty(\emptyStyle)
 		_MyTableInitStyleTableElementSelected(\elementselectedStyle)
 		_MyTableInitStyleTableZebra(\zebraStyle)
+		_MyTableInitStyleTableDisabled(\disabledStyle)
 	EndWith
 EndProcedure
 
@@ -291,6 +301,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	Protected title.b=_MyTable_IsTitle(*this)
 	Protected header.b=_MyTable_IsHeader(*this)
 	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
+	Protected disabled.b=_MyTable_IsDisabled(*this)
 	
 	Protected *row.strMyTableRow=0
 	Protected *cell.strMyTableCell=0
@@ -407,8 +418,9 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	EndIf
 	
 	If *rc\row>-1 And *rc\col=0
-		
-		If hierarchical Or checkboxes
+		disabled=_MyTable_IsDisabled(*rc\trow)
+		If (hierarchical Or checkboxes) And Not disabled
+			Checkboxes=_MyTable_IsCheckboxes(*rc\trow)
 			Protected ex=*row\level*MyTableW20
 			If mx>ex
 				ex=mx-ex
@@ -497,11 +509,13 @@ Procedure _MyTableEvtCanvasKeyDown()
 		Protected *col.strMyTableCol=*this\lastcol
 		
 		Protected editable.b=_MyTable_IsEditable(*this)
+		Protected disabled.b=_MyTable_IsDisabled(*this)
 		
 		
 		If *cell
 			editable=_MyTable_IsEditable(*cell)			
 			checkboxes=_MyTable_IsCheckboxes(*cell)
+			disabled.b=_MyTable_IsDisabled(*cell)
 			
 			If Not *col
 				*col=*cell\col
@@ -602,6 +616,9 @@ Procedure _MyTableEvtCanvasKeyDown()
 					EndIf
 				EndIf
 			Case #PB_Shortcut_Space
+				If *row
+					Checkboxes=_MyTable_IsCheckboxes(*row)
+				EndIf
 				If checkboxes And *row
 					*row\checked=Bool(*row\checked=#False)
 					*row\dirty=#True
@@ -1136,7 +1153,7 @@ Procedure _MyTableEvtCanvasMouseMove()
 					*this\mvcell=*rc\tcell
 					*this\mvcol=*rc\tcol
 					*this\mvrow=*rc\trow
-				_MyTable_Table_Redraw(*this)
+					_MyTable_Table_Redraw(*this)
 				EndIf
 			EndIf				
 		EndIf
@@ -1825,6 +1842,30 @@ Procedure _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
 	EndIf	
 EndProcedure
 
+Procedure.b _MyTable_IsDisabled(*obj.strMyTableObject)
+	Protected result.b=*obj\disabled
+	If Not result
+		Select *obj\type
+			Case #MYTABLE_TYPE_CELL
+				Protected *cell.strMyTableCell=*obj
+				result=Bool(_MyTable_IsDisabled(*cell\col) Or _MyTable_IsDisabled(*cell\row))
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*obj
+				result=_MyTable_IsDisabled(*row\table)	
+			Case #MYTABLE_TYPE_COL
+			Protected *col.strMyTableCol=*obj
+				result=_MyTable_IsDisabled(*col\table)
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+				Protected *table.strMyTableTable=*obj
+				If *table\application
+					result=_MyTable_IsDisabled(*table\application)
+				EndIf
+		EndSelect
+	EndIf
+	ProcedureReturn result
+EndProcedure
+
+
 Procedure _MyTable_StopEdit(*this.strMyTableTable,save.b)
 	If *this
 		If IsWindow(*this\edit\window)
@@ -1867,8 +1908,9 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 		Protected *this.strMyTableTable=*cell\table
 		
 		Protected editable.b=_MyTable_IsEditable(*cell)		
+		Protected disabled.b=_MyTable_IsDisabled(*cell)		
 		
-		If editable
+		If editable And Not disabled
 			Protected custom.b=#False
 			If *this\eventCustomCellEdit
 				custom=*this\eventCustomCellEdit(*cell)
@@ -2107,6 +2149,36 @@ Macro _MyTable_IsTableColNo(name)
 	EndProcedure	
 EndMacro
 
+Macro _MyTable_IsTableCellColRowNo(name)	
+	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
+		Protected result.b=#False
+		Select *obj\type
+			Case #MYTABLE_TYPE_CELL
+				Protected *cell.strMyTableCell=*obj
+				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*cell\table))
+				result=Bool(result Or _Mytable_Is#name(*cell\col))
+				result=Bool(result And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_COL
+				Protected *col.strMyTableCol=*obj
+				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_ROW
+				Protected *row.strMyTableRow=*obj
+				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
+				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
+			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
+			Default
+				DebuggerError("Unbekannt Typ")
+		EndSelect		
+		
+		ProcedureReturn result
+	EndProcedure	
+EndMacro
+
 Macro _MyTable_IsTableRow(name)	
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
@@ -2216,7 +2288,7 @@ EndMacro
 
 
 _MyTable_IsTableNoGrid(Hierarchical)
-_MyTable_IsTableAll(Checkboxes)
+_MyTable_IsTableCellColRowNo(Checkboxes)
 _MyTable_IsTableColNo(Sortable)
 _MyTable_IsTableRowColNo(Resizable)
 _MyTable_IsTable(Title)
@@ -2264,3 +2336,4 @@ _MyTable_StylesMethods(Title)
 _MyTable_StylesMethods(ElementSelected)
 _MyTable_StylesMethods(MouseOver)
 _MyTable_StylesMethods(Zebra)
+_MyTable_StylesMethods(Disabled)

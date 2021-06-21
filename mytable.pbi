@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3008
+	#MYTABLE_VERSION = 3091
 	#MYTABLE_VERSION_DATE = 20210621
 	
 	Enumeration _mytable_type
@@ -87,17 +87,20 @@
 		GetDefaultStyle()
 		GetSelectedStyle()
 		GetMouseOverStyle()
+		GetDisabledStyle()
 		GetFixedStyle()
 		SetFlags(value.i):GetFlags()
 		SetData(*value):GetData()
 		SetDirty(value.b):GetDirty.b()
 		SetSelected(value.b):GetSelected.b()
 		SetTooltip(value.s):GetTooltip.s()
+		SetDisabled(value.b):GetDisabled.b()
 		
 		Autosize()
 	EndInterface
 	
 	EnumerationBinary _mytable_cell	
+		#MYTABLE_CELL_FLAGS_NO_CHECKBOXES
 		#MYTABLE_CELL_FLAGS_CHECKBOXES
 		#MYTABLE_CELL_FLAGS_EDITABLE
 		#MYTABLE_CELL_FLAGS_NO_EDITABLE
@@ -135,6 +138,7 @@
 	EndInterface
 	
 	EnumerationBinary _mytable_col
+		#MYTABLE_COL_FLAGS_NO_CHECKBOXES
 		#MYTABLE_COL_FLAGS_CHECKBOXES
 		#MYTABLE_COL_FLAGS_SORTABLE
 		#MYTABLE_COL_FLAGS_NO_SORTABLE
@@ -173,6 +177,7 @@
 		#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED ; always expand the row
 		#MYTABLE_ROW_FLAGS_EDITABLE
 		#MYTABLE_ROW_FLAGS_NO_EDITABLE
+		#MYTABLE_ROW_FLAGS_NO_CHECKBOXES
 		#MYTABLE_ROW_FLAGS_CHECKBOXES
 	EndEnumeration
 	

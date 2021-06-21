@@ -94,6 +94,7 @@
 |\_MyTable\_Table\_Delete||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_AddCol||<span style="color:#FFFFAA">*this.</span>strMyTableTable , text.s , width.i , image.i = 0 , flags.i = 0||
 |\_MyTable\_IsSelected|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsDisabled|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTableEvtResize||||
 |\_MyTableEvtMove||||
 |\_MyTableEvtCanvasKeyDown||||

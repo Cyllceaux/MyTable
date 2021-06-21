@@ -1,6 +1,7 @@
 ﻿_MyTableSimpleSetterGetter(Col,Tooltip,s)
 _MyTableSimpleSetterGetterSubRedraw(Col,Dirty,b)
 _MyTableSimpleSetterGetterSubPredraw(Col,Flags,i)
+_MyTableSimpleSetterGetterSubPredraw(Col,Disabled,b)
 _MyTableSimpleGetterPointer(Col,Table)
 _MyTableSimpleGetter(Col,Type,i)
 _MyTableSimpleSetterGetterPointer(Col,Data)

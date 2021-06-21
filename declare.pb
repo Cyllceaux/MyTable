@@ -190,6 +190,7 @@ Declare _MyTable_Table_Autosize(*this.strMyTableTable)
 Declare _MyTable_Table_Delete(*this.strMyTableTable)
 Declare _MyTable_Table_AddCol(*this.strMyTableTable,text.s,width.i,image.i=0,flags.i=0)
 Declare.b _MyTable_IsSelected(*obj.strMyTableObject)
+Declare.b _MyTable_IsDisabled(*obj.strMyTableObject)
 
 Declare _MyTableEvtResize()
 Declare _MyTableEvtMove()
@@ -366,6 +367,7 @@ _MyTable_GetStyleApplication(Default)
 	_MyTable_GetStyleApplication(ElementSelected)
 	_MyTable_GetStyleApplication(Empty)
 	_MyTable_GetStyleApplication(Zebra)
+	_MyTable_GetStyleApplication(Disabled)
 EndMacro
 
 Macro _MyTable_GetStylesTable()
@@ -377,6 +379,7 @@ _MyTable_GetStyleTable(Default)
 	_MyTable_GetStyleTable(ElementSelected)
 	_MyTable_GetStyleTable(Empty)
 	_MyTable_GetStyleTable(Zebra)
+	_MyTable_GetStyleTable(Disabled)
 EndMacro
 
 Macro _MyTable_GetStylesRow()
@@ -388,6 +391,7 @@ _MyTable_GetStyleRow(Default)
 	_MyTable_GetStyleRow(ElementSelected)
 	_MyTable_GetStyleRow(Empty)
 	_MyTable_GetStyleRow(Zebra)
+	_MyTable_GetStyleRow(Disabled)
 EndMacro
 
 Macro _MyTable_GetStylesCol()
@@ -399,6 +403,7 @@ _MyTable_GetStyleCol(Default)
 	_MyTable_GetStyleCol(ElementSelected)
 	_MyTable_GetStyleCol(Empty)
 	_MyTable_GetStyleCol(Zebra)
+	_MyTable_GetStyleCol(Disabled)
 EndMacro
 
 Macro _MyTable_GetStylesCell()
@@ -410,6 +415,7 @@ _MyTable_GetStyleCell(Default)
 	_MyTable_GetStyleCell(ElementSelected)
 	_MyTable_GetStyleCell(Empty)
 	_MyTable_GetStyleCell(Zebra)
+	_MyTable_GetStyleCell(Disabled)
 EndMacro
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)

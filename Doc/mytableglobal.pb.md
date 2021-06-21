@@ -10,6 +10,7 @@
 |\_MyTable\_IsTableNoGrid||name||
 |\_MyTable\_IsTable||name||
 |\_MyTable\_IsTableColNo||name||
+|\_MyTable\_IsTableCellColRowNo||name||
 |\_MyTable\_IsTableRow||name||
 |\_MyTable\_IsTableRowColNo||name||
 |\_MyTable\_IsTableAllNo||name||
@@ -46,6 +47,7 @@
 |\_MyTableInitStyleTableElementSelected||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableZebra||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableMouseOver||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
+|\_MyTableInitStyleTableDisabled||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableFixed||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableTitle||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableEmpty||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
@@ -91,6 +93,7 @@
 |\_MyTableTextWidth||text.s||
 |\_MyTableDrawTextCompleteCenter||by , text.s , color.q , maxlen.i||
 |\_MyTableDrawText||x , y , text.s , color.q , maxlen.i||
+|\_MyTable\_IsDisabled|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_StopEdit||<span style="color:#FFFFAA">*this.</span>strMyTableTable , save.b||
 |\_MyTable\_KeyEdit||||
 |\_MyTableEditSetPos||Gadget , Position||

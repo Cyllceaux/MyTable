@@ -22,6 +22,11 @@ UseModule MyTable
 	
 	*grid\SetRedraw(#True)
 	
+	Define *cell.MyTableCell=*grid\GetCell(0,0)
+	*cell\SetText("Hello")
+	*cell=*grid\GetCell(0,1)
+	*cell\SetText("World")
+	
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

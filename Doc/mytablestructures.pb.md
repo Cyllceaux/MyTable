@@ -57,7 +57,9 @@
 |titleStyle|[strMyTableStyle](#strMyTableStyle)||
 |mouseoverStyle|[strMyTableStyle](#strMyTableStyle)||
 |emptyStyle|[strMyTableStyle](#strMyTableStyle)||
+|disabledStyle|[strMyTableStyle](#strMyTableStyle)||
 |tooltip|s||
+|disabled|b||
 
 ### strMyTableStyleObject : [strMyTableVTable](#strMyTableVTable)
 |Field|Type|Comment|

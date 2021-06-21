@@ -2,6 +2,7 @@
 _MyTableSimpleSetterGetterSubRedraw(Row,Dirty,b)
 _MyTableSimpleSetterGetterSubPredraw(Row,Expanded,b)
 _MyTableSimpleSetterGetterSubRedraw(Row,Checked,b)
+_MyTableSimpleSetterGetterSubRedraw(Row,Disabled,b)
 _MyTableSimpleSetterGetterSubPredraw(Row,Flags,i)
 _MyTableSimpleGetterPointer(Row,Table)
 _MyTableSimpleGetterPointer(Row,Parent)

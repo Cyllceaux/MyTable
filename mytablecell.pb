@@ -2,6 +2,7 @@
 _MyTableSimpleSetterGetterSubRedraw(Cell,Dirty,b)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Flags,i)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Datatype,i)
+_MyTableSimpleSetterGetterSubRedraw(Cell,Disabled,b)
 _MyTableSimpleGetter(Cell,Text,s)
 _MyTableSimpleGetter(Cell,Value,d)
 _MyTableSimpleSetterGetterSubRedraw(Cell,Checked,b)

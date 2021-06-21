@@ -8,6 +8,11 @@ UsePNGImageDecoder()
 
 XIncludeFile "../mytable.pbi"
 
+Macro MM
+	"
+EndMacro
+
+
 Global MyTableW1=DesktopScaledX(1)
 Global MyTableW2=DesktopScaledX(2)
 Global MyTableW4=DesktopScaledX(4)

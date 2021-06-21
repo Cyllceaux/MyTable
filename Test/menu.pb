@@ -18,6 +18,7 @@
 	AddGadgetItem(pmGruppe,-1,"Zebra")
 	AddGadgetItem(pmGruppe,-1,"Title")
 	AddGadgetItem(pmGruppe,-1,"Empty")
+	AddGadgetItem(pmGruppe,-1,"Disabled")
 	SetGadgetState(pmGruppe,0)
 	
 	bx+4
@@ -151,6 +152,8 @@
 					*table=*obj			
 					ProcedureReturn *table\getEmptyStyle()
 				EndIf			
+			Case 8
+				ProcedureReturn *obj\GetDisabledStyle()	
 		EndSelect		
 	EndProcedure
 	

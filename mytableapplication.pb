@@ -1,5 +1,6 @@
 ﻿_MyTableSimpleSetterGetter(Application,Tooltip,s)
 _MyTableSimpleSetterGetter(Application,Dirty,b)
+_MyTableSimpleSetterGetter(Application,Disabled,b)
 _MyTableSimpleSetterGetter(Application,Flags,i)
 _MyTableSimpleSetterGetterPointer(Application,Data)
 _MyTableSimpleGetter(Application,Type,i)

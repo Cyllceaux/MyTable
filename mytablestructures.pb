@@ -48,7 +48,9 @@ Structure strMyTableObject Extends strMyTableVTable
 	titleStyle.strMyTableStyle
 	mouseoverStyle.strMyTableStyle
 	emptyStyle.strMyTableStyle
+	disabledStyle.strMyTableStyle
 	tooltip.s
+	disabled.b
 EndStructure
 
 Structure strMyTableStyleObject Extends strMyTableVTable
