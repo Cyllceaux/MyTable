@@ -173,6 +173,7 @@ Declare.b _MyTable_IsMark_Mouse_Over(*obj.strMyTableObject)
 Declare.b _MyTable_IsHierarchical_Always_Expanded(*obj.strMyTableObject)
 Declare.b _MyTable_IsHeader(*obj.strMyTableObject)
 Declare.b _MyTable_IsRedraw(*obj.strMyTableObject)
+Declare.b _MyTable_IsElement_Selected(*obj.strMyTableObject)
 
 ;- Application
 Declare.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)

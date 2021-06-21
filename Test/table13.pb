@@ -18,7 +18,7 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll,#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	*table\SetRedraw(#False)
-	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyle,*cellstyle.MyTableStyle
+	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyle,*cellstyle.MyTableStyle,*border.MyTableBorder
 	
 	
 	#Rows=10
@@ -48,8 +48,9 @@ UseModule MyTable
 			border|#MYTABLE_STYLE_BORDER_TOP
 		EndIf
 		*style\SetBorder(border)
-		*style\SetBorderColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
-		*style\SetBorderWidth(Random(4,1))
+	  *border=*style\getBorderDefault()
+		*border\SetColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
+		*border\SetWidth(Random(4,1))
 	Next
 	For i=1 To #Rows
 		*row=*table\AddRow("","",images(Random(9,0)))		
@@ -75,8 +76,9 @@ UseModule MyTable
 				border|#MYTABLE_STYLE_BORDER_TOP
 			EndIf
 			*cellstyle\SetBorder(border)
-			*cellstyle\SetBorderColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
-			*cellstyle\SetBorderWidth(Random(4,1))
+			*border=*cellstyle\getBorderDefault()
+			*border\SetColor(RGBA(Random(200,50),Random(200,50),Random(200,50),255))
+			*border\SetWidth(Random(4,1))
 		Next
 	Next
 	

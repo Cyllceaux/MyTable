@@ -12,7 +12,7 @@ UseModule MyTable
 	
 	Global *table.MyTableTable=MyTableCreateTable(window,canvas,vscroll,hscroll)
 	*table\SetRedraw(#False)	
-	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyle
+	Define *col.MyTableCol,*style.MyTableStyle,*cell.MyTableCell,*row.MyTableRow,*tablestyle.MyTableStyle,*border.MyTableBorder
 	*col=*table\AddCol("Test 1",120,rowImage):*style=*col\GetDefaultStyle():*style\SetBackColor(RGBA(10,10,100,255))
 	*col=*table\AddCol("Test 2",120,rowImageSub):*style=*col\GetDefaultStyle():*style\SetBackColor(RGBA(10,10,100,255))
 	*col=*table\AddCol("Test 3",120,rowImageSub2):*style=*col\GetDefaultStyle():*style\SetBackColor(RGBA(10,10,100,255))
@@ -21,7 +21,8 @@ UseModule MyTable
 	*tablestyle\SetBackColor(RGBA(50,50,150,255))
 	*tablestyle\SetFrontColor(RGBA(10,10,10,255))
 	*tablestyle\SetForeColor(RGBA(210,210,210,255))
-	*tablestyle\SetBorderColor(RGBA(210,210,210,255))
+	*border=*tablestyle\getBorderDefault()
+	*border\SetColor(RGBA(210,210,210,255))
 	*tablestyle=*table\GetSelectedStyle()
 	*tablestyle\SetForeColor(RGBA(220,220,220,255))
 	*tablestyle\SetBackColor(RGBA(20,20,20,255))

@@ -2230,6 +2230,7 @@ _MyTable_IsTable(Multiselect)
 _MyTable_IsTable(Fullrowselect)
 _MyTable_IsTable(Mark_Mouse_Over)
 _MyTable_IsTableRow(Hierarchical_Always_Expanded)
+_MyTable_IsTable(Element_Selected)
 
 _MyTable_IsTableNo(Header)
 _MyTable_IsTableNo(Redraw)

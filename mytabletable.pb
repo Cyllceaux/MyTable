@@ -246,6 +246,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	Protected fwidth.i=0
 	Protected cc=0
 	
+	Protected ElementSelected.b=_MyTable_IsElement_Selected(*this)
+	
 	ForEach *this\cols()
 		*this\cols()\parent=0
 		If *this\cols()\dirty Or *this\cols()\textheight=0 Or *this\cols()\textwidth=0
@@ -277,29 +279,31 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		Protected calcwidth.i=*col\calcwidth
 		Protected selected.b=_MyTable_IsSelected(*col)
 		Protected tborder=_MyTable_GetDefaultBorder(*col)
-		Protected ElementSelected.b=#False
+		Protected bElementSelected.b=#False
 		Protected *cell.strMyTableCell=0
 		
-		ForEach *this\selectedCells()
-			If *this\selectedCells()
-				*cell=Val(MapKey(*this\selectedCells()))
-				If *cell\col=*col
-					ElementSelected=#True
-					Break
-				EndIf
-			EndIf
-		Next
-		
-		If Not ElementSelected
-			ForEach *this\tempselectedCells()
-				If *this\tempselectedCells()
-					*cell=Val(MapKey(*this\tempselectedCells()))
+		If ElementSelected
+			ForEach *this\selectedCells()
+				If *this\selectedCells()
+					*cell=Val(MapKey(*this\selectedCells()))
 					If *cell\col=*col
-						ElementSelected=#True
+						bElementSelected=#True
 						Break
 					EndIf
 				EndIf
 			Next
+			
+			If Not bElementSelected
+				ForEach *this\tempselectedCells()
+					If *this\tempselectedCells()
+						*cell=Val(MapKey(*this\tempselectedCells()))
+						If *cell\col=*col
+							bElementSelected=#True
+							Break
+						EndIf
+					EndIf
+				Next
+			EndIf
 		EndIf
 		
 		If *col\colspan>1
@@ -332,7 +336,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 			ClipOutput(bx,by,calcwidth,*this\calcheaderheight)
 			If selected
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetSelectedBackColor(*col))
-			ElseIf ElementSelected
+			ElseIf bElementSelected
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetElementSelectedBackColor(*col))
 			Else
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
@@ -552,6 +556,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
 	Protected markmouseover.b=_MyTable_IsMark_Mouse_Over(*this\table)
 	Protected Fullrowselect.b=_MyTable_IsFullrowselect(*this\table)
+	Protected ElementSelected.b=_MyTable_IsElement_Selected(*this)
 	Protected *cell.strMyTableCell=0
 	
 	Protected idx=0
@@ -567,30 +572,31 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 		Next
 	EndIf
 	
-	Protected ElementSelected.b=#False
+	Protected bElementSelected.b=#False
 	If fixed
 		
-		
-		ForEach *this\table\selectedCells()
-			If *this\table\selectedCells()
-				*cell=Val(MapKey(*this\table\selectedCells()))
-				If *cell\row=*this
-					ElementSelected=#True
-					Break
-				EndIf
-			EndIf
-		Next
-		
-		If Not ElementSelected
-			ForEach *this\table\tempselectedCells()
-				If *this\table\tempselectedCells()
-					*cell=Val(MapKey(*this\table\tempselectedCells()))
+		If ElementSelected
+			ForEach *this\table\selectedCells()
+				If *this\table\selectedCells()
+					*cell=Val(MapKey(*this\table\selectedCells()))
 					If *cell\row=*this
-						ElementSelected=#True
+						bElementSelected=#True
 						Break
 					EndIf
 				EndIf
 			Next
+			
+			If Not bElementSelected
+				ForEach *this\table\tempselectedCells()
+					If *this\table\tempselectedCells()
+						*cell=Val(MapKey(*this\table\tempselectedCells()))
+						If *cell\row=*this
+							bElementSelected=#True
+							Break
+						EndIf
+					EndIf
+				Next
+			EndIf
 		EndIf
 		bx=0		
 	Else
@@ -642,7 +648,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			EndIf
 			
 			If Not customdraw
-				If ElementSelected
+				If bElementSelected
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetElementSelectedBackColor(*cell))
 				ElseIf selected
 					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))

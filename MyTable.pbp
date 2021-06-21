@@ -7,12 +7,12 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-20 19:24" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-21 06:23" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="declare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="2b5415e418227e6205c6c1ba994a7d26"/>
+      <fingerprint md5="8118c2bb344990838d7d9a05fb757cfc"/>
     </file>
     <file name="global.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -24,11 +24,15 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="465fa277c83fa87dd3c06ce286b06e28"/>
+      <fingerprint md5="9857e3d39c978c34341679645dd06d1c"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="0e049a7dc6038b329b200ecf4672e0ab"/>
+    </file>
+    <file name="mytableborder.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="a43a6ce1947db1f43d97c2589cd48c79"/>
     </file>
     <file name="mytablecell.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -48,7 +52,7 @@
     </file>
     <file name="mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="dfb21a3bc67c825f3873c7ce8c0e229a"/>
+      <fingerprint md5="6a767de6d0ba7d6abf25a8fa895e5c4a"/>
     </file>
     <file name="mytablegrid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -68,7 +72,7 @@
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="e562b3a3390d082f5d076eba9280db89"/>
+      <fingerprint md5="88f7105a7c12a19ec89f99bbebed7c3b"/>
     </file>
     <file name="mytabletree.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -84,7 +88,7 @@
     </file>
     <file name="Test\declare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="325213e97bbca9a4f2f1f596a1c1ee7a"/>
+      <fingerprint md5="1b7d9b9891641f5164d657f5933e7572"/>
     </file>
     <file name="Test\grid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -95,8 +99,8 @@
       <fingerprint md5="fbd2da6d6847ad9970d6eb0be2d535ff"/>
     </file>
     <file name="Test\grid3.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="479442f6e3bf06f1d22d17871cd17268"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="d440c3f110a5a607c5b90d3b7f6858df"/>
     </file>
     <file name="Test\kontakte.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -104,7 +108,7 @@
     </file>
     <file name="Test\outlook.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="07058bd41fe6a270f312b11ada8a6214"/>
+      <fingerprint md5="a5812d7b64a1ac31312315f96213e11a"/>
     </file>
     <file name="Test\table0.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -128,7 +132,7 @@
     </file>
     <file name="Test\table13.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="739d640ac2e0b011d85e12534354f976"/>
+      <fingerprint md5="4a014a02e9a8aca92afbc3325fd086bf"/>
     </file>
     <file name="Test\table14.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -172,7 +176,7 @@
     </file>
     <file name="Test\table7.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="82b8668cade59daaeb8af200b5dba377"/>
+      <fingerprint md5="82e06da564b6c4082b035050822a0976"/>
     </file>
     <file name="Test\table8.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -226,9 +230,13 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="6bd5ba56b6f0046df7d202bad1087e82"/>
     </file>
-    <file name="mytableborder.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="a43a6ce1947db1f43d97c2589cd48c79"/>
+    <file name="Test\tabletree6.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="6470596142a6a8ba49b8ea95a6e0de93"/>
+    </file>
+    <file name="Test\menu.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="ec59e5a6032d1205dbefbd318a63830a"/>
     </file>
   </section>
   <section name="targets">
@@ -449,7 +457,14 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Outlook" enabled="0" default="0">
+    <target name="TableTree6 (FixedCols, Zebra, Fonts, Editable)" enabled="0" default="0">
+      <inputfile value="Test\tabletree6.pb"/>
+      <outputfile value=""/>
+      <executable value="Test\tabletree4.exe"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="Outlook" enabled="0" default="1">
       <inputfile value="Test\outlook.pb"/>
       <outputfile value=""/>
       <executable value="Test\outlook.exe"/>
@@ -484,7 +499,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="grid3 (fonts, Borders, Edit)" enabled="0" default="1">
+    <target name="grid3 (fonts, Borders, Edit)" enabled="0" default="0">
       <inputfile value="Test\grid3.pb"/>
       <outputfile value=""/>
       <executable value="Test\outlook.exe"/>

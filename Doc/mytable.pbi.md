@@ -5,12 +5,12 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 2980||
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210620||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3008||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210621||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
-|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_GRID \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE \| \#MYTABLE\_TABLE\_FLAGS\_MULTISELECT \| \#MYTABLE\_TABLE\_FLAGS\_EDITABLE</span>||
+|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_ELEMENT\_SELECTED \| \#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_GRID \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE \| \#MYTABLE\_TABLE\_FLAGS\_MULTISELECT \| \#MYTABLE\_TABLE\_FLAGS\_EDITABLE</span>||
 
 
 ## Enumerations
@@ -121,6 +121,7 @@
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_EDITABLE</span>|16384|Editable|
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_ZEBRA</span>|32768|Zebra Layout|
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_GRID</span>|65536|Grid (Excel-like) Layout|
+|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_ELEMENT\_SELECTED</span>|131072|Col/Row Color for selected Elements|
 
 
 ## Prototypes

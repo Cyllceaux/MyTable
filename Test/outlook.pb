@@ -111,8 +111,9 @@ UseModule MyTable
 	*tablestyle\SetBackColor(#Gray)
 	*tablestyle\SetFrontColor(#Gray)
 	*tablestyle\SetForeColor(#White)
-	*tablestyle\SetBorderColor(#White)
-	*tablestyle\SetBorderWidth(1)
+	Define *border.MyTableBorder=*tablestyle\getBorderDefault()
+	*border\SetColor(#White)
+	*border\SetWidth(1)
 
 	
 	Define *col.MyTableCol=*favoriten\AddCol("",#PB_Ignore)

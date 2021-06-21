@@ -81,6 +81,7 @@
 |\_MyTable\_IsHierarchical\_Always\_Expanded|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_IsHeader|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_IsRedraw|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_IsElement\_Selected|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_Application\_HasName|b|<span style="color:#FFFFAA">*this.</span>strMyTableApplication , name.s||
 |\_MyTable\_Application\_Redraw||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Table\_Redraw||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
