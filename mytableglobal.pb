@@ -145,7 +145,7 @@ EndProcedure
 
 Procedure  _MyTableInitStyleTableDisabled(*style.strMyTableStyle)
 	With *style
-		\backcolor=RGBA(100,100,120,255)
+		\backcolor=RGBA(200,200,220,255)
 		\forecolor=RGBA(20,20,20,255)
 		\border\borderDefault\color=RGBA(200,200,250,255)
 		\border\border=#MYTABLE_STYLE_BORDER_ALL
@@ -1464,7 +1464,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		Else
 			\vtable=?vtable_table
 			\type=#MYTABLE_TYPE_TABLE
-			\datagrid=#false
+			\datagrid=#False
 		EndIf
 		
 		\application=*application

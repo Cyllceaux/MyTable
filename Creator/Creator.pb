@@ -74,13 +74,15 @@ UseModule MyTable
 	CloseGadgetList()
 	CloseGadgetList()
 	
+	Global *rowFixed.MyTableRow
+	
 	Global *styleTree.MyTableTree=MyTableCreateTree(window,canvasStyle,vscrollStyle,hscrollStyle,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
 	Global *header.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle
 	*styleTree\AddCol("Name",200)
 	*styleTree\AddCol("Value",#PB_Ignore)
 	*header=*styleTree\AddRow("Table Default Type"):styleHeaderRow(*header,#TABLE_FLAGS_DEFAULT)
 	*checkRow=*header\AddRow("Grid"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_GRID):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
-	*checkRow=*header\AddRow("Table"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("Table"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES):*checkRow\SetChecked(#True)
 	*checkRow=*header\AddRow("Tree"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_DEFAULT_TREE):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*header=*styleTree\AddRow("Table Type"):styleHeaderRow(*header,#TABLE_FLAGS)
 	*checkRow=*header\AddRow("Hierarchical"):*checkRow\SetData(#MYTABLE_TABLE_FLAGS_HIERARCHICAL):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
@@ -113,7 +115,7 @@ UseModule MyTable
 	*header=*styleTree\AddRow("Values"):styleHeaderRow(*header,#TABLE_VALUES)
 	*textRow=*header\AddRow("Rows"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_ROWS,"1000")
 	*textRow=*header\AddRow("Cols"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_COLS,"100")
-	*textRow=*header\AddRow("FixedCols"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_FIXED_COLS,"0")
+	*rowFixed=*header\AddRow("FixedCols"):styleEditCellNumber(*rowFixed\GetCell(1),#TABLE_VALUES_FIXED_COLS,"0")
 	
 	Global panel=PanelGadget(#PB_Any,0,0,0,0)
 	AddGadgetItem(panel,-1,"Preview")
@@ -346,6 +348,8 @@ UseModule MyTable
 		*preview\SetFlags(flags)
 		*preview\ReInit()
 		
+		*rowFixed\SetDisabled(#False)
+		
 		Select *preview\GetType()
 			Case #MYTABLE_TYPE_TABLE
 				*table=*preview
@@ -364,6 +368,7 @@ UseModule MyTable
 			Case #MYTABLE_TYPE_GRID
 				*grid=*preview
 				*grid\ResizeGrid(rows,cols)
+				*rowFixed\SetDisabled(#True)
 		EndSelect
 		
 		*preview\SetBatch(#False)
