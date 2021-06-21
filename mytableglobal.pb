@@ -145,7 +145,7 @@ EndProcedure
 
 Procedure  _MyTableInitStyleTableDisabled(*style.strMyTableStyle)
 	With *style
-		\backcolor=RGBA(200,200,220,255)
+		\backcolor=RGBA(230,230,230,255)
 		\forecolor=RGBA(20,20,20,255)
 		\border\borderDefault\color=RGBA(200,200,250,255)
 		\border\border=#MYTABLE_STYLE_BORDER_ALL
@@ -1642,11 +1642,20 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\defaultStyle\forecolor=RGBA(250,250,250,255)
 		\defaultStyle\backcolor=RGBA(150,150,150,255)
 		\defaultStyle\border\borderDefault\color=RGBA(250,250,250,255)
+		\defaultStyle\border\borderDefault\width=1
+		\defaultStyle\border\border=#MYTABLE_STYLE_BORDER_ALL
+		
+		\disabledStyle\forecolor=RGBA(250,250,250,255)
+		\disabledStyle\backcolor=RGBA(150,150,150,255)
+		\disabledStyle\border\borderDefault\color=RGBA(250,250,250,255)
+		\disabledStyle\border\borderDefault\width=1
+		\disabledStyle\border\border=#MYTABLE_STYLE_BORDER_ALL
 		
 		\selectedStyle\forecolor=RGBA(250,250,250,255)
 		\selectedStyle\backcolor=RGBA(100,100,100,255)
+		\selectedStyle\border\borderDefault\width=1
+		\selectedStyle\border\border=#MYTABLE_STYLE_BORDER_ALL
 		
-		\defaultStyle\border\border=#MYTABLE_STYLE_BORDER_ALL
 		
 		\calcwidth=DesktopScaledX(\width)
 		\listindex=ListSize(*table\cols())-1
