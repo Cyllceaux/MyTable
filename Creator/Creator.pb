@@ -67,9 +67,11 @@ UseModule MyTable
 	
 	Global window=OpenWindow(#PB_Any,0,0,800,600,"Creator",#PB_Window_SystemMenu|#PB_Window_ScreenCentered|#PB_Window_SizeGadget|#PB_Window_MaximizeGadget|#PB_Window_MinimizeGadget)
 	
+	Global container=ContainerGadget(#PB_Any,0,0,0,0)
 	Global canvasStyle=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Keyboard)
 	Global hscrollStyle=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 	Global vscrollStyle=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
 	CloseGadgetList()
 	
 	Global *styleTree.MyTableTree=MyTableCreateTree(window,canvasStyle,vscrollStyle,hscrollStyle,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
@@ -124,7 +126,7 @@ UseModule MyTable
 	Global editor=EditorGadget(#PB_Any,0,0,0,0,#PB_Editor_ReadOnly)
 	CloseGadgetList()
 	
-	Global splitter=SplitterGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),canvasStyle,panel,#PB_Splitter_FirstFixed|#PB_Splitter_Separator|#PB_Splitter_Vertical)
+	Global splitter=SplitterGadget(#PB_Any,0,0,WindowWidth(window),WindowHeight(window),container,panel,#PB_Splitter_FirstFixed|#PB_Splitter_Separator|#PB_Splitter_Vertical)
 	SetGadgetState(splitter,300)
 	
 	*styleTree\setRedraw(#True)
@@ -146,6 +148,11 @@ UseModule MyTable
 		             #PB_Ignore,
 		             GetGadgetAttribute(panel,#PB_Panel_ItemWidth),
 		             GetGadgetAttribute(panel,#PB_Panel_ItemHeight))
+		ResizeGadget(canvasStyle,
+		             #PB_Ignore,
+		             #PB_Ignore,
+		             GadgetWidth(container),
+		             GadgetHeight(container))
 		*styleTree\SetRedraw(#True)
 	EndProcedure
 	
@@ -153,6 +160,7 @@ UseModule MyTable
 	BindEvent(#PB_Event_RestoreWindow,@Resize(),window)
 	BindEvent(#PB_Event_MaximizeWindow,@Resize(),window)
 	BindGadgetEvent(splitter,@Resize())
+	BindGadgetEvent(container,@Resize(),#PB_EventType_Resize)
 	
 	
 	Macro _codetableflags(name)
