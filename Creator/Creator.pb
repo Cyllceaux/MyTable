@@ -125,7 +125,7 @@ UseModule MyTable
 		Protected tableflags.s=""
 		Protected flags=0
 		Protected title.s=""
-		Protected empty.s=""
+		Protected empty.s=""		
 		
 		Protected i,g
 		For i=1 To *styleTree\RowCount()
@@ -181,8 +181,13 @@ UseModule MyTable
 			tableflags="#MYTABLE_TABLE_FLAGS_DEFAULT_TREE"
 		EndIf
 		
-		Protected result.s="Procedure createTable(window,canvas,hscroll,vscroll)"+#CRLF$
-		result+LSet("",4," ")+"UseModule MyTable"+#CRLF$
+		Protected result.s=""
+		result+"UseModule MyTable"+#CRLF$
+		If flags & #MYTABLE_TABLE_FLAGS_CALLBACK
+			result+LSet("",4," ")+"Procedure TableCallback(*Row.MyTableRow)"+#CRLF$	+#CRLF$	
+			result+LSet("",4," ")+"EndProcedure"+#CRLF$+#CRLF$
+		EndIf
+		result+LSet("",4," ")+"Procedure createTable(window,canvas,hscroll,vscroll)"+#CRLF$
 		If tableflags<>""
 			result+LSet("",8," ")+"Protected *preview.MyTable=MyTableCreateTable(window,canvas,vscroll,hscroll,"+tableflags+")"+#CRLF$
 		Else
@@ -194,9 +199,12 @@ UseModule MyTable
 		If empty<>""
 			result+LSet("",8," ")+"*preview\SetEmptyText("+#DQUOTE$+empty+#DQUOTE$+")"+#CRLF$
 		EndIf
+		If flags & #MYTABLE_TABLE_FLAGS_CALLBACK
+			result+LSet("",8," ")+"*preview\RegisterCallback(@TableCallback())"+#CRLF$
+		EndIf
 		result+LSet("",8," ")+"ProcedureReturn *preview"+#CRLF$
-		result+LSet("",4," ")+"UnuseModule MyTable"+#CRLF$
-		result+"EndProcedure"
+		result+LSet("",4," ")+"EndProcedure"+#CRLF$
+		result+"UnuseModule MyTable"
 		
 		*preview\SetTitle(title)
 		*preview\SetEmptyText(empty)

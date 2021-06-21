@@ -623,11 +623,23 @@ Procedure _MyTableEvtCanvasKeyDown()
 					*row\checked=Bool(*row\checked=#False)
 					*row\dirty=#True
 					*this\dirty=#True					
+					If *row\checked And *this\eventRowChangedChecked
+						*this\eventRowChangedChecked(*row)
+					EndIf
+					If Not *row\checked And *this\eventRowChangedUnChecked
+						*this\eventRowChangedUnChecked(*row)
+					EndIf
 					_MyTable_Table_Redraw(*this)
 				ElseIf editable And *cell
 					*cell\checked=Bool(*cell\checked=#False)
 					*cell\dirty=#True
 					*this\dirty=#True					
+					If *cell\checked And *this\eventCellChangedChecked
+						*this\eventCellChangedChecked(*Cell)
+					EndIf
+					If Not *cell\checked And *this\eventCellChangedUnChecked
+						*this\eventCellChangedUnChecked(*Cell)
+					EndIf
 					_MyTable_Table_Redraw(*this)
 				EndIf
 			Case #PB_Shortcut_Delete
