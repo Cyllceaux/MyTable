@@ -18,5 +18,6 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |XIncludeFile "declare|pb"|||
+|XIncludeFile "autodeclare|pb"|||
 
 

@@ -1976,7 +1976,7 @@ Procedure _MyTable_StartEdit(*rc.strMyTableRowCol)
 EndProcedure
 
 Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
-	
+	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
@@ -2006,7 +2006,7 @@ Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
-	
+	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
@@ -2040,7 +2040,7 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
-	
+	_MyTableAddAutoDeclare(_MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected *result.typ=*obj\gruppe#Style\sub#name
 		
@@ -2074,7 +2074,7 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
-	
+	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
@@ -2108,7 +2108,7 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
-	
+	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\border\border#pos\name
 		If Not result
@@ -2142,18 +2142,21 @@ EndMacro
 
 
 Macro _MyTable_IsTableNoGrid(name)
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name) And Not *this\datagrid)
 	EndProcedure	
 EndMacro
 
 Macro _MyTable_IsTable(name)
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name)
 	EndProcedure	
 EndMacro
 
 Macro _MyTable_IsTableColNo(name)	
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -2173,6 +2176,7 @@ Macro _MyTable_IsTableColNo(name)
 EndMacro
 
 Macro _MyTable_IsTableCellColRowNo(name)	
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -2203,6 +2207,7 @@ Macro _MyTable_IsTableCellColRowNo(name)
 EndMacro
 
 Macro _MyTable_IsTableRow(name)	
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -2221,6 +2226,7 @@ Macro _MyTable_IsTableRow(name)
 EndMacro
 
 Macro _MyTable_IsTableRowColNo(name)	
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -2245,6 +2251,7 @@ Macro _MyTable_IsTableRowColNo(name)
 EndMacro
 
 Macro _MyTable_IsTableAllNo(name)	
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -2276,6 +2283,7 @@ Macro _MyTable_IsTableAllNo(name)
 EndMacro
 
 Macro _MyTable_IsTableAll(name)	
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -2304,6 +2312,7 @@ Macro _MyTable_IsTableAll(name)
 EndMacro
 
 Macro _MyTable_IsTableNo(name)
+	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_#name))
 	EndProcedure	

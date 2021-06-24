@@ -3,6 +3,7 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |MM||||
+|\_MyTableAddAutoDeclare||name||
 |\_MyTable\_GetStyleCell||name||
 |\_MyTable\_GetStyleCol||name||
 |\_MyTable\_GetStyleRow||name||
@@ -129,6 +130,11 @@
 |\_MyTable\_Cell\_SetValue||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.d||
 |\_MyTable\_Cell\_SetTextExp||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Style\_Redraw||<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
+|MYTABLE\_AUTODECLARE||||
+|||||
+|autodeclare||||
+|||||
+|autodeclare||||
 
 
 ## Procedures

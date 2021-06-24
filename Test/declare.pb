@@ -1,8 +1,15 @@
-﻿#MYTABLE_DEBUG=0
-#MYTABLE_DEBUG_MS_MAX=0
-
-#MYTABLE_UPDATE_VERSION=1
-#MYTABLE_UPDATE_DOC=1
+﻿CompilerIf Not Defined(MYTABLE_DEBUG,#PB_Constant)
+	#MYTABLE_DEBUG=0
+CompilerEndIf
+CompilerIf Not Defined(MYTABLE_DEBUG_MS_MAX,#PB_Constant)
+	#MYTABLE_DEBUG_MS_MAX=0
+CompilerEndIf
+CompilerIf Not Defined(MYTABLE_UPDATE_VERSION,#PB_Constant)
+	#MYTABLE_UPDATE_VERSION=1
+CompilerEndIf
+CompilerIf Not Defined(MYTABLE_UPDATE_DOC,#PB_Constant)
+	#MYTABLE_UPDATE_DOC=1
+CompilerEndIf
 
 UsePNGImageDecoder()
 

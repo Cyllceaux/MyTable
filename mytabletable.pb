@@ -1,5 +1,6 @@
 ﻿
 Macro _MyTableRegisterEvent(name)
+	_MyTableAddAutoDeclare(_MyTable_Table_RegisterEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name))
 	Procedure _MyTable_Table_RegisterEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
 		If *this
 			*this\Event#name=event
@@ -191,11 +192,11 @@ Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 		_callcountStart()
 		Protected idx
 		LastElement(*this\rows())
-		For idx=1 To rows
+		For idx=1 To rows			
 			Protected *row.strMyTableRow=AddElement(*this\rows())
 			_MyTableInitRow(*this\application,*this,0,*row,"","",0,0)
 			*this\dirty=#True
-		Next
+		Next		
 		_callcountEnde()
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)

@@ -30,6 +30,7 @@ Procedure _MyTable_Border_Delete(*this.strMyTableBorderObject)
 EndProcedure
 
 Macro _MyTableBorderSetterGetter(name,typ)
+	_MyTableAddAutoDeclare(.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject))
 	Procedure.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject)
 		If *this
 			Protected result.typ= *this\border\name

@@ -6,6 +6,7 @@ Module MyTable
 	
 	XIncludeFile "mytablestructures.pb"
 	XIncludeFile "declare.pb"
+	XIncludeFile "autodeclare.pb"
 	XIncludeFile "mytableglobal.pb"
 	XIncludeFile "mytablefont.pb"
 	XIncludeFile "mytablestyle.pb"

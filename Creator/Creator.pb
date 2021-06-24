@@ -9,6 +9,8 @@ UseModule MyTable
 		#NONE
 		#TABLE_FLAGS
 		#TABLE_FLAGS_DEFAULT
+		#TABLE_EVENTS
+		#TABLE_STYLES
 		#TABLE_VALUES
 		#TABLE_VALUES_ROWS
 		#TABLE_VALUES_COLS
@@ -116,6 +118,8 @@ UseModule MyTable
 	*textRow=*header\AddRow("Rows"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_ROWS,"1000")
 	*textRow=*header\AddRow("Cols"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_COLS,"100")
 	*rowFixed=*header\AddRow("FixedCols"):styleEditCellNumber(*rowFixed\GetCell(1),#TABLE_VALUES_FIXED_COLS,"0")
+	*header=*styleTree\AddRow("Events"):styleHeaderRow(*header,#TABLE_EVENTS)
+	*header=*styleTree\AddRow("Styles"):styleHeaderRow(*header,#TABLE_STYLES)
 	
 	Global panel=PanelGadget(#PB_Any,0,0,0,0)
 	AddGadgetItem(panel,-1,"Preview")

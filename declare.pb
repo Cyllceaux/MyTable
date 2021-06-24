@@ -248,7 +248,22 @@ Macro MM
 	"
 EndMacro
 
+CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_AUTODECLARE,#PB_Module)
+	Macro _MyTableAddAutoDeclare(name)
+		AddElement(MYTABLE_AUTODECLARE::autodeclare())		
+		MYTABLE_AUTODECLARE::autodeclare()=Trim(MM#name#MM)
+		If Left(MYTABLE_AUTODECLARE::autodeclare(),1)="."
+			MYTABLE_AUTODECLARE::autodeclare()="Declare"+MYTABLE_AUTODECLARE::autodeclare()
+		Else
+			MYTABLE_AUTODECLARE::autodeclare()="Declare "+MYTABLE_AUTODECLARE::autodeclare()
+		EndIf		
+	EndMacro	
+CompilerElse
+	Macro _MyTableAddAutoDeclare(name):EndMacro
+CompilerEndIf
+
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
+	
 	Procedure.s _MyTableDebugGetName(*this.strMyTableVTable)
 		Select *this\type
 			Case #MYTABLE_TYPE_CELL
@@ -295,6 +310,7 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 CompilerEndIf
 
 Macro _MyTable_GetStyleCell(name)
+	_MyTableAddAutoDeclare(_MyTable_Cell_Get#name#Style(*this.strMyTableCell))
 	Procedure _MyTable_Cell_Get#name#Style(*this.strMyTableCell)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -310,6 +326,7 @@ Macro _MyTable_GetStyleCell(name)
 EndMacro
 
 Macro _MyTable_GetStyleCol(name)
+	_MyTableAddAutoDeclare(_MyTable_Col_Get#name#Style(*this.strMyTableCol))
 	Procedure _MyTable_Col_Get#name#Style(*this.strMyTableCol)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -323,6 +340,7 @@ Macro _MyTable_GetStyleCol(name)
 EndMacro
 
 Macro _MyTable_GetStyleRow(name)
+	_MyTableAddAutoDeclare(_MyTable_Row_Get#name#Style(*this.strMyTableRow))
 	Procedure _MyTable_Row_Get#name#Style(*this.strMyTableRow)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -336,6 +354,7 @@ Macro _MyTable_GetStyleRow(name)
 EndMacro
 
 Macro _MyTable_GetStyleTable(name)
+	_MyTableAddAutoDeclare(_MyTable_Table_Get#name#Style(*this.strMyTableTable))
 	Procedure _MyTable_Table_Get#name#Style(*this.strMyTableTable)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -348,6 +367,7 @@ Macro _MyTable_GetStyleTable(name)
 EndMacro
 
 Macro _MyTable_GetStyleApplication(name)
+	_MyTableAddAutoDeclare(_MyTable_Application_Get#name#Style(*this.strMyTableApplication))
 	Procedure _MyTable_Application_Get#name#Style(*this.strMyTableApplication)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -463,6 +483,7 @@ CompilerEndIf
 
 
 Macro _MyTableSimpleGetterPointer(gruppe,name)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe))
 	Procedure _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
 		If *this
 			ProcedureReturn *this\name
@@ -471,6 +492,7 @@ Macro _MyTableSimpleGetterPointer(gruppe,name)
 EndMacro
 
 Macro _MyTableSimpleGetter(gruppe,name,typ)
+	_MyTableAddAutoDeclare(.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe))
 	Procedure.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
 		If *this
 			ProcedureReturn *this\name
@@ -479,6 +501,7 @@ Macro _MyTableSimpleGetter(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetter(gruppe,name,typ)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -488,6 +511,7 @@ Macro _MyTableSimpleSetter(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetterPointer(gruppe,name)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value)
 		If *this
 			*this\name=*value
@@ -497,6 +521,7 @@ Macro _MyTableSimpleSetterPointer(gruppe,name)
 EndMacro
 
 Macro _MyTableSimpleSetterPointerStructure(gruppe,name,typ)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value.typ))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value.typ)
 		If *this
 			*this\name=*value
@@ -506,6 +531,7 @@ Macro _MyTableSimpleSetterPointerStructure(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetterRedraw(gruppe,name,typ)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -516,6 +542,7 @@ Macro _MyTableSimpleSetterRedraw(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetterSubRedraw(gruppe,name,typ)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -527,6 +554,7 @@ Macro _MyTableSimpleSetterSubRedraw(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetterSubPredraw(gruppe,name,typ)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -539,6 +567,7 @@ Macro _MyTableSimpleSetterSubPredraw(gruppe,name,typ)
 EndMacro
 
 Macro _MyTableSimpleSetterPredraw(gruppe,name,typ)
+	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
 	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
 		If *this
 			*this\name=value

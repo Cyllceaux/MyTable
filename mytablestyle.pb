@@ -11,6 +11,7 @@ Procedure _MyTable_Style_GetType(*this.strMyTableStyleObject)
 EndProcedure
 
 Macro _MyTableStyleBorder(name)
+	_MyTableAddAutoDeclare(_MyTable_Style_GetBorder#name(*this.strMyTableStyleObject))
 	Procedure _MyTable_Style_GetBorder#name(*this.strMyTableStyleObject)
 		If *this
 			Protected *border.strMyTableBorderObject=AllocateStructure(strMyTableBorderObject)
@@ -92,6 +93,7 @@ Procedure _MyTable_Style_Delete(*this.strMyTableStyleObject)
 EndProcedure
 
 Macro _MyTable_Style_GetterSetter(name,typ,sub=)
+	_MyTableAddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ))
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
@@ -122,6 +124,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 		EndIf
 	EndProcedure
 	
+	_MyTableAddAutoDeclare(.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject))
 	Procedure.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject)
 		If *this
 			Protected result.typ=*this\style\sub#name
@@ -134,6 +137,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
+	_MyTableAddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ))
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
@@ -164,6 +168,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 		EndIf
 	EndProcedure
 	
+	_MyTableAddAutoDeclare(_MyTable_Style_Get#name(*this.strMyTableStyleObject))
 	Procedure _MyTable_Style_Get#name(*this.strMyTableStyleObject)
 		If *this
 			Protected *result.typ=*this\style\sub#name
@@ -176,6 +181,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
+	_MyTableAddAutoDeclare(_MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ))
 	Procedure _MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
@@ -207,6 +213,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 		EndIf
 	EndProcedure
 	
+	_MyTableAddAutoDeclare(.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject))
 	Procedure.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject)
 		If *this
 			Protected result.typ=*this\style\border\border#pos\name
