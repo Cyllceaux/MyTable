@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3228||
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210624||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3234||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210626||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
@@ -155,7 +155,7 @@
 |MyTableProtoEventRowLeftDoubleClick|b|<span style="color:#FFFFAA">*cell.[MyTableRow](#MyTableRow)</span>||
 |MyTableProtoEventRowRightDoubleClick|b|<span style="color:#FFFFAA">*cell.[MyTableRow](#MyTableRow)</span>||
 |MyTableProtoEventCustomCellDraw|b|<span style="color:#FFFFAA">*cell.</span>MyTableCell , x , y , w , h|Return #True if custom cell is drawn|
-|MyTableProtoEventCustomCellEdit|b|<span style="color:#FFFFAA">*cell.[MyTableCell](#MyTableCell)</span>|Return #True if custom cell is edited|
+|MyTableProtoEventCustomCellEdit|b|<span style="color:#FFFFAA">*cell.</span>MyTableCell , x , y , w , h|Return #True if custom cell is edited|
 |MyTableProtoCallback||<span style="color:#FFFFAA">*row.[MyTableRow](#MyTableRow)</span>||
 
 

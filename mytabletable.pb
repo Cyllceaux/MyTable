@@ -1649,8 +1649,9 @@ Procedure _MyTable_Table_GetSelectedRows(*this.strMyTableTable,List rows.i())
 			If *this\selectedRows()
 				AddElement(rows())
 				rows()=Val(MapKey(*this\selectedRows()))
-			EndIf
+			EndIf			
 		Next
+		ProcedureReturn ListSize(rows())
 	EndIf
 EndProcedure
 
@@ -1663,6 +1664,7 @@ Procedure _MyTable_Table_GetSelectedCells(*this.strMyTableTable,List cells.i())
 				cells()=Val(MapKey(*this\selectedCells()))
 			EndIf
 		Next
+		ProcedureReturn ListSize(cells())
 	EndIf
 EndProcedure
 
@@ -1675,6 +1677,7 @@ Procedure _MyTable_Table_GetSelectedCols(*this.strMyTableTable,List cols.i())
 				cols()=Val(MapKey(*this\selectedCols()))
 			EndIf
 		Next
+		ProcedureReturn ListSize(cols())
 	EndIf
 EndProcedure
 

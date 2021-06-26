@@ -64,6 +64,17 @@ Procedure _MyTable_Row_Delete(*this.strMyTableRow)
 				idx+1
 			EndIf
 		Next
+		idx=0
+		If *this\parent
+			ForEach *this\parent\rows\rows()
+				If *this\parent\rows\rows()=*this
+					DeleteElement(*this\parent\rows\rows())
+				Else
+					*this\parent\rows\rows()\listindex=idx
+					idx+1
+				EndIf
+			Next
+		EndIf
 		*table\dirty=#True
 		_MyTable_Table_Redraw(*table)
 	EndIf

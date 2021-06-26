@@ -1,8 +1,8 @@
 # MyTable
 
-VERSION = 3227
+VERSION = 3233
 
-VERSION_DATE = 20210624
+VERSION_DATE = 20210626
 
 [autodeclare.pb](Doc/autodeclare.pb.md)
 

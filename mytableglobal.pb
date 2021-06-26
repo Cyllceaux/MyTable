@@ -1876,7 +1876,7 @@ Procedure.b _MyTable_IsDisabled(*obj.strMyTableObject)
 				Protected *row.strMyTableRow=*obj
 				result=_MyTable_IsDisabled(*row\table)	
 			Case #MYTABLE_TYPE_COL
-			Protected *col.strMyTableCol=*obj
+				Protected *col.strMyTableCol=*obj
 				result=_MyTable_IsDisabled(*col\table)
 			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
 				Protected *table.strMyTableTable=*obj
@@ -1936,7 +1936,11 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 		If editable And Not disabled
 			Protected custom.b=#False
 			If *this\eventCustomCellEdit
-				custom=*this\eventCustomCellEdit(*cell)
+				custom=*this\eventCustomCellEdit(*cell,
+				                                 GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\startx,
+				                                 GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\starty,
+				                                 *cell\col\calcwidth,
+				                                 *cell\row\calcheight)
 			EndIf
 			If Not custom
 				_MyTable_StopEdit(*this,#True)
