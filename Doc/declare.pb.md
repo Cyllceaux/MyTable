@@ -1,43 +1,3 @@
-## Macros
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|MM||||
-|\_MyTableAddAutoDeclare||name||
-|\_MyTable\_GetStyleCell||name||
-|\_MyTable\_GetStyleCol||name||
-|\_MyTable\_GetStyleRow||name||
-|\_MyTable\_GetStyleTable||name||
-|\_MyTable\_GetStyleApplication||name||
-|\_MyTable\_GetStylesApplication||||
-|\_MyTable\_GetStylesTable||||
-|\_MyTable\_GetStylesRow||||
-|\_MyTable\_GetStylesCol||||
-|\_MyTable\_GetStylesCell||||
-|\_callcountStart||||
-|\_callcountEnde||||
-|\_MyTableSimpleGetterPointer||gruppe , name||
-|\_MyTableSimpleGetter||gruppe , name , typ||
-|\_MyTableSimpleSetter||gruppe , name , typ||
-|\_MyTableSimpleSetterPointer||gruppe , name||
-|\_MyTableSimpleSetterPointerStructure||gruppe , name , typ||
-|\_MyTableSimpleSetterRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterSubRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterSubPredraw||gruppe , name , typ||
-|\_MyTableSimpleSetterPredraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetter||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterPointer||gruppe , name||
-|\_MyTableSimpleSetterGetterPointerStructure||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterSubRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterSubPredraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterPredraw||gruppe , name , typ||
-|PB|| \_pb\_function\_name\_ ||
-|ClipOutput||\_x\_ , \_y\_ , \_width\_ , \_height\_||
-|UnclipOutput||||
-|DrawingFont||\_font\_id\_||
-
-
 ## Declares
 
 |Name|Return|Parameter|Comment|
@@ -130,18 +90,5 @@
 |\_MyTable\_Cell\_SetValue||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.d||
 |\_MyTable\_Cell\_SetTextExp||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Style\_Redraw||<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
-|MYTABLE\_AUTODECLARE||||
-|||||
-|autodeclare||||
-|||||
-|autodeclare||||
-
-
-## Procedures
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|\_MyTableDebugGetName|s|<span style="color:#FFFFAA">*this.strMyTableVTable</span>||
-|\_MyTableDebugGetCanvas||<span style="color:#FFFFAA">*this.strMyTableVTable</span>||
 
 

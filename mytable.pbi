@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3287
+	#MYTABLE_VERSION = 3289
 	#MYTABLE_VERSION_DATE = 20210627
 	
 	Enumeration _mytable_type
@@ -193,6 +193,7 @@
 		SetExpanded(value.b):GetExpanded.b()
 		SetImage(value.i):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
+		SetHeight(value.i):GetHeight.i()
 		
 		AddDirtyRows(rows.i)
 		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)

@@ -1,6 +1,6 @@
 # MyTable
 
-VERSION = 3286
+VERSION = 3288
 
 VERSION_DATE = 20210627
 
@@ -29,6 +29,8 @@ VERSION_DATE = 20210627
 [mytableglobal.pb](Doc/mytableglobal.pb.md)
 
 [mytablegrid.pb](Doc/mytablegrid.pb.md)
+
+[mytablemacro.pb](Doc/mytablemacro.pb.md)
 
 [mytablerow.pb](Doc/mytablerow.pb.md)
 

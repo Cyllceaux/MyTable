@@ -3,10 +3,6 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |\_MyTableStyleBorder||name||
-|\_MyTable\_Style\_GetterSetter||name , typ , sub = ||
-|\_MyTable\_Style\_GetterSetterPointer||name , typ , sub = ||
-|\_MyTable\_Style\_GetterSetterBorder||name , typ , pos||
-|\_MyTable\_Style\_GetterSetterBorders||name , typ||
 
 
 ## Procedures

@@ -1,10 +1,3 @@
-## Macros
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|\_MyTableBorderSetterGetter||name , typ||
-
-
 ## Procedures
 
 |Name|Return|Parameter|Comment|

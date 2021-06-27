@@ -1,12 +1,4 @@
 ﻿
-Macro _MyTableBindEvent(name)
-	_MyTableAddAutoDeclare(_MyTable_Table_BindEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name))
-	Procedure _MyTable_Table_BindEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
-		If *this
-			*this\Event#name=event
-		EndIf
-	EndProcedure
-EndMacro
 
 
 _MyTableBindEvent(ColLeftClick)	
@@ -670,6 +662,11 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 	Protected start=1	
 	Protected fwidth.i=0
 	Protected cc=0
+	
+	If *this\dirty
+		*this\calcheight=DesktopScaledY(*this\height)
+		*this\dirty=#False
+	EndIf
 	
 	If *this\table\fixedcols
 		ForEach *this\table\cols()

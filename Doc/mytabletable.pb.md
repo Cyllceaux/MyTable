@@ -1,10 +1,3 @@
-## Macros
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|\_MyTableBindEvent||name||
-
-
 ## Procedures
 
 |Name|Return|Parameter|Comment|

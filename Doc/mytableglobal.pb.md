@@ -1,25 +1,3 @@
-## Macros
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|\_MyTable\_StyleMethods||gruppe , name , typ , sub = ||
-|\_MyTable\_StyleMethodsRow||gruppe , name , typ , sub = ||
-|\_MyTable\_StyleMethodsRowPointer||gruppe , name , typ , sub = ||
-|\_MyTable\_StyleMethodsCol||gruppe , name , typ , sub = ||
-|\_MyTable\_StyleBorderMethods||gruppe , name , pos , typ||
-|\_MyTable\_IsTableNoGrid||name||
-|\_MyTable\_IsTable||name||
-|\_MyTable\_IsTableColNo||name||
-|\_MyTable\_IsTableCellColRowNo||name||
-|\_MyTable\_IsTableRow||name||
-|\_MyTable\_IsTableRowColNo||name||
-|\_MyTable\_IsTableAllNo||name||
-|\_MyTable\_IsTableAll||name||
-|\_MyTable\_IsTableNo||name||
-|\_MyTable\_StylesBordersMethods||gruppe , name , typ||
-|\_MyTable\_StylesMethods||gruppe||
-
-
 ## Constants
 
 |Constants|Value|Comment|
