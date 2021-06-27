@@ -26,7 +26,7 @@ UseModule MyTable
 		#TABLE_TEXT_NAME
 	EndEnumeration
 	
-	Procedure styleHeaderRow(*row.MyTableRow,*dat)
+	Procedure styleHeaderRow(*row.MyTableRow,*dat=0)
 		Protected *style.MyTableStyle
 		*row\SetData(*dat)
 		*row\SetExpanded(#True)
@@ -38,7 +38,43 @@ UseModule MyTable
 		*style\SetForeColor(#White)
 	EndProcedure
 	
-	Procedure styleEditCell(*cell.MyTableCell,*dat,init.s="")
+	Procedure styleHeader2Row(*row.MyTableRow,*dat=0)
+		Protected *style.MyTableStyle
+		*row\SetData(*dat)
+		*row\SetExpanded(#True)
+		*style=*row\GetDefaultStyle()
+		*style\SetBackColor(RGBA(70,70,70,255))
+		*style\SetForeColor(#White)
+		*style=*row\GetSelectedStyle()
+		*style\SetBackColor(RGBA(70,70,70,255))
+		*style\SetForeColor(#White)
+	EndProcedure
+	
+	Procedure styleHeader3Row(*row.MyTableRow,*dat=0)
+		Protected *style.MyTableStyle
+		*row\SetData(*dat)
+		*row\SetExpanded(#True)
+		*style=*row\GetDefaultStyle()
+		*style\SetBackColor(RGBA(90,90,90,255))
+		*style\SetForeColor(#White)
+		*style=*row\GetSelectedStyle()
+		*style\SetBackColor(RGBA(90,90,90,255))
+		*style\SetForeColor(#White)
+	EndProcedure
+	
+	Procedure styleHeader4Row(*row.MyTableRow,*dat=0)
+		Protected *style.MyTableStyle
+		*row\SetData(*dat)
+		*row\SetExpanded(#True)
+		*style=*row\GetDefaultStyle()
+		*style\SetBackColor(RGBA(110,110,110,255))
+		*style\SetForeColor(#White)
+		*style=*row\GetSelectedStyle()
+		*style\SetBackColor(RGBA(110,110,110,255))
+		*style\SetForeColor(#White)
+	EndProcedure
+	
+	Procedure styleEditCell(*cell.MyTableCell,*dat=0,init.s="")
 		Protected *style.MyTableStyle
 		*cell\SetData(*dat)
 		*cell\SetText(init)
@@ -50,7 +86,7 @@ UseModule MyTable
 		*style\SetBackColor(#Yellow)
 	EndProcedure
 	
-	Procedure styleEditCellNumber(*cell.MyTableCell,*dat,init.s="")
+	Procedure styleEditCellNumber(*cell.MyTableCell,*dat=0,init.s="")
 		Protected *style.MyTableStyle
 		*cell\SetData(*dat)
 		*cell\SetDatatype(#MYTABLE_DATATYPE_NUMBER)
@@ -84,7 +120,7 @@ UseModule MyTable
 	Global *rowFixed.MyTableRow
 	
 	Global *styleTree.MyTableTree=MyTableCreateTree(window,canvasStyle,vscrollStyle,hscrollStyle,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
-	Global *header.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle	
+	Global *header.MyTableRow,*header2.MyTableRow,*header3.MyTableRow,*header4.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle	
 	*styleTree\AddCol("Name",200)
 	*styleTree\AddCol("Value",#PB_Ignore)
 	*header=*styleTree\AddRow("Table Default Type"):styleHeaderRow(*header,#TABLE_FLAGS_DEFAULT)
@@ -149,6 +185,32 @@ UseModule MyTable
 	*checkRow=*header\AddRow("CustomCellDraw"):styleCheckboxRow(*checkRow)
 	*checkRow=*header\AddRow("CustomCellEdit"):styleCheckboxRow(*checkRow)
 	*header=*styleTree\AddRow("Styles"):styleHeaderRow(*header,#TABLE_STYLES)
+	*header2=*header\AddRow("Default"):styleHeader2Row(*header2)
+	*textRow=*header2\AddRow("Font"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("Name"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("Size"):styleEditCellNumber(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("Backcolor"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("Frontcolor"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("Forecolor"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("HAlign"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("VAlign"):styleEditCell(*textRow\GetCell(1))
+	*textRow=*header2\AddRow("Border"):styleEditCell(*textRow\GetCell(1))
+	*header3=*header2\AddRow("Border"):styleHeader3Row(*header3)
+	*header4=*header3\AddRow("Default"):styleHeader4Row(*header4)
+	*textRow=*header4\AddRow("Color"):styleEditCellNumber(*textRow\GetCell(1))
+	*textRow=*header4\AddRow("width"):styleEditCellNumber(*textRow\GetCell(1))
+	*header4=*header3\AddRow("Top"):styleHeader4Row(*header4)
+	*textRow=*header4\AddRow("Color"):styleEditCellNumber(*textRow\GetCell(1))
+	*textRow=*header4\AddRow("width"):styleEditCellNumber(*textRow\GetCell(1))
+	*header4=*header3\AddRow("Right"):styleHeader4Row(*header4)
+	*textRow=*header4\AddRow("Color"):styleEditCellNumber(*textRow\GetCell(1))
+	*textRow=*header4\AddRow("width"):styleEditCellNumber(*textRow\GetCell(1))
+	*header4=*header3\AddRow("Bottom"):styleHeader4Row(*header4)
+	*textRow=*header4\AddRow("Color"):styleEditCellNumber(*textRow\GetCell(1))
+	*textRow=*header4\AddRow("width"):styleEditCellNumber(*textRow\GetCell(1))
+	*header4=*header3\AddRow("Left"):styleHeader4Row(*header4)
+	*textRow=*header4\AddRow("Color"):styleEditCellNumber(*textRow\GetCell(1))
+	*textRow=*header4\AddRow("width"):styleEditCellNumber(*textRow\GetCell(1))
 	
 	Global panel=PanelGadget(#PB_Any,0,0,0,0)
 	AddGadgetItem(panel,-1,"Preview")
