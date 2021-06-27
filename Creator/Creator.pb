@@ -29,7 +29,6 @@ UseModule MyTable
 	Procedure styleHeaderRow(*row.MyTableRow,*dat)
 		Protected *style.MyTableStyle
 		*row\SetData(*dat)
-		*row\SetFlags(#MYTABLE_ROW_FLAGS_HIERARCHICAL_ALWAYS_EXPANDED)
 		*row\SetExpanded(#True)
 		*style=*row\GetDefaultStyle()
 		*style\SetBackColor(RGBA(50,50,50,255))
@@ -79,7 +78,7 @@ UseModule MyTable
 	Global *rowFixed.MyTableRow
 	
 	Global *styleTree.MyTableTree=MyTableCreateTree(window,canvasStyle,vscrollStyle,hscrollStyle,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_NO_REDRAW)
-	Global *header.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle
+	Global *header.MyTableRow,*checkRow.MyTableRow,*textRow.MyTableRow,*cell.MyTableCell,*style.MyTableStyle	
 	*styleTree\AddCol("Name",200)
 	*styleTree\AddCol("Value",#PB_Ignore)
 	*header=*styleTree\AddRow("Table Default Type"):styleHeaderRow(*header,#TABLE_FLAGS_DEFAULT)
@@ -119,6 +118,30 @@ UseModule MyTable
 	*textRow=*header\AddRow("Cols"):styleEditCellNumber(*textRow\GetCell(1),#TABLE_VALUES_COLS,"100")
 	*rowFixed=*header\AddRow("FixedCols"):styleEditCellNumber(*rowFixed\GetCell(1),#TABLE_VALUES_FIXED_COLS,"0")
 	*header=*styleTree\AddRow("Events"):styleHeaderRow(*header,#TABLE_EVENTS)
+	*checkRow=*header\AddRow("ColLeftClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("ColLeftDoubleClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("ColRightClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("ColRightDoubleClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)	
+	*checkRow=*header\AddRow("CellChangedChecked"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellChangedUnChecked"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellChangedText"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellChangedValue"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellSelected"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellLeftClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellLeftDoubleClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellRightClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CellRightDoubleClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)	
+	*checkRow=*header\AddRow("RowChangedChecked"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowChangedUnChecked"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowChangedExpanded"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowChangedCollapsed"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowSelected"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowLeftClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowLeftDoubleClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowRightClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("RowRightDoubleClick"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)	
+	*checkRow=*header\AddRow("CustomCellDraw"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
+	*checkRow=*header\AddRow("CustomCellEdit"):*checkRow\SetFlags(#MYTABLE_ROW_FLAGS_CHECKBOXES)
 	*header=*styleTree\AddRow("Styles"):styleHeaderRow(*header,#TABLE_STYLES)
 	
 	Global panel=PanelGadget(#PB_Any,0,0,0,0)
@@ -190,12 +213,34 @@ UseModule MyTable
 		Protected rows.i=0
 		Protected fixed.i=0
 		Protected idx
+		Protected defevents.s=""
+		Protected events.s=""
 		*preview\SetRedraw(#False)
 		
 		Protected i,g
 		For i=1 To *styleTree\RowCount()
 			*header=*styleTree\GetRow(i-1)
 			Select *header\GetData()
+				Case #TABLE_EVENTS
+					For g=1 To *header\RowCount()
+						*row=*header\GetRow(g-1) 
+						*cell=*row\GetCell(0)
+						If *row\GetChecked()
+							defevents+#CRLF$+LSet("",8," ")+"*preview\BindEvent"+*cell\GetText()+"(@"+*cell\GetText()+"())"
+							events+LSet("",4," ")+"Procedure.b "+*cell\GetText()+"("
+							If Left(*cell\GetText(),3)="Row"
+								events+"*row.MyTableRow"
+							ElseIf Left(*cell\GetText(),3)="Col"
+								events+"*col.MyTableCol"
+							ElseIf Left(*cell\GetText(),4)="Cell"
+								events+"*cell.MyTableCell"
+							ElseIf Left(*cell\GetText(),6)="Custom"
+								events+"*cell.MyTableCell,x,y,w,h"
+							EndIf
+							events+")"+#CRLF$+#CRLF$
+							events+LSet("",4," ")+"EndProcedure"+#CRLF$+#CRLF$
+						EndIf
+					Next
 				Case #TABLE_FLAGS_DEFAULT
 					For g=1 To *header\RowCount()
 						*row=*header\GetRow(g-1) 
@@ -288,6 +333,26 @@ UseModule MyTable
 			EndSelect
 		Next
 		
+		Protected isTable.b=#False
+		Protected isGrid.b=#False
+		Protected isTree.b=#False
+		Protected tt.s=""
+		Protected st.s=""
+		
+		If flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL
+			isTree=#True
+			tt="Tree"
+			st="tree"
+		ElseIf flags & #MYTABLE_TABLE_FLAGS_GRID
+			isGrid=#True
+			tt="Grid"
+			st="grid"
+		Else
+			isTable=#True
+			tt="Table"
+			st="table"
+		EndIf
+		
 		If flags=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID
 			tableflags="#MYTABLE_TABLE_FLAGS_DEFAULT_GRID"
 		EndIf
@@ -301,11 +366,15 @@ UseModule MyTable
 		Protected result.s=""
 		result+"UseModule MyTable"+#CRLF$
 		If flags & #MYTABLE_TABLE_FLAGS_CALLBACK
-			result+LSet("",4," ")+"Procedure TableCallback(*Row.MyTableRow)"+#CRLF$	+#CRLF$	
+			result+LSet("",4," ")+"Procedure "+tt+"Callback(*row.MyTableRow)"+#CRLF$	
+			result+LSet("",8," ")+"Protected *"+st+".MyTable"+tt+"=*row\GetTable()"+#CRLF$+#CRLF$	
 			result+LSet("",4," ")+"EndProcedure"+#CRLF$+#CRLF$
 		EndIf
+		If events<>""
+			result+events+#CRLF$
+		EndIf
 		result+LSet("",4," ")+"Procedure createTable(window,canvas,hscroll,vscroll)"+#CRLF$
-		result+LSet("",8," ")+"Protected *preview.MyTable=MyTableCreate"
+		result+LSet("",8," ")+"Protected *preview.MyTable"+tt+"=MyTableCreate"
 		If flags & #MYTABLE_TABLE_FLAGS_GRID
 			result+"Grid(window,canvas,vscroll,hscroll,"+rows+","+cols
 		ElseIf flags & #MYTABLE_TABLE_FLAGS_HIERARCHICAL
@@ -328,7 +397,10 @@ UseModule MyTable
 			result+LSet("",8," ")+"*preview\SetEmptyText("+#DQUOTE$+empty+#DQUOTE$+")"+#CRLF$
 		EndIf
 		If flags & #MYTABLE_TABLE_FLAGS_CALLBACK
-			result+LSet("",8," ")+"*preview\BindCallback(@TableCallback())"+#CRLF$
+			result+LSet("",8," ")+"*preview\BindCallback(@"+tt+"Callback())"+#CRLF$
+		EndIf
+		If defevents<>""
+			result+defevents+#CRLF$
 		EndIf
 		If booleans<>""
 			result+booleans+#CRLF$+#CRLF$
