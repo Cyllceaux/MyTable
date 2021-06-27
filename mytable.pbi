@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3255
+	#MYTABLE_VERSION = 3287
 	#MYTABLE_VERSION_DATE = 20210627
 	
 	Enumeration _mytable_type
@@ -127,6 +127,7 @@
 		SetImageLeft(value.i):GetImageLeft.i()
 		SetImageRight(value.i):GetImageRight.i()
 		SetChecked(value.b):GetChecked.b()
+		SetColspan(value.i):GetColspan.i()
 		
 		AddCell(text.s,image.i=0,flags.i=0)
 		DeleteCell(row.i)

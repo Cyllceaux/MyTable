@@ -14,7 +14,7 @@ _MyTableSimpleGetterPointer(Cell,Parent)
 _MyTableSimpleGetterPointer(Cell,Row)
 _MyTableSimpleGetterPointer(Cell,Col)
 _MyTableSimpleGetterPointer(Cell,Table)
-
+_MyTableSimpleSetterGetterSubPredraw(Cell,Colspan,i)
 
 Procedure _MyTable_Cell_SetTextExp(*this.strMyTableCell,value.s)
 	If *this

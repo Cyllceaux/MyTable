@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3255||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3287||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210627||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
@@ -257,6 +257,8 @@
 |GetImageRight|i|||
 |SetChecked||value.b||
 |GetChecked|b|||
+|SetColspan||value.i||
+|GetColspan|i|||
 |AddCell||text.s , image.i = 0 , flags.i = 0||
 |DeleteCell||row.i||
 |GetCell||row.i||

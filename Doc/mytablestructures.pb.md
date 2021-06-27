@@ -112,6 +112,7 @@
 |textheight|i||
 |startx|i||
 |starty|i||
+|colspan|i||
 
 ### strMyTableCol : [strMyTableObject](#strMyTableObject)
 |Field|Type|Comment|

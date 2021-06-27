@@ -103,6 +103,8 @@ Structure strMyTableCell Extends strMyTableObject
 	
 	startx.i
 	starty.i
+	
+	colspan.i
 EndStructure
 
 Structure strMyTableCol Extends strMyTableObject

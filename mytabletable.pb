@@ -566,7 +566,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
-Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell.strMyTableCell)
+Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell.strMyTableCell,cw)
 	Protected result=*cell\table\calcdefaultrowheight
 	Protected valign=_MyTable_GetDefaultVAlign(*cell)
 	Protected halign=_MyTable_GetDefaultHAlign(*cell)
@@ -634,12 +634,12 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	If *cell\text<>""
 		
 		If fixed
-			_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),*cell\col\calcwidth-addx-tw)
+			_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetFixedForeColor(*cell),cw-addx-tw)
 		Else
 			If selected
-				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell),*cell\col\calcwidth-addx-tw)
+				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetSelectedForeColor(*cell),cw-addx-tw)
 			Else
-				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetDefaultForeColor(*cell),*cell\col\calcwidth-addx-tw)
+				_MyTableDrawText(bx+addx,by+addy,*cell\text,_MyTable_GetDefaultForeColor(*cell),cw-addx-tw)
 			EndIf
 		EndIf		
 		result=*cell\textheight
@@ -647,7 +647,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	
 	If *cell\cells
 		ForEach *cell\cells\cells()
-			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell\cells\cells())
+			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell\cells\cells(),cw)
 		Next
 	EndIf
 	ProcedureReturn result
@@ -717,17 +717,28 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 	Protected selected.b=#False
 	Protected mselected.b=#False
 	
+	Protected cw,ch
+	
 	For idx=start To cols
 		
 		
 		DrawingMode(#PB_2DDrawing_Default)			
 		*cell=_MyTableGetOrAddCell(*this,idx-1,#True)
 		Protected *col.strMyTableCol=*cell\col
-		If *col\calcwidth>0 And (bx+*col\calcwidth)>=0
+		cw=*col\calcwidth
+		If *cell\colspan>1
+			Protected g
+			For g=2 To *cell\colspan
+				If g<=cols
+					SelectElement(*this\table\cols(),*col\listindex+(g-1))
+					cw+*this\table\cols()\calcwidth
+				EndIf
+			Next
+		EndIf
+		ch=*this\calcheight
+		
+		If cw>0 And (bx+cw)>=0
 			Protected customdraw.b=#False
-			
-			
-			
 			
 			checkboxes=_MyTable_IsCheckboxes(*this)
 			Protected tborder=_MyTable_GetDefaultBorder(*cell)
@@ -749,30 +760,30 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 			
 			
 			
-			ClipOutput(bx,by,*col\calcwidth,*this\calcheight)
+			ClipOutput(bx,by,cw,ch)
 			*cell\startx=bx
 			*cell\starty=by
 			If *this\table\eventCustomCellDraw
-				customdraw=*this\table\eventCustomCellDraw(*cell,bx,by,*col\calcwidth,*this\calcheight)
+				customdraw=*this\table\eventCustomCellDraw(*cell,bx,by,cw,ch)
 			EndIf
 			
 			If Not customdraw
 				If disabled
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetDisabledBackColor(*cell))
+					Box(bx,by,cw,ch,_MyTable_GetDisabledBackColor(*cell))
 				ElseIf bElementSelected
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetElementSelectedBackColor(*cell))
+					Box(bx,by,cw,ch,_MyTable_GetElementSelectedBackColor(*cell))
 				ElseIf selected
-					Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetSelectedBackColor(*cell))
+					Box(bx,by,cw,ch,_MyTable_GetSelectedBackColor(*cell))
 				Else
 					If mselected
-						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetMouseOverBackColor(*cell))
+						Box(bx,by,cw,ch,_MyTable_GetMouseOverBackColor(*cell))
 					ElseIf fixed
-						Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetFixedBackColor(*cell))
+						Box(bx,by,cw,ch,_MyTable_GetFixedBackColor(*cell))
 					Else
 						If zebra
-							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetZebraBackColor(*cell))
+							Box(bx,by,cw,ch,_MyTable_GetZebraBackColor(*cell))
 						Else
-							Box(bx,by,*col\calcwidth,*this\calcheight,_MyTable_GetDefaultBackColor(*cell))
+							Box(bx,by,cw,ch,_MyTable_GetDefaultBackColor(*cell))
 						EndIf
 					EndIf
 				EndIf
@@ -824,7 +835,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 						If Not *this\image\sized
 							*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
 							If *this\image\resize
-								ResizeImage(*this\image\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+								ResizeImage(*this\image\sized,ch-MyTableW8,ch-MyTableH8)
 							Else
 								ResizeImage(*this\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
 							EndIf
@@ -833,7 +844,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 						DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
 						DrawingMode(#PB_2DDrawing_Default)
 						If *this\image\resize
-							addx+*this\calcheight
+							addx+ch
 						Else
 							addx+*this\table\calcdefaultrowheight
 						EndIf
@@ -845,7 +856,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					If Not *cell\imageLeft\sized
 						*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
 						If *cell\imageLeft\resize
-							ResizeImage(*cell\imageLeft\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+							ResizeImage(*cell\imageLeft\sized,ch-MyTableW8,ch-MyTableH8)
 						Else
 							ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
 						EndIf
@@ -854,7 +865,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					DrawImage(ImageID(*cell\imageLeft\sized),bx+addx,by+addy+MyTableW4)
 					DrawingMode(#PB_2DDrawing_Default)
 					If *cell\imageLeft\resize
-						addx+*this\calcheight
+						addx+ch
 					Else
 						addx+*this\table\calcdefaultrowheight
 					EndIf
@@ -865,7 +876,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					If Not *cell\imageRight\sized
 						*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
 						If *cell\imageRight\resize
-							ResizeImage(*cell\imageRight\sized,*this\calcheight-MyTableW8,*this\calcheight-MyTableH8)
+							ResizeImage(*cell\imageRight\sized,ch-MyTableW8,ch-MyTableH8)
 						Else
 							ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
 						EndIf
@@ -886,15 +897,15 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 				EndIf
 				
 				
-				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell)
+				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell,cw)
 				
 				
 				If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
 					DrawingMode(#PB_2DDrawing_AlphaClip)				
 					If *cell\imageRight\resize					
-						DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\calcheight,by+addy+MyTableW4)
+						DrawImage(ImageID(*cell\imageRight\sized),bx+cw-ch,by+addy+MyTableW4)
 					Else
-						DrawImage(ImageID(*cell\imageRight\sized),bx+*col\calcwidth-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
+						DrawImage(ImageID(*cell\imageRight\sized),bx+cw-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
 					EndIf
 					DrawingMode(#PB_2DDrawing_Default)
 				EndIf
@@ -919,7 +930,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 							c=_MyTable_GetDefaultBorderWidthTop(*cell)
 						EndIf
 						c=DesktopScaledY(c)
-						Box(bx,by,*col\calcwidth,c,bcolor)
+						Box(bx,by,cw,c,bcolor)
 					EndIf
 					
 					If Bool(tborder &  #MYTABLE_STYLE_BORDER_RIGHT)
@@ -937,7 +948,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 							c=_MyTable_GetDefaultBorderWidthRight(*cell)
 						EndIf
 						c=DesktopScaledX(c)
-						Box(bx+*col\calcwidth-c,by,*col\calcwidth,*this\calcheight,bcolor)
+						Box(bx+cw-c,by,cw,ch,bcolor)
 					EndIf
 					If Bool(tborder &  #MYTABLE_STYLE_BORDER_BOTTOM)
 						If disabled
@@ -954,7 +965,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 							c=_MyTable_GetDefaultBorderWidthBottom(*cell)
 						EndIf
 						c=DesktopScaledY(c)
-						Box(bx,by+*this\calcheight-c,*col\calcwidth,c,bcolor)
+						Box(bx,by+ch-c,cw,c,bcolor)
 					EndIf
 					If Bool(tborder &  #MYTABLE_STYLE_BORDER_LEFT)
 						If disabled
@@ -971,20 +982,23 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 							c=_MyTable_GetDefaultBorderWidthLeft(*cell)
 						EndIf
 						c=DesktopScaledX(c)
-						Box(bx,by,c,*this\calcheight,bcolor)
+						Box(bx,by,c,ch,bcolor)
 					EndIf
 					
 				EndIf
 			EndIf
 			UnclipOutput()						
 		EndIf
-		bx+*col\calcwidth
+		bx+cw
 		If bx>=width
 			Break
 		EndIf		
+		If *cell\colspan>1
+			idx+*cell\colspan-1
+		EndIf
 	Next
 	*this\dirty=#False
-	ProcedureReturn *this\calcheight
+	ProcedureReturn ch
 EndProcedure
 
 Procedure _MyTable_Table_Redraw(*this.strMyTableTable)

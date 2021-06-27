@@ -26,7 +26,7 @@
 |\_MyTable\_Table\_ClearRows||<span style="color:#FFFFAA">*this.</span>strMyTableTable , <span style="color:#FFFFAA">*value</span>||
 |\_MyTable\_Table\_ClearCols||<span style="color:#FFFFAA">*this.</span>strMyTableTable , <span style="color:#FFFFAA">*value</span>||
 |\_MyTable\_Table\_Draw\_Header||<span style="color:#FFFFAA">*this.</span>strMyTableTable , by , <span style="color:#FFFFAA">*font.</span>strMyTableFont , width.i , height.i , scrollx.i , scrolly.i , fixed.b||
-|\_MyTable\_Table\_Draw\_CellText||bx , by , addx , addy , <span style="color:#FFFFAA">*font.</span>strMyTableFont , fixed , selected , checkboxes , disabled , idx , <span style="color:#FFFFAA">*cell.strMyTableCell</span>||
+|\_MyTable\_Table\_Draw\_CellText||bx , by , addx , addy , <span style="color:#FFFFAA">*font.</span>strMyTableFont , fixed , selected , checkboxes , disabled , idx , <span style="color:#FFFFAA">*cell.</span>strMyTableCell , cw||
 |\_MyTable\_Table\_Draw\_Row||<span style="color:#FFFFAA">*this.</span>strMyTableRow , by , cols , <span style="color:#FFFFAA">*font.</span>strMyTableFont , width.i , height.i , scrollx.i , scrolly.i , zebra.b , fixed.b||
 |\_MyTable\_Table\_Redraw||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_PredrawSub|i|<span style="color:#FFFFAA">*this.</span>strMyTableTable , <span style="color:#FFFFAA">*row.</span>strMyTableRow , pages.b||

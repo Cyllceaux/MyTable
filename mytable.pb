@@ -297,6 +297,7 @@ Module MyTable
 		_MyTableDataSectionSetterGetter(Cell,ImageLeft)
 		_MyTableDataSectionSetterGetter(Cell,ImageRight)
 		_MyTableDataSectionSetterGetter(Cell,Checked)
+		_MyTableDataSectionSetterGetter(Cell,Colspan)
 		_MyTableDataSectionMethode(Cell,AddCell)
 		_MyTableDataSectionMethode(Cell,DeleteCell)
 		_MyTableDataSectionMethode(Cell,GetCell)
