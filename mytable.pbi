@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3239
+	#MYTABLE_VERSION = 3242
 	#MYTABLE_VERSION_DATE = 20210627
 	
 	Enumeration _mytable_type
@@ -187,6 +187,7 @@
 		GetTable()
 		GetParent()
 		GetPosition()
+		GetVisiblePosition()
 		GetLevel()
 		SetExpanded(value.b):GetExpanded.b()
 		SetImage(value.i):GetImage.i()

@@ -249,6 +249,7 @@ Module MyTable
 		_MyTableDataSectionGetter(Row,Table)
 		_MyTableDataSectionGetter(Row,Parent)
 		_MyTableDataSectionGetter(Row,Position)
+		_MyTableDataSectionGetter(Row,VisiblePosition)
 		_MyTableDataSectionGetter(Row,Level)
 		_MyTableDataSectionSetterGetter(Row,Expanded)
 		_MyTableDataSectionSetterGetter(Row,Image)

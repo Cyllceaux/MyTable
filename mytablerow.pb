@@ -95,6 +95,30 @@ EndProcedure
 Procedure _MyTable_Row_GetPosition(*this.strMyTableRow)
 	If *this
 		Protected result.i=-1
+		If *this\parent
+			If *this\parent\rows
+				ForEach *this\parent\rows\rows()
+					If *this\parent\rows\rows()=*this
+						result=ListIndex(*this\parent\rows\rows())
+						Break
+					EndIf
+				Next
+			EndIf
+		Else
+			ForEach *this\table\rows()
+				If *this\table\rows()=*this
+					result=ListIndex(*this\table\rows())
+					Break
+				EndIf
+			Next
+		EndIf
+		ProcedureReturn result
+	EndIf
+EndProcedure
+
+Procedure _MyTable_Row_GetVisiblePosition(*this.strMyTableRow)
+	If *this
+		Protected result.i=-1
 		ForEach *this\table\expRows()
 			If *this\table\expRows()=*this
 				result=ListIndex(*this\table\expRows())

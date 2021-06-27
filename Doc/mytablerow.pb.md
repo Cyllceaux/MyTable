@@ -8,6 +8,7 @@
 |\_MyTable\_Row\_Delete||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_DeleteRow||<span style="color:#FFFFAA">*this.</span>strMyTableRow , idx.i||
 |\_MyTable\_Row\_GetPosition||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
+|\_MyTable\_Row\_GetVisiblePosition||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetRow||<span style="color:#FFFFAA">*this.</span>strMyTableRow , row.i||
 |\_MyTable\_Row\_GetCell||<span style="color:#FFFFAA">*this.</span>strMyTableRow , col.i||
 |\_MyTable\_Row\_GetImage||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
