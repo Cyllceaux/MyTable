@@ -70,13 +70,13 @@ UseModule MyTable
 		Debug "ChangeText "+*row\GetPosition()+" / "+*col\GetPosition()+"  ("+old+"->"+*cell\GetText()+")"
 	EndProcedure
 	
-	*tree\RegisterEventCellSelected(@CS())
-	*tree\RegisterEventCellChangedText(@RCt())
-	*tree\RegisterEventRowChangedChecked(@RC())
-	*tree\RegisterEventRowChangedUnChecked(@RU())
-	*tree\RegisterEventRowChangedExpanded(@RE())
-	*tree\RegisterEventRowChangedCollapsed(@RCo())
-	*tree\RegisterEventRowSelected(@RS())
+	*tree\BindEventCellSelected(@CS())
+	*tree\BindEventCellChangedText(@RCt())
+	*tree\BindEventRowChangedChecked(@RC())
+	*tree\BindEventRowChangedUnChecked(@RU())
+	*tree\BindEventRowChangedExpanded(@RE())
+	*tree\BindEventRowChangedCollapsed(@RCo())
+	*tree\BindEventRowSelected(@RS())
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

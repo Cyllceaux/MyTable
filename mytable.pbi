@@ -1,7 +1,7 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3234
-	#MYTABLE_VERSION_DATE = 20210626
+	#MYTABLE_VERSION = 3239
+	#MYTABLE_VERSION_DATE = 20210627
 	
 	Enumeration _mytable_type
 		#MYTABLE_TYPE_NONE
@@ -298,35 +298,35 @@
 		AutosizeHeader()
 		
 		
-		RegisterEventColLeftClick(event.MyTableProtoEventColLeftClick)
-		RegisterEventColLeftDoubleClick(event.MyTableProtoEventColLeftDoubleClick)
-		RegisterEventColRightClick(event.MyTableProtoEventColRightClick)
-		RegisterEventColRightDoubleClick(event.MyTableProtoEventColRightDoubleClick)
+		BindEventColLeftClick(event.MyTableProtoEventColLeftClick)
+		BindEventColLeftDoubleClick(event.MyTableProtoEventColLeftDoubleClick)
+		BindEventColRightClick(event.MyTableProtoEventColRightClick)
+		BindEventColRightDoubleClick(event.MyTableProtoEventColRightDoubleClick)
 		
-		RegisterEventCellChangedChecked(event.MyTableProtoEventCellChangedChecked)
-		RegisterEventCellChangedUnChecked(event.MyTableProtoEventCellChangedUnChecked)
-		RegisterEventCellChangedText(event.MyTableProtoEventCellChangedText)
-		RegisterEventCellChangedValue(event.MyTableProtoEventCellChangedValue)
-		RegisterEventCellSelected(event.MyTableProtoEventCellSelected)
-		RegisterEventCellLeftClick(event.MyTableProtoEventCellLeftClick)
-		RegisterEventCellLeftDoubleClick(event.MyTableProtoEventCellLeftDoubleClick)
-		RegisterEventCellRightClick(event.MyTableProtoEventCellRightClick)
-		RegisterEventCellRightDoubleClick(event.MyTableProtoEventCellRightDoubleClick)
+		BindEventCellChangedChecked(event.MyTableProtoEventCellChangedChecked)
+		BindEventCellChangedUnChecked(event.MyTableProtoEventCellChangedUnChecked)
+		BindEventCellChangedText(event.MyTableProtoEventCellChangedText)
+		BindEventCellChangedValue(event.MyTableProtoEventCellChangedValue)
+		BindEventCellSelected(event.MyTableProtoEventCellSelected)
+		BindEventCellLeftClick(event.MyTableProtoEventCellLeftClick)
+		BindEventCellLeftDoubleClick(event.MyTableProtoEventCellLeftDoubleClick)
+		BindEventCellRightClick(event.MyTableProtoEventCellRightClick)
+		BindEventCellRightDoubleClick(event.MyTableProtoEventCellRightDoubleClick)
 		
-		RegisterEventRowChangedChecked(event.MyTableProtoEventRowChangedChecked)
-		RegisterEventRowChangedUnChecked(event.MyTableProtoEventRowChangedUnChecked)
-		RegisterEventRowChangedExpanded(event.MyTableProtoEventRowChangedExpanded)
-		RegisterEventRowChangedCollapsed(event.MyTableProtoEventRowChangedCollapsed)
-		RegisterEventRowSelected(event.MyTableProtoEventRowSelected)
-		RegisterEventRowLeftClick(event.MyTableProtoEventRowLeftClick)
-		RegisterEventRowLeftDoubleClick(event.MyTableProtoEventRowLeftDoubleClick)
-		RegisterEventRowRightClick(event.MyTableProtoEventRowRightClick)
-		RegisterEventRowRightDoubleClick(event.MyTableProtoEventRowRightDoubleClick)
+		BindEventRowChangedChecked(event.MyTableProtoEventRowChangedChecked)
+		BindEventRowChangedUnChecked(event.MyTableProtoEventRowChangedUnChecked)
+		BindEventRowChangedExpanded(event.MyTableProtoEventRowChangedExpanded)
+		BindEventRowChangedCollapsed(event.MyTableProtoEventRowChangedCollapsed)
+		BindEventRowSelected(event.MyTableProtoEventRowSelected)
+		BindEventRowLeftClick(event.MyTableProtoEventRowLeftClick)
+		BindEventRowLeftDoubleClick(event.MyTableProtoEventRowLeftDoubleClick)
+		BindEventRowRightClick(event.MyTableProtoEventRowRightClick)
+		BindEventRowRightDoubleClick(event.MyTableProtoEventRowRightDoubleClick)
 		
-		RegisterEventCustomCellDraw(event.MyTableProtoEventCustomCellDraw)
-		RegisterEventCustomCellEdit(event.MyTableProtoEventCustomCellEdit)
+		BindEventCustomCellDraw(event.MyTableProtoEventCustomCellDraw)
+		BindEventCustomCellEdit(event.MyTableProtoEventCustomCellEdit)
 		
-		RegisterCallback(callback.MyTableProtoCallback)
+		BindCallback(callback.MyTableProtoCallback)
 		
 		GetCell(row.i,col.i)
 		Delete()
@@ -370,7 +370,7 @@
 	Interface MyTableGrid Extends MyTableTableObject
 		ResizeGrid(rows.i=#PB_Ignore,cols.i=#PB_Ignore)
 		
-		RegisterEventColSelected(event.MyTableProtoEventColSelected)
+		BindEventColSelected(event.MyTableProtoEventColSelected)
 	EndInterface
 	
 	Interface MyTableApplication Extends MyTableObject

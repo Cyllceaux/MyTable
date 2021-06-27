@@ -2,7 +2,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|\_MyTableRegisterEvent||name||
+|\_MyTableBindEvent||name||
 
 
 ## Procedures
@@ -54,7 +54,7 @@
 |\_MyTable\_Table\_ClearMaps||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetSelected|b|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_SetSelected||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.b||
-|\_MyTable\_Table\_RegisterCallback||<span style="color:#FFFFAA">*this.</span>strMyTableTable , callback.MyTableProtoCallback||
+|\_MyTable\_Table\_BindCallback||<span style="color:#FFFFAA">*this.</span>strMyTableTable , callback.MyTableProtoCallback||
 |\_MyTable\_Table\_GetSelectedRows||<span style="color:#FFFFAA">*this.</span>strMyTableTable , List rows.i||
 |\_MyTable\_Table\_GetSelectedCells||<span style="color:#FFFFAA">*this.</span>strMyTableTable , List cells.i||
 |\_MyTable\_Table\_GetSelectedCols||<span style="color:#FFFFAA">*this.</span>strMyTableTable , List cols.i||

@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3234||
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210626||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3239||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210627||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
@@ -360,31 +360,31 @@
 |AutosizeRows||||
 |AutosizeCols||||
 |AutosizeHeader||||
-|RegisterEventColLeftClick||event.MyTableProtoEventColLeftClick||
-|RegisterEventColLeftDoubleClick||event.MyTableProtoEventColLeftDoubleClick||
-|RegisterEventColRightClick||event.MyTableProtoEventColRightClick||
-|RegisterEventColRightDoubleClick||event.MyTableProtoEventColRightDoubleClick||
-|RegisterEventCellChangedChecked||event.MyTableProtoEventCellChangedChecked||
-|RegisterEventCellChangedUnChecked||event.MyTableProtoEventCellChangedUnChecked||
-|RegisterEventCellChangedText||event.MyTableProtoEventCellChangedText||
-|RegisterEventCellChangedValue||event.MyTableProtoEventCellChangedValue||
-|RegisterEventCellSelected||event.MyTableProtoEventCellSelected||
-|RegisterEventCellLeftClick||event.MyTableProtoEventCellLeftClick||
-|RegisterEventCellLeftDoubleClick||event.MyTableProtoEventCellLeftDoubleClick||
-|RegisterEventCellRightClick||event.MyTableProtoEventCellRightClick||
-|RegisterEventCellRightDoubleClick||event.MyTableProtoEventCellRightDoubleClick||
-|RegisterEventRowChangedChecked||event.MyTableProtoEventRowChangedChecked||
-|RegisterEventRowChangedUnChecked||event.MyTableProtoEventRowChangedUnChecked||
-|RegisterEventRowChangedExpanded||event.MyTableProtoEventRowChangedExpanded||
-|RegisterEventRowChangedCollapsed||event.MyTableProtoEventRowChangedCollapsed||
-|RegisterEventRowSelected||event.MyTableProtoEventRowSelected||
-|RegisterEventRowLeftClick||event.MyTableProtoEventRowLeftClick||
-|RegisterEventRowLeftDoubleClick||event.MyTableProtoEventRowLeftDoubleClick||
-|RegisterEventRowRightClick||event.MyTableProtoEventRowRightClick||
-|RegisterEventRowRightDoubleClick||event.MyTableProtoEventRowRightDoubleClick||
-|RegisterEventCustomCellDraw||event.MyTableProtoEventCustomCellDraw||
-|RegisterEventCustomCellEdit||event.MyTableProtoEventCustomCellEdit||
-|RegisterCallback||callback.MyTableProtoCallback||
+|BindEventColLeftClick||event.MyTableProtoEventColLeftClick||
+|BindEventColLeftDoubleClick||event.MyTableProtoEventColLeftDoubleClick||
+|BindEventColRightClick||event.MyTableProtoEventColRightClick||
+|BindEventColRightDoubleClick||event.MyTableProtoEventColRightDoubleClick||
+|BindEventCellChangedChecked||event.MyTableProtoEventCellChangedChecked||
+|BindEventCellChangedUnChecked||event.MyTableProtoEventCellChangedUnChecked||
+|BindEventCellChangedText||event.MyTableProtoEventCellChangedText||
+|BindEventCellChangedValue||event.MyTableProtoEventCellChangedValue||
+|BindEventCellSelected||event.MyTableProtoEventCellSelected||
+|BindEventCellLeftClick||event.MyTableProtoEventCellLeftClick||
+|BindEventCellLeftDoubleClick||event.MyTableProtoEventCellLeftDoubleClick||
+|BindEventCellRightClick||event.MyTableProtoEventCellRightClick||
+|BindEventCellRightDoubleClick||event.MyTableProtoEventCellRightDoubleClick||
+|BindEventRowChangedChecked||event.MyTableProtoEventRowChangedChecked||
+|BindEventRowChangedUnChecked||event.MyTableProtoEventRowChangedUnChecked||
+|BindEventRowChangedExpanded||event.MyTableProtoEventRowChangedExpanded||
+|BindEventRowChangedCollapsed||event.MyTableProtoEventRowChangedCollapsed||
+|BindEventRowSelected||event.MyTableProtoEventRowSelected||
+|BindEventRowLeftClick||event.MyTableProtoEventRowLeftClick||
+|BindEventRowLeftDoubleClick||event.MyTableProtoEventRowLeftDoubleClick||
+|BindEventRowRightClick||event.MyTableProtoEventRowRightClick||
+|BindEventRowRightDoubleClick||event.MyTableProtoEventRowRightDoubleClick||
+|BindEventCustomCellDraw||event.MyTableProtoEventCustomCellDraw||
+|BindEventCustomCellEdit||event.MyTableProtoEventCustomCellEdit||
+|BindCallback||callback.MyTableProtoCallback||
 |GetCell||row.i , col.i||
 |Delete||||
 |GetRow||row.i||
@@ -428,7 +428,7 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |ResizeGrid||rows.i = <span style="color:#AAAAFF">\#PB\_Ignore</span> , cols.i = <span style="color:#AAAAFF">\#PB\_Ignore</span>||
-|RegisterEventColSelected||event.MyTableProtoEventColSelected||
+|BindEventColSelected||event.MyTableProtoEventColSelected||
 
 ### MyTableApplication : [MyTableObject](#MyTableObject)
 |Name|Return|Parameter|Comment|

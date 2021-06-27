@@ -35,7 +35,7 @@ UseModule MyTable
 	EndProcedure
 	
 	*table\AddDirtyRows(1000000)
-	*table\RegisterCallback(@callback())
+	*table\BindCallback(@callback())
 	*table\SetRedraw(#True)
 	
 	SetGadgetAttribute(pages,#PB_Spin3D_Maximum,*table\GetPages())

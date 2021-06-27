@@ -1,7 +1,7 @@
 ﻿
-Macro _MyTableRegisterEvent(name)
-	_MyTableAddAutoDeclare(_MyTable_Table_RegisterEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name))
-	Procedure _MyTable_Table_RegisterEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
+Macro _MyTableBindEvent(name)
+	_MyTableAddAutoDeclare(_MyTable_Table_BindEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name))
+	Procedure _MyTable_Table_BindEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
 		If *this
 			*this\Event#name=event
 		EndIf
@@ -9,31 +9,31 @@ Macro _MyTableRegisterEvent(name)
 EndMacro
 
 
-_MyTableRegisterEvent(ColLeftClick)	
-_MyTableRegisterEvent(ColRightClick)
-_MyTableRegisterEvent(ColLeftDoubleClick)		
-_MyTableRegisterEvent(ColRightDoubleClick)
-_MyTableRegisterEvent(ColSelected)
-_MyTableRegisterEvent(CellChangedChecked)
-_MyTableRegisterEvent(CellChangedUnChecked)
-_MyTableRegisterEvent(CellChangedText)
-_MyTableRegisterEvent(CellChangedValue)
-_MyTableRegisterEvent(CellSelected)		
-_MyTableRegisterEvent(CellLeftClick)	
-_MyTableRegisterEvent(CellRightClick)
-_MyTableRegisterEvent(CellLeftDoubleClick)		
-_MyTableRegisterEvent(CellRightDoubleClick)
-_MyTableRegisterEvent(RowChangedChecked)
-_MyTableRegisterEvent(RowChangedUnChecked)
-_MyTableRegisterEvent(RowChangedExpanded)
-_MyTableRegisterEvent(RowChangedCollapsed)
-_MyTableRegisterEvent(RowSelected)
-_MyTableRegisterEvent(RowLeftClick)	
-_MyTableRegisterEvent(RowRightClick)
-_MyTableRegisterEvent(RowLeftDoubleClick)		
-_MyTableRegisterEvent(RowRightDoubleClick)
-_MyTableRegisterEvent(CustomCellDraw)
-_MyTableRegisterEvent(CustomCellEdit)
+_MyTableBindEvent(ColLeftClick)	
+_MyTableBindEvent(ColRightClick)
+_MyTableBindEvent(ColLeftDoubleClick)		
+_MyTableBindEvent(ColRightDoubleClick)
+_MyTableBindEvent(ColSelected)
+_MyTableBindEvent(CellChangedChecked)
+_MyTableBindEvent(CellChangedUnChecked)
+_MyTableBindEvent(CellChangedText)
+_MyTableBindEvent(CellChangedValue)
+_MyTableBindEvent(CellSelected)		
+_MyTableBindEvent(CellLeftClick)	
+_MyTableBindEvent(CellRightClick)
+_MyTableBindEvent(CellLeftDoubleClick)		
+_MyTableBindEvent(CellRightDoubleClick)
+_MyTableBindEvent(RowChangedChecked)
+_MyTableBindEvent(RowChangedUnChecked)
+_MyTableBindEvent(RowChangedExpanded)
+_MyTableBindEvent(RowChangedCollapsed)
+_MyTableBindEvent(RowSelected)
+_MyTableBindEvent(RowLeftClick)	
+_MyTableBindEvent(RowRightClick)
+_MyTableBindEvent(RowLeftDoubleClick)		
+_MyTableBindEvent(RowRightDoubleClick)
+_MyTableBindEvent(CustomCellDraw)
+_MyTableBindEvent(CustomCellEdit)
 
 _MyTableSimpleSetterGetter(Table,Tooltip,s)
 _MyTableSimpleSetterGetterPredraw(Table,Title,s)
@@ -1636,7 +1636,7 @@ EndProcedure
 
 
 
-Procedure _MyTable_Table_RegisterCallback(*this.strMyTableTable,callback.MyTableProtoCallback)
+Procedure _MyTable_Table_BindCallback(*this.strMyTableTable,callback.MyTableProtoCallback)
 	If *this
 		*this\callback=callback
 	EndIf

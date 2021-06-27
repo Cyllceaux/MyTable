@@ -63,12 +63,12 @@ UseModule MyTable
 		Debug "RowCollpased "+*row\GetPosition()
 	EndProcedure
 	
-	*tree\RegisterEventCellSelected(@CS())
-	*tree\RegisterEventRowChangedChecked(@RC())
-	*tree\RegisterEventRowChangedUnChecked(@RU())
-	*tree\RegisterEventRowChangedExpanded(@RE())
-	*tree\RegisterEventRowChangedCollapsed(@RCo())
-	*tree\RegisterEventRowSelected(@RS())
+	*tree\BindEventCellSelected(@CS())
+	*tree\BindEventRowChangedChecked(@RC())
+	*tree\BindEventRowChangedUnChecked(@RU())
+	*tree\BindEventRowChangedExpanded(@RE())
+	*tree\BindEventRowChangedCollapsed(@RCo())
+	*tree\BindEventRowSelected(@RS())
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

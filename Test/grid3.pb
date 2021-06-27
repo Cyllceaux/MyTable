@@ -140,10 +140,10 @@ UseModule MyTable
 		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)		
 		*element\grid\SetData(*element)
 		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
-		*element\grid\RegisterEventCellSelected(@EvtCellSelect())
-		*element\grid\RegisterEventColSelected(@EvtColSelect())
-		*element\grid\RegisterEventRowSelected(@EvtRowSelect())
-		*element\grid\RegisterEventCellChangedText(@EvtCellSelectTextChange())
+		*element\grid\BindEventCellSelected(@EvtCellSelect())
+		*element\grid\BindEventColSelected(@EvtColSelect())
+		*element\grid\BindEventRowSelected(@EvtRowSelect())
+		*element\grid\BindEventCellChangedText(@EvtCellSelectTextChange())
 		change()
 	EndProcedure
 	

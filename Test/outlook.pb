@@ -430,8 +430,8 @@ UseModule MyTable
 		Resize()
 	EndProcedure
 	
-	*favoriten\RegisterEventRowChangedExpanded(@favExp())
-	*favoriten\RegisterEventRowChangedCollapsed(@favExp())
+	*favoriten\BindEventRowChangedExpanded(@favExp())
+	*favoriten\BindEventRowChangedCollapsed(@favExp())
 	
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)

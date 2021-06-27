@@ -31,7 +31,7 @@ UseModule MyTable
 	EndProcedure
 	
 	*table\AddDirtyRows(1000000)
-	*table\RegisterCallback(@callback())
+	*table\BindCallback(@callback())
 	*table\SetRedraw(#True)
 	
 	Procedure Resize()

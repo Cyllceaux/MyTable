@@ -328,7 +328,7 @@ UseModule MyTable
 			result+LSet("",8," ")+"*preview\SetEmptyText("+#DQUOTE$+empty+#DQUOTE$+")"+#CRLF$
 		EndIf
 		If flags & #MYTABLE_TABLE_FLAGS_CALLBACK
-			result+LSet("",8," ")+"*preview\RegisterCallback(@TableCallback())"+#CRLF$
+			result+LSet("",8," ")+"*preview\BindCallback(@TableCallback())"+#CRLF$
 		EndIf
 		If booleans<>""
 			result+booleans+#CRLF$+#CRLF$
@@ -407,9 +407,9 @@ UseModule MyTable
 	Resize()
 	GenerateCode()
 	
-	*styleTree\RegisterEventCellChangedText(@CellTextChange())
-	*styleTree\RegisterEventRowChangedChecked(@RowCheckChange())
-	*styleTree\RegisterEventRowChangedUnChecked(@RowCheckChange())
+	*styleTree\BindEventCellChangedText(@CellTextChange())
+	*styleTree\BindEventRowChangedChecked(@RowCheckChange())
+	*styleTree\BindEventRowChangedUnChecked(@RowCheckChange())
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 UnuseModule MyTable

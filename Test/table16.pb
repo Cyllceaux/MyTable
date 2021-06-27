@@ -56,7 +56,7 @@ UseModule MyTable
 		ProcedureReturn #False
 	EndProcedure
 	
-	*table\RegisterEventCustomCellEdit(@customCellEdit())
+	*table\BindEventCustomCellEdit(@customCellEdit())
 	
 	Procedure Resize()
 		ResizeGadget(canvas,
