@@ -469,12 +469,21 @@ Procedure _MyTableEvtCanvasKeyUp()
 			If multiselect
 				ForEach *this\tempselectedCells()
 					*this\selectedCells(MapKey(*this\tempselectedCells()))=*this\tempselectedCells()
+					If *this\eventCellSelected
+						*this\eventCellSelected(Val(MapKey(*this\tempselectedCells())))
+					EndIf
 				Next
 				ForEach *this\tempselectedCols()
 					*this\selectedCols(MapKey(*this\tempselectedCols()))=*this\tempselectedCols()
+					If *this\eventColSelected
+						*this\eventColSelected(Val(MapKey(*this\tempselectedCols())))
+					EndIf
 				Next			
 				ForEach *this\tempselectedRows()
 					*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()						
+					If *this\eventRowSelected
+						*this\eventRowSelected(Val(MapKey(*this\tempselectedRows())))
+					EndIf
 				Next
 			EndIf
 			ClearMap(*this\tempselectedCells())
@@ -1283,12 +1292,21 @@ Procedure _MyTableEvtCanvasMouseLeftUp()
 			If multiselect
 				ForEach *this\tempselectedCells()
 					*this\selectedCells(MapKey(*this\tempselectedCells()))=*this\tempselectedCells()
+					If *this\eventCellSelected
+						*this\eventCellSelected(Val(MapKey(*this\tempselectedCells())))
+					EndIf
 				Next
 				ForEach *this\tempselectedCols()
 					*this\selectedCols(MapKey(*this\tempselectedCols()))=*this\tempselectedCols()
+					If *this\eventColSelected
+						*this\eventColSelected(Val(MapKey(*this\tempselectedCols())))
+					EndIf
 				Next			
 				ForEach *this\tempselectedRows()
 					*this\selectedRows(MapKey(*this\tempselectedRows()))=*this\tempselectedRows()						
+					If *this\eventRowSelected
+						*this\eventRowSelected(Val(MapKey(*this\tempselectedRows())))
+					EndIf
 				Next
 				If Not *rc\bottom And Not *rc\right
 					_MyTableSelect(*this,*rc,#False)	
