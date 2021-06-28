@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-27 14:01" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-28 07:19" user="silko" host="AQUALAD"/>
   </section>
   <section name="files">
     <file name="autodeclare.pb">
@@ -32,7 +32,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="71573e6a171680c507444212fa8a12c4"/>
+      <fingerprint md5="79fe1645016200a1db1b7e021872b964"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -59,12 +59,16 @@
       <fingerprint md5="57177335b5234c29cc01f7cf1d76dcd4"/>
     </file>
     <file name="mytableglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="25321e9243c9a0ab4066a3230e919f8f"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="28dec84bd59a3e7ed3f8c350ec48f738"/>
     </file>
     <file name="mytablegrid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="da0367325522b779b120ba5bef635385"/>
+    </file>
+    <file name="mytablemacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="81d24b60544455be63e8ca32b0829871"/>
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -80,7 +84,7 @@
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="3576ae810596364b030fb298babae235"/>
+      <fingerprint md5="71f60e02f9e75f4ed7fb6f95d4815ac2"/>
     </file>
     <file name="mytabletree.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -245,10 +249,6 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="6bd5ba56b6f0046df7d202bad1087e82"/>
-    </file>
-    <file name="mytablemacro.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="81d24b60544455be63e8ca32b0829871"/>
     </file>
   </section>
   <section name="targets">

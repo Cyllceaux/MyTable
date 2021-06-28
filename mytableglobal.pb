@@ -272,10 +272,10 @@ Procedure _MyTableEvtMoveExp(*this.strMyTableTable)
 	If *this
 		If IsWindow(*this\edit\window)
 			ResizeWindow(*this\edit\window,
-			             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*this\edit\cell\startx,
-			             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*this\edit\cell\starty,
-			             *this\edit\cell\col\calcwidth,
-			             *this\edit\cell\row\calcheight)
+			             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+DesktopUnscaledX(*this\edit\cell\startx),
+			             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+DesktopUnscaledY(*this\edit\cell\starty),
+			             DesktopUnscaledX(*this\edit\cell\col\calcwidth),
+			             DesktopUnscaledY(*this\edit\cell\row\calcheight))
 		EndIf
 	EndIf
 EndProcedure
@@ -1964,10 +1964,10 @@ Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 				_MyTable_StopEdit(*this,#True)
 				
 				*this\edit\window=OpenWindow(#PB_Any,
-				                             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\startx,
-				                             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+*cell\starty,
-				                             *cell\col\calcwidth,
-				                             *cell\row\calcheight,
+				                             GadgetX(*this\canvas,#PB_Gadget_ScreenCoordinate)+DesktopUnscaledX(*cell\startx),
+				                             GadgetY(*this\canvas,#PB_Gadget_ScreenCoordinate)+DesktopUnscaledY(*cell\starty),
+				                             DesktopUnscaledX(*cell\col\calcwidth),
+				                             DesktopUnscaledY(*cell\row\calcheight),
 				                             "",
 				                             #PB_Window_BorderLess,
 				                             WindowID(*this\window))

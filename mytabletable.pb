@@ -122,7 +122,7 @@ EndProcedure
 Procedure _MyTable_Table_GetCalcHeight(*this.strMyTableTable)
 	If *this
 		Protected result=_MyTable_Table_Predraw(*this,#True)
-		ProcedureReturn result
+		ProcedureReturn DesktopScaledY(result)
 	EndIf
 EndProcedure
 
