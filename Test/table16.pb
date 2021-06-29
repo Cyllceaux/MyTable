@@ -1,5 +1,6 @@
 ﻿EnableExplicit
 
+
 XIncludeFile "declare.pb"
 
 UseModule MyTable

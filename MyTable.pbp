@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-29 08:42" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-29 10:53" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="autodeclare.pb">
@@ -32,7 +32,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="7c1ff40a03f368aa9eed182227d5520e"/>
+      <fingerprint md5="cd74216292b05f8fa94d535508e61c0d"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -159,8 +159,8 @@
       <fingerprint md5="0059d4e33a0734d12e16ea4511dde75b"/>
     </file>
     <file name="Test\table16.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="1c3d14c7d5917292e66864db9a1fc9fc"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="1f741991e8823ae0bb9ee608c7d22b75"/>
     </file>
     <file name="Test\table17.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -476,7 +476,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Outlook" enabled="0" default="0">
+    <target name="Outlook" enabled="0" default="1">
       <inputfile value="Test\outlook.pb"/>
       <outputfile value=""/>
       <executable value="Test\outlook.exe"/>
@@ -518,7 +518,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Creator" enabled="0" default="1">
+    <target name="Creator" enabled="0" default="0">
       <inputfile value="Creator\Creator.pb"/>
       <outputfile value="Creator\Creator.exe"/>
       <executable value="Creator\Creator.exe"/>
