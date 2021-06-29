@@ -1,6 +1,4 @@
 ﻿
-
-
 _MyTableBindEvent(ColLeftClick)	
 _MyTableBindEvent(ColRightClick)
 _MyTableBindEvent(ColLeftDoubleClick)		
@@ -46,6 +44,11 @@ _MyTableSimpleSetterGetterRedraw(Table,DefaultImagePlusArrow,i)
 _MyTableSimpleSetterGetterRedraw(Table,DefaultImageMinusArrow,i)
 _MyTableSimpleSetterGetterPredraw(Table,Page,i)
 _MyTableSimpleSetterGetterPredraw(Table,PageElements,i)
+
+_MyTableSimpleGetter(Table,Canvas,i)
+_MyTableSimpleGetter(Table,HScroll,i)
+_MyTableSimpleGetter(Table,VScroll,i)
+_MyTableSimpleGetter(Table,Window,i)
 
 Procedure _MyTable_Table_Reinit(*this.strMyTableTable)
 	If *this

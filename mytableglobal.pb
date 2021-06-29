@@ -142,6 +142,7 @@ Procedure  _MyTableInitStyleTableSelected(*style.strMyTableStyle)
 		\backcolor=RGBA(230,230,250,255)
 		\forecolor=RGBA(20,20,20,255)
 		\border\borderDefault\color=RGBA(200,200,200,255)	
+		\border\borderDefault\width=1
 		\border\border=#MYTABLE_STYLE_BORDER_ALL
 	EndWith
 EndProcedure

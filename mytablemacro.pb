@@ -544,6 +544,11 @@ Macro _MyTableDataSectionDefaultTableObject(gruppe)
 	
 	_MyTableDataSectionGetter(gruppe,Col)
 	_MyTableDataSectionMethode(gruppe,ColCount)
+	
+	_MyTableDataSectionGetter(gruppe,Canvas)
+	_MyTableDataSectionGetter(gruppe,HScroll)
+	_MyTableDataSectionGetter(gruppe,VScroll)
+	_MyTableDataSectionGetter(gruppe,Window)
 EndMacro
 
 Macro _MyTableDataSectionDefaultTable(gruppe)

@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3413
+	#MYTABLE_VERSION = 3422
 	#MYTABLE_VERSION_DATE = 20210629
 	
 	Enumeration _mytable_type
@@ -339,6 +339,11 @@
 		VisibleRowCount()
 		GetCol(col.i)
 		ColCount()
+		
+		GetCanvas()
+		GetHScroll()
+		GetVScroll()
+		GetWindow()
 	EndInterface
 	
 	Interface MyTableTable Extends MyTableTableObject
