@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-29 10:53" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-29 12:50" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="autodeclare.pb">
@@ -28,15 +28,15 @@
     </file>
     <file name="mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="6e4b37587cae3b9e113c73a3fbe5f540"/>
+      <fingerprint md5="77ed04d626db6ea09f6f90098f466443"/>
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="cd74216292b05f8fa94d535508e61c0d"/>
+      <fingerprint md5="4eaa0f9445875981003cb8572ed32fb5"/>
     </file>
     <file name="mytableapplication.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="83a7a02ea131d8b8a9be4f0482df3cb1"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="52bca622ad3319230e336bfbc39c90f5"/>
     </file>
     <file name="mytableborder.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -60,7 +60,7 @@
     </file>
     <file name="mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="296305914e34f88d8d75cc9a3d5a1bf7"/>
+      <fingerprint md5="da36caa8f5a9dd8b45dee12c557ec214"/>
     </file>
     <file name="mytablegrid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -68,7 +68,7 @@
     </file>
     <file name="mytablemacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="81d24b60544455be63e8ca32b0829871"/>
+      <fingerprint md5="47af284edf159e326bc3fc1cdba01e44"/>
     </file>
     <file name="mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -84,7 +84,7 @@
     </file>
     <file name="mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="af0faf7e8e76cc3cbcdafd02ee065370"/>
+      <fingerprint md5="b0e030350849ef19efd85e8f9cf06da2"/>
     </file>
     <file name="mytabletree.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -159,7 +159,7 @@
       <fingerprint md5="0059d4e33a0734d12e16ea4511dde75b"/>
     </file>
     <file name="Test\table16.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="1f741991e8823ae0bb9ee608c7d22b75"/>
     </file>
     <file name="Test\table17.pb">
@@ -476,7 +476,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Outlook" enabled="0" default="1">
+    <target name="Outlook" enabled="0" default="0">
       <inputfile value="Test\outlook.pb"/>
       <outputfile value=""/>
       <executable value="Test\outlook.exe"/>
@@ -518,7 +518,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Creator" enabled="0" default="0">
+    <target name="Creator" enabled="0" default="1">
       <inputfile value="Creator\Creator.pb"/>
       <outputfile value="Creator\Creator.exe"/>
       <executable value="Creator\Creator.exe"/>
