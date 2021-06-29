@@ -29,10 +29,11 @@ Procedure runFile(file.s)
 	EndIf
 EndProcedure
 
+
 Define dir=ExamineDirectory(#PB_Any,#PB_Compiler_FilePath,"*.pb")
 If dir
 	While NextDirectoryEntry(dir)
-		runFile(DirectoryEntryName(dir))
+		runFile(DirectoryEntryName(dir))		
 	Wend
 	FinishDirectory(dir)
 EndIf

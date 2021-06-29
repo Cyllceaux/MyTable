@@ -2,8 +2,6 @@
 Module MyTable
 	EnableExplicit
 	
-	
-	
 	XIncludeFile "mytablemacro.pb"
 	XIncludeFile "mytablestructures.pb"
 	XIncludeFile "declare.pb"
@@ -132,4 +130,5 @@ Module MyTable
 		_MyTableDataSectionMethode(Cell,StopEdit)
 		
 	EndDataSection	
+	
 EndModule

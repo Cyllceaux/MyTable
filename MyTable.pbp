@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-28 07:19" user="silko" host="AQUALAD"/>
+    <lastopen date="2021-06-29 06:07" user="silko" host="AQUALAD"/>
   </section>
   <section name="files">
     <file name="autodeclare.pb">
@@ -32,7 +32,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="79fe1645016200a1db1b7e021872b964"/>
+      <fingerprint md5="b686fb16051e060ca08e1d4b111ab79d"/>
     </file>
     <file name="mytableapplication.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -95,8 +95,8 @@
       <fingerprint md5="1f9221d60a72bd1e7a76b5cc6551abda"/>
     </file>
     <file name="Test\complete.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="281115479ba03381ab28953e8296a51e"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="ebb13b86e4dcdbe6106c31859f9cb6d7"/>
     </file>
     <file name="Test\declare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
