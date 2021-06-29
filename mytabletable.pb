@@ -1323,6 +1323,7 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 			
 			
 			If IsGadget(*this\hscroll)
+				
 				If h>0
 					w+GadgetWidth(*this\vscroll)
 					ResizeGadget(*this\hscroll,#PB_Ignore,#PB_Ignore,cw-GadgetWidth(*this\vscroll),#PB_Ignore)
@@ -1358,12 +1359,13 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				
 				If w>0
 					HideGadget(*this\hscroll,#False)										
-					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,w)
-				Else
+					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,w+cw-1)
+				Else					
 					SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_Maximum,0)
 					HideGadget(*this\hscroll,#True)
 					SetGadgetState(*this\hscroll,0)
 				EndIf
+				SetGadgetAttribute(*this\hscroll,#PB_ScrollBar_PageLength,cw)
 			Else
 				w-*this\hscroll
 			EndIf
@@ -1374,9 +1376,10 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				*this\maxvscroll=0
 			EndIf
 			If IsGadget(*this\vscroll)
+				
 				If w>0					
 					h+GadgetHeight(*this\hscroll)		
-					ResizeGadget(*this\vscroll,#PB_Ignore,#PB_Ignore,#PB_Ignore,ch-GadgetHeight(*this\hscroll))
+					ResizeGadget(*this\vscroll,#PB_Ignore,#PB_Ignore,#PB_Ignore,ch-GadgetHeight(*this\hscroll))					
 				ElseIf w=0
 					ResizeGadget(*this\vscroll,#PB_Ignore,#PB_Ignore,#PB_Ignore,ch)
 				Else
@@ -1384,13 +1387,15 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 				EndIf
 				
 				If h>0
-					HideGadget(*this\vscroll,#False)
-					SetGadgetAttribute(*this\vscroll,#PB_ScrollBar_Maximum,h)
+					HideGadget(*this\vscroll,#False)				
+					SetGadgetAttribute(*this\vscroll,#PB_ScrollBar_Maximum,h+ch-1)
 				Else
 					SetGadgetAttribute(*this\vscroll,#PB_ScrollBar_Maximum,0)
 					HideGadget(*this\vscroll,#True)
 					SetGadgetState(*this\vscroll,0)
 				EndIf
+				
+				SetGadgetAttribute(*this\vscroll,#PB_ScrollBar_PageLength,ch)
 			Else
 				h-*this\vscroll
 			EndIf

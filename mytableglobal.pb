@@ -1536,10 +1536,12 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		If IsGadget(vscroll)
 			SetGadgetData(vscroll,*table)
 			BindGadgetEvent(vscroll,@_MyTableEvtScroll())
+			SetGadgetAttribute(vscroll,#PB_ScrollBar_PageLength,GadgetHeight(canvas))
 		EndIf
 		If IsGadget(hscroll)
 			SetGadgetData(hscroll,*table)
 			BindGadgetEvent(hscroll,@_MyTableEvtScroll())
+			SetGadgetAttribute(hscroll,#PB_ScrollBar_PageLength,GadgetWidth(canvas))
 		EndIf
 		
 		If *application
