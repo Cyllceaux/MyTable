@@ -76,6 +76,36 @@ Procedure MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,
 	ProcedureReturn *this
 EndProcedure
 
+Procedure MyTableCreateNewTable(x.i,y.i,w.i,h.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
+	Protected window=GetActiveWindow()
+	Protected canvas=CanvasGadget(#PB_Any,x,y,w,h,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+	Protected hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+	Protected vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
+	
+	ProcedureReturn MyTableCreateTable(window,canvas,vscroll,hscroll,flags)
+EndProcedure
+
+Procedure MyTableCreateNewTree(x.i,y.i,w.i,h.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
+	Protected window=GetActiveWindow()
+	Protected canvas=CanvasGadget(#PB_Any,x,y,w,h,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+	Protected hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+	Protected vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
+	
+	ProcedureReturn MyTableCreateTree(window,canvas,vscroll,hscroll,flags)
+EndProcedure
+
+Procedure MyTableCreateNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+	Protected window=GetActiveWindow()
+	Protected canvas=CanvasGadget(#PB_Any,x,y,w,h,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+	Protected hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+	Protected vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
+	
+	ProcedureReturn MyTableCreateGrid(window,canvas,vscroll,hscroll,rows,cols,flags)
+EndProcedure
+
 Global NewList fonts.strMyTableFont()
 
 Procedure MyTableCreateFont(name.s,size.i,flags.i=0)

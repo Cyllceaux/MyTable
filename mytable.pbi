@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3410
+	#MYTABLE_VERSION = 3413
 	#MYTABLE_VERSION_DATE = 20210629
 	
 	Enumeration _mytable_type
@@ -258,7 +258,7 @@
 	Prototype.b MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
 	
 	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is drawn
-	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell,x,y,w,h)				; Return #True if custom cell is edited
+	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is edited
 	
 	
 	Prototype MyTableProtoCallback(*row.MyTableRow)
@@ -387,21 +387,29 @@
 		
 		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
 		AddTree(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)			
-		AddGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)			
+		AddGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+		
+		AddNewTable(x.i,y.i,w.i,h.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
+		AddNewTree(x.i,y.i,w.i,h.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)			
+		AddNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)			
+		
 		ClearTables()
 		Redraw()
 		Recalc()
 		Free()
-		Save.b(file.s)
+		Save.b(file.s); TODO
 	EndInterface
 	
 	Declare MyTableCreateApplication(flags.i=0)	
-	Declare MyTableLoadApplication(file.s)	
+	Declare MyTableLoadApplication(file.s); TODO
 	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	Declare MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
 	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
 	Declare MyTableCreateFont(name.s,size.i,flags.i=0)	
 	
+	Declare MyTableCreateNewTable(x.i,y.i,w.i,h.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
+	Declare MyTableCreateNewTree(x.i,y.i,w.i,h.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
+	Declare MyTableCreateNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
 EndDeclareModule
 
 XIncludeFile "global.pb"

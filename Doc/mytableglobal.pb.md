@@ -19,6 +19,9 @@
 |MyTableCreateTable||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
 |MyTableCreateTree||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
 |MyTableCreateGrid||window.i , canvas.i , vscroll.i , hscroll.i , rows.i , cols.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
+|MyTableCreateNewTable||x.i , y.i , w.i , h.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
+|MyTableCreateNewTree||x.i , y.i , w.i , h.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
+|MyTableCreateNewGrid||x.i , y.i , w.i , h.i , rows.i , cols.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
 |MyTableCreateFont||name.s , size.i , flags.i = 0||
 |\_MyTableInitStyleTable||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableSelected||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||

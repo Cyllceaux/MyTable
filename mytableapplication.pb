@@ -93,6 +93,36 @@ Procedure _MyTable_Application_AddGrid(*this.strMyTableApplication,window.i,canv
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Application_AddNewTable(*this.strMyTableApplication,x.i,y.i,w.i,h.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
+	Protected window=GetActiveWindow()
+	Protected canvas=CanvasGadget(#PB_Any,x,y,w,h,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+	Protected hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+	Protected vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
+	
+	ProcedureReturn _MyTable_Application_AddTable(*this,window,canvas,vscroll,hscroll,name,flags)
+EndProcedure
+
+Procedure _MyTable_Application_AddNewTree(*this.strMyTableApplication,x.i,y.i,w.i,h.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
+	Protected window=GetActiveWindow()
+	Protected canvas=CanvasGadget(#PB_Any,x,y,w,h,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+	Protected hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+	Protected vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
+	
+	ProcedureReturn _MyTable_Application_AddTree(*this,window,canvas,vscroll,hscroll,name,flags)
+EndProcedure
+
+Procedure _MyTable_Application_AddNewGrid(*this.strMyTableApplication,x.i,y.i,w.i,h.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
+	Protected window=GetActiveWindow()
+	Protected canvas=CanvasGadget(#PB_Any,x,y,w,h,#PB_Canvas_Container|#PB_Canvas_Keyboard)
+	Protected hscroll=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
+	Protected vscroll=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
+	CloseGadgetList()
+	
+	ProcedureReturn _MyTable_Application_AddGrid(*this,window,canvas,vscroll,hscroll,rows,cols,name,flags)
+EndProcedure
+
 
 Procedure _MyTable_Application_Redraw(*this.strMyTableApplication)
 	If *this
