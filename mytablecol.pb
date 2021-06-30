@@ -354,7 +354,7 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 			*cell\textheight=_MyTableTextHeight(*cell\text)
 		EndIf
 		tresult+*cell\textwidth+MyTableW8
-		If *cell\imageLeft\orig					
+		If *cell\imageLeft And *cell\imageLeft\orig					
 			If Not *cell\imageLeft\sized
 				*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
 				If *cell\imageLeft\resize
@@ -365,7 +365,7 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 			EndIf
 			tresult+ImageWidth(*cell\imageLeft\sized)+MyTableW8
 		EndIf
-		If *cell\imageRight\orig					
+		If *cell\imageRight And *cell\imageRight\orig					
 			If Not *cell\imageRight\sized
 				*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
 				If *cell\imageRight\resize
@@ -414,7 +414,7 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		Else
 			result=*this\textwidth+MyTableW8
 			
-			If *this\image\orig
+			If *this\image And *this\image\orig
 				If Not *this\image\sized
 					*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
 					If *this\image\resize
