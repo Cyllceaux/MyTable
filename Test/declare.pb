@@ -84,7 +84,7 @@ Macro AssertNotEmpty(value1)
 	EndIf
 EndMacro
 
-XIncludeFile "../mytabledoc.pb"
+XIncludeFile "../MyTable/mytabledoc.pb"
 
 DataSection
 	

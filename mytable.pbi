@@ -1,6 +1,6 @@
 ﻿DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3454
+	#MYTABLE_VERSION = 3459
 	#MYTABLE_VERSION_DATE = 20210630
 	
 	Enumeration _mytable_type
@@ -417,5 +417,5 @@
 	Declare MyTableCreateNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
 EndDeclareModule
 
-XIncludeFile "global.pb"
-XIncludeFile "mytable.pb"
+XIncludeFile "MyTable/global.pb"
+XIncludeFile "MyTable/mytable.pb"
