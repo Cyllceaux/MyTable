@@ -2,8 +2,8 @@
 Module MyTable
 	EnableExplicit
 	
-	XIncludeFile "mytablemacro.pb"
 	XIncludeFile "mytablestructures.pb"
+	XIncludeFile "mytablemacro.pb"
 	XIncludeFile "declare.pb"
 	XIncludeFile "autodeclare.pb"
 	XIncludeFile "mytableglobal.pb"

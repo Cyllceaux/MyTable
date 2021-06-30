@@ -250,7 +250,6 @@ UseModule MyTable
 		             #PB_Ignore,
 		             GadgetWidth(container),
 		             GadgetHeight(container))
-		*styleTree\SetRedraw(#True)
 	EndProcedure
 	
 	BindEvent(#PB_Event_SizeWindow,@Resize(),window)
