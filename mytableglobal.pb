@@ -1645,7 +1645,10 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 		\dirty=#True
 		\height=*table\defaultrowheight
 		\calcheight=*table\calcdefaultrowheight
-		\image\orig=image		
+		If image
+			\image=AllocateStructure(strMyTableImage)
+			\image\orig=image		
+		EndIf
 		\expanded=_MyTable_IsHierarchical_Always_Expanded(*table)
 		If text<>""
 			Protected c=CountString(text,sep)+1
@@ -1684,7 +1687,10 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\dirty=#True
 		\text=text
 		\width=width
-		\image\orig=image
+		If image
+			\image=AllocateStructure(strMyTableImage)
+			\image\orig=image
+		EndIf
 		\sort=#MYTABLE_COL_SORT_NONE
 		\datatype=#MYTABLE_DATATYPE_DEFAULT
 		If width=#PB_Ignore

@@ -106,8 +106,8 @@
 |mask|s||
 |datatype|i||
 |<span style="color:#FFFFAA">*cells|[strMyTableCell](#strMyTableCell)List</span>||
-|imageLeft|[strMyTableImage](#strMyTableImage)||
-|imageRight|[strMyTableImage](#strMyTableImage)||
+|<span style="color:#FFFFAA">*imageLeft|[strMyTableImage](#strMyTableImage)</span>||
+|<span style="color:#FFFFAA">*imageRight|[strMyTableImage](#strMyTableImage)</span>||
 |textwidth|i||
 |textheight|i||
 |startx|i||
@@ -122,7 +122,7 @@
 |<span style="color:#FFFFAA">*parent|[strMyTableCol](#strMyTableCol)</span>||
 |listindex|i||
 |text|s||
-|image|[strMyTableImage](#strMyTableImage)||
+|<span style="color:#FFFFAA">*image|[strMyTableImage](#strMyTableImage)</span>||
 |stretched|b||
 |width|i||
 |calcwidth|i||
@@ -146,7 +146,7 @@
 |<span style="color:#FFFFAA">*parent|[strMyTableRow](#strMyTableRow)</span>||
 |listindex|i||
 |expanded|b||
-|image|[strMyTableImage](#strMyTableImage)||
+|<span style="color:#FFFFAA">*image|[strMyTableImage](#strMyTableImage)</span>||
 |height|i||
 |calcheight|i||
 |checked|b||

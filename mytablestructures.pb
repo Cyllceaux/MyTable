@@ -95,8 +95,8 @@ Structure strMyTableCell Extends strMyTableObject
 	mask.s
 	datatype.i
 	*cells.strMyTableCellList
-	imageLeft.strMyTableImage
-	imageRight.strMyTableImage
+	*imageLeft.strMyTableImage
+	*imageRight.strMyTableImage
 	
 	textwidth.i
 	textheight.i
@@ -113,7 +113,7 @@ Structure strMyTableCol Extends strMyTableObject
 	*parent.strMyTableCol
 	listindex.i
 	text.s
-	image.strMyTableImage
+	*image.strMyTableImage
 	
 	stretched.b
 	width.i
@@ -140,7 +140,7 @@ Structure strMyTableRow Extends strMyTableObject
 	*parent.strMyTableRow
 	listindex.i
 	expanded.b
-	image.strMyTableImage
+	*image.strMyTableImage
 	height.i
 	calcheight.i
 	checked.b

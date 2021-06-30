@@ -414,7 +414,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
 			EndIf
 			
-			If *col\image\orig And IsImage(*col\image\orig)
+			If *col\image And *col\image\orig And IsImage(*col\image\orig)
 				addx+DesktopScaledX(2)
 				If Not *col\image\sized
 					*col\image\sized=CopyImage(*col\image\orig,#PB_Any)
@@ -593,7 +593,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 		*cell\textheight=_MyTableTextHeight(*cell\text)
 	EndIf
 	
-	If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+	If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
 		
 		If *cell\imageRight\resize					
 			tw=*this\calcheight+MyTableW4
@@ -830,7 +830,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 				checkboxes=_MyTable_IsCheckboxes(*cell)
 				
 				If idx=1
-					If *this\image\orig And IsImage(*this\image\orig)
+					If *this\image And *this\image\orig And IsImage(*this\image\orig)
 						addx+DesktopScaledX(2)
 						If Not *this\image\sized
 							*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
@@ -851,7 +851,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 					EndIf
 				EndIf
 				
-				If *cell\imageLeft\orig And IsImage(*cell\imageLeft\orig)
+				If *cell\imageLeft And *cell\imageLeft\orig And IsImage(*cell\imageLeft\orig)
 					addx+DesktopScaledX(2)
 					If Not *cell\imageLeft\sized
 						*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
@@ -872,7 +872,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 				EndIf
 				
 				
-				If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)				
+				If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)				
 					If Not *cell\imageRight\sized
 						*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
 						If *cell\imageRight\resize
@@ -900,7 +900,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell,cw)
 				
 				
-				If *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+				If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
 					DrawingMode(#PB_2DDrawing_AlphaClip)				
 					If *cell\imageRight\resize					
 						DrawImage(ImageID(*cell\imageRight\sized),bx+cw-ch,by+addy+MyTableW4)

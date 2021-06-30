@@ -127,10 +127,23 @@ EndProcedure
 
 Procedure _MyTable_Cell_SetImageLeft(*this.strMyTableCell,value.i)
 	If *this
-		*this\imageLeft\orig=value
-		If IsImage(*this\imageLeft\sized)
-			FreeImage(*this\imageLeft\sized)
-			*this\imageLeft\sized=0
+		If value
+			If Not *this\imageLeft
+				*this\imageLeft=AllocateStructure(strMyTableImage)
+			EndIf
+			*this\imageLeft\orig=value
+			If IsImage(*this\imageLeft\sized)
+				FreeImage(*this\imageLeft\sized)
+				*this\imageLeft\sized=0
+			EndIf
+		Else
+			If *this\imageLeft
+				If IsImage(*this\imageLeft\sized)
+					FreeImage(*this\imageLeft\sized)
+				EndIf
+			EndIf
+			FreeStructure(*this\imageLeft)
+			*this\imageLeft=0
 		EndIf
 		*this\dirty=#True
 		*this\table\dirty=#True
@@ -140,10 +153,23 @@ EndProcedure
 
 Procedure _MyTable_Cell_SetImageRight(*this.strMyTableCell,value.i)
 	If *this
-		*this\ImageRight\orig=value
-		If IsImage(*this\ImageRight\sized)
-			FreeImage(*this\ImageRight\sized)
-			*this\ImageRight\sized=0
+		If value
+			If Not *this\ImageRight
+				*this\ImageRight=AllocateStructure(strMyTableImage)
+			EndIf
+			*this\ImageRight\orig=value
+			If IsImage(*this\ImageRight\sized)
+				FreeImage(*this\ImageRight\sized)
+				*this\ImageRight\sized=0
+			EndIf
+		Else
+			If *this\ImageRight
+				If IsImage(*this\ImageRight\sized)
+					FreeImage(*this\ImageRight\sized)
+				EndIf
+			EndIf
+			FreeStructure(*this\ImageRight)
+			*this\ImageRight=0
 		EndIf
 		*this\dirty=#True
 		*this\table\dirty=#True
