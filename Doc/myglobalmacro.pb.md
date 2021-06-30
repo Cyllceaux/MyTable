@@ -2,7 +2,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|﻿Macro MM||||
+|MM||||
 |\_AddAutoDeclare||name||
 |PB|| \_pb\_function\_name\_ ||
 |ClipOutput||\_x\_ , \_y\_ , \_width\_ , \_height\_||
@@ -29,16 +29,5 @@
 |\_DataSectionSetter||projekt , gruppe , name||
 |\_DataSectionGetter||projekt , gruppe , name||
 |\_DataSectionSetterGetter||projekt , gruppe , name||
-
-
-## Declares
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|AUTODECLARE||||
-|||||
-|autodeclare||||
-|||||
-|autodeclare||||
 
 

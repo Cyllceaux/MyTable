@@ -7,16 +7,24 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-30 12:16" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-30 12:40" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="15c430c2abb93fb57c626695638fa8d9"/>
     </file>
+    <file name="MyGlobal\myglobaldoc.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="9e9609208ed526c47df896b53e7cd2d6"/>
+    </file>
+    <file name="MyGlobal\myglobalmacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="1960e2beb80550aa888d554b68817975"/>
+    </file>
     <file name="mytable.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="ee39c44d9750a876bd2668e49db83ecb"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="4e1ad80a8c8148d39e66074d0cc2bdaa"/>
     </file>
     <file name="MyTable\autodeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -53,6 +61,10 @@
     <file name="MyTable\mytablefont.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="ba17c881fc490120260e387ba17eaf9f"/>
+    </file>
+    <file name="MyTable\mytableglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="ed79856b870d909bb6e8ea476162b3dc"/>
     </file>
     <file name="MyTable\mytablegrid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -241,18 +253,6 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="6bd5ba56b6f0046df7d202bad1087e82"/>
-    </file>
-    <file name="MyGlobal\myglobaldoc.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="9e9609208ed526c47df896b53e7cd2d6"/>
-    </file>
-    <file name="MyGlobal\myglobalmacro.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="1960e2beb80550aa888d554b68817975"/>
-    </file>
-    <file name="MyTable\mytableglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="ed79856b870d909bb6e8ea476162b3dc"/>
     </file>
   </section>
   <section name="targets">

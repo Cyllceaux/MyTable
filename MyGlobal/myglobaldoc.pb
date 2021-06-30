@@ -169,12 +169,12 @@ CompilerIf #PB_Compiler_Debugger
 						inhalt=ReplaceString(inhalt,"_","\_")
 						inhalt=ReplaceString(inhalt,"#","\#")
 						If inhalt<>""						
-							If FindString(inhalt,"DeclareModule",0,#PB_String_NoCase) And Not FindString(inhalt,"EndDeclareModule",0,#PB_String_NoCase) And Not bmacros
+							If FindString(inhalt,"DeclareModule")=1 And Not FindString(inhalt,"EndDeclareModule",0,#PB_String_NoCase) And Not bmacros
 								modules+#CRLF$+"# "+StringField(inhalt,2," ")+#CRLF$+#CRLF$		
 								bmoduless=#True
 							ElseIf  FindString(inhalt,"EndDeclareModule",0,#PB_String_NoCase) And Not bmacros
 								bmoduless=#False
-							ElseIf FindString(inhalt,"Interface ",0,#PB_String_NoCase) And Not FindString(inhalt,"EndInterface",0,#PB_String_NoCase) And Not bmacros
+							ElseIf FindString(inhalt,"Interface ")=1 And Not FindString(inhalt,"EndInterface",0,#PB_String_NoCase) And Not bmacros
 								interfaces+#CRLF$+"### "+Trim(StringField(inhalt,2," "))
 								If Trim(StringField(inhalt,3," "))="Extends"
 									interfaces+" : ["+Trim(StringField(inhalt,4," "))+"](#"+Trim(StringField(inhalt,4," "))+")"
@@ -185,7 +185,7 @@ CompilerIf #PB_Compiler_Debugger
 								binterfaces=#True
 								AddElement(interfacesList())
 								interfacesList()=Trim(StringField(inhalt,2," "))
-							ElseIf FindString(inhalt,"Structure ",0,#PB_String_NoCase) And Not FindString(inhalt,"EndStructure",0,#PB_String_NoCase) And Not bmacros
+							ElseIf FindString(inhalt,"Structure ",0,#PB_String_NoCase)=1 And Not FindString(inhalt,"EndStructure",0,#PB_String_NoCase) And Not bmacros
 								structures+#CRLF$+"### "+Trim(StringField(inhalt,2," "))
 								If Trim(StringField(inhalt,3," "))="Extends"
 									structures+" : ["+Trim(StringField(inhalt,4," "))+"](#"+Trim(StringField(inhalt,4," "))+")"
@@ -207,39 +207,39 @@ CompilerIf #PB_Compiler_Debugger
 							ElseIf FindString(inhalt,"EndEnumeration",0,#PB_String_NoCase) And Not bmacros
 								benumerations=#False
 								benumerationbinarys=#False
-							ElseIf FindString(inhalt,"Enumeration ",0,#PB_String_NoCase) And Not FindString(inhalt,"EndEnumeration",0,#PB_String_NoCase) And Not bmacros
+							ElseIf FindString(inhalt,"Enumeration ")=1 And Not FindString(inhalt,"EndEnumeration",0,#PB_String_NoCase) And Not bmacros
 								enumerations+#CRLF$+"### "+StringField(inhalt,2," ")+#CRLF$
 								enumerations+"|Name|Value|Comment|"+#CRLF$
 								enumerations+"| --- | --- | --- |"+#CRLF$
 								benumerations=#True
 								idx=0
-							ElseIf FindString(inhalt,"EnumerationBinary ",0,#PB_String_NoCase) And Not FindString(inhalt,"EndEnumeration",0,#PB_String_NoCase) And Not bmacros							
+							ElseIf FindString(inhalt,"EnumerationBinary ")=1 And Not FindString(inhalt,"EndEnumeration",0,#PB_String_NoCase) And Not bmacros							
 								enumerationbinarys+#CRLF$+"### "+StringField(inhalt,2," ")+#CRLF$
 								enumerationbinarys+"|Name|Value|Comment|"+#CRLF$
 								enumerationbinarys+"| --- | --- | --- |"+#CRLF$
 								benumerationbinarys=#True			
 								idx=1
-							ElseIf (FindString(inhalt,"Procedure ",0,#PB_String_NoCase) Or FindString(inhalt,"Procedure.",0,#PB_String_NoCase)) And Not FindString(inhalt,"EndProcedure",0,#PB_String_NoCase) And Not bmacros
+							ElseIf (FindString(inhalt,"Procedure ")=1 Or FindString(inhalt,"Procedure.")=1) And Not FindString(inhalt,"EndProcedure",0,#PB_String_NoCase) And Not bmacros
 								If procedures=""
 									procedures+"|Name|Return|Parameter|Comment|"+#CRLF$
 									procedures+"| --- | --- | --- | --- |"+#CRLF$
 								EndIf
 								procedures+splitProcedure(inhalt,comment)+#CRLF$
 								bprocedures=#True
-							ElseIf FindString(inhalt,"Macro",0,#PB_String_NoCase) And Not FindString(inhalt,"EndMacro",0,#PB_String_NoCase) And Not bmacros
+							ElseIf FindString(inhalt,"Macro")=1 And Not FindString(inhalt,"EndMacro",0,#PB_String_NoCase) And Not bmacros
 								If macros=""
 									macros+"|Name|Return|Parameter|Comment|"+#CRLF$
 									macros+"| --- | --- | --- | --- |"+#CRLF$
 								EndIf
 								macros+splitProcedure(inhalt,comment)+#CRLF$
 								bmacros=#True
-							ElseIf FindString(inhalt,"Declare ",0,#PB_String_NoCase) Or FindString(inhalt,"Declare.",0,#PB_String_NoCase)
+							ElseIf FindString(inhalt,"Declare ",0,#PB_String_NoCase)=1 Or FindString(inhalt,"Declare.",0,#PB_String_NoCase)=1
 								If declares=""
 									declares+"|Name|Return|Parameter|Comment|"+#CRLF$
 									declares+"| --- | --- | --- | --- |"+#CRLF$
 								EndIf
 								declares+splitProcedure(inhalt,comment)+#CRLF$
-							ElseIf FindString(inhalt,"Prototype ",0,#PB_String_NoCase) Or FindString(inhalt,"Prototype.",0,#PB_String_NoCase)
+							ElseIf FindString(inhalt,"Prototype ",0,#PB_String_NoCase)=1 Or FindString(inhalt,"Prototype.",0,#PB_String_NoCase)=1
 								If prototypes=""
 									prototypes+"|Name|Return|Parameter|Comment|"+#CRLF$
 									prototypes+"| --- | --- | --- | --- |"+#CRLF$

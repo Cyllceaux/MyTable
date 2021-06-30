@@ -1,12 +1,6 @@
 ## Structures
 
 
-### strMyTableVTable
-|Field|Type|Comment|
-| --- | --- | --- |
-|vtable|i||
-|type|i||
-
 ### strMyTableFont : [strMyTableVTable](#strMyTableVTable)
 |Field|Type|Comment|
 | --- | --- | --- |

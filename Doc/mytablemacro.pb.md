@@ -2,7 +2,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|XIncludeFile "||||
+|\_MyTable\_GetStyleCell||name||
 |\_MyTable\_GetStyleCol||name||
 |\_MyTable\_GetStyleRow||name||
 |\_MyTable\_GetStyleTable||name||

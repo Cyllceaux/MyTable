@@ -1,4 +1,5 @@
-﻿Macro MM
+﻿
+Macro MM
 	"
 EndMacro
 
