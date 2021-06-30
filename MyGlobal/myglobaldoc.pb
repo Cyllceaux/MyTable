@@ -374,29 +374,38 @@ CompilerIf #PB_Compiler_Debugger
 	CompilerEndIf
 	
 	CompilerIf #MYTABLE_UPDATE_DOC
-		Define readme.s="# MyTable"+#CRLF$+#CRLF$
-		readme+"VERSION = "+MyTable::#MYTABLE_VERSION+#CRLF$+#CRLF$
-		readme+"VERSION_DATE = "+MyTable::#MYTABLE_VERSION_DATE+#CRLF$+#CRLF$
 		
-		If ExamineDirectory(0,"../","*.pb*")
-			While NextDirectoryEntry(0)
-				If GetExtensionPart(DirectoryEntryName(0))<>"pbp"
-					updateDoc("../"+DirectoryEntryName(0),"../Doc/"+DirectoryEntryName(0)+".md")
-					readme+"["+DirectoryEntryName(0)+"](Doc/"+DirectoryEntryName(0)+".md)"+#CRLF$+#CRLF$
-				EndIf
-			Wend
-			FinishDirectory(0)
-		EndIf
+		Procedure.s parsePBFiles(pfad.s,titel.s,version.q=0,versiondate.q=0)
+			Protected readme.s=""
+			If titel<>""
+				readme+"## "+titel+#CRLF$+#CRLF$
+			EndIf
+			If version
+				readme+"VERSION = "+version+#CRLF$+#CRLF$
+			EndIf
+			If versiondate
+				readme+"VERSION_DATE = "+versiondate+#CRLF$+#CRLF$
+			EndIf
+			If ExamineDirectory(0,pfad,"*.pb*")
+				While NextDirectoryEntry(0)
+					If GetExtensionPart(DirectoryEntryName(0))<>"pbp"
+						updateDoc(pfad+DirectoryEntryName(0),"../Doc/"+DirectoryEntryName(0)+".md")
+						readme+"["+DirectoryEntryName(0)+"](Doc/"+DirectoryEntryName(0)+".md)"+#CRLF$+#CRLF$
+					EndIf
+				Wend
+				FinishDirectory(0)
+			EndIf
+			ProcedureReturn readme
+		EndProcedure
 		
-		If ExamineDirectory(0,"../MyTable/","*.pb*")
-			While NextDirectoryEntry(0)
-				If GetExtensionPart(DirectoryEntryName(0))<>"pbp"
-					updateDoc("../MyTable/"+DirectoryEntryName(0),"../Doc/"+DirectoryEntryName(0)+".md")
-					readme+"["+DirectoryEntryName(0)+"](Doc/"+DirectoryEntryName(0)+".md)"+#CRLF$+#CRLF$
-				EndIf
-			Wend
-			FinishDirectory(0)
-		EndIf
+		Define readme.s="# My"+#CRLF$+#CRLF$
+		
+		
+		
+		readme+parsePBFiles("../","")
+		readme+parsePBFiles("../MyGlobal/","MyGlobal")
+		readme+parsePBFiles("../MyTable/","MyTable",MyTable::#MYTABLE_VERSION,MyTable::#MYTABLE_VERSION_DATE)
+		
 		
 		CreateFile(0,"../README.md",#PB_UTF8)
 		WriteString(0,readme)

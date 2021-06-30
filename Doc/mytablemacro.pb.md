@@ -2,50 +2,23 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|MM||||
-|\_MyTableAddAutoDeclare||name||
-|\_MyTable\_GetStyleCell||name||
+|XIncludeFile "||||
 |\_MyTable\_GetStyleCol||name||
 |\_MyTable\_GetStyleRow||name||
 |\_MyTable\_GetStyleTable||name||
 |\_MyTable\_GetStyleApplication||name||
+|\_callcountStart||||
+|\_callcountEnde||||
 |\_MyTable\_GetStylesApplication||||
 |\_MyTable\_GetStylesTable||||
 |\_MyTable\_GetStylesRow||||
 |\_MyTable\_GetStylesCol||||
 |\_MyTable\_GetStylesCell||||
-|\_callcountStart||||
-|\_callcountEnde||||
-|\_MyTableSimpleGetterPointer||gruppe , name||
-|\_MyTableSimpleGetter||gruppe , name , typ||
-|\_MyTableSimpleSetter||gruppe , name , typ||
-|\_MyTableSimpleSetterPointer||gruppe , name||
-|\_MyTableSimpleSetterPointerStructure||gruppe , name , typ||
-|\_MyTableSimpleSetterRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterSubRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterSubPredraw||gruppe , name , typ||
-|\_MyTableSimpleSetterPredraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetter||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterPointer||gruppe , name||
-|\_MyTableSimpleSetterGetterPointerStructure||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterSubRedraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterSubPredraw||gruppe , name , typ||
-|\_MyTableSimpleSetterGetterPredraw||gruppe , name , typ||
-|PB|| \_pb\_function\_name\_ ||
-|ClipOutput||\_x\_ , \_y\_ , \_width\_ , \_height\_||
-|UnclipOutput||||
-|DrawingFont||\_font\_id\_||
-|\_MyTableDataSectionMethode||gruppe , methode||
-|\_MyTableDataSectionSetter||gruppe , name||
-|\_MyTableDataSectionGetter||gruppe , name||
-|\_MyTableDataSectionSetterGetter||gruppe , name||
 |\_MyTableDataSectionDefault||gruppe||
 |\_MyTableDataSectionBorderDefault||gruppe||
 |\_MyTableDataSectionStyleDefault||gruppe||
 |\_MyTableDataSectionDefaultTableObject||gruppe||
 |\_MyTableDataSectionDefaultTable||gruppe||
-|\_MyTableBindEvent||name||
 |\_MyTableBorderSetterGetter||name , typ||
 |\_MyTable\_StyleMethods||gruppe , name , typ , sub = ||
 |\_MyTable\_StyleMethodsRow||gruppe , name , typ , sub = ||
@@ -67,17 +40,6 @@
 |\_MyTable\_Style\_GetterSetterPointer||name , typ , sub = ||
 |\_MyTable\_Style\_GetterSetterBorder||name , typ , pos||
 |\_MyTable\_Style\_GetterSetterBorders||name , typ||
-
-
-## Declares
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|MYTABLE\_AUTODECLARE||||
-|||||
-|autodeclare||||
-|||||
-|autodeclare||||
 
 
 ## Procedures

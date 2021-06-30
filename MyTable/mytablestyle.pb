@@ -11,7 +11,7 @@ Procedure _MyTable_Style_GetType(*this.strMyTableStyleObject)
 EndProcedure
 
 Macro _MyTableStyleBorder(name)
-	_MyTableAddAutoDeclare(_MyTable_Style_GetBorder#name(*this.strMyTableStyleObject))
+	_AddAutoDeclare(_MyTable_Style_GetBorder#name(*this.strMyTableStyleObject))
 	Procedure _MyTable_Style_GetBorder#name(*this.strMyTableStyleObject)
 		If *this
 			Protected *border.strMyTableBorderObject=AllocateStructure(strMyTableBorderObject)

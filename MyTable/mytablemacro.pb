@@ -1,21 +1,76 @@
 ﻿
-Macro MM
-	"
+XIncludeFile "../MyGlobal/myglobalmacro.pb"
+
+
+Macro _MyTable_GetStyleCell(name)
+	_AddAutoDeclare(_MyTable_Cell_Get#name#Style(*this.strMyTableCell))
+	Procedure _MyTable_Cell_Get#name#Style(*this.strMyTableCell)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\cellStyle=*this\name#Style
+		*style\rowStyle=*this\row\name#Style
+		*style\colStyle=*this\col\name#Style
+		*style\tableStyle=*this\table\name#Style
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
 EndMacro
 
-CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_AUTODECLARE,#PB_Module)
-	Macro _MyTableAddAutoDeclare(name)
-		AddElement(MYTABLE_AUTODECLARE::autodeclare())		
-		MYTABLE_AUTODECLARE::autodeclare()=Trim(MM#name#MM)
-		If Left(MYTABLE_AUTODECLARE::autodeclare(),1)="."
-			MYTABLE_AUTODECLARE::autodeclare()="Declare"+MYTABLE_AUTODECLARE::autodeclare()
-		Else
-			MYTABLE_AUTODECLARE::autodeclare()="Declare "+MYTABLE_AUTODECLARE::autodeclare()
-		EndIf		
-	EndMacro	
-CompilerElse
-	Macro _MyTableAddAutoDeclare(name):EndMacro
-CompilerEndIf
+Macro _MyTable_GetStyleCol(name)
+	_AddAutoDeclare(_MyTable_Col_Get#name#Style(*this.strMyTableCol))
+	Procedure _MyTable_Col_Get#name#Style(*this.strMyTableCol)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\colStyle=*this\name#Style
+		*style\tableStyle=*this\table\name#Style
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleRow(name)
+	_AddAutoDeclare(_MyTable_Row_Get#name#Style(*this.strMyTableRow))
+	Procedure _MyTable_Row_Get#name#Style(*this.strMyTableRow)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\rowStyle=*this\name#Style
+		*style\tableStyle=*this\table\name#Style
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleTable(name)
+	_AddAutoDeclare(_MyTable_Table_Get#name#Style(*this.strMyTableTable))
+	Procedure _MyTable_Table_Get#name#Style(*this.strMyTableTable)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\tableStyle=*this\name#Style		
+		*style\applicationStyle=*this\application\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
+Macro _MyTable_GetStyleApplication(name)
+	_AddAutoDeclare(_MyTable_Application_Get#name#Style(*this.strMyTableApplication))
+	Procedure _MyTable_Application_Get#name#Style(*this.strMyTableApplication)
+		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		
+		*style\applicationStyle=*this\name#Style
+		
+		_MyTableInitStyleObject(*style,*this,*this\name#Style)
+		ProcedureReturn *style
+	EndProcedure
+EndMacro
+
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	
@@ -64,74 +119,50 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	EndProcedure
 CompilerEndIf
 
-Macro _MyTable_GetStyleCell(name)
-	_MyTableAddAutoDeclare(_MyTable_Cell_Get#name#Style(*this.strMyTableCell))
-	Procedure _MyTable_Cell_Get#name#Style(*this.strMyTableCell)
-		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-		
-		*style\cellStyle=*this\name#Style
-		*style\rowStyle=*this\row\name#Style
-		*style\colStyle=*this\col\name#Style
-		*style\tableStyle=*this\table\name#Style
-		*style\applicationStyle=*this\application\name#Style
-		
-		_MyTableInitStyleObject(*style,*this,*this\name#Style)
-		ProcedureReturn *style
-	EndProcedure
-EndMacro
 
-Macro _MyTable_GetStyleCol(name)
-	_MyTableAddAutoDeclare(_MyTable_Col_Get#name#Style(*this.strMyTableCol))
-	Procedure _MyTable_Col_Get#name#Style(*this.strMyTableCol)
-		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-		
-		*style\colStyle=*this\name#Style
-		*style\tableStyle=*this\table\name#Style
-		*style\applicationStyle=*this\application\name#Style
-		
-		_MyTableInitStyleObject(*style,*this,*this\name#Style)
-		ProcedureReturn *style
-	EndProcedure
-EndMacro
 
-Macro _MyTable_GetStyleRow(name)
-	_MyTableAddAutoDeclare(_MyTable_Row_Get#name#Style(*this.strMyTableRow))
-	Procedure _MyTable_Row_Get#name#Style(*this.strMyTableRow)
-		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
+	Macro _callcountStart()
+		Static NewMap callcount.i()
+		Static NewMap callms.i()
+		Static NewMap callmssum.i()					
+		callms(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))=ElapsedMilliseconds()		
 		
-		*style\rowStyle=*this\name#Style
-		*style\tableStyle=*this\table\name#Style
-		*style\applicationStyle=*this\application\name#Style
 		
-		_MyTableInitStyleObject(*style,*this,*this\name#Style)
-		ProcedureReturn *style
-	EndProcedure
-EndMacro
-
-Macro _MyTable_GetStyleTable(name)
-	_MyTableAddAutoDeclare(_MyTable_Table_Get#name#Style(*this.strMyTableTable))
-	Procedure _MyTable_Table_Get#name#Style(*this.strMyTableTable)
-		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+	EndMacro
+	
+	Macro _callcountEnde()
 		
-		*style\tableStyle=*this\name#Style		
-		*style\applicationStyle=*this\application\name#Style
+		Protected _callcountms=ElapsedMilliseconds()-callms(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))
+		callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))+1
+		callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))+_callcountms
 		
-		_MyTableInitStyleObject(*style,*this,*this\name#Style)
-		ProcedureReturn *style
-	EndProcedure
-EndMacro
-
-Macro _MyTable_GetStyleApplication(name)
-	_MyTableAddAutoDeclare(_MyTable_Application_Get#name#Style(*this.strMyTableApplication))
-	Procedure _MyTable_Application_Get#name#Style(*this.strMyTableApplication)
-		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
+		Protected tname.s=""
+		If _MyTableDebugGetName(*this)=""
+			tname=Str(_MyTableDebugGetCanvas(*this))
+		Else
+			tname=_MyTableDebugGetName(*this)
+		EndIf
 		
-		*style\applicationStyle=*this\name#Style
+		Protected debugline.s=LSet(tname+":",20," ")
+		debugline + LSet(#PB_Compiler_Procedure+":   "+callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))),40," ")
 		
-		_MyTableInitStyleObject(*style,*this,*this\name#Style)
-		ProcedureReturn *style
-	EndProcedure
-EndMacro
+		CompilerIf Defined(MYTABLE_DEBUG_MS_MAX,#PB_Module)
+			If _callcountms>MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX
+				DebuggerWarning(#PB_Compiler_Procedure+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_callcountms)+" )")
+			EndIf
+		CompilerEndIf
+		debugline + Str(_callcountms)+"ms / "+Str(callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
+		CompilerIf Defined(MYTABLE_DEBUG_LEVEL,#PB_Module)
+			Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
+		CompilerElse
+			Debug debugline
+		CompilerEndIf
+	EndMacro
+CompilerElse
+	Macro _callcountStart():EndMacro
+	Macro _callcountEnde():EndMacro
+CompilerEndIf
 
 Macro _MyTable_GetStylesApplication()
 _MyTable_GetStyleApplication(Default)
@@ -193,403 +224,175 @@ _MyTable_GetStyleCell(Default)
 	_MyTable_GetStyleCell(Disabled)
 EndMacro
 
-CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
-	Macro _callcountStart()
-		Static NewMap callcount.i()
-		Static NewMap callms.i()
-		Static NewMap callmssum.i()					
-		callms(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))=ElapsedMilliseconds()		
-		
-		
-	EndMacro
-	
-	Macro _callcountEnde()
-		
-		Protected _callcountms=ElapsedMilliseconds()-callms(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))
-		callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))+1
-		callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))+_callcountms
-		
-		Protected tname.s=""
-		If _MyTableDebugGetName(*this)=""
-			tname=Str(_MyTableDebugGetCanvas(*this))
-		Else
-			tname=_MyTableDebugGetName(*this)
-		EndIf
-		
-		Protected debugline.s=LSet(tname+":",20," ")
-		debugline + LSet(#PB_Compiler_Procedure+":   "+callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))),40," ")
-		
-		CompilerIf Defined(MYTABLE_DEBUG_MS_MAX,#PB_Module)
-			If _callcountms>MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX
-				DebuggerWarning(#PB_Compiler_Procedure+" für "+tname+" > "+Str(MYTABLE_DEBUG_MS_MAX::#MYTABLE_DEBUG_MS_MAX)+"ms ( "+Str(_callcountms)+" )")
-			EndIf
-		CompilerEndIf
-		debugline + Str(_callcountms)+"ms / "+Str(callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))))+"ms / " +Str(callmssum(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this)))/callcount(#PB_Compiler_Procedure+"_"+Str(_MyTableDebugGetCanvas(*this))))+ "ms"
-		CompilerIf Defined(MYTABLE_DEBUG_LEVEL,#PB_Module)
-			Debug debugline,MYTABLE_DEBUG_LEVEL::#MYTABLE_DEBUG_LEVEL
-		CompilerElse
-			Debug debugline
-		CompilerEndIf
-	EndMacro
-CompilerElse
-	Macro _callcountStart():EndMacro
-	Macro _callcountEnde():EndMacro
-CompilerEndIf
-
-
-Macro _MyTableSimpleGetterPointer(gruppe,name)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe))
-	Procedure _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
-		If *this
-			ProcedureReturn *this\name
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleGetter(gruppe,name,typ)
-	_MyTableAddAutoDeclare(.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe))
-	Procedure.typ _MyTable_#gruppe#_Get#name(*this.strMyTable#gruppe)
-		If *this
-			ProcedureReturn *this\name
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetter(gruppe,name,typ)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
-		If *this
-			*this\name=value
-			*this\dirty=#True
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterPointer(gruppe,name)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value)
-		If *this
-			*this\name=*value
-			*this\dirty=#True
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterPointerStructure(gruppe,name,typ)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value.typ))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,*value.typ)
-		If *this
-			*this\name=*value
-			*this\dirty=#True
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterRedraw(gruppe,name,typ)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
-		If *this
-			*this\name=value
-			*this\dirty=#True			
-			_MyTable_Table_Redraw(*this)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterSubRedraw(gruppe,name,typ)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
-		If *this
-			*this\name=value
-			*this\dirty=#True			
-			*this\table\dirty=#True
-			_MyTable_Table_Redraw(*this\table)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterSubPredraw(gruppe,name,typ)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
-		If *this
-			*this\name=value
-			*this\dirty=#True			
-			*this\table\dirty=#True
-			_MyTable_Table_Predraw(*this\table)						
-			_MyTable_Table_Redraw(*this\table)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterPredraw(gruppe,name,typ)
-	_MyTableAddAutoDeclare(_MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ))
-	Procedure _MyTable_#gruppe#_Set#name(*this.strMyTable#gruppe,value.typ)
-		If *this
-			*this\name=value
-			*this\dirty=#True			
-			*this\dirty=#True
-			_MyTable_Table_Predraw(*this)						
-			_MyTable_Table_Redraw(*this)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _MyTableSimpleSetterGetter(gruppe,name,typ)
-	_MyTableSimpleGetter(gruppe,name,typ)
-	_MyTableSimpleSetter(gruppe,name,typ)
-EndMacro
-
-Macro _MyTableSimpleSetterGetterRedraw(gruppe,name,typ)
-	_MyTableSimpleGetter(gruppe,name,typ)
-	_MyTableSimpleSetterRedraw(gruppe,name,typ)
-EndMacro
-
-Macro _MyTableSimpleSetterGetterPointer(gruppe,name)
-	_MyTableSimpleGetterPointer(gruppe,name)
-	_MyTableSimpleSetterPointer(gruppe,name)
-EndMacro
-
-Macro _MyTableSimpleSetterGetterPointerStructure(gruppe,name,typ)
-	_MyTableSimpleGetterPointer(gruppe,name)
-	_MyTableSimpleSetterPointerStructure(gruppe,name,typ)
-EndMacro
-
-Macro _MyTableSimpleSetterGetterSubRedraw(gruppe,name,typ)
-	_MyTableSimpleGetter(gruppe,name,typ)
-	_MyTableSimpleSetterSubRedraw(gruppe,name,typ)
-EndMacro
-
-Macro _MyTableSimpleSetterGetterSubPredraw(gruppe,name,typ)
-	_MyTableSimpleGetter(gruppe,name,typ)
-	_MyTableSimpleSetterSubPredraw(gruppe,name,typ)
-EndMacro
-
-Macro _MyTableSimpleSetterGetterPredraw(gruppe,name,typ)
-	_MyTableSimpleGetter(gruppe,name,typ)
-	_MyTableSimpleSetterPredraw(gruppe,name,typ)
-EndMacro
-
-;{
-;- workaround for MacOS. thx to mestnyi (https://www.purebasic.fr/english/viewtopic.php?p=571500#p571500)
-	Macro PB( _pb_function_name_ ) 
-		_pb_function_name_
-	EndMacro
-	Macro ClipOutput(_x_,_y_,_width_,_height_)
-		CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
-			PB(ClipOutput)(_x_,_y_,_width_,_height_)
-		CompilerEndIf
-	EndMacro
-	Macro UnclipOutput()
-		CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
-			PB(UnclipOutput)()
-		CompilerEndIf
-	EndMacro
-	Macro DrawingFont(_font_id_)
-		CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
-			If _font_id_
-				PB(DrawingFont)(_font_id_)
-			EndIf
-		CompilerElse
-			PB(DrawingFont)(_font_id_)
-		CompilerEndIf
-	EndMacro
-;}
-
-
-
-Macro _MyTableDataSectionMethode(gruppe,methode)
-	Data.i @_MyTable_#gruppe#_#methode()
-EndMacro
-
-Macro _MyTableDataSectionSetter(gruppe,name)
-	_MyTableDataSectionMethode(gruppe,Set#name)
-EndMacro
-
-Macro _MyTableDataSectionGetter(gruppe,name)
-	_MyTableDataSectionMethode(gruppe,Get#name)
-EndMacro
-
-Macro _MyTableDataSectionSetterGetter(gruppe,name)
-	_MyTableDataSectionSetter(gruppe,name)
-	_MyTableDataSectionGetter(gruppe,name)
-EndMacro
 
 Macro _MyTableDataSectionDefault(gruppe)
-	_MyTableDataSectionGetter(gruppe,Type)
-	_MyTableDataSectionGetter(gruppe,DefaultStyle)
-	_MyTableDataSectionGetter(gruppe,SelectedStyle)
-	_MyTableDataSectionGetter(gruppe,MouseOverStyle)
-	_MyTableDataSectionGetter(gruppe,DisabledStyle)
-	_MyTableDataSectionGetter(gruppe,FixedStyle)
-	_MyTableDataSectionSetterGetter(gruppe,Flags)
-	_MyTableDataSectionSetterGetter(gruppe,Data)
-	_MyTableDataSectionSetterGetter(gruppe,Dirty)
-	_MyTableDataSectionSetterGetter(gruppe,Selected)		
-	_MyTableDataSectionSetterGetter(gruppe,Tooltip)
-	_MyTableDataSectionSetterGetter(gruppe,Disabled)
+	_DataSectionGetter(MyTable,gruppe,Type)
+	_DataSectionGetter(MyTable,gruppe,DefaultStyle)
+	_DataSectionGetter(MyTable,gruppe,SelectedStyle)
+	_DataSectionGetter(MyTable,gruppe,MouseOverStyle)
+	_DataSectionGetter(MyTable,gruppe,DisabledStyle)
+	_DataSectionGetter(MyTable,gruppe,FixedStyle)
+	_DataSectionSetterGetter(MyTable,gruppe,Flags)
+	_DataSectionSetterGetter(MyTable,gruppe,Data)
+	_DataSectionSetterGetter(MyTable,gruppe,Dirty)
+	_DataSectionSetterGetter(MyTable,gruppe,Selected)		
+	_DataSectionSetterGetter(MyTable,gruppe,Tooltip)
+	_DataSectionSetterGetter(MyTable,gruppe,Disabled)
 	
-	_MyTableDataSectionMethode(gruppe,Autosize)
+	_DataSectionMethode(MyTable,gruppe,Autosize)
 EndMacro
 
 Macro _MyTableDataSectionBorderDefault(gruppe)
-	_MyTableDataSectionGetter(gruppe,Type)
-	_MyTableDataSectionGetter(gruppe,Object)
-	_MyTableDataSectionGetter(gruppe,Style)
+	_DataSectionGetter(MyTable,gruppe,Type)
+	_DataSectionGetter(MyTable,gruppe,Object)
+	_DataSectionGetter(MyTable,gruppe,Style)
 	
-	_MyTableDataSectionSetterGetter(gruppe,Color)
-	_MyTableDataSectionSetterGetter(gruppe,Width)
+	_DataSectionSetterGetter(MyTable,gruppe,Color)
+	_DataSectionSetterGetter(MyTable,gruppe,Width)
 	
-	_MyTableDataSectionMethode(gruppe,Free)
-	_MyTableDataSectionMethode(gruppe,Delete)
+	_DataSectionMethode(MyTable,gruppe,Free)
+	_DataSectionMethode(MyTable,gruppe,Delete)
 EndMacro
 
 Macro _MyTableDataSectionStyleDefault(gruppe)
-	_MyTableDataSectionGetter(gruppe,Type)
-	_MyTableDataSectionGetter(gruppe,Object)
+	_DataSectionGetter(MyTable,gruppe,Type)
+	_DataSectionGetter(MyTable,gruppe,Object)
 	
-	_MyTableDataSectionGetter(gruppe,BorderDefault)
-	_MyTableDataSectionGetter(gruppe,BorderTop)
-	_MyTableDataSectionGetter(gruppe,BorderLeft)
-	_MyTableDataSectionGetter(gruppe,BorderRight)
-	_MyTableDataSectionGetter(gruppe,BorderBottom)
+	_DataSectionGetter(MyTable,gruppe,BorderDefault)
+	_DataSectionGetter(MyTable,gruppe,BorderTop)
+	_DataSectionGetter(MyTable,gruppe,BorderLeft)
+	_DataSectionGetter(MyTable,gruppe,BorderRight)
+	_DataSectionGetter(MyTable,gruppe,BorderBottom)
 	
-	_MyTableDataSectionSetterGetter(gruppe,Font)
-	_MyTableDataSectionSetterGetter(gruppe,BackColor)
-	_MyTableDataSectionSetterGetter(gruppe,FrontColor)
-	_MyTableDataSectionSetterGetter(gruppe,ForeColor)
-	_MyTableDataSectionSetterGetter(gruppe,HAlign)
-	_MyTableDataSectionSetterGetter(gruppe,VAlign)
-	_MyTableDataSectionSetterGetter(gruppe,Border)
+	_DataSectionSetterGetter(MyTable,gruppe,Font)
+	_DataSectionSetterGetter(MyTable,gruppe,BackColor)
+	_DataSectionSetterGetter(MyTable,gruppe,FrontColor)
+	_DataSectionSetterGetter(MyTable,gruppe,ForeColor)
+	_DataSectionSetterGetter(MyTable,gruppe,HAlign)
+	_DataSectionSetterGetter(MyTable,gruppe,VAlign)
+	_DataSectionSetterGetter(MyTable,gruppe,Border)
 	
 	
-	_MyTableDataSectionMethode(gruppe,Free)
-	_MyTableDataSectionMethode(gruppe,Delete)
+	_DataSectionMethode(MyTable,gruppe,Free)
+	_DataSectionMethode(MyTable,gruppe,Delete)
 EndMacro
 
 Macro _MyTableDataSectionDefaultTableObject(gruppe)
 	_MyTableDataSectionDefault(gruppe)
-	_MyTableDataSectionGetter(gruppe,ElementSelectedStyle)
-	_MyTableDataSectionGetter(gruppe,ZebraStyle)
-	_MyTableDataSectionGetter(gruppe,TitleStyle)
-	_MyTableDataSectionGetter(gruppe,EmptyStyle)
-	_MyTableDataSectionGetter(gruppe,Application)
+	_DataSectionGetter(MyTable,gruppe,ElementSelectedStyle)
+	_DataSectionGetter(MyTable,gruppe,ZebraStyle)
+	_DataSectionGetter(MyTable,gruppe,TitleStyle)
+	_DataSectionGetter(MyTable,gruppe,EmptyStyle)
+	_DataSectionGetter(MyTable,gruppe,Application)
 	
-	_MyTableDataSectionGetter(gruppe,Pages)
+	_DataSectionGetter(MyTable,gruppe,Pages)
 	
-	_MyTableDataSectionSetterGetter(gruppe,Name)
-	_MyTableDataSectionSetterGetter(gruppe,Title)
-	_MyTableDataSectionSetterGetter(gruppe,Redraw)
-	_MyTableDataSectionSetterGetter(gruppe,Recalc)
-	_MyTableDataSectionSetterGetter(gruppe,Batch)
-	_MyTableDataSectionSetterGetter(gruppe,HeaderHeight)
-	_MyTableDataSectionSetterGetter(gruppe,TitleHeight)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultRowHeight)
-	_MyTableDataSectionSetterGetter(gruppe,FixedCols)
-	_MyTableDataSectionSetterGetter(gruppe,EmptyText)
-	_MyTableDataSectionSetterGetter(gruppe,Page)
-	_MyTableDataSectionSetterGetter(gruppe,PageElements)
+	_DataSectionSetterGetter(MyTable,gruppe,Name)
+	_DataSectionSetterGetter(MyTable,gruppe,Title)
+	_DataSectionSetterGetter(MyTable,gruppe,Redraw)
+	_DataSectionSetterGetter(MyTable,gruppe,Recalc)
+	_DataSectionSetterGetter(MyTable,gruppe,Batch)
+	_DataSectionSetterGetter(MyTable,gruppe,HeaderHeight)
+	_DataSectionSetterGetter(MyTable,gruppe,TitleHeight)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultRowHeight)
+	_DataSectionSetterGetter(MyTable,gruppe,FixedCols)
+	_DataSectionSetterGetter(MyTable,gruppe,EmptyText)
+	_DataSectionSetterGetter(MyTable,gruppe,Page)
+	_DataSectionSetterGetter(MyTable,gruppe,PageElements)
 	
-	_MyTableDataSectionGetter(gruppe,SelectedRows)
-	_MyTableDataSectionGetter(gruppe,SelectedCells)
-	_MyTableDataSectionGetter(gruppe,SelectedCols)
-	_MyTableDataSectionGetter(gruppe,CalcHeight)
-	_MyTableDataSectionGetter(gruppe,CalcWidth)
+	_DataSectionGetter(MyTable,gruppe,SelectedRows)
+	_DataSectionGetter(MyTable,gruppe,SelectedCells)
+	_DataSectionGetter(MyTable,gruppe,SelectedCols)
+	_DataSectionGetter(MyTable,gruppe,CalcHeight)
+	_DataSectionGetter(MyTable,gruppe,CalcWidth)
 	
-	_MyTableDataSectionMethode(gruppe,Redraw)
-	_MyTableDataSectionMethode(gruppe,Recalc)
-	_MyTableDataSectionMethode(gruppe,ReInit)
-	_MyTableDataSectionMethode(gruppe,Free)
-	_MyTableDataSectionMethode(gruppe,ScrollToPos)
-	_MyTableDataSectionMethode(gruppe,ScrollToCellPos)
-	_MyTableDataSectionMethode(gruppe,AutosizeRows)
-	_MyTableDataSectionMethode(gruppe,AutosizeCols)
-	_MyTableDataSectionMethode(gruppe,AutosizeHeader)
+	_DataSectionMethode(MyTable,gruppe,Redraw)
+	_DataSectionMethode(MyTable,gruppe,Recalc)
+	_DataSectionMethode(MyTable,gruppe,ReInit)
+	_DataSectionMethode(MyTable,gruppe,Free)
+	_DataSectionMethode(MyTable,gruppe,ScrollToPos)
+	_DataSectionMethode(MyTable,gruppe,ScrollToCellPos)
+	_DataSectionMethode(MyTable,gruppe,AutosizeRows)
+	_DataSectionMethode(MyTable,gruppe,AutosizeCols)
+	_DataSectionMethode(MyTable,gruppe,AutosizeHeader)
 	
-	_MyTableDataSectionMethode(gruppe,BindEventColLeftClick)
-	_MyTableDataSectionMethode(gruppe,BindEventColLeftDoubleClick)
-	_MyTableDataSectionMethode(gruppe,BindEventColRightClick)
-	_MyTableDataSectionMethode(gruppe,BindEventColRightDoubleClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventColLeftClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventColLeftDoubleClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventColRightClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventColRightDoubleClick)
 	
-	_MyTableDataSectionMethode(gruppe,BindEventCellChangedChecked)
-	_MyTableDataSectionMethode(gruppe,BindEventCellChangedUnChecked)
-	_MyTableDataSectionMethode(gruppe,BindEventCellChangedText)
-	_MyTableDataSectionMethode(gruppe,BindEventCellChangedValue)
-	_MyTableDataSectionMethode(gruppe,BindEventCellSelected)
-	_MyTableDataSectionMethode(gruppe,BindEventCellLeftClick)
-	_MyTableDataSectionMethode(gruppe,BindEventCellLeftDoubleClick)
-	_MyTableDataSectionMethode(gruppe,BindEventCellRightClick)
-	_MyTableDataSectionMethode(gruppe,BindEventCellRightDoubleClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellChangedChecked)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellChangedUnChecked)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellChangedText)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellChangedValue)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellSelected)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellLeftClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellLeftDoubleClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellRightClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventCellRightDoubleClick)
 	
-	_MyTableDataSectionMethode(gruppe,BindEventRowChangedChecked)
-	_MyTableDataSectionMethode(gruppe,BindEventRowChangedUnChecked)
-	_MyTableDataSectionMethode(gruppe,BindEventRowChangedExpanded)
-	_MyTableDataSectionMethode(gruppe,BindEventRowChangedCollapsed)
-	_MyTableDataSectionMethode(gruppe,BindEventRowSelected)
-	_MyTableDataSectionMethode(gruppe,BindEventRowLeftClick)
-	_MyTableDataSectionMethode(gruppe,BindEventRowLeftDoubleClick)
-	_MyTableDataSectionMethode(gruppe,BindEventRowRightClick)
-	_MyTableDataSectionMethode(gruppe,BindEventRowRightDoubleClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowChangedChecked)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowChangedUnChecked)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowChangedExpanded)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowChangedCollapsed)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowSelected)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowLeftClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowLeftDoubleClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowRightClick)
+	_DataSectionMethode(MyTable,gruppe,BindEventRowRightDoubleClick)
 	
-	_MyTableDataSectionMethode(gruppe,BindEventCustomCellDraw)
-	_MyTableDataSectionMethode(gruppe,BindEventCustomCellEdit)
+	_DataSectionMethode(MyTable,gruppe,BindEventCustomCellDraw)
+	_DataSectionMethode(MyTable,gruppe,BindEventCustomCellEdit)
 	
-	_MyTableDataSectionMethode(gruppe,BindCallback)
+	_DataSectionMethode(MyTable,gruppe,BindCallback)
 	
-	_MyTableDataSectionGetter(gruppe,Cell)
-	_MyTableDataSectionMethode(gruppe,Delete)
+	_DataSectionGetter(MyTable,gruppe,Cell)
+	_DataSectionMethode(MyTable,gruppe,Delete)
 	
-	_MyTableDataSectionGetter(gruppe,Row)
-	_MyTableDataSectionMethode(gruppe,RowCount)
-	_MyTableDataSectionMethode(gruppe,VisibleRowCount)
+	_DataSectionGetter(MyTable,gruppe,Row)
+	_DataSectionMethode(MyTable,gruppe,RowCount)
+	_DataSectionMethode(MyTable,gruppe,VisibleRowCount)
 	
-	_MyTableDataSectionGetter(gruppe,Col)
-	_MyTableDataSectionMethode(gruppe,ColCount)
+	_DataSectionGetter(MyTable,gruppe,Col)
+	_DataSectionMethode(MyTable,gruppe,ColCount)
 	
-	_MyTableDataSectionGetter(gruppe,Canvas)
-	_MyTableDataSectionGetter(gruppe,HScroll)
-	_MyTableDataSectionGetter(gruppe,VScroll)
-	_MyTableDataSectionGetter(gruppe,Window)
+	_DataSectionGetter(MyTable,gruppe,Canvas)
+	_DataSectionGetter(MyTable,gruppe,HScroll)
+	_DataSectionGetter(MyTable,gruppe,VScroll)
+	_DataSectionGetter(MyTable,gruppe,Window)
 EndMacro
 
 Macro _MyTableDataSectionDefaultTable(gruppe)
 	_MyTableDataSectionDefaultTableObject(gruppe)
 	
 	
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImageSortAsc)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImageSortDesc)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImagePlus)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImageMinus)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImageCheckBox)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImageCheckBoxChecked)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImagePlusArrow)
-	_MyTableDataSectionSetterGetter(gruppe,DefaultImageMinusArrow)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImageSortAsc)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImageSortDesc)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImagePlus)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImageMinus)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImageCheckBox)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImageCheckBoxChecked)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImagePlusArrow)
+	_DataSectionSetterGetter(MyTable,gruppe,DefaultImageMinusArrow)
 	
 	
-	_MyTableDataSectionMethode(gruppe,AddDirtyRows)
-	_MyTableDataSectionMethode(gruppe,AddRow)
-	_MyTableDataSectionMethode(gruppe,DeleteRow)
+	_DataSectionMethode(MyTable,gruppe,AddDirtyRows)
+	_DataSectionMethode(MyTable,gruppe,AddRow)
+	_DataSectionMethode(MyTable,gruppe,DeleteRow)
 	
-	_MyTableDataSectionMethode(gruppe,AddCol)
-	_MyTableDataSectionMethode(gruppe,DeleteCol)
+	_DataSectionMethode(MyTable,gruppe,AddCol)
+	_DataSectionMethode(MyTable,gruppe,DeleteCol)
 	
 	
 	
-	_MyTableDataSectionMethode(gruppe,ClearRows)
-	_MyTableDataSectionMethode(gruppe,ClearCols)
+	_DataSectionMethode(MyTable,gruppe,ClearRows)
+	_DataSectionMethode(MyTable,gruppe,ClearCols)
 	
 EndMacro
 
-Macro _MyTableBindEvent(name)
-	_MyTableAddAutoDeclare(_MyTable_Table_BindEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name))
-	Procedure _MyTable_Table_BindEvent#name(*this.strMyTableTable,event.MyTableProtoEvent#name)
-		If *this
-			*this\Event#name=event
-		EndIf
-	EndProcedure
-EndMacro
 
 Macro _MyTableBorderSetterGetter(name,typ)
-	_MyTableAddAutoDeclare(.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject))
+	_AddAutoDeclare(.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject))
 	Procedure.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject)
 		If *this
 			Protected result.typ= *this\border\name
@@ -620,7 +423,7 @@ EndMacro
 
 
 Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
-	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
@@ -650,7 +453,7 @@ Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
-	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
@@ -684,7 +487,7 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
-	_MyTableAddAutoDeclare(_MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(_MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected *result.typ=*obj\gruppe#Style\sub#name
 		
@@ -718,7 +521,7 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
-	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
@@ -752,7 +555,7 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
-	_MyTableAddAutoDeclare(.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\border\border#pos\name
 		If Not result
@@ -786,21 +589,21 @@ EndMacro
 
 
 Macro _MyTable_IsTableNoGrid(name)
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
+	_AddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name) And Not *this\datagrid)
 	EndProcedure	
 EndMacro
 
 Macro _MyTable_IsTable(name)
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
+	_AddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name)
 	EndProcedure	
 EndMacro
 
 Macro _MyTable_IsTableColNo(name)	
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -820,7 +623,7 @@ Macro _MyTable_IsTableColNo(name)
 EndMacro
 
 Macro _MyTable_IsTableCellColRowNo(name)	
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -851,7 +654,7 @@ Macro _MyTable_IsTableCellColRowNo(name)
 EndMacro
 
 Macro _MyTable_IsTableRow(name)	
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -870,7 +673,7 @@ Macro _MyTable_IsTableRow(name)
 EndMacro
 
 Macro _MyTable_IsTableRowColNo(name)	
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -895,7 +698,7 @@ Macro _MyTable_IsTableRowColNo(name)
 EndMacro
 
 Macro _MyTable_IsTableAllNo(name)	
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -927,7 +730,7 @@ Macro _MyTable_IsTableAllNo(name)
 EndMacro
 
 Macro _MyTable_IsTableAll(name)	
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
@@ -956,7 +759,7 @@ Macro _MyTable_IsTableAll(name)
 EndMacro
 
 Macro _MyTable_IsTableNo(name)
-	_MyTableAddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
+	_AddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_#name))
 	EndProcedure	
@@ -984,7 +787,7 @@ Macro _MyTable_StylesMethods(gruppe)
 EndMacro
 
 Macro _MyTable_Style_GetterSetter(name,typ,sub=)
-	_MyTableAddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ))
+	_AddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ))
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
@@ -1015,7 +818,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 		EndIf
 	EndProcedure
 	
-	_MyTableAddAutoDeclare(.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject))
+	_AddAutoDeclare(.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject))
 	Procedure.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject)
 		If *this
 			Protected result.typ=*this\style\sub#name
@@ -1028,7 +831,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
-	_MyTableAddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ))
+	_AddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ))
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
@@ -1059,7 +862,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 		EndIf
 	EndProcedure
 	
-	_MyTableAddAutoDeclare(_MyTable_Style_Get#name(*this.strMyTableStyleObject))
+	_AddAutoDeclare(_MyTable_Style_Get#name(*this.strMyTableStyleObject))
 	Procedure _MyTable_Style_Get#name(*this.strMyTableStyleObject)
 		If *this
 			Protected *result.typ=*this\style\sub#name
@@ -1072,7 +875,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
-	_MyTableAddAutoDeclare(_MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ))
+	_AddAutoDeclare(_MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ))
 	Procedure _MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
@@ -1104,7 +907,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 		EndIf
 	EndProcedure
 	
-	_MyTableAddAutoDeclare(.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject))
+	_AddAutoDeclare(.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject))
 	Procedure.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject)
 		If *this
 			Protected result.typ=*this\style\border\border#pos\name

@@ -1,5 +1,5 @@
 
-# MYTABLE\_AUTODECLARE
+# AUTODECLARE
 
 ## Constants
 

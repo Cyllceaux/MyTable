@@ -1,6 +1,6 @@
 ﻿EnableExplicit
 
-#MYTABLE_AUTODECLARE=1
+#AUTODECLARE=1
 
 XIncludeFile "declare.pb"
 
@@ -31,12 +31,12 @@ UseModule MyTable
 	*application\Free()
 	*table\Free()
 	
-	CompilerIf Defined(MYTABLE_AUTODECLARE,#PB_Module)
-		SortList(MYTABLE_AUTODECLARE::autodeclare(),#PB_Sort_Ascending)
-		Define file=CreateFile(#PB_Any,"../autodeclare.pb")
+	CompilerIf Defined(AUTODECLARE,#PB_Module)
+		SortList(AUTODECLARE::autodeclare(),#PB_Sort_Ascending)
+		Define file=CreateFile(#PB_Any,"../MyTable/autodeclare.pb")
 		Define line.s="; auto-generated"
-		ForEach MYTABLE_AUTODECLARE::autodeclare()
-			line+#CRLF$+MYTABLE_AUTODECLARE::autodeclare()
+		ForEach AUTODECLARE::autodeclare()
+			line+#CRLF$+AUTODECLARE::autodeclare()
 		Next
 		WriteString(file,line)
 		CloseFile(file)

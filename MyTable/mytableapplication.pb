@@ -1,9 +1,9 @@
-﻿_MyTableSimpleSetterGetter(Application,Tooltip,s)
-_MyTableSimpleSetterGetter(Application,Dirty,b)
-_MyTableSimpleSetterGetter(Application,Disabled,b)
-_MyTableSimpleSetterGetter(Application,Flags,i)
-_MyTableSimpleSetterGetterPointer(Application,Data)
-_MyTableSimpleGetter(Application,Type,i)
+﻿_SimpleSetterGetter(MyTable,Application,Tooltip,s)
+_SimpleSetterGetter(MyTable,Application,Dirty,b)
+_SimpleSetterGetter(MyTable,Application,Disabled,b)
+_SimpleSetterGetter(MyTable,Application,Flags,i)
+_SimpleSetterGetterPointer(MyTable,Application,Data)
+_SimpleGetter(MyTable,Application,Type,i)
 
 
 Procedure.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)

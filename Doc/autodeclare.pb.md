@@ -32,6 +32,7 @@
 |\_MyTable\_Cell\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_SetChecked||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.b||
+|\_MyTable\_Cell\_SetColspan||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.i||
 |\_MyTable\_Cell\_SetData||<span style="color:#FFFFAA">*this.</span>strMyTableCell , <span style="color:#FFFFAA">*value</span>||
 |\_MyTable\_Cell\_SetDatatype||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.i||
 |\_MyTable\_Cell\_SetDirty||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.b||
@@ -84,6 +85,7 @@
 |\_MyTable\_Row\_SetDisabled||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||
 |\_MyTable\_Row\_SetExpanded||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||
 |\_MyTable\_Row\_SetFlags||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.i||
+|\_MyTable\_Row\_SetHeight||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.i||
 |\_MyTable\_Row\_SetLevel||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.i||
 |\_MyTable\_Row\_SetTooltip||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.s||
 |\_MyTable\_Style\_GetBorderBottom||<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
@@ -144,6 +146,7 @@
 |\_MyTable\_Table\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_SetBatch||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.b||
+|\_MyTable\_Table\_SetCanvas||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetDefaultImageCheckBox||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetDefaultImageCheckBoxChecked||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetDefaultImageMinus||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
@@ -156,10 +159,14 @@
 |\_MyTable\_Table\_SetDisabled||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.b||
 |\_MyTable\_Table\_SetEmptyText||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.s||
 |\_MyTable\_Table\_SetFixedCols||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
+|\_MyTable\_Table\_SetHScroll||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetPage||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetPageElements||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetTitle||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.s||
 |\_MyTable\_Table\_SetTooltip||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.s||
+|\_MyTable\_Table\_SetType||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
+|\_MyTable\_Table\_SetVScroll||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
+|\_MyTable\_Table\_SetWindow||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Application\_GetDirty|b|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Application\_GetDisabled|b|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Cell\_GetChecked|b|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -196,6 +203,7 @@
 |\_MyTable\_Application\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Application\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Border\_GetWidth|i|<span style="color:#FFFFAA">*this.strMyTableBorderObject</span>||
+|\_MyTable\_Cell\_GetColspan|i|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetDatatype|i|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -324,6 +332,7 @@
 |\_MyTable\_GetZebraHAlign|i|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||
 |\_MyTable\_GetZebraVAlign|i|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||
 |\_MyTable\_Row\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
+|\_MyTable\_Row\_GetHeight|i|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetLevel|i|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Style\_GetBorder|i|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
@@ -334,6 +343,7 @@
 |\_MyTable\_Style\_GetBorderWidthTop|i|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
 |\_MyTable\_Style\_GetHAlign|i|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
 |\_MyTable\_Style\_GetVAlign|i|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
+|\_MyTable\_Table\_GetCanvas|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetDefaultImageCheckBox|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetDefaultImageCheckBoxChecked|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetDefaultImageMinus|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
@@ -344,9 +354,12 @@
 |\_MyTable\_Table\_GetDefaultImageSortDesc|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetFixedCols|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
+|\_MyTable\_Table\_GetHScroll|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetPage|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetPageElements|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
+|\_MyTable\_Table\_GetVScroll|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
+|\_MyTable\_Table\_GetWindow|i|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Border\_GetColor|q|<span style="color:#FFFFAA">*this.strMyTableBorderObject</span>||
 |\_MyTable\_GetDefaultBackColor|q|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||
 |\_MyTable\_GetDefaultForeColor|q|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||

@@ -1,10 +1,18 @@
-# MyTable
-
-VERSION = 3460
-
-VERSION_DATE = 20210630
+# My
 
 [mytable.pbi](Doc/mytable.pbi.md)
+
+## MyGlobal
+
+[myglobaldoc.pb](Doc/myglobaldoc.pb.md)
+
+[myglobalmacro.pb](Doc/myglobalmacro.pb.md)
+
+## MyTable
+
+VERSION = 3483
+
+VERSION_DATE = 20210630
 
 [autodeclare.pb](Doc/autodeclare.pb.md)
 
@@ -21,8 +29,6 @@ VERSION_DATE = 20210630
 [mytablecell.pb](Doc/mytablecell.pb.md)
 
 [mytablecol.pb](Doc/mytablecol.pb.md)
-
-[mytabledoc.pb](Doc/mytabledoc.pb.md)
 
 [mytablefont.pb](Doc/mytablefont.pb.md)
 

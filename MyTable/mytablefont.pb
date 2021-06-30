@@ -1,4 +1,4 @@
-﻿_MyTableSimpleGetter(Font,Type,i)
-_MyTableSimpleGetter(Font,Name,s)
-_MyTableSimpleGetter(Font,Size,i)
-_MyTableSimpleGetter(Font,Flags,i)
+﻿_SimpleGetter(MyTable,Font,Type,i)
+_SimpleGetter(MyTable,Font,Name,s)
+_SimpleGetter(MyTable,Font,Size,i)
+_SimpleGetter(MyTable,Font,Flags,i)
