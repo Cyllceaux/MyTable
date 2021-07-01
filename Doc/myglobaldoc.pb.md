@@ -2,8 +2,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_UPDATE\_DOC</span>|0||
-|<span style="color:#AAAAFF">\#MYTABLE\_UPDATE\_VERSION</span>|0||
+|<span style="color:#AAAAFF">\#UPDATE\_DOC</span>|0||
+|<span style="color:#AAAAFF">\#UPDATE\_VERSION</span>|0||
 
 
 ## Procedures

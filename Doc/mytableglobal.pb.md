@@ -68,12 +68,7 @@
 |\_MyTableInitCol||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitFont||<span style="color:#FFFFAA">*font.</span>strMyTableFont , ||
 |\_MyTableInitCell||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableCleanName|s|name.s||
 |\_MyTableGetOrAddCell||<span style="color:#FFFFAA">*row.</span>strMyTableRow , idx.i , force.b||
-|\_MyTableTextHeight||text.s||
-|\_MyTableTextWidth||text.s||
-|\_MyTableDrawTextCompleteCenter||by , text.s , color.q , maxlen.i||
-|\_MyTableDrawText||x , y , text.s , color.q , maxlen.i||
 |\_MyTable\_IsDisabled|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_StopEdit||<span style="color:#FFFFAA">*this.</span>strMyTableTable , save.b||
 |\_MyTable\_KeyEdit||||

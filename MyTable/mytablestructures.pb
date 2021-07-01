@@ -1,9 +1,6 @@
-﻿Structure strMyTableVTable
-	vtable.i
-	type.i
-EndStructure
+﻿XIncludeFile "../MyGlobal/myglobalstructure.pb"
 
-Structure strMyTableFont Extends strMyTableVTable
+Structure strMyTableFont Extends strMyVTable
 	name.s
 	size.i
 	flags.i
@@ -36,7 +33,7 @@ Structure strMyTableStyle
 	border.strMyTableStyleBorder
 EndStructure
 
-Structure strMyTableObject Extends strMyTableVTable
+Structure strMyTableObject Extends strMyVTable
 	flags.i
 	*data
 	dirty.b
@@ -53,7 +50,7 @@ Structure strMyTableObject Extends strMyTableVTable
 	disabled.b
 EndStructure
 
-Structure strMyTableStyleObject Extends strMyTableVTable
+Structure strMyTableStyleObject Extends strMyVTable
 	*obj.strMyTableObject
 	*cellStyle.strMyTableStyle
 	*rowStyle.strMyTableStyle
@@ -63,7 +60,7 @@ Structure strMyTableStyleObject Extends strMyTableVTable
 	*style.strMyTableStyle
 EndStructure
 
-Structure strMyTableBorderObject Extends strMyTableVTable
+Structure strMyTableBorderObject Extends strMyVTable
 	*style.strMyTableStyleObject
 	*border.strMyTableStyleBorderStyle
 	

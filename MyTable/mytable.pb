@@ -4,6 +4,7 @@ Module MyTable
 	
 	XIncludeFile "mytablestructures.pb"
 	XIncludeFile "mytablemacro.pb"
+	XIncludeFile "../MyGlobal/myglobaldeclare.pb"
 	XIncludeFile "declare.pb"
 	XIncludeFile "autodeclare.pb"
 	XIncludeFile "mytableglobal.pb"
@@ -17,6 +18,7 @@ Module MyTable
 	XIncludeFile "mytablerow.pb"
 	XIncludeFile "mytablecol.pb"
 	XIncludeFile "mytablecell.pb"
+	XIncludeFile "../MyGlobal/myglobalglobal.pb"
 	
 	
 	

@@ -4,15 +4,21 @@
 
 ## MyGlobal
 
+[myglobaldeclare.pb](Doc/myglobaldeclare.pb.md)
+
 [myglobaldoc.pb](Doc/myglobaldoc.pb.md)
+
+[myglobalglobal.pb](Doc/myglobalglobal.pb.md)
 
 [myglobalmacro.pb](Doc/myglobalmacro.pb.md)
 
+[myglobalstructure.pb](Doc/myglobalstructure.pb.md)
+
 ## MyTable
 
-VERSION = 3503
+VERSION = 3511
 
-VERSION_DATE = 20210630
+VERSION_DATE = 20210701
 
 [autodeclare.pb](Doc/autodeclare.pb.md)
 

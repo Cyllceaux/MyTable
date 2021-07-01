@@ -143,11 +143,6 @@ Declare _MyTableInitCell(*application.strMyTableApplication,
                          *cell.strMyTableCell,
                          flags.i)
 
-Declare.s _MyTableCleanName(name.s)
-Declare _MyTableTextHeight(text.s)
-Declare _MyTableTextWidth(text.s)
-Declare _MyTableDrawText(x,y,text.s,color.q,maxlen.i)
-Declare _MyTableDrawTextCompleteCenter(by,text.s,color.q,maxlen.i)
 Declare _MyTableGetOrAddCell(*row.strMyTableRow,idx.i,force.b)
 Declare _MyTable_StartEdit(*rc.strMyTableRowCol)
 Declare _MyTable_StartEditCell(*cll.strMyTableCell)

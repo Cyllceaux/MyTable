@@ -1,7 +1,7 @@
 ## Structures
 
 
-### strMyTableFont : [strMyTableVTable](#strMyTableVTable)
+### strMyTableFont : [strMyVTable](#strMyVTable)
 |Field|Type|Comment|
 | --- | --- | --- |
 |name|s||
@@ -37,7 +37,7 @@
 |halign|i||
 |border|[strMyTableStyleBorder](#strMyTableStyleBorder)||
 
-### strMyTableObject : [strMyTableVTable](#strMyTableVTable)
+### strMyTableObject : [strMyVTable](#strMyVTable)
 |Field|Type|Comment|
 | --- | --- | --- |
 |flags|i||
@@ -55,7 +55,7 @@
 |tooltip|s||
 |disabled|b||
 
-### strMyTableStyleObject : [strMyTableVTable](#strMyTableVTable)
+### strMyTableStyleObject : [strMyVTable](#strMyVTable)
 |Field|Type|Comment|
 | --- | --- | --- |
 |<span style="color:#FFFFAA">*obj|[strMyTableObject](#strMyTableObject)</span>||
@@ -66,7 +66,7 @@
 |<span style="color:#FFFFAA">*applicationStyle|[strMyTableStyle](#strMyTableStyle)</span>||
 |<span style="color:#FFFFAA">*style|[strMyTableStyle](#strMyTableStyle)</span>||
 
-### strMyTableBorderObject : [strMyTableVTable](#strMyTableVTable)
+### strMyTableBorderObject : [strMyVTable](#strMyVTable)
 |Field|Type|Comment|
 | --- | --- | --- |
 |<span style="color:#FFFFAA">*style|[strMyTableStyle](#strMyTableStyle)Object</span>||

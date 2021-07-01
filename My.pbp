@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-06-30 13:38" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-06-30 14:16" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
@@ -15,8 +15,8 @@
       <fingerprint md5="15c430c2abb93fb57c626695638fa8d9"/>
     </file>
     <file name="MyGlobal\myglobaldoc.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="e27df0c9b10f4b78972792e0928ad575"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="a84db318e842a54e43c3d301828a03b9"/>
     </file>
     <file name="MyGlobal\myglobalmacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -24,7 +24,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="894159a7da7ffdaf6f8fcbd52aa36694"/>
+      <fingerprint md5="19e2e16bbaeaa2926140970f200da957"/>
     </file>
     <file name="MyTable\autodeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -79,7 +79,7 @@
       <fingerprint md5="8245f242f564a5c318096725900f4134"/>
     </file>
     <file name="MyTable\mytablestructures.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="9a9b7a406f4452076fc5e7f88ec482e3"/>
     </file>
     <file name="MyTable\mytablestyle.pb">
@@ -95,7 +95,7 @@
       <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
     </file>
     <file name="Test\backend.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="9b23bad0665a267239bb1b41e413c4bd"/>
     </file>
     <file name="Test\complete.pb">
@@ -103,8 +103,8 @@
       <fingerprint md5="ebb13b86e4dcdbe6106c31859f9cb6d7"/>
     </file>
     <file name="Test\declare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="ce14337b97442b079f2e7153d22f389e"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="48ae7dab3298c8308bd3bc5a0519e169"/>
     </file>
     <file name="Test\grid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>

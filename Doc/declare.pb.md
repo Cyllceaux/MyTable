@@ -13,11 +13,6 @@
 |\_MyTableInitRow||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitCol||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitCell||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableCleanName|s|name.s||
-|\_MyTableTextHeight||text.s||
-|\_MyTableTextWidth||text.s||
-|\_MyTableDrawText||x , y , text.s , color.q , maxlen.i||
-|\_MyTableDrawTextCompleteCenter||by , text.s , color.q , maxlen.i||
 |\_MyTableGetOrAddCell||<span style="color:#FFFFAA">*row.</span>strMyTableRow , idx.i , force.b||
 |\_MyTable\_StartEdit||<span style="color:#FFFFAA">*rc.strMyTableRowCol</span>||
 |\_MyTable\_StartEditCell||<span style="color:#FFFFAA">*cll.strMyTableCell</span>||

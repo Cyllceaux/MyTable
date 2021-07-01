@@ -1,13 +1,13 @@
-﻿CompilerIf Not Defined(MYTABLE_UPDATE_DOC,#PB_Constant)
-	#MYTABLE_UPDATE_DOC=0
+﻿CompilerIf Not Defined(UPDATE_DOC,#PB_Constant)
+	#UPDATE_DOC=0
 CompilerEndIf
 
-CompilerIf Not Defined(MYTABLE_UPDATE_VERSION,#PB_Constant)
-	#MYTABLE_UPDATE_VERSION=0
+CompilerIf Not Defined(UPDATE_VERSION,#PB_Constant)
+	#UPDATE_VERSION=0
 CompilerEndIf
 
 CompilerIf #PB_Compiler_Debugger
-	CompilerIf #MYTABLE_UPDATE_DOC
+	CompilerIf #UPDATE_DOC
 		
 		Procedure.s parseParameter(line.s,split.b)
 			Protected result.s=line
@@ -329,7 +329,7 @@ CompilerIf #PB_Compiler_Debugger
 		
 	CompilerEndIf
 	
-	CompilerIf #MYTABLE_UPDATE_VERSION 
+	CompilerIf #UPDATE_VERSION 
 		
 		Procedure updateVersion(pfad.s)
 			If FileSize("../update")=0
@@ -368,12 +368,12 @@ CompilerIf #PB_Compiler_Debugger
 CompilerEndIf
 
 CompilerIf #PB_Compiler_Debugger
-	CompilerIf #MYTABLE_UPDATE_VERSION 
+	CompilerIf #UPDATE_VERSION 
 		updateVersion("../mytable.pbi")
 		updateVersion("../README.md")
 	CompilerEndIf
 	
-	CompilerIf #MYTABLE_UPDATE_DOC
+	CompilerIf #UPDATE_DOC
 		
 		Procedure.s parsePBFiles(pfad.s,titel.s,version.q=0,versiondate.q=0)
 			Protected readme.s=""
