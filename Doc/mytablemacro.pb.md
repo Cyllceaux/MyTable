@@ -47,7 +47,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|\_MyTableDebugGetName|s|<span style="color:#FFFFAA">*this.strMyTableVTable</span>||
-|\_MyTableDebugGetCanvas||<span style="color:#FFFFAA">*this.strMyTableVTable</span>||
+|\_MyTableDebugGetName|s|<span style="color:#FFFFAA">*this.strMyVTable</span>||
+|\_MyTableDebugGetCanvas||<span style="color:#FFFFAA">*this.strMyVTable</span>||
 
 

@@ -411,6 +411,7 @@ CompilerIf #PB_Compiler_Debugger
 		readme+parsePBFiles("../","")
 		readme+parsePBFiles("../MyGlobal/","MyGlobal")
 		readme+parsePBFiles("../MyFont/","MyFont",MyFont::#MYFONT_VERSION,MyFont::#MYFONT_VERSION_DATE)
+		readme+parsePBFiles("../MyImage/","MyImage",MyImage::#MYIMAGE_VERSION,MyImage::#MYIMAGE_VERSION_DATE)
 		readme+parsePBFiles("../MyTable/","MyTable",MyTable::#MYTABLE_VERSION,MyTable::#MYTABLE_VERSION_DATE)
 		
 		

@@ -68,13 +68,6 @@
 |<span style="color:#FFFFAA">*borderRight|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
 |<span style="color:#FFFFAA">*borderBottom|[strMyTableStyleBorderStyle](#strMyTableStyleBorderStyle)</span>||
 
-### strMyTableImage
-|Field|Type|Comment|
-| --- | --- | --- |
-|orig|i||
-|sized|i||
-|resize|b||
-
 ### strMyTableCell : [strMyTableObject](#strMyTableObject)
 |Field|Type|Comment|
 | --- | --- | --- |
@@ -91,8 +84,8 @@
 |mask|s||
 |datatype|i||
 |<span style="color:#FFFFAA">*cells|[strMyTableCell](#strMyTableCell)List</span>||
-|<span style="color:#FFFFAA">*imageLeft|[strMyTableImage](#strMyTableImage)</span>||
-|<span style="color:#FFFFAA">*imageRight|[strMyTableImage](#strMyTableImage)</span>||
+|<span style="color:#FFFFAA">*imageLeft|MyImage::MyImage</span>||
+|<span style="color:#FFFFAA">*imageRight|MyImage::MyImage</span>||
 |textwidth|i||
 |textheight|i||
 |startx|i||
@@ -107,7 +100,7 @@
 |<span style="color:#FFFFAA">*parent|[strMyTableCol](#strMyTableCol)</span>||
 |listindex|i||
 |text|s||
-|<span style="color:#FFFFAA">*image|[strMyTableImage](#strMyTableImage)</span>||
+|<span style="color:#FFFFAA">*image|MyImage::MyImage</span>||
 |stretched|b||
 |width|i||
 |calcwidth|i||
@@ -131,7 +124,7 @@
 |<span style="color:#FFFFAA">*parent|[strMyTableRow](#strMyTableRow)</span>||
 |listindex|i||
 |expanded|b||
-|<span style="color:#FFFFAA">*image|[strMyTableImage](#strMyTableImage)</span>||
+|<span style="color:#FFFFAA">*image|MyImage::MyImage</span>||
 |height|i||
 |calcheight|i||
 |checked|b||

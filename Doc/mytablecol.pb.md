@@ -17,7 +17,9 @@
 |\_MyTable\_Col\_DeleteColRow||<span style="color:#FFFFAA">*row.</span>strMyTableRow , idx||
 |\_MyTable\_Col\_Delete||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetImage||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
-|\_MyTable\_Col\_SetImage||<span style="color:#FFFFAA">*this.</span>strMyTableCol , value.i||
+|\_MyTable\_Col\_SetImage||<span style="color:#FFFFAA">*this.</span>strMyTableCol , <span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |\_MyTable\_Col\_GetSelected|b|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_SetSelected||<span style="color:#FFFFAA">*this.</span>strMyTableCol , value.b||
 |\_MyTable\_Col\_ScrollTo||<span style="color:#FFFFAA">*this.</span>strMyTableCol , setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||

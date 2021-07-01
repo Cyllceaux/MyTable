@@ -1,7 +1,8 @@
 ﻿XIncludeFile "MyGlobal/global.pb"
+
 DeclareModule My
 	
-	#VERSION = 5
+	#VERSION = 23
 	#VERSION_DATE = 20210701
 		
 	Enumeration _my_type
@@ -16,6 +17,7 @@ DeclareModule My
 		#MY_TYPE_STYLE
 		#MY_TYPE_FONT
 		#MY_TYPE_BORDER
+		#MY_TYPE_IMAGE
 	EndEnumeration
 	
 EndDeclareModule

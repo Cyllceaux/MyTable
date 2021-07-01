@@ -74,7 +74,7 @@ EndMacro
 
 CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	
-	Procedure.s _MyTableDebugGetName(*this.strMyTableVTable)
+	Procedure.s _MyTableDebugGetName(*this.strMyVTable)
 		Select *this\type
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*this
@@ -96,7 +96,7 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 		EndSelect
 	EndProcedure
 	
-	Procedure _MyTableDebugGetCanvas(*this.strMyTableVTable)
+	Procedure _MyTableDebugGetCanvas(*this.strMyVTable)
 		Select *this\type
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*this

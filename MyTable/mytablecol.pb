@@ -215,9 +215,6 @@ Procedure _MyTable_Col_Delete(*this.strMyTableCol)
 		Protected *table.strMyTableTable=*this\table
 		ForEach *this\table\cols()
 			If *this\table\cols()=*this
-				If IsImage(*this\image\sized)
-					FreeImage(*this\image\sized)
-				EndIf
 				DeleteElement(*this\table\cols())
 				ForEach *this\table\rows()
 					_MyTable_Col_DeleteColRow(*this\table\rows(),idx)
@@ -242,17 +239,13 @@ EndProcedure
 
 Procedure _MyTable_Col_GetImage(*this.strMyTableCol)
 	If *this
-		ProcedureReturn *this\image\orig
+		ProcedureReturn *this\image
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Col_SetImage(*this.strMyTableCol,value.i)
+Procedure _MyTable_Col_SetImage(*this.strMyTableCol,*value.MyImage::MyImage)
 	If *this
-		*this\image\orig=value
-		If IsImage(*this\image\sized)
-			FreeImage(*this\image\sized)
-			*this\image\sized=0
-		EndIf
+		*this\image=*value
 		*this\dirty=#True
 		*this\table\dirty=#True
 		_MyTable_Table_Predraw(*this\table)
@@ -328,17 +321,9 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 		If checkboxes And *this\listindex=0
 			tresult+MyTableW20
 		EndIf
-		If *row\image\orig						
-			If Not *row\image\sized															
-				*row\image\sized=CopyImage(*row\image\orig,#PB_Any)
-				If *row\image\resize
-					ResizeImage(*row\image\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
-				Else
-					ResizeImage(*row\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-				EndIf
-			EndIf
+		If *row\image
 			If *this\listindex=0
-				tresult+ImageWidth(*row\image\sized)+MyTableW8
+				tresult+*row\table\defaultrowheight+MyTableW8
 			EndIf
 		EndIf
 	EndIf
@@ -354,27 +339,11 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 			*cell\textheight=_MyTableTextHeight(*cell\text)
 		EndIf
 		tresult+*cell\textwidth+MyTableW8
-		If *cell\imageLeft And *cell\imageLeft\orig					
-			If Not *cell\imageLeft\sized
-				*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
-				If *cell\imageLeft\resize
-					ResizeImage(*cell\imageLeft\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
-				Else
-					ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-				EndIf
-			EndIf
-			tresult+ImageWidth(*cell\imageLeft\sized)+MyTableW8
+		If *cell\imageLeft
+			tresult+*cell\table\defaultrowheight+MyTableW8
 		EndIf
-		If *cell\imageRight And *cell\imageRight\orig					
-			If Not *cell\imageRight\sized
-				*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
-				If *cell\imageRight\resize
-					ResizeImage(*cell\imageRight\sized,*row\calcheight-MyTableW8,*row\calcheight-MyTableH8)
-				Else
-					ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-				EndIf
-			EndIf
-			tresult+ImageWidth(*cell\imageRight\sized)+MyTableW8
+		If *cell\imageRight	
+			tresult+*cell\table\defaultrowheight+MyTableW8
 		EndIf
 	EndIf
 	If *row\rows
@@ -414,16 +383,8 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		Else
 			result=*this\textwidth+MyTableW8
 			
-			If *this\image And *this\image\orig
-				If Not *this\image\sized
-					*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
-					If *this\image\resize
-						ResizeImage(*this\image\sized,*this\table\calcdefaultheaderheight-MyTableW8,*this\table\calcdefaultheaderheight-MyTableH8)
-					Else
-						ResizeImage(*this\image\sized,*this\table\calcheaderheight-MyTableW8,*this\table\calcheaderheight-MyTableH8)
-					EndIf
-				EndIf
-				result+ImageWidth(*this\image\sized)
+			If *this\image
+				result+*this\table\calcheaderheight-MyTableW8
 				result+MyTableW8			
 			EndIf
 			If *this\sort

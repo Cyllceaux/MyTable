@@ -1,9 +1,10 @@
 ﻿XIncludeFile "my.pbi"
 XIncludeFile "myfont.pbi"
+XIncludeFile "myimage.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3546
+	#MYTABLE_VERSION = 3564
 	#MYTABLE_VERSION_DATE = 20210701
 
 
@@ -108,12 +109,12 @@ DeclareModule MyTable
 		SetMask(value.s):GetMask.s()
 		SetDatatype(value.i):GetDatatype.i()
 		SetValue(value.d):GetValue.d()
-		SetImageLeft(value.i):GetImageLeft.i()
-		SetImageRight(value.i):GetImageRight.i()
+		SetImageLeft(*value.MyImage::MyImage):GetImageLeft.i()
+		SetImageRight(*value.MyImage::MyImage):GetImageRight.i()
 		SetChecked(value.b):GetChecked.b()
 		SetColspan(value.i):GetColspan.i()
 		
-		AddCell(text.s,image.i=0,flags.i=0)
+		AddCell(text.s,*image.MyImage::MyImage=0,flags.i=0)
 		DeleteCell(row.i)
 		GetCell(row.i)
 		CountCells()
@@ -147,7 +148,7 @@ DeclareModule MyTable
 		SetText(value.s):GetText.s()
 		SetMask(value.s):GetMask.s()
 		SetDatatype(value.i):GetDatatype.i()
-		SetImage(value.i):GetImage.i()
+		SetImage(*value.MyImage::MyImage):GetImage.i()
 		SetWidth(value.i):GetWidth.i()
 		SetSort(value.i):GetSort.i()
 		SetColspan(value.i):GetColspan.i()
@@ -175,12 +176,12 @@ DeclareModule MyTable
 		GetVisiblePosition()
 		GetLevel()
 		SetExpanded(value.b):GetExpanded.b()
-		SetImage(value.i):GetImage.i()
+		SetImage(*value.MyImage::MyImage):GetImage.i()
 		SetChecked(value.b):GetChecked.b()
 		SetHeight(value.i):GetHeight.i()
 		
 		AddDirtyRows(rows.i)
-		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
+		AddRow(text.s,sep.s="|",*image.MyImage::MyImage=0,flags.i=0)
 		DeleteRow(row.i)
 		GetRow(row.i)
 		RowCount()
@@ -343,10 +344,10 @@ DeclareModule MyTable
 		
 		
 		AddDirtyRows(rows.i)
-		AddRow(text.s,sep.s="|",image.i=0,flags.i=0)
+		AddRow(text.s,sep.s="|",*image.MyImage::MyImage=0,flags.i=0)
 		DeleteRow(row.i)
 		
-		AddCol(text.s,width.i,image.i=0,flags.i=0)
+		AddCol(text.s,width.i,*image.MyImage::MyImage=0,flags.i=0)
 		DeleteCol(col.i)
 		
 		
@@ -401,5 +402,4 @@ DeclareModule MyTable
 	Declare MyTableCreateNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
 EndDeclareModule
 
-XIncludeFile "MyTable/global.pb"
 XIncludeFile "MyTable/mytable.pb"

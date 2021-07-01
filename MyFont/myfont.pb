@@ -4,7 +4,7 @@
 	IncludeFile "myfontstructure.pb"
 	IncludeFile "../MyGlobal/myglobalmacro.pb"
 	IncludeFile "../MyGlobal/myglobaldeclare.pb"
-	IncludeFile "declare.pb"
+	IncludeFile "myfontdeclare.pb"
 	IncludeFile "myfontautodeclare.pb"
 	IncludeFile "myfontglobal.pb"
 	IncludeFile "myfontfont.pb"

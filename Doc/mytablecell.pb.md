@@ -13,8 +13,12 @@
 |\_MyTable\_Cell\_GetSelected|b|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetImageLeft||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetImageRight||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
-|\_MyTable\_Cell\_SetImageLeft||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.i||
-|\_MyTable\_Cell\_SetImageRight||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.i||
+|\_MyTable\_Cell\_SetImageLeft||<span style="color:#FFFFAA">*this.</span>strMyTableCell , <span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
+|\_MyTable\_Cell\_SetImageRight||<span style="color:#FFFFAA">*this.</span>strMyTableCell , <span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |\_MyTable\_Cell\_ScrollTo||<span style="color:#FFFFAA">*this.</span>strMyTableCell , setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||
 |\_MyTable\_Cell\_Autosize||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_AddCell||<span style="color:#FFFFAA">*this.</span>strMyTableCell , text.s , image.i = 0 , flags.i = 0||

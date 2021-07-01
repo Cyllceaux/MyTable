@@ -1,1 +1,0 @@
-﻿IncludeFile "../MyGlobal/global.pb"

@@ -56,70 +56,70 @@ Macro _BindEvent(projekt,gruppe,name)
 EndMacro
 
 
-Macro _SimpleGetterPointer(projekt,gruppe,name)
+Macro _SimpleGetterPointer(projekt,gruppe,name,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
 	Procedure _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe)
 		If *this
-			ProcedureReturn *this\name
+			ProcedureReturn *this\sub#name
 		EndIf
 	EndProcedure
 EndMacro
 
-Macro _SimpleGetter(projekt,gruppe,name,typ)
+Macro _SimpleGetter(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
 	Procedure.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe)
 		If *this
-			ProcedureReturn *this\name
+			ProcedureReturn *this\sub#name
 		EndIf
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetter(projekt,gruppe,name,typ)
+Macro _SimpleSetter(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
-			*this\name=value
+			*this\sub#name=value
 			*this\dirty=#True
 		EndIf
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterPointer(projekt,gruppe,name)
+Macro _SimpleSetterPointer(projekt,gruppe,name,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value)
 		If *this
-			*this\name=*value
+			*this\sub#name=*value
 			*this\dirty=#True
 		EndIf
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterPointerStructure(projekt,gruppe,name,typ)
+Macro _SimpleSetterPointerStructure(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ)
 		If *this
-			*this\name=*value
+			*this\sub#name=*value
 			*this\dirty=#True
 		EndIf
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterRedraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterRedraw(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
-			*this\name=value
+			*this\sub#name=value
 			*this\dirty=#True			
 			_#projekt#_Table_Redraw(*this)						
 		EndIf
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
-			*this\name=value
+			*this\sub#name=value
 			*this\dirty=#True			
 			*this\table\dirty=#True
 			_#projekt#_Table_Redraw(*this\table)						
@@ -127,11 +127,11 @@ Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ)
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
-			*this\name=value
+			*this\sub#name=value
 			*this\dirty=#True			
 			*this\table\dirty=#True
 			_#projekt#_Table_Predraw(*this\table)						
@@ -140,11 +140,11 @@ Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ)
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterPredraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterPredraw(projekt,gruppe,name,typ,sub=)
 	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
-			*this\name=value
+			*this\sub#name=value
 			*this\dirty=#True			
 			*this\dirty=#True
 			_#projekt#_Table_Predraw(*this)						
@@ -153,39 +153,39 @@ Macro _SimpleSetterPredraw(projekt,gruppe,name,typ)
 	EndProcedure
 EndMacro
 
-Macro _SimpleSetterGetter(projekt,gruppe,name,typ)
-	_SimpleGetter(projekt,gruppe,name,typ)
-	_SimpleSetter(projekt,gruppe,name,typ)
+Macro _SimpleSetterGetter(projekt,gruppe,name,typ,sub=)
+	_SimpleGetter(projekt,gruppe,name,typ,sub)
+	_SimpleSetter(projekt,gruppe,name,typ,sub)
 EndMacro
 
-Macro _SimpleSetterGetterRedraw(projekt,gruppe,name,typ)
-	_SimpleGetter(projekt,gruppe,name,typ)
-	_SimpleSetterRedraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterGetterRedraw(projekt,gruppe,name,typ,sub=)
+	_SimpleGetter(projekt,gruppe,name,typ,sub)
+	_SimpleSetterRedraw(projekt,gruppe,name,typ,sub)
 EndMacro
 
-Macro _SimpleSetterGetterPointer(projekt,gruppe,name)
-	_SimpleGetterPointer(projekt,gruppe,name)
-	_SimpleSetterPointer(projekt,gruppe,name)
+Macro _SimpleSetterGetterPointer(projekt,gruppe,name,sub=)
+	_SimpleGetterPointer(projekt,gruppe,name,sub)
+	_SimpleSetterPointer(projekt,gruppe,name,sub)
 EndMacro
 
-Macro _SimpleSetterGetterPointerStructure(projekt,gruppe,name,typ)
-	_SimpleGetterPointer(projekt,gruppe,name)
-	_SimpleSetterPointerStructure(projekt,gruppe,name,typ)
+Macro _SimpleSetterGetterPointerStructure(projekt,gruppe,name,typ,sub=)
+	_SimpleGetterPointer(projekt,gruppe,name,sub)
+	_SimpleSetterPointerStructure(projekt,gruppe,name,typ,sub)
 EndMacro
 
-Macro _SimpleSetterGetterSubRedraw(projekt,gruppe,name,typ)
-	_SimpleGetter(projekt,gruppe,name,typ)
-	_SimpleSetterSubRedraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterGetterSubRedraw(projekt,gruppe,name,typ,sub=)
+	_SimpleGetter(projekt,gruppe,name,typ,sub)
+	_SimpleSetterSubRedraw(projekt,gruppe,name,typ,sub)
 EndMacro
 
-Macro _SimpleSetterGetterSubPredraw(projekt,gruppe,name,typ)
-	_SimpleGetter(projekt,gruppe,name,typ)
-	_SimpleSetterSubPredraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterGetterSubPredraw(projekt,gruppe,name,typ,sub=)
+	_SimpleGetter(projekt,gruppe,name,typ,sub)
+	_SimpleSetterSubPredraw(projekt,gruppe,name,typ,sub)
 EndMacro
 
-Macro _SimpleSetterGetterPredraw(projekt,gruppe,name,typ)
-	_SimpleGetter(projekt,gruppe,name,typ)
-	_SimpleSetterPredraw(projekt,gruppe,name,typ)
+Macro _SimpleSetterGetterPredraw(projekt,gruppe,name,typ,sub=)
+	_SimpleGetter(projekt,gruppe,name,typ,sub)
+	_SimpleSetterPredraw(projekt,gruppe,name,typ,sub)
 EndMacro
 
 

@@ -414,14 +414,10 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.MyFont::MyFo
 				Box(bx,by,calcwidth,*this\calcheaderheight,_MyTable_GetDefaultBackColor(*col))
 			EndIf
 			
-			If *col\image And *col\image\orig And IsImage(*col\image\orig)
+			If *col\image
 				addx+DesktopScaledX(2)
-				If Not *col\image\sized
-					*col\image\sized=CopyImage(*col\image\orig,#PB_Any)
-					ResizeImage(*col\image\sized,*this\calcheaderheight-MyTableW8,*this\calcheaderheight-MyTableH8)
-				EndIf
 				DrawingMode(#PB_2DDrawing_AlphaClip)
-				DrawImage(ImageID(*col\image\sized),bx+addx,by+addy+MyTableW4)
+				DrawImage(*col\image\GetSizedID(*this\calcheaderheight-MyTableW8),bx+addx,by+addy+MyTableW4)
 				DrawingMode(#PB_2DDrawing_Default)
 				addx+*this\calcheaderheight
 			EndIf
@@ -593,13 +589,11 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.MyFont::MyFont,fixe
 		*cell\textheight=_MyTableTextHeight(*cell\text)
 	EndIf
 	
-	If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+	If *cell\imageRight
 		
-		If *cell\imageRight\resize					
-			tw=*this\calcheight+MyTableW4
-		Else
-			tw=*this\table\calcdefaultrowheight+MyTableW4
-		EndIf
+		
+		tw=*this\table\calcdefaultrowheight+MyTableW4
+		
 		
 	EndIf
 	
@@ -830,58 +824,29 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 				checkboxes=_MyTable_IsCheckboxes(*cell)
 				
 				If idx=1
-					If *this\image And *this\image\orig And IsImage(*this\image\orig)
+					If *this\image
 						addx+DesktopScaledX(2)
-						If Not *this\image\sized
-							*this\image\sized=CopyImage(*this\image\orig,#PB_Any)
-							If *this\image\resize
-								ResizeImage(*this\image\sized,ch-MyTableW8,ch-MyTableH8)
-							Else
-								ResizeImage(*this\image\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-							EndIf
-						EndIf
+						
 						DrawingMode(#PB_2DDrawing_AlphaClip)
-						DrawImage(ImageID(*this\image\sized),bx+addx,by+addy+MyTableW4)
+						DrawImage(*this\image\GetSizedID(*this\table\calcdefaultrowheight-MyTableW8),bx+addx,by+addy+MyTableW4)
 						DrawingMode(#PB_2DDrawing_Default)
-						If *this\image\resize
-							addx+ch
-						Else
-							addx+*this\table\calcdefaultrowheight
-						EndIf
-					EndIf
-				EndIf
-				
-				If *cell\imageLeft And *cell\imageLeft\orig And IsImage(*cell\imageLeft\orig)
-					addx+DesktopScaledX(2)
-					If Not *cell\imageLeft\sized
-						*cell\imageLeft\sized=CopyImage(*cell\imageLeft\orig,#PB_Any)
-						If *cell\imageLeft\resize
-							ResizeImage(*cell\imageLeft\sized,ch-MyTableW8,ch-MyTableH8)
-						Else
-							ResizeImage(*cell\imageLeft\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-						EndIf
-					EndIf
-					DrawingMode(#PB_2DDrawing_AlphaClip)
-					DrawImage(ImageID(*cell\imageLeft\sized),bx+addx,by+addy+MyTableW4)
-					DrawingMode(#PB_2DDrawing_Default)
-					If *cell\imageLeft\resize
-						addx+ch
-					Else
+						
 						addx+*this\table\calcdefaultrowheight
+						
 					EndIf
 				EndIf
 				
-				
-				If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)				
-					If Not *cell\imageRight\sized
-						*cell\imageRight\sized=CopyImage(*cell\imageRight\orig,#PB_Any)
-						If *cell\imageRight\resize
-							ResizeImage(*cell\imageRight\sized,ch-MyTableW8,ch-MyTableH8)
-						Else
-							ResizeImage(*cell\imageRight\sized,*this\table\calcdefaultrowheight-MyTableW8,*this\table\calcdefaultrowheight-MyTableH8)
-						EndIf
-					EndIf
+				If *cell\imageLeft
+					addx+DesktopScaledX(2)
+					DrawingMode(#PB_2DDrawing_AlphaClip)
+					DrawImage(*cell\imageLeft\GetSizedID(*this\table\calcdefaultrowheight-MyTableW8),bx+addx,by+addy+MyTableW4)
+					DrawingMode(#PB_2DDrawing_Default)
+					
+					addx+*this\table\calcdefaultrowheight
+					
 				EndIf
+				
+				
 				
 				If checkboxes
 					If idx>1
@@ -900,13 +865,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font,fixed,selected,checkboxes,disabled,idx,*cell,cw)
 				
 				
-				If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
+				If *cell\imageRight
 					DrawingMode(#PB_2DDrawing_AlphaClip)				
-					If *cell\imageRight\resize					
-						DrawImage(ImageID(*cell\imageRight\sized),bx+cw-ch,by+addy+MyTableW4)
-					Else
-						DrawImage(ImageID(*cell\imageRight\sized),bx+cw-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
-					EndIf
+					DrawImage(*cell\imageRight\GetSizedID(*this\table\calcdefaultrowheight-MyTableW8),bx+cw-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
 					DrawingMode(#PB_2DDrawing_Default)
 				EndIf
 				
@@ -1485,10 +1446,6 @@ Procedure _MyTable_Table_SetHeaderHeight(*this.strMyTableTable,value.i)
 		*this\dirty=#True
 		ForEach *this\cols()
 			*this\cols()\dirty=#True
-			If IsImage(*this\cols()\image\sized)
-				FreeImage(*this\cols()\image\sized)
-			EndIf
-			*this\cols()\image\sized=0
 		Next
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
@@ -1513,10 +1470,6 @@ Procedure _MyTable_Table_SetDefaultRowHeight(*this.strMyTableTable,value.i)
 		*this\dirty=#True
 		ForEach *this\rows()
 			*this\rows()\dirty=#True
-			If IsImage(*this\rows()\image\sized)
-				FreeImage(*this\rows()\image\sized)
-			EndIf
-			*this\rows()\image\sized=0
 			If *this\rows()\height=old
 				*this\rows()\height=value
 				*this\rows()\calcheight=*this\calcdefaultrowheight

@@ -1126,24 +1126,7 @@ Procedure _MyTableEvtCanvasMouseMove()
 				*this\myd=my
 				*this\resizeRow\calcheight=DesktopScaledY(*this\resizeRow\height)
 				*this\resizeRow\dirty=#True	
-				If *this\resizeRow\image\sized And *this\resizeRow\image\resize
-					FreeImage(*this\resizeRow\image\sized)
-					*this\resizeRow\image\sized=0
-				EndIf
-				If *this\resizeRow\cells
-					ForEach *this\resizeRow\cells\cells()
-						If *this\resizeRow\cells\cells()\imageLeft\sized And *this\resizeRow\cells\cells()\imageLeft\resize
-							FreeImage(*this\resizeRow\cells\cells()\imageLeft\sized)
-							*this\resizeRow\cells\cells()\imageLeft\sized=0
-						EndIf
-					Next
-					ForEach *this\resizeRow\cells\cells()
-						If *this\resizeRow\cells\cells()\imageRight\sized And *this\resizeRow\cells\cells()\imageRight\resize
-							FreeImage(*this\resizeRow\cells\cells()\imageRight\sized)
-							*this\resizeRow\cells\cells()\imageRight\sized=0
-						EndIf
-					Next
-				EndIf
+				
 				*this\dirty=#True
 				_Mytable_Table_Predraw(*this)
 				_Mytable_Table_Redraw(*this)
@@ -1615,7 +1598,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
                           *row.strMyTableRow,
                           text.s,
                           sep.s,
-                          image.i,
+                          *image.MyImage::MyImage,
                           flags.i)
 	
 	With *row
@@ -1628,10 +1611,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 		\dirty=#True
 		\height=*table\defaultrowheight
 		\calcheight=*table\calcdefaultrowheight
-		If image
-			\image=AllocateStructure(strMyTableImage)
-			\image\orig=image		
-		EndIf
+		\image=*image
 		\expanded=_MyTable_IsHierarchical_Always_Expanded(*table)
 		If text<>""
 			Protected c=CountString(text,sep)+1
@@ -1657,7 +1637,7 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
                           *col.strMyTableCol,
                           text.s,
                           width.i,
-                          image.i,
+                          *image.MyImage::MyImage,
                           flags.i)
 	
 	
@@ -1670,10 +1650,7 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\dirty=#True
 		\text=text
 		\width=width
-		If image
-			\image=AllocateStructure(strMyTableImage)
-			\image\orig=image
-		EndIf
+		\image=*image
 		\sort=#MYTABLE_COL_SORT_NONE
 		\datatype=#MYTABLE_DATATYPE_DEFAULT
 		If width=#PB_Ignore

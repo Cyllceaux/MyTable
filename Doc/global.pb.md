@@ -1,7 +1,12 @@
-## Constants
 
-|Constants|Value|Comment|
+# AUTODECLARE
+
+## Structures
+
+
+### strAutodeclare
+|Field|Type|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_DEBUG\_LEVEL</span>|0||
+|List autodeclare|s()||
 
 

@@ -152,7 +152,7 @@ EndProcedure
 
 Procedure _MyTable_Row_GetImage(*this.strMyTableRow)
 	If *this
-		ProcedureReturn *this\image\orig
+		ProcedureReturn *this\image
 	EndIf
 EndProcedure
 
@@ -164,13 +164,9 @@ Procedure _MyTable_Row_RowCount(*this.strMyTableRow)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_SetImage(*this.strMyTableRow,value.i)
+Procedure _MyTable_Row_SetImage(*this.strMyTableRow,*value.MyImage::MyImage)
 	If *this
-		*this\image\orig=value
-		If IsImage(*this\image\sized)
-			FreeImage(*this\image\sized)
-			*this\image\sized=0
-		EndIf
+		*this\image=*value
 		*this\dirty=#True
 		*this\table\dirty=#True
 		_MyTable_Table_Redraw(*this\table)

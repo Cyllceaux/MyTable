@@ -115,62 +115,28 @@ EndProcedure
 
 Procedure _MyTable_Cell_GetImageLeft(*this.strMyTableCell)
 	If *this
-		ProcedureReturn *this\imageLeft\orig
+		ProcedureReturn *this\imageLeft
 	EndIf
 EndProcedure
 
 Procedure _MyTable_Cell_GetImageRight(*this.strMyTableCell)
 	If *this
-		ProcedureReturn *this\imageRight\orig
+		ProcedureReturn *this\imageRight
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Cell_SetImageLeft(*this.strMyTableCell,value.i)
+Procedure _MyTable_Cell_SetImageLeft(*this.strMyTableCell,*value.MyImage::MyImage)
 	If *this
-		If value
-			If Not *this\imageLeft
-				*this\imageLeft=AllocateStructure(strMyTableImage)
-			EndIf
-			*this\imageLeft\orig=value
-			If IsImage(*this\imageLeft\sized)
-				FreeImage(*this\imageLeft\sized)
-				*this\imageLeft\sized=0
-			EndIf
-		Else
-			If *this\imageLeft
-				If IsImage(*this\imageLeft\sized)
-					FreeImage(*this\imageLeft\sized)
-				EndIf
-			EndIf
-			FreeStructure(*this\imageLeft)
-			*this\imageLeft=0
-		EndIf
+		*this\imageLeft=*value
 		*this\dirty=#True
 		*this\table\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Cell_SetImageRight(*this.strMyTableCell,value.i)
+Procedure _MyTable_Cell_SetImageRight(*this.strMyTableCell,*value.MyImage::MyImage)
 	If *this
-		If value
-			If Not *this\ImageRight
-				*this\ImageRight=AllocateStructure(strMyTableImage)
-			EndIf
-			*this\ImageRight\orig=value
-			If IsImage(*this\ImageRight\sized)
-				FreeImage(*this\ImageRight\sized)
-				*this\ImageRight\sized=0
-			EndIf
-		Else
-			If *this\ImageRight
-				If IsImage(*this\ImageRight\sized)
-					FreeImage(*this\ImageRight\sized)
-				EndIf
-			EndIf
-			FreeStructure(*this\ImageRight)
-			*this\ImageRight=0
-		EndIf
+		*this\imageRight=*value
 		*this\dirty=#True
 		*this\table\dirty=#True
 		_MyTable_Table_Redraw(*this\table)

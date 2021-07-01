@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3546||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3564||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210701||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
@@ -230,15 +230,21 @@
 |GetDatatype|i|||
 |SetValue||value.d||
 |GetValue|d|||
-|SetImageLeft||value.i||
+|SetImageLeft||<span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |GetImageLeft|i|||
-|SetImageRight||value.i||
+|SetImageRight||<span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |GetImageRight|i|||
 |SetChecked||value.b||
 |GetChecked|b|||
 |SetColspan||value.i||
 |GetColspan|i|||
-|AddCell||text.s , image.i = 0 , flags.i = 0||
+|AddCell||text.s , <span style="color:#FFFFAA">*image.MyImage</span>||
+|||||
+|MyImage=0,flags|i=0)|||
 |DeleteCell||row.i||
 |GetCell||row.i||
 |CountCells||||
@@ -259,7 +265,9 @@
 |GetMask|s|||
 |SetDatatype||value.i||
 |GetDatatype|i|||
-|SetImage||value.i||
+|SetImage||<span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |GetImage|i|||
 |SetWidth||value.i||
 |GetWidth|i|||
@@ -282,14 +290,18 @@
 |GetLevel||||
 |SetExpanded||value.b||
 |GetExpanded|b|||
-|SetImage||value.i||
+|SetImage||<span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |GetImage|i|||
 |SetChecked||value.b||
 |GetChecked|b|||
 |SetHeight||value.i||
 |GetHeight|i|||
 |AddDirtyRows||rows.i||
-|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
+|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , <span style="color:#FFFFAA">*image.MyImage</span>||
+|||||
+|MyImage=0,flags|i=0)|||
 |DeleteRow||row.i||
 |GetRow||row.i||
 |RowCount||||
@@ -401,9 +413,13 @@
 |SetDefaultImageMinusArrow||value.i||
 |GeDefaultImageMinusArrow|i|||
 |AddDirtyRows||rows.i||
-|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
+|AddRow||text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , <span style="color:#FFFFAA">*image.MyImage</span>||
+|||||
+|MyImage=0,flags|i=0)|||
 |DeleteRow||row.i||
-|AddCol||text.s , width.i , image.i = 0 , flags.i = 0||
+|AddCol||text.s , width.i , <span style="color:#FFFFAA">*image.MyImage</span>||
+|||||
+|MyImage=0,flags|i=0)|||
 |DeleteCol||col.i||
 |ClearRows||||
 |ClearCols||||

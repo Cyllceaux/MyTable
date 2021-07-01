@@ -13,7 +13,9 @@
 |\_MyTable\_Row\_GetCell||<span style="color:#FFFFAA">*this.</span>strMyTableRow , col.i||
 |\_MyTable\_Row\_GetImage||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_RowCount||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
-|\_MyTable\_Row\_SetImage||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.i||
+|\_MyTable\_Row\_SetImage||<span style="color:#FFFFAA">*this.</span>strMyTableRow , <span style="color:#FFFFAA">*value.MyImage</span>||
+|||||
+|MyImage)||||
 |\_MyTable\_Row\_GetSelected|b|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_SetSelected||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||
 |\_MyTable\_Row\_ScrollTo||<span style="color:#FFFFAA">*this.</span>strMyTableRow , setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||

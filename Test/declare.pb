@@ -41,21 +41,25 @@ Global MyTableH12=DesktopScaledY(12)
 Global MyTableH14=DesktopScaledY(14)
 Global MyTableH16=DesktopScaledY(16)
 
-Global rowImage=CatchImage(#PB_Any,?Briefcase_png_start)
-Global rowImageSub=CatchImage(#PB_Any,?Lock_png_start)
-Global rowImageSub2=CatchImage(#PB_Any,?Attach_png_start)
-Global Dim images(10)
-
-images(0)=CatchImage(#PB_Any,?Alarm_png_start)
-images(1)=CatchImage(#PB_Any,?Android_png_start)
-images(2)=CatchImage(#PB_Any,?Apple_PC_png_start)
-images(3)=CatchImage(#PB_Any,?ATM_png_start)
-images(4)=CatchImage(#PB_Any,?Audio_png_start)
-images(5)=CatchImage(#PB_Any,?Audioplug_png_start)
-images(6)=CatchImage(#PB_Any,?Barcode_scanner_png_start)
-images(7)=CatchImage(#PB_Any,?Barcode_png_start)
-images(8)=CatchImage(#PB_Any,?Blue_gear_png_start)
-images(9)=CatchImage(#PB_Any,?Blueray_drive_png_start)
+UseModule MyImage
+	
+	Global rowImage=MyImageCreateImage(CatchImage(#PB_Any,?Briefcase_png_start))
+	Global rowImageSub=MyImageCreateImage(CatchImage(#PB_Any,?Lock_png_start))
+	Global rowImageSub2=MyImageCreateImage(CatchImage(#PB_Any,?Attach_png_start))
+	Global Dim images(10)
+	
+	
+	images(0)=MyImageCreateImage(CatchImage(#PB_Any,?Alarm_png_start))
+	images(1)=MyImageCreateImage(CatchImage(#PB_Any,?Android_png_start))
+	images(2)=MyImageCreateImage(CatchImage(#PB_Any,?Apple_PC_png_start))
+	images(3)=MyImageCreateImage(CatchImage(#PB_Any,?ATM_png_start))
+	images(4)=MyImageCreateImage(CatchImage(#PB_Any,?Audio_png_start))
+	images(5)=MyImageCreateImage(CatchImage(#PB_Any,?Audioplug_png_start))
+	images(6)=MyImageCreateImage(CatchImage(#PB_Any,?Barcode_scanner_png_start))
+	images(7)=MyImageCreateImage(CatchImage(#PB_Any,?Barcode_png_start))
+	images(8)=MyImageCreateImage(CatchImage(#PB_Any,?Blue_gear_png_start))
+	images(9)=MyImageCreateImage(CatchImage(#PB_Any,?Blueray_drive_png_start))
+UnuseModule MyImage
 
 Global MyTableDefaultImagePlusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
 Global MyTableDefaultImageMinusArrow=CreateImage(#PB_Any,MyTableW16,MyTableH16,32,#PB_Image_Transparent)
