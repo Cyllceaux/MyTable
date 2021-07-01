@@ -404,13 +404,13 @@ CompilerIf #PB_Compiler_Debugger
 		EndProcedure
 		
 		Define readme.s="# My"+#CRLF$+#CRLF$
-		
-		
+		readme+"VERSION = "+My::#VERSION+#CRLF$+#CRLF$
+		readme+"VERSION_DATE = "+My::#VERSION_DATE+#CRLF$+#CRLF$
 		
 		readme+parsePBFiles("../","")
 		readme+parsePBFiles("../MyGlobal/","MyGlobal")
-		readme+parsePBFiles("../MyFont/","MyFont",MyFont::#MYFONT_VERSION,MyFont::#MYFONT_VERSION_DATE)
-		readme+parsePBFiles("../MyTable/","MyTable",MyTable::#MYTABLE_VERSION,MyTable::#MYTABLE_VERSION_DATE)
+		readme+parsePBFiles("../MyFont/","MyFont",MyFont::#VERSION,MyFont::#VERSION_DATE)
+		readme+parsePBFiles("../MyTable/","MyTable",MyTable::#VERSION,MyTable::#VERSION_DATE)
 		
 		
 		CreateFile(0,"../README.md",#PB_UTF8)

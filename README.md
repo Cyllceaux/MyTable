@@ -1,6 +1,12 @@
 # My
 
+VERSION = 1
+
+VERSION_DATE = 20210701
+
 [my.pbi](Doc/my.pbi.md)
+
+[myapplication.pbi](Doc/myapplication.pbi.md)
 
 [myfont.pbi](Doc/myfont.pbi.md)
 
@@ -22,7 +28,7 @@
 
 ## MyFont
 
-VERSION = 25
+VERSION = 29
 
 VERSION_DATE = 20210701
 
@@ -42,7 +48,7 @@ VERSION_DATE = 20210701
 
 ## MyTable
 
-VERSION = 3538
+VERSION = 3542
 
 VERSION_DATE = 20210701
 

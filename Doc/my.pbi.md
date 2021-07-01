@@ -1,6 +1,14 @@
 
 # My
 
+## Constants
+
+|Constants|Value|Comment|
+| --- | --- | --- |
+|<span style="color:#AAAAFF">\#VERSION</span>| 2||
+|<span style="color:#AAAAFF">\#VERSION\_DATE</span>| 20210701||
+
+
 ## Enumerations
 
 
