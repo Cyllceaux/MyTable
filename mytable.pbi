@@ -3,7 +3,7 @@ XIncludeFile "myfont.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3523
+	#MYTABLE_VERSION = 3538
 	#MYTABLE_VERSION_DATE = 20210701
 
 

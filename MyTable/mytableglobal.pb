@@ -329,15 +329,15 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	*rc\row=-2
 	
 	If IsGadget(*this\vscroll)
-		vsc=-GetGadgetState(*this\vscroll)
+		vsc=-DesktopScaledY(GetGadgetState(*this\vscroll))
 	Else
-		vsc=-*this\vscroll
+		vsc=-DesktopScaledY(*this\vscroll)
 	EndIf
 	
 	If IsGadget(*this\hscroll)
-		hsc=-GetGadgetState(*this\hscroll)
+		hsc=-DesktopScaledX(GetGadgetState(*this\hscroll))
 	Else
-		hsc=-*this\hscroll
+		hsc=-DesktopScaledX(*this\hscroll)
 	EndIf
 	
 	If title
