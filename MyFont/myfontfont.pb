@@ -1,0 +1,6 @@
+﻿_SimpleGetter(MyFont,Font,Type,i)
+_SimpleGetter(MyFont,Font,Name,s)
+_SimpleGetter(MyFont,Font,Size,i)
+_SimpleGetter(MyFont,Font,Flags,i)
+_SimpleGetter(MyFont,Font,Font,i)
+_SimpleGetter(MyFont,Font,FontID,i)

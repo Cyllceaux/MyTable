@@ -1,15 +1,6 @@
 ## Structures
 
 
-### strMyTableFont : [strMyVTable](#strMyVTable)
-|Field|Type|Comment|
-| --- | --- | --- |
-|name|s||
-|size|i||
-|flags|i||
-|font|i||
-|fontid|i||
-
 ### strMyTableStyleBorderStyle
 |Field|Type|Comment|
 | --- | --- | --- |
@@ -29,7 +20,7 @@
 ### strMyTableStyle
 |Field|Type|Comment|
 | --- | --- | --- |
-|<span style="color:#FFFFAA">*font|[strMyTableFont](#strMyTableFont)</span>||
+|<span style="color:#FFFFAA">*font|MyFont::MyFont</span>||
 |backcolor|q||
 |frontcolor|q||
 |forecolor|q||

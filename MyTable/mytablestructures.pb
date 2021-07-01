@@ -1,13 +1,5 @@
-﻿XIncludeFile "../MyGlobal/myglobalstructure.pb"
+﻿IncludeFile "../MyGlobal/myglobalstructure.pb"
 
-Structure strMyTableFont Extends strMyVTable
-	name.s
-	size.i
-	flags.i
-		
-	font.i
-	fontid.i
-EndStructure
 
 Structure strMyTableStyleBorderStyle
 	color.q
@@ -24,7 +16,7 @@ Structure strMyTableStyleBorder
 EndStructure
 
 Structure strMyTableStyle		
-	*font.strMyTableFont
+	*font.MyFont::MyFont
 	backcolor.q
 	frontcolor.q
 	forecolor.q

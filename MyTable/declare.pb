@@ -83,11 +83,7 @@ StopDrawing()
 
 
 ;- Global
-Declare _MyTableInitFont(*font.strMyTableFont,
-                         name.s,
-                         size.i,
-                         flags.i,
-                         font.i)
+
 Declare _MyTableInitStyleTable(*style.strMyTableStyle)
 Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
                                 *this.strMyTableObject,

@@ -3,12 +3,12 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |MM||||
-|\_AddAutoDeclare||name||
+|\_AddAutoDeclare||projekt , line||
 |PB|| \_pb\_function\_name\_ ||
 |ClipOutput||\_x\_ , \_y\_ , \_width\_ , \_height\_||
 |UnclipOutput||||
 |DrawingFont||\_font\_id\_||
-|\_BindEvent||projekt , name||
+|\_BindEvent||projekt , gruppe , name||
 |\_SimpleGetterPointer||projekt , gruppe , name||
 |\_SimpleGetter||projekt , gruppe , name , typ||
 |\_SimpleSetter||projekt , gruppe , name , typ||

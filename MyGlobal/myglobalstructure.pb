@@ -1,4 +1,5 @@
-﻿Structure strMyVTable
+﻿
+Structure strMyVTable
 	vtable.i
 	type.i
 EndStructure

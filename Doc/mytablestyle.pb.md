@@ -1,10 +1,3 @@
-## Macros
-
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|\_MyTableStyleBorder||name||
-
-
 ## Procedures
 
 |Name|Return|Parameter|Comment|

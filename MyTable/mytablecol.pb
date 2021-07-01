@@ -319,7 +319,7 @@ EndProcedure
 Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
 	Protected checkboxes.b=_MyTable_IsCheckboxes(*this\table)
-	Protected *lastfont.strMyTableFont=0
+	Protected *lastfont.MyFont::MyFont=0
 	Protected tresult.i=0
 	If *this\listindex=0
 		If hierarchical And *this\listindex=0
@@ -345,9 +345,9 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 	If *row\cells And ListSize(*row\cells\cells())>*this\listindex	
 		Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*row,*this\listindex,#True)
 		If (*cell\textwidth=0 And *cell\text<>"") Or *cell\dirty
-			Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*cell)
+			Protected *nfont.MyFont::MyFont=_MyTable_GetDefaultFont(*cell)
 			If *nfont<>*lastfont
-				DrawingFont(*nfont\fontid)
+				DrawingFont(*nfont\GetFontID())
 				*lastfont=*nfont
 			EndIf
 			*cell\textwidth=_MyTableTextWidth(*cell\text)
@@ -402,8 +402,8 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		_callcountStart()
 		
 		If (*this\textheight=0 And *this\text<>"") Or *this\dirty
-			Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*this)
-			DrawingFont(*nfont\fontid)
+			Protected *nfont.MyFont::MyFont=_MyTable_GetDefaultFont(*this)
+			DrawingFont(*nfont\GetFontID())
 			*this\textheight=_MyTableTextHeight(*this\text)
 			*this\textwidth=_MyTableTextWidth(*this\text)
 		EndIf

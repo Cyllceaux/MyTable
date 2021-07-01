@@ -234,12 +234,12 @@ Procedure _MyTable_Row_ScrollTo(*this.strMyTableRow,setSelect.b=#False,redraw.b=
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,*lastfont.strMyTableFont)
+Procedure _MyTable_Row_Autosize_CellHeight(*cell.strMyTableCell,*lastfont.MyFont::MyFont)
 	Protected result.i=*cell\table\calcdefaultrowheight
 	If (*cell\textheight=0 And *cell\text<>"") Or *cell\dirty
-		Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*cell)
+		Protected *nfont.MyFont::MyFont=_MyTable_GetDefaultFont(*cell)
 		If *nfont<>*lastfont
-			DrawingFont(*nfont\fontid)
+			DrawingFont(*nfont\GetFontID())
 			*lastfont=*nfont
 		EndIf
 		*cell\textheight=_MyTableTextHeight(*cell\text)
@@ -279,7 +279,7 @@ Procedure _MyTable_Row_Autosize(*this.strMyTableRow)
 			EndIf
 		EndIf
 		Protected result.i=*this\table\calcdefaultrowheight
-		Protected *lastfont.strMyTableFont=0
+		Protected *lastfont.MyFont::MyFont=0
 		If *this\cells
 			ForEach *this\cells\cells()
 				Protected *cell.strMyTableCell=*this\cells\cells()

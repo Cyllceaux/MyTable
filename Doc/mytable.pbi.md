@@ -1,8 +1,11 @@
+
+# MyTable
+
 ## Constants
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3512||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3523||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210701||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
@@ -12,21 +15,6 @@
 
 ## Enumerations
 
-
-### \_mytable\_type
-|Name|Value|Comment|
-| --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_NONE</span>|0||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_CELL</span>|1||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_ROW</span>|2||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_COL</span>|3||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_TABLE</span>|4||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_TREE</span>|5||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_GRID</span>|6||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_APPLICATION</span>|7||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_STYLE</span>|8||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_FONT</span>|9||
-|<span style="color:#AAAAFF">\#MYTABLE\_TYPE\_BORDER</span>|10||
 
 ### \_mytable\_style\_valign
 |Name|Value|Comment|
@@ -159,14 +147,6 @@
 ## Interfaces
 
 
-### MyTableFont
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|GetType||||
-|GetFlags||||
-|GetName|s|||
-|GetSize||||
-
 ### MyTableBorder
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
@@ -190,7 +170,9 @@
 |getBorderLeft||||
 |getBorderRight||||
 |getBorderBottom||||
-|SetFont||<span style="color:#FFFFAA">*font.[MyTableFont](#MyTableFont)</span>||
+|SetFont||<span style="color:#FFFFAA">*font.MyFont</span>||
+|||||
+|MyFont)||||
 |GetFont||||
 |SetBackColor||value.q||
 |GetBackColor|q|||
@@ -469,7 +451,6 @@
 |MyTableCreateTable||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
 |MyTableCreateTree||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
 |MyTableCreateGrid||window.i , canvas.i , vscroll.i , hscroll.i , rows.i , cols.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
-|MyTableCreateFont||name.s , size.i , flags.i = 0||
 |MyTableCreateNewTable||x.i , y.i , w.i , h.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
 |MyTableCreateNewTree||x.i , y.i , w.i , h.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
 |MyTableCreateNewGrid||x.i , y.i , w.i , h.i , rows.i , cols.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||

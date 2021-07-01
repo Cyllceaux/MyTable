@@ -1,29 +1,29 @@
 ﻿
-_BindEvent(MyTable,ColLeftClick)	
-_BindEvent(MyTable,ColRightClick)
-_BindEvent(MyTable,ColLeftDoubleClick)		
-_BindEvent(MyTable,ColRightDoubleClick)
-_BindEvent(MyTable,ColSelected)
-_BindEvent(MyTable,CellChangedChecked)
-_BindEvent(MyTable,CellChangedUnChecked)
-_BindEvent(MyTable,CellChangedText)
-_BindEvent(MyTable,CellChangedValue)
-_BindEvent(MyTable,CellSelected)		
-_BindEvent(MyTable,CellLeftClick)	
-_BindEvent(MyTable,CellRightClick)
-_BindEvent(MyTable,CellLeftDoubleClick)		
-_BindEvent(MyTable,CellRightDoubleClick)
-_BindEvent(MyTable,RowChangedChecked)
-_BindEvent(MyTable,RowChangedUnChecked)
-_BindEvent(MyTable,RowChangedExpanded)
-_BindEvent(MyTable,RowChangedCollapsed)
-_BindEvent(MyTable,RowSelected)
-_BindEvent(MyTable,RowLeftClick)	
-_BindEvent(MyTable,RowRightClick)
-_BindEvent(MyTable,RowLeftDoubleClick)		
-_BindEvent(MyTable,RowRightDoubleClick)
-_BindEvent(MyTable,CustomCellDraw)
-_BindEvent(MyTable,CustomCellEdit)
+_BindEvent(MyTable,Table,ColLeftClick)	
+_BindEvent(MyTable,Table,ColRightClick)
+_BindEvent(MyTable,Table,ColLeftDoubleClick)		
+_BindEvent(MyTable,Table,ColRightDoubleClick)
+_BindEvent(MyTable,Table,ColSelected)
+_BindEvent(MyTable,Table,CellChangedChecked)
+_BindEvent(MyTable,Table,CellChangedUnChecked)
+_BindEvent(MyTable,Table,CellChangedText)
+_BindEvent(MyTable,Table,CellChangedValue)
+_BindEvent(MyTable,Table,CellSelected)		
+_BindEvent(MyTable,Table,CellLeftClick)	
+_BindEvent(MyTable,Table,CellRightClick)
+_BindEvent(MyTable,Table,CellLeftDoubleClick)		
+_BindEvent(MyTable,Table,CellRightDoubleClick)
+_BindEvent(MyTable,Table,RowChangedChecked)
+_BindEvent(MyTable,Table,RowChangedUnChecked)
+_BindEvent(MyTable,Table,RowChangedExpanded)
+_BindEvent(MyTable,Table,RowChangedCollapsed)
+_BindEvent(MyTable,Table,RowSelected)
+_BindEvent(MyTable,Table,RowLeftClick)	
+_BindEvent(MyTable,Table,RowRightClick)
+_BindEvent(MyTable,Table,RowLeftDoubleClick)		
+_BindEvent(MyTable,Table,RowRightDoubleClick)
+_BindEvent(MyTable,Table,CustomCellDraw)
+_BindEvent(MyTable,Table,CustomCellEdit)
 
 _SimpleSetterGetter(MyTable,Table,Tooltip,s)
 _SimpleSetterGetterPredraw(MyTable,Table,Title,s)
@@ -94,16 +94,16 @@ Procedure _MyTable_Table_SetFlags(*this.strMyTableTable,value.i)
 		*this\flags=value
 		If _MyTable_IsGrid(*this)
 			*this\vtable=?vtable_grid
-			*this\type=#MYTABLE_TYPE_GRID
+			*this\type=My::#MY_TYPE_GRID
 			*this\datagrid=#True
 			
 		ElseIf _MyTable_IsHierarchical(*this)
 			*this\vtable=?vtable_tree
-			*this\type=#MYTABLE_TYPE_TREE
+			*this\type=My::#MY_TYPE_TREE
 			*this\datagrid=#False
 		Else
 			*this\vtable=?vtable_table
-			*this\type=#MYTABLE_TYPE_TABLE
+			*this\type=My::#MY_TYPE_TABLE
 			*this\datagrid=#False
 		EndIf
 		*this\dirty=#True
@@ -296,7 +296,7 @@ EndProcedure
 
 
 
-Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFont,width.i,height.i,scrollx.i,scrolly.i,fixed.b)
+Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.MyFont::MyFont,width.i,height.i,scrollx.i,scrolly.i,fixed.b)
 	Protected border.b=_MyTable_IsBorder(*this)
 	Protected bx=-scrollx	
 	Protected idx=0
@@ -309,8 +309,8 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	ForEach *this\cols()
 		*this\cols()\parent=0
 		If *this\cols()\dirty Or *this\cols()\textheight=0 Or *this\cols()\textwidth=0
-			Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*this\cols())
-			DrawingFont(*nfont\fontid)
+			Protected *nfont.MyFont::MyFont=_MyTable_GetDefaultFont(*this\cols())
+			DrawingFont(*nfont\GetFontID())
 			*this\cols()\calcwidth=DesktopScaledX(*this\cols()\width)			
 			*this\cols()\textwidth=_MyTableTextWidth(*this\cols()\text)
 			*this\cols()\textheight=_MyTableTextHeight(*this\cols()\text)			
@@ -376,7 +376,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 		
 		If calcwidth>0
 			
-			Protected *tfont.strMyTableFont
+			Protected *tfont.MyFont::MyFont
 			If disabled
 				*tfont=_MyTable_GetDisabledFont(*col)
 			ElseIf selected
@@ -388,9 +388,9 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 			EndIf
 			
 			If *tfont
-				DrawingFont(*tfont\fontid)					
+				DrawingFont(*tfont\GetFontID())					
 			Else
-				DrawingFont(*font\fontid)
+				DrawingFont(*font\GetFontID())
 			EndIf
 			
 			Protected addx=DesktopScaledX(2)
@@ -561,7 +561,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.strMyTableFo
 	ProcedureReturn *this\calcheaderheight
 EndProcedure
 
-Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell.strMyTableCell,cw)
+Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.MyFont::MyFont,fixed,selected,checkboxes,disabled,idx,*cell.strMyTableCell,cw)
 	Protected result=*cell\table\calcdefaultrowheight
 	Protected valign=_MyTable_GetDefaultVAlign(*cell)
 	Protected halign=_MyTable_GetDefaultHAlign(*cell)
@@ -570,7 +570,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	Protected tw=0
 	
 	
-	Protected *tfont.strMyTableFont=0
+	Protected *tfont.MyFont::MyFont=0
 	If disabled
 		*tfont=_MyTable_GetDisabledFont(*cell)
 	ElseIf fixed
@@ -583,9 +583,9 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	
 	
 	If *tfont
-		DrawingFont(*tfont\fontid)		
+		DrawingFont(*tfont\GetFontID())		
 	Else						
-		DrawingFont(*font\fontid)		
+		DrawingFont(*font\GetFontID())		
 	EndIf
 	
 	If *cell\dirty Or *cell\textwidth=0 Or *cell\textheight=0
@@ -642,14 +642,14 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixe
 	
 	If *cell\cells
 		ForEach *cell\cells\cells()
-			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell\cells\cells(),cw)
+			result+_MyTable_Table_Draw_CellText(bx,by+result,addx,addy,*font.MyFont::MyFont,fixed,selected,checkboxes,disabled,idx,*cell\cells\cells(),cw)
 		Next
 	EndIf
 	ProcedureReturn result
 EndProcedure
 
-Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFont,width.i,height.i,scrollx.i,scrolly.i,zebra.b,fixed.b)	
-	Protected *lastfont.strMyTableFont=*font.strMyTableFont
+Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFont,width.i,height.i,scrollx.i,scrolly.i,zebra.b,fixed.b)	
+	Protected *lastfont.MyFont::MyFont=*font.MyFont::MyFont
 	Protected bx=-scrollx
 	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
 	Protected checkboxes.b=#False
@@ -897,7 +897,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.strMyTableFo
 				EndIf
 				
 				
-				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.strMyTableFont,fixed,selected,checkboxes,disabled,idx,*cell,cw)
+				_MyTable_Table_Draw_CellText(bx,by,addx,addy,*font,fixed,selected,checkboxes,disabled,idx,*cell,cw)
 				
 				
 				If *cell\imageRight And *cell\imageRight\orig And IsImage(*cell\imageRight\orig)
@@ -1024,7 +1024,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				StartDrawing(CanvasOutput(*this\canvas))
 			EndIf
 			*this\drawing=#True
-			Protected *font.strMyTableFont=_MyTable_GetDefaultFont(*this)
+			Protected *font.MyFont::MyFont=_MyTable_GetDefaultFont(*this)
 			Protected backcolor.q=_MyTable_GetDefaultBackColor(*this)
 			Protected frontcolor.q=_MyTable_GetDefaultFrontColor(*this)
 			
@@ -1045,7 +1045,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			
 			BackColor(backcolor)
 			FrontColor(frontcolor)
-			DrawingFont(*font\fontid)
+			DrawingFont(*font\GetFontID())
 			
 			If backcolor<>frontcolor
 				DrawingMode(#PB_2DDrawing_Gradient)
@@ -1071,7 +1071,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 						*row=*this\expRowsPage()
 						
 						If by+*row\calcheight>=0
-							DrawingFont(*font\fontid)
+							DrawingFont(*font\GetFontID())
 							_MyTable_Table_Draw_Row(*row,by,c,*font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRowsPage()) % 2 = 1),#False)
 							If *this\fixedcols
 								_MyTable_Table_Draw_Row(*row,by,*this\fixedcols,*font,width,height,scrollx,scrolly,Bool(ListIndex(*this\expRowsPage()) % 2 = 1),#True)
@@ -1089,7 +1089,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 						*row=*this\expRows()
 						
 						If by+*row\calcheight>=0
-							DrawingFont(*font\fontid)
+							DrawingFont(*font\GetFontID())
 							Protected tz.b=zebra
 							If tz
 								tz=Bool(ListIndex(*this\expRows()) % 2 = 1)
@@ -1110,7 +1110,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				DrawingMode(#PB_2DDrawing_Transparent)
 				*font=_MyTable_GetEmptyFont(*this)
 				If *font
-					DrawingFont(*font\fontid)
+					DrawingFont(*font\GetFontID())
 				EndIf
 				_MyTableDrawTextCompleteCenter(by,*this\emptytext,_MyTable_GetEmptyForeColor(*this),width)
 			EndIf
@@ -1122,7 +1122,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			
 			*font=_MyTable_GetDefaultFont(*this)
 			If *font
-				DrawingFont(*font\fontid)
+				DrawingFont(*font\GetFontID())
 			EndIf
 			If header				
 				_MyTable_Table_Draw_Header(*this,by,*font,width,height,scrollx,scrolly,#False)
@@ -1154,7 +1154,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 				EndIf
 				*font=_MyTable_GetTitleFont(*this)
 				If *font				
-					DrawingFont(*font\fontid)
+					DrawingFont(*font\GetFontID())
 				EndIf
 				DrawingMode(#PB_2DDrawing_Transparent)
 				_MyTableDrawText(addx,addy,*this\title,_MyTable_GetTitleForeColor(*this),width)
@@ -1229,8 +1229,8 @@ Procedure _MyTable_Table_Predraw(*this.strMyTableTable,force.b=#False)
 								StartDrawing(ImageOutput(*this\canvas))
 							EndIf
 						EndIf
-						Protected *titleFont.strMyTableFont=_MytAble_GetTitleFont(*this)
-						DrawingFont(*titleFont\fontid)						
+						Protected *titleFont.MyFont::MyFont=_MytAble_GetTitleFont(*this)
+						DrawingFont(*titleFont\GetFontID())						
 						*this\textheight=_MyTableTextHeight(*this\title)
 						*this\textwidth=_MyTableTextWidth(*this\title)
 						If Not *this\drawing
@@ -1809,13 +1809,13 @@ Procedure _MyTable_Table_AutosizeHeader(*this.strMyTableTable)
 		
 		Protected headerheight.i=*this\headerheight
 		Protected calcheaderheight.i=*this\calcheaderheight
-		Protected *lastfont.strMyTableFont=0
+		Protected *lastfont.MyFont::MyFont=0
 		
 		ForEach *this\cols()
 			If (*this\cols()\textheight=0 And *this\cols()\text<>"") Or *this\cols()\dirty
-				Protected *nfont.strMyTableFont=_MyTable_GetDefaultFont(*this\cols())
+				Protected *nfont.MyFont::MyFont=_MyTable_GetDefaultFont(*this\cols())
 				If *nfont<>*lastfont
-					DrawingFont(*nfont\fontid)
+					DrawingFont(*nfont\GetFontID())
 					*lastfont=*nfont
 				EndIf
 				*this\cols()\textheight=_MyTableTextHeight(*this\cols()\text)

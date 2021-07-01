@@ -369,7 +369,12 @@ CompilerEndIf
 
 CompilerIf #PB_Compiler_Debugger
 	CompilerIf #UPDATE_VERSION 
-		updateVersion("../mytable.pbi")
+		If ExamineDirectory(0,"../","*.pbi")
+			While NextDirectoryEntry(0)
+				updateVersion("../"+DirectoryEntryName(0))
+			Wend
+			FinishDirectory(0)
+		EndIf
 		updateVersion("../README.md")
 	CompilerEndIf
 	
@@ -404,6 +409,7 @@ CompilerIf #PB_Compiler_Debugger
 		
 		readme+parsePBFiles("../","")
 		readme+parsePBFiles("../MyGlobal/","MyGlobal")
+		readme+parsePBFiles("../MyFont/","MyFont",MyFont::#MYFONT_VERSION,MyFont::#MYFONT_VERSION_DATE)
 		readme+parsePBFiles("../MyTable/","MyTable",MyTable::#MYTABLE_VERSION,MyTable::#MYTABLE_VERSION_DATE)
 		
 		

@@ -40,6 +40,7 @@
 |\_MyTable\_Style\_GetterSetterPointer||name , typ , sub = ||
 |\_MyTable\_Style\_GetterSetterBorder||name , typ , pos||
 |\_MyTable\_Style\_GetterSetterBorders||name , typ||
+|\_MyTableStyleBorder||name||
 
 
 ## Procedures

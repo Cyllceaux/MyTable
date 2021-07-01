@@ -26,11 +26,3 @@ CompilerIf Defined(MYTABLE_DEBUG_LEVEL,#PB_Constant) And Defined(MYTABLE_DEBUG,#
 	CompilerEndSelect
 CompilerEndIf
 
-CompilerIf Defined(AUTODECLARE,#PB_Constant) And #PB_Compiler_Debugger
-	CompilerIf #AUTODECLARE
-		DeclareModule AUTODECLARE
-			Global NewList autodeclare.s()
-		EndDeclareModule
-		Module AUTODECLARE:EndModule
-	CompilerEndIf
-CompilerEndIf

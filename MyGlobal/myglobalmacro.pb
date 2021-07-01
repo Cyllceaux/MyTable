@@ -4,17 +4,17 @@ Macro MM
 EndMacro
 
 CompilerIf #PB_Compiler_Debugger And Defined(AUTODECLARE,#PB_Module)
-	Macro _AddAutoDeclare(name)
-		AddElement(AUTODECLARE::autodeclare())		
-		AUTODECLARE::autodeclare()=Trim(MM#name#MM)
-		If Left(AUTODECLARE::autodeclare(),1)="."
-			AUTODECLARE::autodeclare()="Declare"+AUTODECLARE::autodeclare()
+	Macro _AddAutoDeclare(projekt,line)
+		AddElement(AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare())		
+		AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()=Trim(MM#line#MM)
+		If Left(AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare(),1)="."
+			AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()="Declare"+AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()
 		Else
-			AUTODECLARE::autodeclare()="Declare "+AUTODECLARE::autodeclare()
+			AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()="Declare "+AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()
 		EndIf		
 	EndMacro	
 CompilerElse
-	Macro _AddAutoDeclare(name):EndMacro
+	Macro _AddAutoDeclare(projekt,line):EndMacro
 CompilerEndIf
 
 
@@ -46,9 +46,9 @@ CompilerEndIf
 
 
 
-Macro _BindEvent(projekt,name)
-	_AddAutoDeclare(_#projekt#_Table_BindEvent#name(*this.str#projekt#Table,event.MyTableProtoEvent#name))
-	Procedure _#projekt#_Table_BindEvent#name(*this.str#projekt#Table,event.MyTableProtoEvent#name)
+Macro _BindEvent(projekt,gruppe,name)
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#Table,event.projekt#ProtoEvent#name))
+	Procedure _#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#Table,event.projekt#ProtoEvent#name)
 		If *this
 			*this\Event#name=event
 		EndIf
@@ -57,7 +57,7 @@ EndMacro
 
 
 Macro _SimpleGetterPointer(projekt,gruppe,name)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
 	Procedure _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe)
 		If *this
 			ProcedureReturn *this\name
@@ -66,7 +66,7 @@ Macro _SimpleGetterPointer(projekt,gruppe,name)
 EndMacro
 
 Macro _SimpleGetter(projekt,gruppe,name,typ)
-	_AddAutoDeclare(.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
+	_AddAutoDeclare(projekt,.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
 	Procedure.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe)
 		If *this
 			ProcedureReturn *this\name
@@ -75,7 +75,7 @@ Macro _SimpleGetter(projekt,gruppe,name,typ)
 EndMacro
 
 Macro _SimpleSetter(projekt,gruppe,name,typ)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -85,7 +85,7 @@ Macro _SimpleSetter(projekt,gruppe,name,typ)
 EndMacro
 
 Macro _SimpleSetterPointer(projekt,gruppe,name)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value)
 		If *this
 			*this\name=*value
@@ -95,7 +95,7 @@ Macro _SimpleSetterPointer(projekt,gruppe,name)
 EndMacro
 
 Macro _SimpleSetterPointerStructure(projekt,gruppe,name,typ)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ)
 		If *this
 			*this\name=*value
@@ -105,7 +105,7 @@ Macro _SimpleSetterPointerStructure(projekt,gruppe,name,typ)
 EndMacro
 
 Macro _SimpleSetterRedraw(projekt,gruppe,name,typ)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -116,7 +116,7 @@ Macro _SimpleSetterRedraw(projekt,gruppe,name,typ)
 EndMacro
 
 Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -128,7 +128,7 @@ Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ)
 EndMacro
 
 Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
 			*this\name=value
@@ -141,7 +141,7 @@ Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ)
 EndMacro
 
 Macro _SimpleSetterPredraw(projekt,gruppe,name,typ)
-	_AddAutoDeclare(_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
 		If *this
 			*this\name=value

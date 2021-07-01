@@ -1,9 +1,9 @@
 ﻿
-XIncludeFile "../MyGlobal/myglobalmacro.pb"
+IncludeFile "../MyGlobal/myglobalmacro.pb"
 
 
 Macro _MyTable_GetStyleCell(name)
-	_AddAutoDeclare(_MyTable_Cell_Get#name#Style(*this.strMyTableCell))
+	_AddAutoDeclare(MyTable,_MyTable_Cell_Get#name#Style(*this.strMyTableCell))
 	Procedure _MyTable_Cell_Get#name#Style(*this.strMyTableCell)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -19,7 +19,7 @@ Macro _MyTable_GetStyleCell(name)
 EndMacro
 
 Macro _MyTable_GetStyleCol(name)
-	_AddAutoDeclare(_MyTable_Col_Get#name#Style(*this.strMyTableCol))
+	_AddAutoDeclare(MyTable,_MyTable_Col_Get#name#Style(*this.strMyTableCol))
 	Procedure _MyTable_Col_Get#name#Style(*this.strMyTableCol)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -33,7 +33,7 @@ Macro _MyTable_GetStyleCol(name)
 EndMacro
 
 Macro _MyTable_GetStyleRow(name)
-	_AddAutoDeclare(_MyTable_Row_Get#name#Style(*this.strMyTableRow))
+	_AddAutoDeclare(MyTable,_MyTable_Row_Get#name#Style(*this.strMyTableRow))
 	Procedure _MyTable_Row_Get#name#Style(*this.strMyTableRow)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -47,7 +47,7 @@ Macro _MyTable_GetStyleRow(name)
 EndMacro
 
 Macro _MyTable_GetStyleTable(name)
-	_AddAutoDeclare(_MyTable_Table_Get#name#Style(*this.strMyTableTable))
+	_AddAutoDeclare(MyTable,_MyTable_Table_Get#name#Style(*this.strMyTableTable))
 	Procedure _MyTable_Table_Get#name#Style(*this.strMyTableTable)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -60,7 +60,7 @@ Macro _MyTable_GetStyleTable(name)
 EndMacro
 
 Macro _MyTable_GetStyleApplication(name)
-	_AddAutoDeclare(_MyTable_Application_Get#name#Style(*this.strMyTableApplication))
+	_AddAutoDeclare(MyTable,_MyTable_Application_Get#name#Style(*this.strMyTableApplication))
 	Procedure _MyTable_Application_Get#name#Style(*this.strMyTableApplication)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
@@ -76,21 +76,21 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	
 	Procedure.s _MyTableDebugGetName(*this.strMyTableVTable)
 		Select *this\type
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*this
 				ProcedureReturn *cell\table\name
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*this
 				ProcedureReturn *row\table\name
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*this
 				ProcedureReturn *col\table\name
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 				Protected *table.strMyTableTable=*this
 				ProcedureReturn *table\name
-			Case #MYTABLE_TYPE_APPLICATION
+			Case My::#MY_TYPE_APPLICATION
 				ProcedureReturn ""
-			Case #MYTABLE_TYPE_STYLE
+			Case My::#MY_TYPE_STYLE
 				Protected *style.strMyTableStyleObject=*this
 				ProcedureReturn _MyTableDebugGetName(*style\obj)
 		EndSelect
@@ -98,21 +98,21 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 	
 	Procedure _MyTableDebugGetCanvas(*this.strMyTableVTable)
 		Select *this\type
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*this
 				ProcedureReturn *cell\table\canvas
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*this
 				ProcedureReturn *row\table\canvas
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*this
 				ProcedureReturn *col\table\canvas
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 				Protected *table.strMyTableTable=*this
 				ProcedureReturn *table\canvas
-			Case #MYTABLE_TYPE_APPLICATION
+			Case My::#MY_TYPE_APPLICATION
 				ProcedureReturn 0
-			Case #MYTABLE_TYPE_STYLE
+			Case My::#MY_TYPE_STYLE
 				Protected *style.strMyTableStyleObject=*this
 				ProcedureReturn _MyTableDebugGetCanvas(*style\obj)
 		EndSelect
@@ -392,7 +392,7 @@ EndMacro
 
 
 Macro _MyTableBorderSetterGetter(name,typ)
-	_AddAutoDeclare(.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject))
 	Procedure.typ _MyTable_Border_Get#name(*this.strMyTableBorderObject)
 		If *this
 			Protected result.typ= *this\border\name
@@ -413,6 +413,7 @@ Macro _MyTableBorderSetterGetter(name,typ)
 		EndIf
 	EndProcedure
 	
+	_AddAutoDeclare(MyTable, _MyTable_Border_Set#name(*this.strMyTableBorderObject,value.typ))
 	Procedure _MyTable_Border_Set#name(*this.strMyTableBorderObject,value.typ)
 		If *this
 			*this\border\name=value
@@ -423,22 +424,22 @@ EndMacro
 
 
 Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
-	_AddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
 		If Not result
 			Select *obj\type
-				Case #MYTABLE_TYPE_CELL
+				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj					
 					result=_MyTable_Get#gruppe#name(*cell\table,#False)
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result=_MyTable_Get#gruppe#name(*row\table,#False)
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -453,26 +454,26 @@ Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
-	_AddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
 		If Not result
 			Select *obj\type
-				Case #MYTABLE_TYPE_CELL
+				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
 					If Not *cell\table\datagrid						
 						result=_MyTable_Get#gruppe#name(*cell\row,#False)
 					Else
 						result=_MyTable_Get#gruppe#name(*cell\table,#False)
 					EndIf
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result=_MyTable_Get#gruppe#name(*row\table,#False)
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -487,26 +488,26 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
-	_AddAutoDeclare(_MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(MyTable,_MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected *result.typ=*obj\gruppe#Style\sub#name
 		
 		If Not *result
 			Select *obj\type
-				Case #MYTABLE_TYPE_CELL
+				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
 					If Not *cell\table\datagrid
 						*result=_MyTable_Get#gruppe#name(*cell\row,#False)
 					Else
 						*result=_MyTable_Get#gruppe#name(*cell\table,#False)
 					EndIf
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					*result=_MyTable_Get#gruppe#name(*row\table,#False)
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					*result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						*result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -521,26 +522,26 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
-	_AddAutoDeclare(.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#name(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\sub#name
 		
 		If Not result
 			Select *obj\type
-				Case #MYTABLE_TYPE_CELL
+				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj		
 					If Not *cell\table\datagrid						
 						result=_MyTable_Get#gruppe#name(*cell\col,#False)
 					Else
 						result=_MyTable_Get#gruppe#name(*cell\table,#False)
 					EndIf
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result=_MyTable_Get#gruppe#name(*row\table,#False)
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result=_MyTable_Get#gruppe#name(*table\application,#False)
@@ -555,21 +556,21 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 EndMacro
 
 Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
-	_AddAutoDeclare(.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True))
 	Procedure.typ _MyTable_Get#gruppe#Border#name#pos(*obj.strMyTableObject,root.b=#True)
 		Protected result.typ=*obj\gruppe#Style\border\border#pos\name
 		If Not result
 			Select *obj\type
-				Case #MYTABLE_TYPE_CELL
+				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj					
 					result= _MyTable_Get#gruppe#Border#name#pos(*cell\table,#False)
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
 					result= _MyTable_Get#gruppe#Border#name#pos(*row\table,#False)
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
 					result= _MyTable_Get#gruppe#Border#name#pos(*col\table,#False)					
-				Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 					If *table\application
 						result= _MyTable_Get#gruppe#Border#name#pos(*table\application,#False)
@@ -589,30 +590,30 @@ EndMacro
 
 
 Macro _MyTable_IsTableNoGrid(name)
-	_AddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name) And Not *this\datagrid)
 	EndProcedure	
 EndMacro
 
 Macro _MyTable_IsTable(name)
-	_AddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(*this\flags & #MYTABLE_TABLE_FLAGS_#name)
 	EndProcedure	
 EndMacro
 
 Macro _MyTable_IsTableColNo(name)	
-	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
 				DebuggerError("Unbekannt Typ")
@@ -623,27 +624,27 @@ Macro _MyTable_IsTableColNo(name)
 EndMacro
 
 Macro _MyTable_IsTableCellColRowNo(name)	
-	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*cell\table))
 				result=Bool(result Or _Mytable_Is#name(*cell\col))
 				result=Bool(result And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*row\table))
 				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
 				DebuggerError("Unbekannt Typ")
@@ -654,15 +655,15 @@ Macro _MyTable_IsTableCellColRowNo(name)
 EndMacro
 
 Macro _MyTable_IsTableRow(name)	
-	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*row\table))
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
 				DebuggerError("Unbekannt Typ")
@@ -673,21 +674,21 @@ Macro _MyTable_IsTableRow(name)
 EndMacro
 
 Macro _MyTable_IsTableRowColNo(name)	
-	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*row\table))
 				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
 				DebuggerError("Unbekannt Typ")
@@ -698,28 +699,28 @@ Macro _MyTable_IsTableRowColNo(name)
 EndMacro
 
 Macro _MyTable_IsTableAllNo(name)	
-	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*cell\table))
 				result=Bool(result Or _Mytable_Is#name(*cell\row))
 				result=Bool(result Or _Mytable_Is#name(*cell\col))
 				result=Bool(result And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*row\table))
 				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
 				DebuggerError("Unbekannt Typ")
@@ -730,25 +731,25 @@ Macro _MyTable_IsTableAllNo(name)
 EndMacro
 
 Macro _MyTable_IsTableAll(name)	
-	_AddAutoDeclare(.b _MyTable_Is#name(*obj.strMyTableObject))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*obj.strMyTableObject))
 	Procedure.b _MyTable_Is#name(*obj.strMyTableObject)
 		Protected result.b=#False
 		Select *obj\type
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*cell\table))
 				result=Bool(result Or _Mytable_Is#name(*cell\row))
 				result=Bool(result Or _Mytable_Is#name(*cell\col))
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*row\table))
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
 				result=Bool(result Or _Mytable_Is#name(*col\table))
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
 				DebuggerError("Unbekannt Typ")
@@ -759,7 +760,7 @@ Macro _MyTable_IsTableAll(name)
 EndMacro
 
 Macro _MyTable_IsTableNo(name)
-	_AddAutoDeclare(.b _MyTable_Is#name(*this.strMyTableTable))
+	_AddAutoDeclare(MyTable,.b _MyTable_Is#name(*this.strMyTableTable))
 	Procedure.b _MyTable_Is#name(*this.strMyTableTable)
 		ProcedureReturn Bool(Not Bool(*this\flags & #MYTABLE_TABLE_FLAGS_NO_#name))
 	EndProcedure	
@@ -778,7 +779,7 @@ Macro _MyTable_StylesMethods(gruppe)
 	_MyTable_StyleMethodsRow(gruppe,BackColor,q)
 	_MyTable_StyleMethodsRow(gruppe,FrontColor,q)
 	_MyTable_StyleMethodsRow(gruppe,ForeColor,q)
-	_MyTable_StyleMethodsRowPointer(gruppe,Font,strMyTableFont)
+	_MyTable_StyleMethodsRowPointer(gruppe,Font,MyFont::MyFont)
 	_MyTable_StyleMethodsRow(gruppe,Border,i,border\)
 	_MyTable_StyleMethodsCol(gruppe,HAlign,i)
 	_MyTable_StyleMethodsRow(gruppe,VAlign,i)
@@ -787,13 +788,13 @@ Macro _MyTable_StylesMethods(gruppe)
 EndMacro
 
 Macro _MyTable_Style_GetterSetter(name,typ,sub=)
-	_AddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ))
+	_AddAutoDeclare(MyTable,_MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ))
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
 		If *this
 			Select *this\obj\type
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*this\obj
 					*this\style\sub#name=value
 					If *col\table\datagrid
@@ -802,7 +803,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 							*cell\defaultStyle\sub#name=value
 						Next
 					EndIf					
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
 					
 					For idx=1 To ListSize(*row\table\cols())
@@ -818,7 +819,7 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 		EndIf
 	EndProcedure
 	
-	_AddAutoDeclare(.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject))
 	Procedure.typ _MyTable_Style_Get#name(*this.strMyTableStyleObject)
 		If *this
 			Protected result.typ=*this\style\sub#name
@@ -831,13 +832,13 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
-	_AddAutoDeclare(_MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ))
+	_AddAutoDeclare(MyTable,_MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ))
 	Procedure _MyTable_Style_Set#name(*this.strMyTableStyleObject,*value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
 		If *this
 			Select *this\obj\type
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*this\obj
 					*this\style\sub#name=*value
 					If *col\table\datagrid
@@ -846,7 +847,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 							*cell\defaultStyle\sub#name=*value							
 						Next
 					EndIf					
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
 					
 					For idx=1 To ListSize(*row\table\cols())
@@ -862,7 +863,7 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 		EndIf
 	EndProcedure
 	
-	_AddAutoDeclare(_MyTable_Style_Get#name(*this.strMyTableStyleObject))
+	_AddAutoDeclare(MyTable,_MyTable_Style_Get#name(*this.strMyTableStyleObject))
 	Procedure _MyTable_Style_Get#name(*this.strMyTableStyleObject)
 		If *this
 			Protected *result.typ=*this\style\sub#name
@@ -875,13 +876,13 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 EndMacro
 
 Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
-	_AddAutoDeclare(_MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ))
+	_AddAutoDeclare(MyTable,_MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ))
 	Procedure _MyTable_Style_SetBorder#name#pos(*this.strMyTableStyleObject,value.typ)
 		Protected *cell.strMyTableCell=0
 		Protected idx=0
 		If *this
 			Select *this\obj\type
-				Case #MYTABLE_TYPE_COL
+				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*this\obj
 					If *col\table\datagrid
 						ForEach *col\table\rows()
@@ -890,7 +891,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 						Next
 					EndIf					
 					*this\style\border\border#pos\name=value
-				Case #MYTABLE_TYPE_ROW
+				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
 					
 					For idx=1 To ListSize(*row\table\cols())
@@ -907,7 +908,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 		EndIf
 	EndProcedure
 	
-	_AddAutoDeclare(.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject))
+	_AddAutoDeclare(MyTable,.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject))
 	Procedure.typ _MyTable_Style_GetBorder#name#pos(*this.strMyTableStyleObject)
 		If *this
 			Protected result.typ=*this\style\border\border#pos\name
@@ -925,4 +926,17 @@ _MyTable_Style_GetterSetterBorder(name,typ,Default)
 	_MyTable_Style_GetterSetterBorder(name,typ,Bottom)
 	_MyTable_Style_GetterSetterBorder(name,typ,Left)
 	_MyTable_Style_GetterSetterBorder(name,typ,Right)
+EndMacro
+
+Macro _MyTableStyleBorder(name)
+	_AddAutoDeclare(MyTable,_MyTable_Style_GetBorder#name(*this.strMyTableStyleObject))
+	Procedure _MyTable_Style_GetBorder#name(*this.strMyTableStyleObject)
+		If *this
+			Protected *border.strMyTableBorderObject=AllocateStructure(strMyTableBorderObject)
+			_MyTableInitBorderObject(*border,*this,*this\style\border\border#name)
+			*border\border#name=*this\style\border\border#name
+			ProcedureReturn *border
+		EndIf
+	EndProcedure
+	
 EndMacro

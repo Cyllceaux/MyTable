@@ -5,7 +5,7 @@
 XIncludeFile "declare.pb"
 
 UseModule MyTable
-
+	
 	Define image=CreateImage(#PB_Any,800,600,32)
 	Define image2=CreateImage(#PB_Any,800,600,32)
 	Define *application.MyTableApplication=MyTableCreateApplication()
@@ -32,13 +32,15 @@ UseModule MyTable
 	*table\Free()
 	
 	CompilerIf Defined(AUTODECLARE,#PB_Module)
-		SortList(AUTODECLARE::autodeclare(),#PB_Sort_Ascending)
-		Define file=CreateFile(#PB_Any,"../MyTable/autodeclare.pb")
-		Define line.s="; auto-generated"
 		ForEach AUTODECLARE::autodeclare()
-			line+#CRLF$+AUTODECLARE::autodeclare()
+			SortList(AUTODECLARE::autodeclare()\autodeclare(),#PB_Sort_Ascending)
+			Define file=CreateFile(#PB_Any,"../"+MapKey(AUTODECLARE::autodeclare())+"/autodeclare.pb")
+			Define line.s="; auto-generated"
+			ForEach AUTODECLARE::autodeclare()\autodeclare()
+				line+#CRLF$+AUTODECLARE::autodeclare()\autodeclare()
+			Next
+			WriteString(file,line)
+			CloseFile(file)
 		Next
-		WriteString(file,line)
-		CloseFile(file)
 	CompilerEndIf
 UnuseModule MyTable

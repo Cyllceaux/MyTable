@@ -2,33 +2,27 @@
 Module MyTable
 	EnableExplicit
 	
-	XIncludeFile "mytablestructures.pb"
-	XIncludeFile "mytablemacro.pb"
-	XIncludeFile "../MyGlobal/myglobaldeclare.pb"
-	XIncludeFile "declare.pb"
-	XIncludeFile "autodeclare.pb"
-	XIncludeFile "mytableglobal.pb"
-	XIncludeFile "mytablefont.pb"
-	XIncludeFile "mytablestyle.pb"
-	XIncludeFile "mytableborder.pb"
-	XIncludeFile "mytableapplication.pb"
-	XIncludeFile "mytabletable.pb"
-	XIncludeFile "mytabletree.pb"
-	XIncludeFile "mytablegrid.pb"
-	XIncludeFile "mytablerow.pb"
-	XIncludeFile "mytablecol.pb"
-	XIncludeFile "mytablecell.pb"
-	XIncludeFile "../MyGlobal/myglobalglobal.pb"
+	IncludeFile "mytablestructures.pb"
+	IncludeFile "mytablemacro.pb"
+	IncludeFile "../MyGlobal/myglobaldeclare.pb"
+	IncludeFile "declare.pb"
+	IncludeFile "autodeclare.pb"
+	IncludeFile "mytableglobal.pb"
+	IncludeFile "mytablestyle.pb"
+	IncludeFile "mytableborder.pb"
+	IncludeFile "mytableapplication.pb"
+	IncludeFile "mytabletable.pb"
+	IncludeFile "mytabletree.pb"
+	IncludeFile "mytablegrid.pb"
+	IncludeFile "mytablerow.pb"
+	IncludeFile "mytablecol.pb"
+	IncludeFile "mytablecell.pb"
+	IncludeFile "../MyGlobal/myglobalglobal.pb"
 	
 	
 	
 	
 	DataSection
-		vtable_font: ;- Font
-		_DataSectionGetter(MyTable,Font,Type)
-		_DataSectionGetter(MyTable,Font,Flags)
-		_DataSectionGetter(MyTable,Font,Name)
-		_DataSectionGetter(MyTable,Font,Size)
 		
 		vtable_style: ;- Style
 		_MyTableDataSectionStyleDefault(Style)

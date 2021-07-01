@@ -17,6 +17,8 @@
 |\_MyTable\_Application\_SetDisabled||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.b||
 |\_MyTable\_Application\_SetFlags||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.i||
 |\_MyTable\_Application\_SetTooltip||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.s||
+|\_MyTable\_Border\_SetColor||<span style="color:#FFFFAA">*this.</span>strMyTableBorderObject , value.q||
+|\_MyTable\_Border\_SetWidth||<span style="color:#FFFFAA">*this.</span>strMyTableBorderObject , value.i||
 |\_MyTable\_Cell\_GetCol||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetData||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetDefaultStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -106,7 +108,9 @@
 |\_MyTable\_Style\_SetBorderWidthLeft||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , value.i||
 |\_MyTable\_Style\_SetBorderWidthRight||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , value.i||
 |\_MyTable\_Style\_SetBorderWidthTop||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , value.i||
-|\_MyTable\_Style\_SetFont||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , <span style="color:#FFFFAA">*value.strMyTableFont</span>||
+|\_MyTable\_Style\_SetFont||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , <span style="color:#FFFFAA">*value.MyFont</span>||
+|||||
+|MyFont)||||
 |\_MyTable\_Style\_SetForeColor||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , value.q||
 |\_MyTable\_Style\_SetFrontColor||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , value.q||
 |\_MyTable\_Style\_SetHAlign||<span style="color:#FFFFAA">*this.</span>strMyTableStyleObject , value.i||
@@ -211,9 +215,6 @@
 |\_MyTable\_Col\_GetDatatype|i|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
-|\_MyTable\_Font\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableFont</span>||
-|\_MyTable\_Font\_GetSize|i|<span style="color:#FFFFAA">*this.strMyTableFont</span>||
-|\_MyTable\_Font\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableFont</span>||
 |\_MyTable\_GetDefaultBorder|i|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||
 |\_MyTable\_GetDefaultBorderColorBottom|i|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||
 |\_MyTable\_GetDefaultBorderColorDefault|i|<span style="color:#FFFFAA">*obj.</span>strMyTableObject , root.b = <span style="color:#AAAAFF">\#True</span>||
@@ -404,7 +405,6 @@
 |\_MyTable\_Col\_GetMask|s|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetText|s|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetTooltip|s|<span style="color:#FFFFAA">*this.strMyTableCol</span>||
-|\_MyTable\_Font\_GetName|s|<span style="color:#FFFFAA">*this.strMyTableFont</span>||
 |\_MyTable\_Row\_GetTooltip|s|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Table\_GetEmptyText|s|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetTitle|s|<span style="color:#FFFFAA">*this.strMyTableTable</span>||

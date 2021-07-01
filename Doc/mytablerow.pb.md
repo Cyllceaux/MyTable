@@ -17,7 +17,9 @@
 |\_MyTable\_Row\_GetSelected|b|<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_SetSelected||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||
 |\_MyTable\_Row\_ScrollTo||<span style="color:#FFFFAA">*this.</span>strMyTableRow , setSelect.b = <span style="color:#AAAAFF">\#False</span> , redraw.b = <span style="color:#AAAAFF">\#True</span>||
-|\_MyTable\_Row\_Autosize\_CellHeight||<span style="color:#FFFFAA">*cell.</span>strMyTableCell , <span style="color:#FFFFAA">*lastfont.strMyTableFont</span>||
+|\_MyTable\_Row\_Autosize\_CellHeight||<span style="color:#FFFFAA">*cell.</span>strMyTableCell , <span style="color:#FFFFAA">*lastfont.MyFont</span>||
+|||||
+|MyFont)||||
 |\_MyTable\_Row\_Expand||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||
 |\_MyTable\_Row\_Autosize||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 

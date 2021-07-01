@@ -1,6 +1,3 @@
-
-# AUTODECLARE
-
 ## Constants
 
 |Constants|Value|Comment|

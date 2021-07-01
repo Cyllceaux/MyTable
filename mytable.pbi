@@ -1,28 +1,12 @@
-﻿DeclareModule MyTable
+﻿XIncludeFile "my.pbi"
+XIncludeFile "myfont.pbi"
+
+DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3512
+	#MYTABLE_VERSION = 3523
 	#MYTABLE_VERSION_DATE = 20210701
-	
-	Enumeration _mytable_type
-		#MYTABLE_TYPE_NONE
-		#MYTABLE_TYPE_CELL
-		#MYTABLE_TYPE_ROW
-		#MYTABLE_TYPE_COL
-		#MYTABLE_TYPE_TABLE
-		#MYTABLE_TYPE_TREE
-		#MYTABLE_TYPE_GRID
-		#MYTABLE_TYPE_APPLICATION
-		#MYTABLE_TYPE_STYLE
-		#MYTABLE_TYPE_FONT
-		#MYTABLE_TYPE_BORDER
-	EndEnumeration
-	
-	Interface MyTableFont
-		GetType()
-		GetFlags()
-		GetName.s()
-		GetSize()
-	EndInterface
+
+
 	
 	Interface MyTableBorder
 		GetType()
@@ -46,7 +30,7 @@
 		getBorderRight()
 		getBorderBottom()
 		
-		SetFont(*font.MyTableFont):GetFont()
+		SetFont(*font.MyFont::MyFont):GetFont()
 		SetBackColor(value.q):GetBackColor.q()
 		SetFrontColor(value.q):GetFrontColor.q()
 		SetForeColor(value.q):GetForeColor.q()
@@ -410,7 +394,7 @@
 	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	Declare MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
 	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	
-	Declare MyTableCreateFont(name.s,size.i,flags.i=0)	
+	
 	
 	Declare MyTableCreateNewTable(x.i,y.i,w.i,h.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	Declare MyTableCreateNewTree(x.i,y.i,w.i,h.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	

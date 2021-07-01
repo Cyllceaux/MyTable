@@ -2,7 +2,7 @@
 
 Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
 	Select *obj\type
-		Case #MYTABLE_TYPE_CELL
+		Case My::#MY_TYPE_CELL
 			Protected *cell.strMyTableCell=*obj
 			If FindMapElement(*cell\table\selectedCells(),Str(*obj))
 				ProcedureReturn *cell\table\selectedCells()
@@ -11,7 +11,7 @@ Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
 				ProcedureReturn *cell\table\tempselectedCells()
 			EndIf
 			ProcedureReturn *cell\table\selectall
-		Case #MYTABLE_TYPE_COL
+		Case My::#MY_TYPE_COL
 			Protected *col.strMyTableCol=*obj
 			If FindMapElement(*col\table\selectedCols(),Str(*obj))
 				ProcedureReturn *col\table\selectedCols()
@@ -20,7 +20,7 @@ Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
 				ProcedureReturn *col\table\tempselectedCols()
 			EndIf
 			ProcedureReturn *col\table\selectall
-		Case #MYTABLE_TYPE_ROW			
+		Case My::#MY_TYPE_ROW			
 			Protected *row.strMyTableRow=*obj
 			If FindMapElement(*row\table\selectedRows(),Str(*obj))
 				ProcedureReturn *row\table\selectedRows()
@@ -29,7 +29,7 @@ Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
 				ProcedureReturn *row\table\tempselectedRows()
 			EndIf
 			ProcedureReturn *row\table\selectall
-		Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+		Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 			Protected *table.strMyTableTable=*obj
 			ProcedureReturn *table\selectall
 	EndSelect
@@ -106,28 +106,11 @@ Procedure MyTableCreateNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,flags.i=#MYTABLE_TA
 	ProcedureReturn MyTableCreateGrid(window,canvas,vscroll,hscroll,rows,cols,flags)
 EndProcedure
 
-Global NewList fonts.strMyTableFont()
 
-Procedure MyTableCreateFont(name.s,size.i,flags.i=0)
-	ForEach fonts()
-		If fonts()\name=name And 
-		   fonts()\size=size And 
-		   fonts()\flags=flags
-			ProcedureReturn fonts()
-		EndIf
-	Next
-	
-	Protected font=LoadFont(#PB_Any,name,size,flags)
-	If font
-		Protected *this.strMyTableFont=AddElement(fonts())
-		_MyTableInitFont(*this,name,size,flags,font)
-		ProcedureReturn *this
-	EndIf
-EndProcedure
 
 Procedure  _MyTableInitStyleTable(*style.strMyTableStyle)
 	With *style
-		\font=MyTableCreateFont("Arial",10,#PB_Font_HighQuality)
+		\font=MyFont::MyFontCreateFont("Arial",10,#PB_Font_HighQuality)
 		\backcolor=RGBA(250,250,250,255)
 		\frontcolor=RGBA(230,230,230,255)
 		\forecolor=RGBA(50,50,50,255)
@@ -214,7 +197,7 @@ EndProcedure
 Procedure _MyTableInitStyleObject(*style.strMyTableStyleObject,*this.strMyTableObject,*s.strMyTableStyle)
 	With *style
 		\vtable=?vtable_style
-		\type=#MYTABLE_TYPE_STYLE
+		\type=My::#MY_TYPE_STYLE
 		\obj=*this
 		\style=*s
 	EndWith
@@ -239,7 +222,7 @@ Procedure _MyTableInitBorderObject(*border.strMyTableBorderObject,
                                    *b.strMyTableStyleBorderStyle)
 	With *border
 		\vtable=?vtable_border
-		\type=#MYTABLE_TYPE_BORDER
+		\type=My::#MY_TYPE_BORDER
 		\style=*style		
 		\border=*b
 	EndWith
@@ -249,7 +232,7 @@ Procedure _MyTableInitApplication(*application.strMyTableApplication,
                                   flags.i)
 	With *application
 		\vtable=?vtable_application
-		\type=#MYTABLE_TYPE_APPLICATION
+		\type=My::#MY_TYPE_APPLICATION
 		\flags=flags
 		\recalc=#True
 		\redraw=#True
@@ -726,7 +709,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 	Protected *col.strMyTableCol=0
 	Protected *this.strMyTableTable=0
 	If *obj
-		If *obj\type=#MYTABLE_TYPE_CELL
+		If *obj\type=My::#MY_TYPE_CELL
 			*cell=*obj
 			*row=*cell\row
 			*col=*cell\col
@@ -778,7 +761,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 					*this\eventCellSelected(*cell)
 				EndIf
 			EndIf			
-		ElseIf *obj\type=#MYTABLE_TYPE_COL
+		ElseIf *obj\type=My::#MY_TYPE_COL
 			*col=*obj
 			*this=*col\table
 			If Not shift
@@ -788,7 +771,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 			EndIf
 			*this\selectedCols(Str(*obj))=#True
 			*this\lastcol=*obj
-		ElseIf *obj\type=#MYTABLE_TYPE_ROW
+		ElseIf *obj\type=My::#MY_TYPE_ROW
 			*row=*obj
 			*this=*row\table
 			If Not shift
@@ -1051,20 +1034,20 @@ Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
 	Protected result.s=*this\tooltip
 	If result=""
 		Select *this\type
-			Case #MYTABLE_TYPE_APPLICATION
+			Case My::#MY_TYPE_APPLICATION
 				*application=*this
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_GRID,#MYTABLE_TYPE_TREE
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 				*table=*this
 				*application=*table\application
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				*row=*this
 				*table=*row\table
 				*application=*table\application
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				*col=*this
 				*table=*col\table
 				*application=*table\application
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				*cell=*this
 				*table=*cell\table
 				*application=*table\application
@@ -1504,15 +1487,15 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 		\flags=flags
 		If _MyTable_IsGrid(*table)
 			\vtable=?vtable_grid
-			\type=#MYTABLE_TYPE_GRID
+			\type=My::#MY_TYPE_GRID
 			\datagrid=#True
 		ElseIf _MyTable_IsHierarchical(*table)
 			\vtable=?vtable_tree
-			\type=#MYTABLE_TYPE_TREE
+			\type=My::#MY_TYPE_TREE
 			\datagrid=#False
 		Else
 			\vtable=?vtable_table
-			\type=#MYTABLE_TYPE_TABLE
+			\type=My::#MY_TYPE_TABLE
 			\datagrid=#False
 		EndIf
 		
@@ -1637,7 +1620,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 	
 	With *row
 		\vtable=?vtable_row
-		\type=#MYTABLE_TYPE_ROW
+		\type=My::#MY_TYPE_ROW
 		\flags=flags			
 		\application=*application
 		\table=*table
@@ -1680,7 +1663,7 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 	
 	With *col
 		\vtable=?vtable_col
-		\type=#MYTABLE_TYPE_COL
+		\type=My::#MY_TYPE_COL
 		\flags=flags
 		\application=*application
 		\table=*table
@@ -1729,22 +1712,7 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 	
 EndProcedure
 
-Procedure _MyTableInitFont(*font.strMyTableFont,
-                           name.s,
-                           size.i,
-                           flags.i,
-                           font.i)
-	With *font
-		\vtable=?vtable_font
-		\name=name
-		\size=size
-		\flags=flags
-		\font=font
-		\fontid=FontID(font)
-		\type=#MYTABLE_TYPE_FONT
-	EndWith
-	
-EndProcedure
+
 
 Procedure _MyTableInitCell(*application.strMyTableApplication,
                            *table.strMyTableTable,
@@ -1755,7 +1723,7 @@ Procedure _MyTableInitCell(*application.strMyTableApplication,
                            flags.i)
 	With *cell
 		\vtable=?vtable_cell
-		\type=#MYTABLE_TYPE_CELL
+		\type=My::#MY_TYPE_CELL
 		\flags=flags
 		\application=*application
 		\table=*table
@@ -1814,16 +1782,16 @@ Procedure.b _MyTable_IsDisabled(*obj.strMyTableObject)
 	Protected result.b=*obj\disabled
 	If Not result
 		Select *obj\type
-			Case #MYTABLE_TYPE_CELL
+			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(_MyTable_IsDisabled(*cell\col) Or _MyTable_IsDisabled(*cell\row))
-			Case #MYTABLE_TYPE_ROW
+			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=_MyTable_IsDisabled(*row\table)	
-			Case #MYTABLE_TYPE_COL
+			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=_MyTable_IsDisabled(*col\table)
-			Case #MYTABLE_TYPE_TABLE,#MYTABLE_TYPE_TREE,#MYTABLE_TYPE_GRID
+			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				Protected *table.strMyTableTable=*obj
 				If *table\application
 					result=_MyTable_IsDisabled(*table\application)

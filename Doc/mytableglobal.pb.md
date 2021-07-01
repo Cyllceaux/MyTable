@@ -22,7 +22,6 @@
 |MyTableCreateNewTable||x.i , y.i , w.i , h.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
 |MyTableCreateNewTree||x.i , y.i , w.i , h.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
 |MyTableCreateNewGrid||x.i , y.i , w.i , h.i , rows.i , cols.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
-|MyTableCreateFont||name.s , size.i , flags.i = 0||
 |\_MyTableInitStyleTable||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableSelected||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleTableElementSelected||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
@@ -66,7 +65,6 @@
 |\_MyTableInitGrid||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitRow||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableInitCol||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitFont||<span style="color:#FFFFAA">*font.</span>strMyTableFont , ||
 |\_MyTableInitCell||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
 |\_MyTableGetOrAddCell||<span style="color:#FFFFAA">*row.</span>strMyTableRow , idx.i , force.b||
 |\_MyTable\_IsDisabled|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
