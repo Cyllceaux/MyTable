@@ -578,6 +578,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.MyFont::MyFont,fixe
 	EndIf
 	
 	
+	
 	If *tfont
 		DrawingFont(*tfont\GetFontID())		
 	Else						
