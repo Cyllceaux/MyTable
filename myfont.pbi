@@ -2,7 +2,7 @@
 
 DeclareModule MyFont
 	
-	#MYFONT_VERSION = 51
+	#MYFONT_VERSION = 62
 	#MYFONT_VERSION_DATE = 20210701
 	
 	Interface MyFont
