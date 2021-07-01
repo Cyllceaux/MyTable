@@ -1,12 +1,10 @@
 # My
 
-VERSION = 1
+VERSION = 4
 
 VERSION_DATE = 20210701
 
 [my.pbi](Doc/my.pbi.md)
-
-[myapplication.pbi](Doc/myapplication.pbi.md)
 
 [myfont.pbi](Doc/myfont.pbi.md)
 
@@ -28,17 +26,17 @@ VERSION_DATE = 20210701
 
 ## MyFont
 
-VERSION = 29
+VERSION = 32
 
 VERSION_DATE = 20210701
-
-[autodeclare.pb](Doc/autodeclare.pb.md)
 
 [declare.pb](Doc/declare.pb.md)
 
 [global.pb](Doc/global.pb.md)
 
 [myfont.pb](Doc/myfont.pb.md)
+
+[myfontautodeclare.pb](Doc/myfontautodeclare.pb.md)
 
 [myfontfont.pb](Doc/myfontfont.pb.md)
 
@@ -48,11 +46,9 @@ VERSION_DATE = 20210701
 
 ## MyTable
 
-VERSION = 3542
+VERSION = 3545
 
 VERSION_DATE = 20210701
-
-[autodeclare.pb](Doc/autodeclare.pb.md)
 
 [declare.pb](Doc/declare.pb.md)
 
@@ -61,6 +57,8 @@ VERSION_DATE = 20210701
 [mytable.pb](Doc/mytable.pb.md)
 
 [mytableapplication.pb](Doc/mytableapplication.pb.md)
+
+[mytableautodeclare.pb](Doc/mytableautodeclare.pb.md)
 
 [mytableborder.pb](Doc/mytableborder.pb.md)
 

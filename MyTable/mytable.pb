@@ -6,7 +6,7 @@ Module MyTable
 	IncludeFile "mytablemacro.pb"
 	IncludeFile "../MyGlobal/myglobaldeclare.pb"
 	IncludeFile "declare.pb"
-	IncludeFile "autodeclare.pb"
+	IncludeFile "mytableautodeclare.pb"
 	IncludeFile "mytableglobal.pb"
 	IncludeFile "mytablestyle.pb"
 	IncludeFile "mytableborder.pb"

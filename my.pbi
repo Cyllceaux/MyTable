@@ -1,7 +1,7 @@
 ﻿XIncludeFile "MyGlobal/global.pb"
 DeclareModule My
 	
-	#VERSION = 2
+	#VERSION = 5
 	#VERSION_DATE = 20210701
 		
 	Enumeration _my_type

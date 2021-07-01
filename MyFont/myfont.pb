@@ -5,7 +5,7 @@
 	IncludeFile "../MyGlobal/myglobalmacro.pb"
 	IncludeFile "../MyGlobal/myglobaldeclare.pb"
 	IncludeFile "declare.pb"
-	IncludeFile "autodeclare.pb"
+	IncludeFile "myfontautodeclare.pb"
 	IncludeFile "myfontglobal.pb"
 	IncludeFile "myfontfont.pb"
 	IncludeFile "../MyGlobal/myglobalglobal.pb"
