@@ -20,14 +20,14 @@ UseModule MyTable
 	Define i,g,h,j
 	For i=1 To #Rows
 		*stamm=*tree\AddRow("Stamm "+i)
-		*stamm\SetExpanded(Random(1,0))
-		For g=1 To Random(#rows)
+		*stamm\SetExpanded(#True)
+		For g=1 To #rows
 			*ast=*stamm\AddRow("Ast "+g)
-			*ast\SetExpanded(Random(1,0))
-			For h=1 To Random(#rows)
+			*ast\SetExpanded(#True)
+			For h=1 To #rows
 				*zweig=*ast\AddRow("Zweig "+h)
-				*zweig\SetExpanded(Random(1,0))
-				For j=1 To Random(#rows)
+				*zweig\SetExpanded(#True)
+				For j=1 To #rows
 					*blatt=*zweig\AddRow("Blatt "+j)
 				Next
 			Next
@@ -35,6 +35,18 @@ UseModule MyTable
 	Next
 	
 	*tree\SetRedraw(#True)
+	
+	Define *cell.MyTableCell=*tree\GetCell(1,0)
+	Define *row.MyTableRow=*cell\GetRow()
+	Debug *cell\GetText()
+	Debug *row\GetPosition()
+	Debug *row\GetVisiblePosition()
+	
+	Define *vcell.MyTableCell=*tree\GetVisibleCell(12,0)
+	Define *vrow.MyTableRow=*vcell\GetRow()
+	Debug *vcell\GetText()
+	Debug *vrow\GetPosition()
+	Debug *vrow\GetVisiblePosition()
 	
 	Procedure Resize()
 		ResizeGadget(canvas,

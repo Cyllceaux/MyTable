@@ -47,6 +47,7 @@
 |\_MyTable\_Table\_GetCol||<span style="color:#FFFFAA">*this.</span>strMyTableTable , col.i||
 |\_MyTable\_Table\_GetApplication||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetCell||<span style="color:#FFFFAA">*this.</span>strMyTableTable , row.i , col.i||
+|\_MyTable\_Table\_GetVisibleCell||<span style="color:#FFFFAA">*this.</span>strMyTableTable , row.i , col.i||
 |\_MyTable\_Table\_RowCount||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_VisibleRowCount||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_ColCount||<span style="color:#FFFFAA">*this.strMyTableTable</span>||

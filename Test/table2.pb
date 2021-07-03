@@ -30,6 +30,7 @@ UseModule MyTable
 		*table\AddRow(line,"|",images(5))
 	Next
 	
+
 	*table\SetRedraw(#True)
 	
 	Procedure Resize()

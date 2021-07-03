@@ -4,8 +4,8 @@ XIncludeFile "myimage.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3584
-	#MYTABLE_VERSION_DATE = 20210701
+	#MYTABLE_VERSION = 3623
+	#MYTABLE_VERSION_DATE = 20210703
 
 
 	
@@ -317,6 +317,7 @@ DeclareModule MyTable
 		BindCallback(callback.MyTableProtoCallback)
 		
 		GetCell(row.i,col.i)
+		GetVisibleCell(row.i,col.i)
 		Delete()
 		
 		GetRow(row.i)

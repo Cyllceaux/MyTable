@@ -347,6 +347,7 @@ Macro _MyTableDataSectionDefaultTableObject(gruppe)
 	_DataSectionMethode(MyTable,gruppe,BindCallback)
 	
 	_DataSectionGetter(MyTable,gruppe,Cell)
+	_DataSectionGetter(MyTable,gruppe,VisibleCell)
 	_DataSectionMethode(MyTable,gruppe,Delete)
 	
 	_DataSectionGetter(MyTable,gruppe,Row)

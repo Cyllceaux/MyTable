@@ -2,8 +2,8 @@
 
 DeclareModule My
 	
-	#VERSION = 43
-	#VERSION_DATE = 20210701
+	#VERSION = 82
+	#VERSION_DATE = 20210703
 		
 	Enumeration _my_type
 		#MY_TYPE_NONE

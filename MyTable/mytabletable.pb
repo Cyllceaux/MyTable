@@ -1527,6 +1527,21 @@ Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	EndIf
 EndProcedure
 
+Procedure _MyTable_Table_GetVisibleCell(*this.strMyTableTable,row.i,col.i)
+	If *this
+		Protected page.b=_MyTable_IsPages(*this)
+		If ListSize(*this\cols())>col And (ListSize(*this\expRows())>row Or ListSize(*this\expRowsPage())>row)
+			If page
+				SelectElement(*this\expRowsPage(),row)
+				ProcedureReturn _MyTableGetOrAddCell(*this\expRowsPage(),col,#False)
+			Else
+				SelectElement(*this\expRows(),row)
+				ProcedureReturn _MyTableGetOrAddCell(*this\expRows(),col,#False)
+			EndIf
+		EndIf
+	EndIf
+EndProcedure
+
 _MyTable_GetStylesTable()
 
 Procedure _MyTable_Table_RowCount(*this.strMyTableTable)

@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYIMAGE\_VERSION</span>| 38||
-|<span style="color:#AAAAFF">\#MYIMAGE\_VERSION\_DATE</span>| 20210701||
+|<span style="color:#AAAAFF">\#MYIMAGE\_VERSION</span>| 77||
+|<span style="color:#AAAAFF">\#MYIMAGE\_VERSION\_DATE</span>| 20210703||
 
 
 ## Interfaces

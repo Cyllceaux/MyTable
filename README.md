@@ -1,8 +1,8 @@
 # My
 
-VERSION = 42
+VERSION = 81
 
-VERSION_DATE = 20210701
+VERSION_DATE = 20210703
 
 [my.pbi](Doc/my.pbi.md)
 
@@ -28,9 +28,9 @@ VERSION_DATE = 20210701
 
 ## MyFont
 
-VERSION = 70
+VERSION = 109
 
-VERSION_DATE = 20210701
+VERSION_DATE = 20210703
 
 [myfont.pb](Doc/myfont.pb.md)
 
@@ -46,9 +46,9 @@ VERSION_DATE = 20210701
 
 ## MyImage
 
-VERSION = 37
+VERSION = 76
 
-VERSION_DATE = 20210701
+VERSION_DATE = 20210703
 
 [myimage.pb](Doc/myimage.pb.md)
 
@@ -64,9 +64,9 @@ VERSION_DATE = 20210701
 
 ## MyTable
 
-VERSION = 3583
+VERSION = 3622
 
-VERSION_DATE = 20210701
+VERSION_DATE = 20210703
 
 [mytable.pb](Doc/mytable.pb.md)
 

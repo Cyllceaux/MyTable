@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#VERSION</span>| 43||
-|<span style="color:#AAAAFF">\#VERSION\_DATE</span>| 20210701||
+|<span style="color:#AAAAFF">\#VERSION</span>| 82||
+|<span style="color:#AAAAFF">\#VERSION\_DATE</span>| 20210703||
 
 
 ## Enumerations

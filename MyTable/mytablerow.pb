@@ -126,6 +126,14 @@ Procedure _MyTable_Row_GetVisiblePosition(*this.strMyTableRow)
 				Break
 			EndIf
 		Next
+		If result=-1
+			ForEach *this\table\expRowsPage()
+				If *this\table\expRowsPage()=*this
+					result=ListIndex(*this\table\expRowsPage())
+					Break
+				EndIf
+			Next		
+		EndIf
 		ProcedureReturn result
 	EndIf
 EndProcedure

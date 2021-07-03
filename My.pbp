@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-01 20:39" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-03 14:26" user="silko" host="AQUALAD"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
@@ -16,11 +16,11 @@
     </file>
     <file name="my.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="9136c7c77413f5319c21b63701523a72"/>
+      <fingerprint md5="fbb285e6a0c36d571df5560069ec6c13"/>
     </file>
     <file name="myfont.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="5286b0fcfee9437e10232f9bc3b41a08"/>
+      <fingerprint md5="ada6dedbefe32ddc701afa8123e46a00"/>
     </file>
     <file name="MyFont\myfont.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -72,7 +72,7 @@
     </file>
     <file name="myimage.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="cfabc0c218ddaa4db47b8d48997b57af"/>
+      <fingerprint md5="df4c472ca9b87c3a884849d55b65b919"/>
     </file>
     <file name="MyImage\myimage.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -100,7 +100,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="0c5bd4b19002046d1157861789d1ef93"/>
+      <fingerprint md5="2fb236ffc7cc329a6002ea520c1763b1"/>
     </file>
     <file name="MyTable\mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
