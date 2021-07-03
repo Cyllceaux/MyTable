@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#VERSION</span>| 82||
+|<span style="color:#AAAAFF">\#VERSION</span>| 93||
 |<span style="color:#AAAAFF">\#VERSION\_DATE</span>| 20210703||
 
 
