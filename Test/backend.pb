@@ -1,5 +1,7 @@
 ﻿EnableExplicit
 
+#UPDATE_VERSION=1
+#UPDATE_DOC=1
 #AUTODECLARE=1
 
 XIncludeFile "declare.pb"

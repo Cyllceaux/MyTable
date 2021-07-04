@@ -9,6 +9,7 @@ Procedure _MySplitter_LeftButtonDown()
 	*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 EndProcedure
 
+
 Procedure _MySplitter_MouseMove()
 	Protected *this.strMySplitterSplitter=GetGadgetData(EventGadget())
 	Protected vertical.b=_Mysplitter_Splitter_IsVertical(*this)
@@ -32,6 +33,14 @@ Procedure _MySplitter_MouseMove()
 	EndIf
 EndProcedure
 
+Global NewList gadgets.strMySplitterSplitter()
+
+Procedure _MySplitter_WinRepaint()
+	ForEach gadgets()
+		_MySplitter_Splitter_Draw(gadgets())
+	Next
+EndProcedure
+
 Procedure _MySplitterInitSplitter(*splitter.strMySplitterSplitter,
                                   x.i,
                                   y.i,
@@ -46,6 +55,7 @@ Procedure _MySplitterInitSplitter(*splitter.strMySplitterSplitter,
 		\vtable=?vtable_splitter
 		\gadget1=gadget1
 		\gadget2=gadget2
+		\window=GetActiveWindow()
 		\x=x
 		\y=y
 		\w=w
@@ -62,13 +72,16 @@ Procedure _MySplitterInitSplitter(*splitter.strMySplitterSplitter,
 		BindGadgetEvent(\canvas,@_MySplitter_LeftButtonDown(),#PB_EventType_LeftButtonDown)
 		BindGadgetEvent(\canvas,@_MySplitter_LeftButtonUp(),#PB_EventType_LeftButtonUp)
 		
+		UnbindEvent(#PB_Event_Repaint,@_MySplitter_WinRepaint(),\window)
+		BindEvent(#PB_Event_Repaint,@_MySplitter_WinRepaint(),\window)
+		
 		_MySplitter_Splitter_Redraw(*splitter)
 	EndWith
 EndProcedure
 
 
 Procedure MySplitterCreateSplitter(x.i,y.i,w.i,h.i,gadget1.i=0,gadget2.i=0,flags.i=0)
-	Protected *this.strMySplitterSplitter=AllocateStructure(strMySplitterSplitter)
+	Protected *this.strMySplitterSplitter=AddElement(gadgets())
 	_MySplitterInitSplitter(*this,x,y,w,h,gadget1,gadget2,flags)
 	ProcedureReturn *this
 EndProcedure

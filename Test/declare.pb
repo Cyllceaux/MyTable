@@ -5,10 +5,10 @@ CompilerIf Not Defined(MYTABLE_DEBUG_MS_MAX,#PB_Constant)
 	#MYTABLE_DEBUG_MS_MAX=0
 CompilerEndIf
 CompilerIf Not Defined(UPDATE_VERSION,#PB_Constant)
-	#UPDATE_VERSION=1
+	#UPDATE_VERSION=0
 CompilerEndIf
 CompilerIf Not Defined(UPDATE_DOC,#PB_Constant)
-	#UPDATE_DOC=1
+	#UPDATE_DOC=0
 CompilerEndIf
 
 UsePNGImageDecoder()

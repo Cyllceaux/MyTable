@@ -1134,6 +1134,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 			*this\dirty=#False
 			*this\drawing=#False
 			StopDrawing()
+			
 			_callcountEnde()
 		EndIf
 	EndIf

@@ -2,7 +2,7 @@
 
 DeclareModule MyImage
 	
-	#MYIMAGE_VERSION = 230
+	#MYIMAGE_VERSION = 231
 	#MYIMAGE_VERSION_DATE = 20210704
 	
 	Interface MyImage

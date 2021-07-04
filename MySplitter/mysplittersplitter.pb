@@ -8,6 +8,22 @@ _SimpleSetterGetterRedraw(Mysplitter,Splitter,MinSizeGadget2,i)
 _SimpleSetterGetterRedraw(Mysplitter,Splitter,SeparatorSize,i)
 _BindEvent(MySplitter,Splitter,CustomDraw)
 
+Procedure _MySplitter_Splitter_Draw(*this.strMySplitterSplitter)
+	Protected customdraw.b=#False		
+	
+	StartDrawing(CanvasOutput(*this\canvas))
+	If *this\EventCustomDraw
+		CustomDraw=*this\EventCustomDraw(*this)
+	EndIf
+	
+	If Not CustomDraw
+		Box(0,0,OutputWidth(),OutputHeight(),RGBA(100,100,100,255))			
+		Box(0,0,OutputWidth()-2,OutputHeight()-2,RGBA(200,200,200,255))
+	EndIf
+
+	StopDrawing()	
+EndProcedure
+
 Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 	If *this
 		Protected *obj.strMyVTable=0
@@ -109,17 +125,7 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 			EndIf
 		EndIf
 		
-		Protected customdraw.b=#False
-		StartDrawing(CanvasOutput(*this\canvas))
-		If *this\EventCustomDraw
-			CustomDraw=*this\EventCustomDraw(*this)
-		EndIf
-		
-		If Not CustomDraw
-			Box(0,0,OutputWidth(),OutputHeight(),RGBA(100,100,100,255))			
-			Box(0,0,OutputWidth()-2,OutputHeight()-2,RGBA(200,200,200,255))
-		EndIf
-		StopDrawing()
+		_MySplitter_Splitter_Draw(*this)	
 	EndIf
 EndProcedure
 

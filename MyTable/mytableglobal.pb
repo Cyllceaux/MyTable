@@ -36,6 +36,14 @@ Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
 	ProcedureReturn #False
 EndProcedure
 
+Global NewList gadgets.i()
+
+Procedure _MyTable_WinRepaint()
+	ForEach gadgets()
+		_MyTable_Table_Redraw(gadgets())
+	Next
+EndProcedure
+
 Procedure MyTableCreateApplication(flags.i=0)
 	Protected *this.strMyTableApplication=AllocateStructure(strMyTableApplication)
 	_MyTableInitApplication(*this,flags)
@@ -59,7 +67,7 @@ Procedure MyTableLoadApplication(file.s)
 EndProcedure
 
 Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
-	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
+	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)	
 	_MyTableInitTable(0,*this,window,canvas,vscroll,hscroll,flags)
 	ProcedureReturn *this
 EndProcedure
@@ -1466,6 +1474,11 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
                             vscroll.i,
                             hscroll.i,
                             flags.i)
+	
+	AddElement(gadgets())
+	UnbindEvent(#PB_Event_Repaint,@_MyTable_WinRepaint(),window)
+	BindEvent(#PB_Event_Repaint,@_MyTable_WinRepaint(),window)
+	gadgets()=*table
 	With *table
 		\flags=flags
 		If _MyTable_IsGrid(*table)
