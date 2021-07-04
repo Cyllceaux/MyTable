@@ -4,7 +4,7 @@ XIncludeFile "myimage.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3775
+	#MYTABLE_VERSION = 3776
 	#MYTABLE_VERSION_DATE = 20210704
 
 
