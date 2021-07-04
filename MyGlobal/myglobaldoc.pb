@@ -391,6 +391,7 @@ CompilerIf #PB_Compiler_Debugger
 			If versiondate
 				readme+"VERSION_DATE = "+versiondate+#CRLF$+#CRLF$
 			EndIf
+			
 			If ExamineDirectory(0,pfad,"*.pb*")
 				While NextDirectoryEntry(0)
 					If GetExtensionPart(DirectoryEntryName(0))<>"pbp"
@@ -408,6 +409,7 @@ CompilerIf #PB_Compiler_Debugger
 		readme+"VERSION = "+My::#VERSION+#CRLF$+#CRLF$
 		readme+"VERSION_DATE = "+My::#VERSION_DATE+#CRLF$+#CRLF$
 		
+		DeleteDirectory("../Doc","*.md",#PB_FileSystem_Force)
 		readme+parsePBFiles("../","")
 		readme+parsePBFiles("../MyGlobal/","MyGlobal")
 		readme+parsePBFiles("../MyFont/","MyFont",MyFont::#MYFONT_VERSION,MyFont::#MYFONT_VERSION_DATE)

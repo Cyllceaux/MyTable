@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYFONT\_VERSION</span>| 253||
+|<span style="color:#AAAAFF">\#MYFONT\_VERSION</span>| 262||
 |<span style="color:#AAAAFF">\#MYFONT\_VERSION\_DATE</span>| 20210704||
 
 

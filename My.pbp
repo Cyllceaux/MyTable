@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-04 17:00" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-04 18:50" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
@@ -16,11 +16,11 @@
     </file>
     <file name="my.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="1e660a5a85a233c8d0140a6033b44bd9"/>
+      <fingerprint md5="b43d3bb6a2a264015e7dfb5d5d220f62"/>
     </file>
     <file name="myfont.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="4bad1b376049a7f1905196bcca54c7b2"/>
+      <fingerprint md5="b70e95cc426bfb3b348d1b2e189d45df"/>
     </file>
     <file name="MyFont\myfont.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -72,7 +72,7 @@
     </file>
     <file name="myimage.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="688d2d7f96fd37caa51281b92544dfaf"/>
+      <fingerprint md5="12bba2d884feca78bc9e556197c0d6f6"/>
     </file>
     <file name="MyImage\myimage.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -100,7 +100,7 @@
     </file>
     <file name="mysplitter.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="ebe6295a5464f5cc4621a623bd66b36d"/>
+      <fingerprint md5="06b692a4deaacaddab04fb4ef0c4c83f"/>
     </file>
     <file name="MySplitter\mysplitter.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -128,7 +128,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="d65383f37f771f3aa418298b47a04abc"/>
+      <fingerprint md5="40dc0ef5905bfc1139a1e88fd7184d5e"/>
     </file>
     <file name="MyTable\mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
