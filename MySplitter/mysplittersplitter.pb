@@ -1,11 +1,11 @@
-﻿_SimpleGetter(Mysplitter,Splitter,Type,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,Value,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,Flags,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,Gadget1,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,Gadget2,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,MinSizeGadget1,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,MinSizeGadget2,i)
-_SimpleSetterGetterRedraw(Mysplitter,Splitter,SeparatorSize,i)
+﻿_SimpleGetter(MySplitter,Splitter,Type,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,Value,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,Flags,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,Gadget1,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,Gadget2,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,MinSizeGadget1,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,MinSizeGadget2,i)
+_SimpleSetterGetterRedraw(MySplitter,Splitter,SeparatorSize,i)
 _BindEvent(MySplitter,Splitter,CustomDraw)
 
 Procedure _MySplitter_Splitter_Draw(*this.strMySplitterSplitter)
@@ -28,7 +28,7 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 	If *this
 		Protected *obj.strMyVTable=0
 		Protected *spl.MySplitter=0
-		Protected vertical.b=_Mysplitter_Splitter_IsVertical(*this)
+		Protected vertical.b=_MySplitter_Splitter_IsVertical(*this)
 		_MySplitter_Splitter_Check(*this)
 		If vertical
 			ResizeGadget(*this\canvas,
@@ -153,11 +153,11 @@ Procedure _MySplitter_Splitter_Resize(*this.strMySplitterSplitter,x.i=#PB_Ignore
 		
 		If nh<>mh Or nw<>mw
 			
-			Protected vertical.b=_Mysplitter_Splitter_IsVertical(*this)
+			Protected vertical.b=_MySplitter_Splitter_IsVertical(*this)
 			
-			If _Mysplitter_Splitter_IsFirstFixed(*this)
+			If _MySplitter_Splitter_IsFirstFixed(*this)
 				
-			ElseIf _Mysplitter_Splitter_IsSecondFixed(*this)
+			ElseIf _MySplitter_Splitter_IsSecondFixed(*this)
 				If vertical
 					*this\value-(mw-nw)
 				Else

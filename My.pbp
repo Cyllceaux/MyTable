@@ -7,20 +7,20 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-04 20:28" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-04 20:42" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="df91baebe4e801e208c94038f6e6f372"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="dc34d7e67f063fde0151fd91e38516af"/>
     </file>
     <file name="my.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="97ded19a4402034355df23164180f75e"/>
+      <fingerprint md5="5d57f74df498003dda999428fc52dcb5"/>
     </file>
     <file name="myfont.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="b0f0aca8948f8d7582343f4bce22be4e"/>
+      <fingerprint md5="913efb4bc3d4fa006429de3eae15a408"/>
     </file>
     <file name="MyFont\myfont.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -47,7 +47,7 @@
       <fingerprint md5="5e0b590ed12ae8ed540d1436dfede542"/>
     </file>
     <file name="MyGlobal\global.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="05b803a2860b42d3ecfee8b641d48aaa"/>
     </file>
     <file name="MyGlobal\myglobaldeclare.pb">
@@ -55,15 +55,15 @@
       <fingerprint md5="769d915b8983daf33083ad97379cbbbc"/>
     </file>
     <file name="MyGlobal\myglobaldoc.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="fe1fcac97a9b696d3d344fbb668ed337"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="e50687b24918cdc34efc5095ea380557"/>
     </file>
     <file name="MyGlobal\myglobalglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="ecdf533180c61f4930e219d2bba7f7b1"/>
     </file>
     <file name="MyGlobal\myglobalmacro.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="bd3363c161866b5e40b5638a4d93283c"/>
     </file>
     <file name="MyGlobal\myglobalstructure.pb">
@@ -72,7 +72,7 @@
     </file>
     <file name="myimage.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="7563e3a1e46e40e65cf246e8b5689bc8"/>
+      <fingerprint md5="8fa201cbd6f2178cdf44c82e3be7b36b"/>
     </file>
     <file name="MyImage\myimage.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -100,7 +100,7 @@
     </file>
     <file name="mysplitter.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="92d735ea79f43c70e237b2336193e2cd"/>
+      <fingerprint md5="af0be5ab3e1cbd572e202390f6573602"/>
     </file>
     <file name="MySplitter\mysplitter.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -108,19 +108,19 @@
     </file>
     <file name="MySplitter\mysplitterautodeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="25d106fd3b03be48875907a881910316"/>
+      <fingerprint md5="eb2a1c9269ce5e1037d52410cedab376"/>
     </file>
     <file name="MySplitter\mysplitterdeclare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="334f73885328ce76f5f80ec77f382807"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="1fca30d07356bfdc59227a044d643c90"/>
     </file>
     <file name="MySplitter\mysplitterglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="a96266cadec95c17d8c291ab90f6a0c9"/>
+      <fingerprint md5="b4ab4e8ef7410b9e0d100a2218e33cc5"/>
     </file>
     <file name="MySplitter\mysplittersplitter.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="7ff6a9ff5bb306ca83ffde01d9984d15"/>
+      <fingerprint md5="22e58aee694ec5c94ee15fbf2f7d77b3"/>
     </file>
     <file name="MySplitter\mysplitterstructure.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -128,7 +128,7 @@
     </file>
     <file name="mytable.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="d7a03b897825cf618c1cc2fb1cab29ea"/>
+      <fingerprint md5="0d07e954e27a2b1fcf8a128259242cdc"/>
     </file>
     <file name="MyTable\mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -159,7 +159,7 @@
       <fingerprint md5="da77a8174964d8a3aae333eacb615df9"/>
     </file>
     <file name="MyTable\mytableglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="fb250e94cf38a8266c33119ee75a9df4"/>
     </file>
     <file name="MyTable\mytablegrid.pb">
@@ -183,7 +183,7 @@
       <fingerprint md5="642e651bf0a31af76c02a9dc7981b174"/>
     </file>
     <file name="MyTable\mytabletable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="3e5376a42d75a8dd89574ad2925abff7"/>
     </file>
     <file name="MyTable\mytabletree.pb">
@@ -192,15 +192,15 @@
     </file>
     <file name="Test\backend.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
-      <fingerprint md5="ed7fe6bbb1e73708106b8adf5037857f"/>
+      <fingerprint md5="3ea172855e441564f85b14f01f2cc2b4"/>
     </file>
     <file name="Test\complete.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
       <fingerprint md5="730f3af6b49d7824652a55b886a6d58b"/>
     </file>
     <file name="Test\declare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="bd725f17d8a09e10e0f226e501edff47"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
+      <fingerprint md5="90d944fc4d6aa8044c6ebc382799af45"/>
     </file>
     <file name="Test\grid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
@@ -223,7 +223,7 @@
       <fingerprint md5="faeda2ae7284dffd924e7a40ac292659"/>
     </file>
     <file name="Test\outlook.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="b30553c9e05aee286dca4da63eb0b7b8"/>
     </file>
     <file name="Test\splitter.pb">

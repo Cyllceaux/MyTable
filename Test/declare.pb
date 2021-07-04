@@ -10,6 +10,9 @@ CompilerEndIf
 CompilerIf Not Defined(UPDATE_DOC,#PB_Constant)
 	#UPDATE_DOC=0
 CompilerEndIf
+CompilerIf Not Defined(AUTODECLARE,#PB_Constant)
+	#AUTODECLARE=0
+CompilerEndIf
 
 UsePNGImageDecoder()
 

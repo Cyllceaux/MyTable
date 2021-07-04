@@ -422,4 +422,18 @@ CompilerIf #PB_Compiler_Debugger
 		WriteString(0,readme)
 		CloseFile(0)
 	CompilerEndIf
+	
+	CompilerIf #AUTODECLARE
+		ForEach AUTODECLARE::autodeclare()						
+			SortList(AUTODECLARE::autodeclare()\autodeclare(),#PB_Sort_Ascending)
+			Define file=CreateFile(#PB_Any,"../"+MapKey(AUTODECLARE::autodeclare())+"/"+LCase(MapKey(AUTODECLARE::autodeclare()))+"autodeclare.pb")
+			Define line.s="; auto-generated"
+			ForEach AUTODECLARE::autodeclare()\autodeclare()
+				line+#CRLF$+AUTODECLARE::autodeclare()\autodeclare()
+			Next
+			WriteString(file,line)
+			CloseFile(file)
+		Next
+	CompilerEndIf
+	
 CompilerEndIf

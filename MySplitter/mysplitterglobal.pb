@@ -4,7 +4,7 @@ EndProcedure
 
 Procedure _MySplitter_LeftButtonDown()
 	Protected *this.strMySplitterSplitter=GetGadgetData(EventGadget())
-	Protected vertical.b=_Mysplitter_Splitter_IsVertical(*this)
+	Protected vertical.b=_MySplitter_Splitter_IsVertical(*this)
 	*this\oldx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 	*this\oldy=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
 EndProcedure
@@ -12,11 +12,11 @@ EndProcedure
 
 Procedure _MySplitter_MouseMove()
 	Protected *this.strMySplitterSplitter=GetGadgetData(EventGadget())
-	Protected vertical.b=_Mysplitter_Splitter_IsVertical(*this)
+	Protected vertical.b=_MySplitter_Splitter_IsVertical(*this)
 	Protected md.b=Bool(GetGadgetAttribute(*this\canvas,#PB_Canvas_Buttons) & #PB_Canvas_LeftButton)
 	Protected x=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
 	Protected y=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseY)
-	If _Mysplitter_Splitter_IsSizeable(*this)
+	If _MySplitter_Splitter_IsSizeable(*this)
 		If vertical
 			SetGadgetAttribute(*this\canvas,#PB_Canvas_Cursor,#PB_Cursor_LeftRight)
 			If md
@@ -61,7 +61,7 @@ Procedure _MySplitterInitSplitter(*splitter.strMySplitterSplitter,
 		\w=w
 		\h=h
 		\separatorsize=5
-		If _Mysplitter_Splitter_IsVertical(*splitter)
+		If _MySplitter_Splitter_IsVertical(*splitter)
 			\value=w/2-\separatorsize/2
 		Else
 			\value=h/2-\separatorsize/2
@@ -86,32 +86,32 @@ Procedure MySplitterCreateSplitter(x.i,y.i,w.i,h.i,gadget1.i=0,gadget2.i=0,flags
 	ProcedureReturn *this
 EndProcedure
 
-Procedure.b _Mysplitter_Splitter_IsVertical(*this.strMySplitterSplitter)
+Procedure.b _MySplitter_Splitter_IsVertical(*this.strMySplitterSplitter)
 	If *this
 		ProcedureReturn Bool(*this\flags & #MYSPLITTER_FLAGS_VERTICAL)
 	EndIf
 EndProcedure
 
-Procedure.b _Mysplitter_Splitter_IsFirstFixed(*this.strMySplitterSplitter)
+Procedure.b _MySplitter_Splitter_IsFirstFixed(*this.strMySplitterSplitter)
 	If *this
 		ProcedureReturn Bool(*this\flags & #MYSPLITTER_FLAGS_FIRSTFIXED)
 	EndIf
 EndProcedure
 
-Procedure.b _Mysplitter_Splitter_IsSecondFixed(*this.strMySplitterSplitter)
+Procedure.b _MySplitter_Splitter_IsSecondFixed(*this.strMySplitterSplitter)
 	If *this
 		ProcedureReturn Bool(*this\flags & #MYSPLITTER_FLAGS_SECONDFIXED)
 	EndIf
 EndProcedure
 
-Procedure.b _Mysplitter_Splitter_IsSizeable(*this.strMySplitterSplitter)
+Procedure.b _MySplitter_Splitter_IsSizeable(*this.strMySplitterSplitter)
 	If *this
 		ProcedureReturn Bool(Not Bool(*this\flags & #MYSPLITTER_FLAGS_NO_SIZEABLE))
 	EndIf
 EndProcedure
 
 Procedure _MySplitter_Splitter_Check(*this.strMySplitterSplitter)
-	Protected vertical.b=_Mysplitter_Splitter_IsVertical(*this)
+	Protected vertical.b=_MySplitter_Splitter_IsVertical(*this)
 	If vertical				
 		If *this\value<*this\minsizegadget1
 			*this\value=*this\minsizegadget1

@@ -5,7 +5,7 @@ XIncludeFile "../Test/declare.pb"
 
 UseModule MyTable
 	UseModule MyFont
-		UseModule Mysplitter
+		UseModule MySplitter
 			
 			
 			Enumeration _mytable_creator_tree
