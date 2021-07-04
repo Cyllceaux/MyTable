@@ -14,6 +14,7 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |\_MyTable\_IsSelected|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
+|\_MyTable\_WinRepaint||||
 |MyTableCreateApplication||flags.i = 0||
 |MyTableLoadApplication||file.s||
 |MyTableCreateTable||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
