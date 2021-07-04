@@ -1,4 +1,5 @@
-﻿_SimpleSetterGetter(MyTable,Cell,Tooltip,s)
+﻿_MyTableMakeDraws(Cell)
+_SimpleSetterGetter(MyTable,Cell,Tooltip,s)
 _SimpleSetterGetterSubRedraw(MyTable,Cell,Dirty,b)
 _SimpleSetterGetterSubRedraw(MyTable,Cell,Flags,i)
 _SimpleSetterGetterSubRedraw(MyTable,Cell,Datatype,i)

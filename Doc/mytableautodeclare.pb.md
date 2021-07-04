@@ -33,6 +33,8 @@
 |\_MyTable\_Cell\_GetTable||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
+|\_MyTable\_Cell\_Predraw||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
+|\_MyTable\_Cell\_Redraw||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_SetChecked||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.b||
 |\_MyTable\_Cell\_SetColspan||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.i||
 |\_MyTable\_Cell\_SetData||<span style="color:#FFFFAA">*this.</span>strMyTableCell , <span style="color:#FFFFAA">*value</span>||
@@ -53,6 +55,8 @@
 |\_MyTable\_Col\_GetTable||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
+|\_MyTable\_Col\_Predraw||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
+|\_MyTable\_Col\_Redraw||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_SetColspan||<span style="color:#FFFFAA">*this.</span>strMyTableCol , value.i||
 |\_MyTable\_Col\_SetData||<span style="color:#FFFFAA">*this.</span>strMyTableCol , <span style="color:#FFFFAA">*value</span>||
 |\_MyTable\_Col\_SetDirty||<span style="color:#FFFFAA">*this.</span>strMyTableCol , value.b||
@@ -81,6 +85,8 @@
 |\_MyTable\_Row\_GetTable||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
+|\_MyTable\_Row\_Predraw||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
+|\_MyTable\_Row\_Redraw||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_SetChecked||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||
 |\_MyTable\_Row\_SetData||<span style="color:#FFFFAA">*this.</span>strMyTableRow , <span style="color:#FFFFAA">*value</span>||
 |\_MyTable\_Row\_SetDirty||<span style="color:#FFFFAA">*this.</span>strMyTableRow , value.b||

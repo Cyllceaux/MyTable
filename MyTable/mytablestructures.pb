@@ -42,6 +42,7 @@ Structure strMyTableObject Extends strMyVTable
 	disabled.b
 EndStructure
 
+
 Structure strMyTableStyleObject Extends strMyVTable
 	*obj.strMyTableObject
 	*cellStyle.strMyTableStyle
@@ -141,7 +142,15 @@ Structure strMyTableTableEdit
 	menu.i
 EndStructure
 
-Structure strMyTableTable Extends strMyTableObject		
+Structure strMyTableTable Extends strMyTableObject
+	vscroll.i
+	hscroll.i
+	maxvscroll.i
+	maxhscroll.i
+	
+	window.i
+	canvas.i
+	
 	*application.strMyTableApplication
 	List rows.strMyTableRow()
 	List expRows.i()
@@ -162,12 +171,7 @@ Structure strMyTableTable Extends strMyTableObject
 	
 	drawing.b
 	
-	window.i
-	canvas.i
-	vscroll.i
-	hscroll.i
-	maxvscroll.i
-	maxhscroll.i
+
 	
 	fixedcols.i
 	

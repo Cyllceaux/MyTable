@@ -1,6 +1,26 @@
 ﻿
 IncludeFile "../MyGlobal/myglobalmacro.pb"
 
+Macro _MyTableMakeDraws(gruppe)
+	_AddAutoDeclare(MyTable,_MyTable_#gruppe#_Redraw(*this.strMyTable#gruppe))
+	Procedure _MyTable_#gruppe#_Redraw(*this.strMyTable#gruppe)
+		If *this\type=My::#MY_TYPE_#gruppe
+			ProcedureReturn _MyTable_Table_Redraw(*this\table)
+		Else
+			ProcedureReturn _MyTable_Table_Redraw(*this)
+		EndIf
+	EndProcedure
+	
+	_AddAutoDeclare(MyTable,_MyTable_#gruppe#_Predraw(*this.strMyTable#gruppe))
+	Procedure _MyTable_#gruppe#_Predraw(*this.strMyTable#gruppe)
+		If *this\type=My::#MY_TYPE_#gruppe
+			ProcedureReturn _MyTable_Table_Predraw(*this\table)
+		Else
+			ProcedureReturn _MyTable_Table_Predraw(*this)
+		EndIf
+	EndProcedure
+EndMacro
+
 
 Macro _MyTable_GetStyleCell(name)
 	_AddAutoDeclare(MyTable,_MyTable_Cell_Get#name#Style(*this.strMyTableCell))

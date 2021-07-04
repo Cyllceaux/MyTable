@@ -2,8 +2,8 @@
 
 DeclareModule My
 	
-	#VERSION = 93
-	#VERSION_DATE = 20210703
+	#VERSION = 225
+	#VERSION_DATE = 20210704
 		
 	Enumeration _my_type
 		#MY_TYPE_NONE
@@ -18,6 +18,7 @@ DeclareModule My
 		#MY_TYPE_FONT
 		#MY_TYPE_BORDER
 		#MY_TYPE_IMAGE
+		#MY_TYPE_SPLITTER
 	EndEnumeration
 	
 EndDeclareModule

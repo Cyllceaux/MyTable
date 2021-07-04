@@ -1,10 +1,19 @@
 ## Structures
 
 
-### strMyVTable
+### strMyGadget : [strMyVTable](#strMyVTable)
 |Field|Type|Comment|
 | --- | --- | --- |
-|vtable|i||
-|type|i||
+|window|i||
+|canvas|i||
+|flags|i||
+
+### strMyScrollGadget : [strMyGadget](#strMyGadget)
+|Field|Type|Comment|
+| --- | --- | --- |
+|vscroll|i||
+|hscroll|i||
+|maxvscroll|i||
+|maxhscroll|i||
 
 

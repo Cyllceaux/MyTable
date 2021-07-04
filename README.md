@@ -1,14 +1,16 @@
 # My
 
-VERSION = 92
+VERSION = 224
 
-VERSION_DATE = 20210703
+VERSION_DATE = 20210704
 
 [my.pbi](Doc/my.pbi.md)
 
 [myfont.pbi](Doc/myfont.pbi.md)
 
 [myimage.pbi](Doc/myimage.pbi.md)
+
+[mysplitter.pbi](Doc/mysplitter.pbi.md)
 
 [mytable.pbi](Doc/mytable.pbi.md)
 
@@ -28,9 +30,9 @@ VERSION_DATE = 20210703
 
 ## MyFont
 
-VERSION = 120
+VERSION = 252
 
-VERSION_DATE = 20210703
+VERSION_DATE = 20210704
 
 [myfont.pb](Doc/myfont.pb.md)
 
@@ -46,9 +48,9 @@ VERSION_DATE = 20210703
 
 ## MyImage
 
-VERSION = 87
+VERSION = 219
 
-VERSION_DATE = 20210703
+VERSION_DATE = 20210704
 
 [myimage.pb](Doc/myimage.pb.md)
 
@@ -64,9 +66,9 @@ VERSION_DATE = 20210703
 
 ## MyTable
 
-VERSION = 3633
+VERSION = 3765
 
-VERSION_DATE = 20210703
+VERSION_DATE = 20210704
 
 [mytable.pb](Doc/mytable.pb.md)
 
@@ -97,4 +99,22 @@ VERSION_DATE = 20210703
 [mytabletable.pb](Doc/mytabletable.pb.md)
 
 [mytabletree.pb](Doc/mytabletree.pb.md)
+
+## MySplitter
+
+VERSION = 127
+
+VERSION_DATE = 20210704
+
+[mysplitter.pb](Doc/mysplitter.pb.md)
+
+[mysplitterautodeclare.pb](Doc/mysplitterautodeclare.pb.md)
+
+[mysplitterdeclare.pb](Doc/mysplitterdeclare.pb.md)
+
+[mysplitterglobal.pb](Doc/mysplitterglobal.pb.md)
+
+[mysplittersplitter.pb](Doc/mysplittersplitter.pb.md)
+
+[mysplitterstructure.pb](Doc/mysplitterstructure.pb.md)
 

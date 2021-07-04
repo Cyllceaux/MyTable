@@ -47,10 +47,11 @@ CompilerEndIf
 
 
 Macro _BindEvent(projekt,gruppe,name)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#Table,event.projekt#ProtoEvent#name))
-	Procedure _#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#Table,event.projekt#ProtoEvent#name)
+	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#gruppe,event.projekt#ProtoEvent#name))
+	Procedure _#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#gruppe,event.projekt#ProtoEvent#name)
 		If *this
 			*this\Event#name=event
+			_#projekt#_#gruppe#_Redraw(*this)
 		EndIf
 	EndProcedure
 EndMacro
@@ -110,7 +111,7 @@ Macro _SimpleSetterRedraw(projekt,gruppe,name,typ,sub=)
 		If *this
 			*this\sub#name=value
 			*this\dirty=#True			
-			_#projekt#_Table_Redraw(*this)						
+			_#projekt#_#gruppe#_Redraw(*this)						
 		EndIf
 	EndProcedure
 EndMacro
@@ -122,7 +123,7 @@ Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ,sub=)
 			*this\sub#name=value
 			*this\dirty=#True			
 			*this\table\dirty=#True
-			_#projekt#_Table_Redraw(*this\table)						
+			_#projekt#_#gruppe#_Redraw(*this\table)						
 		EndIf
 	EndProcedure
 EndMacro
@@ -134,8 +135,8 @@ Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ,sub=)
 			*this\sub#name=value
 			*this\dirty=#True			
 			*this\table\dirty=#True
-			_#projekt#_Table_Predraw(*this\table)						
-			_#projekt#_Table_Redraw(*this\table)						
+			_#projekt#_#gruppe#_Predraw(*this\table)						
+			_#projekt#_#gruppe#_Redraw(*this\table)						
 		EndIf
 	EndProcedure
 EndMacro
@@ -147,8 +148,8 @@ Macro _SimpleSetterPredraw(projekt,gruppe,name,typ,sub=)
 			*this\sub#name=value
 			*this\dirty=#True			
 			*this\dirty=#True
-			_#projekt#_Table_Predraw(*this)						
-			_#projekt#_Table_Redraw(*this)						
+			_#projekt#_#gruppe#_Predraw(*this)						
+			_#projekt#_#gruppe#_Redraw(*this)						
 		EndIf
 	EndProcedure
 EndMacro

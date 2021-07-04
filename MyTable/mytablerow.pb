@@ -1,4 +1,5 @@
-﻿_SimpleSetterGetterPredraw(MyTable,Row,Tooltip,s)
+﻿_MyTableMakeDraws(Row)
+_SimpleSetterGetterPredraw(MyTable,Row,Tooltip,s)
 _SimpleSetterGetterSubRedraw(MyTable,Row,Dirty,b)
 _SimpleSetterGetterSubPredraw(MyTable,Row,Expanded,b)
 _SimpleSetterGetterSubRedraw(MyTable,Row,Checked,b)
@@ -10,6 +11,7 @@ _SimpleGetterPointer(MyTable,Row,Parent)
 _SimpleGetter(MyTable,Row,Type,i)
 _SimpleSetterGetterPredraw(MyTable,Row,Level,i)
 _SimpleSetterGetterPointer(MyTable,Row,Data)
+
 
 
 Procedure _MyTable_Row_GetApplication(*this.strMyTableRow)

@@ -2,6 +2,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
+|\_MyTableMakeDraws||gruppe||
 |\_MyTable\_GetStyleCell||name||
 |\_MyTable\_GetStyleCol||name||
 |\_MyTable\_GetStyleRow||name||

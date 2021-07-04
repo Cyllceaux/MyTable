@@ -1,0 +1,2 @@
+; auto-generated
+Declare _MySplitter_Splitter_BindEventCustomDraw(*this.strMySplitterSplitter,event.MySplitterProtoEventCustomDraw)

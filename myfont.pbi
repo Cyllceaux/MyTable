@@ -2,8 +2,8 @@
 
 DeclareModule MyFont
 	
-	#MYFONT_VERSION = 121
-	#MYFONT_VERSION_DATE = 20210703
+	#MYFONT_VERSION = 253
+	#MYFONT_VERSION_DATE = 20210704
 	
 	Interface MyFont
 		GetType()

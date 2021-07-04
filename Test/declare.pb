@@ -14,6 +14,7 @@ CompilerEndIf
 UsePNGImageDecoder()
 
 XIncludeFile "../mytable.pbi"
+XIncludeFile "../mysplitter.pbi"
 
 Macro MM
 	"
@@ -87,6 +88,8 @@ Macro AssertNotEmpty(value1)
 		DebuggerError("Empty")
 	EndIf
 EndMacro
+
+
 
 XIncludeFile "../MyGlobal/myglobaldoc.pb"
 

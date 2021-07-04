@@ -413,6 +413,7 @@ CompilerIf #PB_Compiler_Debugger
 		readme+parsePBFiles("../MyFont/","MyFont",MyFont::#MYFONT_VERSION,MyFont::#MYFONT_VERSION_DATE)
 		readme+parsePBFiles("../MyImage/","MyImage",MyImage::#MYIMAGE_VERSION,MyImage::#MYIMAGE_VERSION_DATE)
 		readme+parsePBFiles("../MyTable/","MyTable",MyTable::#MYTABLE_VERSION,MyTable::#MYTABLE_VERSION_DATE)
+		readme+parsePBFiles("../MySplitter/","MySplitter",MySplitter::#MYSPLITTER_VERSION,MySplitter::#MYSPLITTER_VERSION_DATE)
 		
 		
 		CreateFile(0,"../README.md",#PB_UTF8)

@@ -143,6 +143,12 @@
 ### strMyTableTable : [strMyTableObject](#strMyTableObject)
 |Field|Type|Comment|
 | --- | --- | --- |
+|vscroll|i||
+|hscroll|i||
+|maxvscroll|i||
+|maxhscroll|i||
+|window|i||
+|canvas|i||
 |<span style="color:#FFFFAA">*application|[strMyTableApplication](#strMyTableApplication)</span>||
 |List rows|[strMyTableRow](#strMyTableRow)()||
 |List expRows|i()||
@@ -160,12 +166,6 @@
 |datagrid|b||
 |emptytext|s||
 |drawing|b||
-|window|i||
-|canvas|i||
-|vscroll|i||
-|hscroll|i||
-|maxvscroll|i||
-|maxhscroll|i||
 |fixedcols|i||
 |defaultheaderheight|i||
 |calcdefaultheaderheight|i||

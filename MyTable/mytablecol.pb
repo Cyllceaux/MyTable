@@ -1,4 +1,5 @@
-﻿_SimpleSetterGetter(MyTable,Col,Tooltip,s)
+﻿_MyTableMakeDraws(Col)
+_SimpleSetterGetter(MyTable,Col,Tooltip,s)
 _SimpleSetterGetterSubRedraw(MyTable,Col,Dirty,b)
 _SimpleSetterGetterSubPredraw(MyTable,Col,Flags,i)
 _SimpleSetterGetterSubPredraw(MyTable,Col,Disabled,b)
