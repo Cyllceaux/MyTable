@@ -95,7 +95,7 @@ Procedure _MyTable_Row_DeleteRow(*this.strMyTableRow,idx.i)
 EndProcedure
 
 
-Procedure _MyTable_Row_GetPosition(*this.strMyTableRow)
+Procedure _MyTable_Row_GetLevelPosition(*this.strMyTableRow)
 	If *this
 		Protected result.i=-1
 		If *this\parent

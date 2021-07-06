@@ -4,8 +4,8 @@ XIncludeFile "myimage.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3784
-	#MYTABLE_VERSION_DATE = 20210704
+	#MYTABLE_VERSION = 3785
+	#MYTABLE_VERSION_DATE = 20210706
 
 
 	
@@ -172,7 +172,7 @@ DeclareModule MyTable
 		GetApplication()
 		GetTable()
 		GetParent()
-		GetPosition()
+		GetLevelPosition()
 		GetVisiblePosition()
 		GetLevel()
 		SetExpanded(value.b):GetExpanded.b()

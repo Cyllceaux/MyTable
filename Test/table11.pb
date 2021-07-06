@@ -21,9 +21,9 @@ UseModule MyTable
 		Protected *cell1.MyTableCell=*row\GetCell(0)
 		Protected *cell2.MyTableCell=*row\GetCell(1)
 		Protected *cell3.MyTableCell=*row\GetCell(2)
-		*cell1\SetText("Cell "+*row\GetPosition()+"_1")
-		*cell2\SetText("Cell "+*row\GetPosition()+"_2")
-		*cell3\SetText("Cell "+*row\GetPosition()+"_3")
+		*cell1\SetText("Cell "+*row\GetLevelPosition()+"_1")
+		*cell2\SetText("Cell "+*row\GetLevelPosition()+"_2")
+		*cell3\SetText("Cell "+*row\GetLevelPosition()+"_3")
 		
 		*cell1\SetImageLeft(images(Random(9,0)))
 		*cell2\SetImageLeft(images(Random(9,0)))

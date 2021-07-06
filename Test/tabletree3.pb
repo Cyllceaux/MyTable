@@ -44,24 +44,24 @@ UseModule MyTable
 	*tree\SetRedraw(#True)
 	
 	Procedure RC(*row.MyTableRow)
-		Debug "RowCheck "+*row\GetPosition()
+		Debug "RowCheck "+*row\GetLevelPosition()
 	EndProcedure
 	Procedure RU(*row.MyTableRow)
-		Debug "RowUnCheck "+*row\GetPosition()
+		Debug "RowUnCheck "+*row\GetLevelPosition()
 	EndProcedure
 	Procedure RS(*row.MyTableRow)
-		Debug "RowSelect "+*row\GetPosition()
+		Debug "RowSelect "+*row\GetLevelPosition()
 	EndProcedure
 	Procedure CS(*cell.MyTableCell)
 		Protected *row.MyTableRow=*cell\getRow()
 		Protected *col.MyTableCol=*cell\getCol()
-		Debug "CelSelect "+*row\GetPosition()+" / "+*col\GetPosition()
+		Debug "CelSelect "+*row\GetLevelPosition()+" / "+*col\GetPosition()
 	EndProcedure
 	Procedure RE(*row.MyTableRow)
-		Debug "RowExpand "+*row\GetPosition()
+		Debug "RowExpand "+*row\GetLevelPosition()
 	EndProcedure
 	Procedure RCo(*row.MyTableRow)
-		Debug "RowCollpased "+*row\GetPosition()
+		Debug "RowCollpased "+*row\GetLevelPosition()
 	EndProcedure
 	
 	*tree\BindEventCellSelected(@CS())

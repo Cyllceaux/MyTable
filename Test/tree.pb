@@ -39,13 +39,13 @@ UseModule MyTable
 	Define *cell.MyTableCell=*tree\GetCell(1,0)
 	Define *row.MyTableRow=*cell\GetRow()
 	Debug *cell\GetText()
-	Debug *row\GetPosition()
+	Debug *row\GetLevelPosition()
 	Debug *row\GetVisiblePosition()
 	
 	Define *vcell.MyTableCell=*tree\GetVisibleCell(12,0)
 	Define *vrow.MyTableRow=*vcell\GetRow()
 	Debug *vcell\GetText()
-	Debug *vrow\GetPosition()
+	Debug *vrow\GetLevelPosition()
 	Debug *vrow\GetVisiblePosition()
 	
 	Procedure Resize()

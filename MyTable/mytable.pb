@@ -96,7 +96,7 @@ Module MyTable
 		_DataSectionGetter(MyTable,Row,Application)
 		_DataSectionGetter(MyTable,Row,Table)
 		_DataSectionGetter(MyTable,Row,Parent)
-		_DataSectionGetter(MyTable,Row,Position)
+		_DataSectionGetter(MyTable,Row,LevelPosition)
 		_DataSectionGetter(MyTable,Row,VisiblePosition)
 		_DataSectionGetter(MyTable,Row,Level)
 		_DataSectionSetterGetter(MyTable,Row,Expanded)
