@@ -75,7 +75,7 @@
 |<span style="color:#FFFFAA">*col|[strMyTableCol](#strMyTableCol)</span>||
 |<span style="color:#FFFFAA">*row|[strMyTableRow](#strMyTableRow)</span>||
 |<span style="color:#FFFFAA">*table|[strMyTableTable](#strMyTableTable)</span>||
-|<span style="color:#FFFFAA">*application|[strMyTableApplication](#strMyTableApplication)</span>||
+|<span style="color:#FFFFAA">*application|strMyTableApplication</span>||
 |listindex|i||
 |text|s||
 |value|d||
@@ -96,7 +96,7 @@
 |Field|Type|Comment|
 | --- | --- | --- |
 |<span style="color:#FFFFAA">*table|[strMyTableTable](#strMyTableTable)</span>||
-|<span style="color:#FFFFAA">*application|[strMyTableApplication](#strMyTableApplication)</span>||
+|<span style="color:#FFFFAA">*application|strMyTableApplication</span>||
 |<span style="color:#FFFFAA">*parent|[strMyTableCol](#strMyTableCol)</span>||
 |listindex|i||
 |text|s||
@@ -117,7 +117,7 @@
 |Field|Type|Comment|
 | --- | --- | --- |
 |<span style="color:#FFFFAA">*table|[strMyTableTable](#strMyTableTable)</span>||
-|<span style="color:#FFFFAA">*application|[strMyTableApplication](#strMyTableApplication)</span>||
+|<span style="color:#FFFFAA">*application|strMyTableApplication</span>||
 |<span style="color:#FFFFAA">*cells|[strMyTableCell](#strMyTableCell)List</span>||
 |<span style="color:#FFFFAA">*rows|[strMyTableRow](#strMyTableRow)List</span>||
 |level|i||
@@ -149,7 +149,6 @@
 |maxhscroll|i||
 |window|i||
 |canvas|i||
-|<span style="color:#FFFFAA">*application|[strMyTableApplication](#strMyTableApplication)</span>||
 |List rows|[strMyTableRow](#strMyTableRow)()||
 |List expRows|i()||
 |List cols|[strMyTableCol](#strMyTableCol)()||
@@ -242,14 +241,6 @@
 |Field|Type|Comment|
 | --- | --- | --- |
 
-### strMyTableApplication : [strMyTableObject](#strMyTableObject)
-|Field|Type|Comment|
-| --- | --- | --- |
-|List tables|[strMyTableTable](#strMyTableTable)()||
-|lastindex|i||
-|redraw|b||
-|recalc|b||
-
 ### strMyTableRowCol
 |Field|Type|Comment|
 | --- | --- | --- |
@@ -276,70 +267,5 @@
 |Field|Type|Comment|
 | --- | --- | --- |
 |List rows|[strMyTableRow](#strMyTableRow)()||
-
-### strMyTableSaveStyleFont
-|Field|Type|Comment|
-| --- | --- | --- |
-|name|s||
-|size|i||
-|flags|i||
-
-### strMyTableSaveStyleBorder
-|Field|Type|Comment|
-| --- | --- | --- |
-|color|q||
-|width|i||
-
-### strMyTableSaveStyle
-|Field|Type|Comment|
-| --- | --- | --- |
-|border|i||
-|boderDefault|[strMyTableSaveStyleBorder](#strMyTableSaveStyleBorder)||
-|boderTop|[strMyTableSaveStyleBorder](#strMyTableSaveStyleBorder)||
-|boderBottom|[strMyTableSaveStyleBorder](#strMyTableSaveStyleBorder)||
-|boderLeft|[strMyTableSaveStyleBorder](#strMyTableSaveStyleBorder)||
-|boderRight|[strMyTableSaveStyleBorder](#strMyTableSaveStyleBorder)||
-|font|[strMyTableSaveStyleFont](#strMyTableSaveStyleFont)||
-|backcolor|q||
-|frontcolor|q||
-|forecolor|q||
-
-### strMyTableSaveObject
-|Field|Type|Comment|
-| --- | --- | --- |
-|flags|i||
-
-### strMyTableSaveCell : [strMyTableSaveObject](#strMyTableSaveObject)
-|Field|Type|Comment|
-| --- | --- | --- |
-|text|s||
-|value|d||
-|checked|b||
-|selected|b||
-
-### strMyTableSaveRow : [strMyTableSaveObject](#strMyTableSaveObject)
-|Field|Type|Comment|
-| --- | --- | --- |
-|checked|b||
-|selected|b||
-
-### strMyTableSaveCol : [strMyTableSaveObject](#strMyTableSaveObject)
-|Field|Type|Comment|
-| --- | --- | --- |
-|text|s||
-|selected|b||
-
-### strMyTableSaveTable : [strMyTableSaveObject](#strMyTableSaveObject)
-|Field|Type|Comment|
-| --- | --- | --- |
-|name|s||
-|title|s||
-|List cols|[strMyTableSaveCol](#strMyTableSaveCol)()||
-|List rows|[strMyTableSaveRow](#strMyTableSaveRow)()||
-
-### strMyTableSaveApplication : [strMyTableSaveObject](#strMyTableSaveObject)
-|Field|Type|Comment|
-| --- | --- | --- |
-|List tables|[strMyTableSaveTable](#strMyTableSaveTable)()||
 
 

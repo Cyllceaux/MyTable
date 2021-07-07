@@ -44,43 +44,22 @@ Procedure _MyTable_WinRepaint()
 	Next
 EndProcedure
 
-Procedure MyTableCreateApplication(flags.i=0)
-	Protected *this.strMyTableApplication=AllocateStructure(strMyTableApplication)
-	_MyTableInitApplication(*this,flags)
-	ProcedureReturn *this
-EndProcedure
-
-Procedure MyTableLoadApplication(file.s)
-	Protected xml=LoadXML(#PB_Any,file,#PB_UTF8)
-	Protected *app.strMyTableApplication=AllocateStructure(strMyTableApplication)
-	_MyTableInitApplication(*app,0)
-	If xml And XMLStatus(xml)=#PB_XML_Success
-		Protected *save.strMyTableSaveApplication=AllocateStructure(strMyTableSaveApplication)
-		_MyTableLoadApp(*save,*app)
-		ExtractXMLStructure(MainXMLNode(xml),*save,strMyTableSaveApplication)
-	Else
-		FreeStructure(*app)
-		*app=0
-	EndIf
-	FreeXML(xml)
-	ProcedureReturn *app
-EndProcedure
 
 Procedure MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)
 	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)	
-	_MyTableInitTable(0,*this,window,canvas,vscroll,hscroll,flags)
+	_MyTableInitTable(*this,window,canvas,vscroll,hscroll,flags)
 	ProcedureReturn *this
 EndProcedure
 
 Procedure MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)
 	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
-	_MyTableInitTree(0,*this,window,canvas,vscroll,hscroll,flags)
+	_MyTableInitTree(*this,window,canvas,vscroll,hscroll,flags)
 	ProcedureReturn *this
 EndProcedure
 
 Procedure MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
 	Protected *this.strMyTableTable=AllocateStructure(strMyTableTable)
-	_MyTableInitGrid(0,*this,window,canvas,vscroll,hscroll,rows,cols,flags)
+	_MyTableInitGrid(*this,window,canvas,vscroll,hscroll,rows,cols,flags)
 	ProcedureReturn *this
 EndProcedure
 
@@ -236,18 +215,7 @@ Procedure _MyTableInitBorderObject(*border.strMyTableBorderObject,
 	EndWith
 EndProcedure
 
-Procedure _MyTableInitApplication(*application.strMyTableApplication,
-                                  flags.i)
-	With *application
-		\vtable=?vtable_application
-		\type=My::#MY_TYPE_APPLICATION
-		\flags=flags
-		\recalc=#True
-		\redraw=#True
-		\dirty=#True
-		_MyTableInitStyles(*application)
-	EndWith
-EndProcedure
+
 
 Procedure _MyTableEvtScroll()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
@@ -1038,27 +1006,20 @@ Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
 	Protected *col.strMyTableCol=0
 	Protected *row.strMyTableRow=0
 	Protected *table.strMyTableTable=0
-	Protected *application.strMyTableApplication=0
 	Protected result.s=*this\tooltip
 	If result=""
 		Select *this\type
-			Case My::#MY_TYPE_APPLICATION
-				*application=*this
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 				*table=*this
-				*application=*table\application
 			Case My::#MY_TYPE_ROW
 				*row=*this
 				*table=*row\table
-				*application=*table\application
 			Case My::#MY_TYPE_COL
 				*col=*this
 				*table=*col\table
-				*application=*table\application
 			Case My::#MY_TYPE_CELL
 				*cell=*this
 				*table=*cell\table
-				*application=*table\application
 		EndSelect
 		
 		If result="" And *cell		
@@ -1072,20 +1033,9 @@ Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
 		EndIf
 		If result="" And *table
 			result=*table\tooltip
-		EndIf
-		If result="" And *application
-			result=*application\tooltip			
-		EndIf
+		EndIf	
 	EndIf
 	ProcedureReturn result
-EndProcedure
-
-Procedure _MyTableLoadApp(*save.strMyTableSaveApplication,*app.strMyTableApplication)
-	;TODO _MyTableLoadApp
-EndProcedure
-
-Procedure _MyTableSaveApp(*app.strMyTableApplication,*save.strMyTableSaveApplication)
-	;TODO _MyTableSaveApp
 EndProcedure
 
 Procedure _MyTableEvtCanvasMouseMove()
@@ -1467,8 +1417,7 @@ EndProcedure
 
 
 
-Procedure _MyTableInitTable(*application.strMyTableApplication,
-                            *table.strMyTableTable,
+Procedure _MyTableInitTable(*table.strMyTableTable,
                             window.i,
                             canvas.i,
                             vscroll.i,
@@ -1495,7 +1444,7 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			\datagrid=#False
 		EndIf
 		
-		\application=*application
+		
 		\redraw=_MyTable_IsRedraw(*table)
 		\recalc=#True
 		\dirty=#True
@@ -1554,25 +1503,21 @@ Procedure _MyTableInitTable(*application.strMyTableApplication,
 			SetGadgetAttribute(hscroll,#PB_ScrollBar_PageLength,GadgetWidth(canvas))
 		EndIf
 		
-		If *application
-			\listindex=ListSize(*application\tables())-1
-		Else
-			_MyTableInitStyles(*table)		
-		EndIf
+		
+		_MyTableInitStyles(*table)		
+		
 	EndWith
 	
 	_MyTableEvtResizeExp(*table)
 EndProcedure
 
-Procedure _MyTableInitTree(*application.strMyTableApplication,
-                           *table.strMyTableTable,
+Procedure _MyTableInitTree(*table.strMyTableTable,
                            window.i,
                            canvas.i,
                            vscroll.i,
                            hscroll.i,
                            flags.i)
-	_MyTableInitTable(*application,
-	                  *table,
+	_MyTableInitTable(*table,
 	                  window,
 	                  canvas,
 	                  vscroll,
@@ -1580,8 +1525,7 @@ Procedure _MyTableInitTree(*application.strMyTableApplication,
 	                  flags|#MYTABLE_TABLE_FLAGS_HIERARCHICAL)
 EndProcedure
 
-Procedure _MyTableInitGrid(*application.strMyTableApplication,
-                           *table.strMyTableTable,
+Procedure _MyTableInitGrid(*table.strMyTableTable,
                            window.i,
                            canvas.i,
                            vscroll.i,
@@ -1589,8 +1533,7 @@ Procedure _MyTableInitGrid(*application.strMyTableApplication,
                            rows.i,
                            cols.i,
                            flags.i)
-	_MyTableInitTable(*application,
-	                  *table,
+	_MyTableInitTable(*table,
 	                  window,
 	                  canvas,
 	                  vscroll,
@@ -1605,8 +1548,7 @@ Procedure _MyTableInitGrid(*application.strMyTableApplication,
 	*table\redraw=redraw
 EndProcedure
 
-Procedure _MyTableInitRow(*application.strMyTableApplication,
-                          *table.strMyTableTable,
+Procedure _MyTableInitRow(*table.strMyTableTable,
                           *parent.strMyTableRow,
                           *row.strMyTableRow,
                           text.s,
@@ -1618,7 +1560,6 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 		\vtable=?vtable_row
 		\type=My::#MY_TYPE_ROW
 		\flags=flags			
-		\application=*application
 		\table=*table
 		\parent=*parent
 		\dirty=#True
@@ -1645,8 +1586,7 @@ Procedure _MyTableInitRow(*application.strMyTableApplication,
 	
 EndProcedure
 
-Procedure _MyTableInitCol(*application.strMyTableApplication,
-                          *table.strMyTableTable,
+Procedure _MyTableInitCol(*table.strMyTableTable,
                           *col.strMyTableCol,
                           text.s,
                           width.i,
@@ -1658,7 +1598,6 @@ Procedure _MyTableInitCol(*application.strMyTableApplication,
 		\vtable=?vtable_col
 		\type=My::#MY_TYPE_COL
 		\flags=flags
-		\application=*application
 		\table=*table
 		\dirty=#True
 		\text=text
@@ -1704,8 +1643,7 @@ EndProcedure
 
 
 
-Procedure _MyTableInitCell(*application.strMyTableApplication,
-                           *table.strMyTableTable,
+Procedure _MyTableInitCell(*table.strMyTableTable,
                            *row.strMyTableRow,
                            *col.strMyTableCol,
                            *parent.strMyTableCell,
@@ -1715,7 +1653,6 @@ Procedure _MyTableInitCell(*application.strMyTableApplication,
 		\vtable=?vtable_cell
 		\type=My::#MY_TYPE_CELL
 		\flags=flags
-		\application=*application
 		\table=*table
 		\parent=*parent
 		\row=*row
@@ -1755,7 +1692,7 @@ Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i,force.b)
 			While ListSize(*row\cells\cells())<=tidx
 				LastElement(*row\cells\cells())
 				*cell=AddElement(*row\cells\cells())
-				_MyTableInitCell(*row\table\application,*row\table,*row,*col,0,*cell,0)
+				_MyTableInitCell(*row\table,*row,*col,0,*cell,0)
 			Wend
 			If *cell
 				ProcedureReturn *cell
@@ -1783,9 +1720,6 @@ Procedure.b _MyTable_IsDisabled(*obj.strMyTableObject)
 				result=_MyTable_IsDisabled(*col\table)
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				Protected *table.strMyTableTable=*obj
-				If *table\application
-					result=_MyTable_IsDisabled(*table\application)
-				EndIf
 		EndSelect
 	EndIf
 	ProcedureReturn result

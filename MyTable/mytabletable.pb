@@ -57,8 +57,7 @@ Procedure _MyTable_Table_Reinit(*this.strMyTableTable)
 		ClearList(*this\rows())
 		ClearList(*this\cols())
 		If _MyTable_IsGrid(*this)
-			_MyTableInitGrid(*this\application,
-			                 *this,
+			_MyTableInitGrid(*this,
 			                 *this\window,
 			                 *this\canvas,
 			                 *this\vscroll,
@@ -67,16 +66,14 @@ Procedure _MyTable_Table_Reinit(*this.strMyTableTable)
 			                 cols,
 			                 *this\flags)
 		ElseIf _MyTable_IsHierarchical(*this)
-			_MyTableInitTree(*this\application,
-			                 *this,
+			_MyTableInitTree(*this,
 			                 *this\window,
 			                 *this\canvas,
 			                 *this\vscroll,
 			                 *this\hscroll,			                 
 			                 *this\flags)
 		Else
-			_MyTableInitTable(*this\application,
-			                  *this,
+			_MyTableInitTable(*this,
 			                  *this\window,
 			                  *this\canvas,
 			                  *this\vscroll,
@@ -151,22 +148,7 @@ EndProcedure
 Procedure _MyTable_Table_SetName(*this.strMyTableTable,value.s)
 	If *this
 		Protected nname.s=_MyTableCleanName(value)
-		If *this\application
-			If nname<>*this\name
-				If nname=""
-					While _MyTable_Application_HasName(*this\application,"Table"+*this\application\lastindex)
-						*this\application\lastindex+1
-					Wend
-					*this\name="Table"+*this\application\lastindex
-				Else
-					If Not _MyTable_Application_HasName(*this\application,nname)
-						*this\name=nname
-					EndIf
-				EndIf
-			EndIf
-		Else
-			*this\name=nname
-		EndIf
+		*this\name=nname		
 	EndIf
 EndProcedure
 
@@ -174,7 +156,7 @@ EndProcedure
 Procedure _MyTable_Table_AddRow(*this.strMyTableTable,text.s,sep.s="|",image.i=0,flags.i=0)
 	If *this
 		Protected *row.strMyTableRow=AddElement(*this\rows())
-		_MyTableInitRow(*this\application,*this,0,*row,text,sep,image,flags)
+		_MyTableInitRow(*this,0,*row,text,sep,image,flags)
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
@@ -189,7 +171,7 @@ Procedure _MyTable_Table_AddDirtyRows(*this.strMyTableTable,rows.i)
 		LastElement(*this\rows())
 		For idx=1 To rows			
 			Protected *row.strMyTableRow=AddElement(*this\rows())
-			_MyTableInitRow(*this\application,*this,0,*row,"","",0,0)
+			_MyTableInitRow(*this,0,*row,"","",0,0)
 			*this\dirty=#True
 		Next		
 		_callcountEnde()
@@ -201,7 +183,7 @@ EndProcedure
 Procedure _MyTable_Table_AddCol(*this.strMyTableTable,text.s,width.i,image.i=0,flags.i=0)
 	If *this
 		Protected *col.strMyTableCol=AddElement(*this\cols())
-		_MyTableInitCol(*this\application,*this,*col,text,width,image,flags)
+		_MyTableInitCol(*this,*col,text,width,image,flags)
 		*this\dirty=#True
 		_MyTable_Table_Predraw(*this)
 		_MyTable_Table_Redraw(*this)
@@ -236,20 +218,8 @@ Procedure _MyTable_Table_Delete(*this.strMyTableTable)
 			UnbindGadgetEvent(*this\hscroll,@_MyTableEvtScroll())
 		EndIf
 		
-		If *this\application
-			Protected idx=0
-			ForEach *this\application\tables()
-				If *this\application\tables()=*this
-					DeleteElement(*this\application\tables())
-					Break
-				Else
-					*this\application\tables()\listindex=idx
-					idx+1
-				EndIf
-			Next
-		Else
-			FreeStructure(*this)
-		EndIf
+		FreeStructure(*this)
+		
 	EndIf
 EndProcedure
 
@@ -973,9 +943,7 @@ Procedure _MyTable_Table_Redraw(*this.strMyTableTable)
 		Protected zebra.b=_MyTable_IsZebra(*this)
 		
 		
-		If *this\application
-			redraw=Bool(redraw And *this\application\redraw)
-		EndIf
+
 		redraw=Bool(redraw And Not *this\drawing)
 		If redraw
 			_callcountStart()
@@ -1393,9 +1361,6 @@ EndProcedure
 Procedure _MyTable_Table_Recalc(*this.strMyTableTable)
 	If *this
 		Protected recalc.b=*this\recalc
-		If *this\application
-			recalc=Bool(recalc And *this\application\recalc)
-		EndIf
 		If recalc And Not *this\drawing
 			_callcountStart()
 			
@@ -1514,11 +1479,6 @@ Procedure _MyTable_Table_GetCol(*this.strMyTableTable,col.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Table_GetApplication(*this.strMyTableTable)
-	If *this		
-		ProcedureReturn *this\application
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Table_GetCell(*this.strMyTableTable,row.i,col.i)
 	If *this

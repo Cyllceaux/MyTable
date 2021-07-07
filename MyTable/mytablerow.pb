@@ -14,12 +14,6 @@ _SimpleSetterGetterPointer(MyTable,Row,Data)
 
 
 
-Procedure _MyTable_Row_GetApplication(*this.strMyTableRow)
-	If *this
-		ProcedureReturn *this\table\application
-	EndIf
-EndProcedure
-
 
 Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",image.i=0,flags.i=0)
 	If *this
@@ -27,7 +21,7 @@ Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",image.i=0,fla
 			*this\rows=AllocateStructure(strMyTableRowList)
 		EndIf
 		Protected *row.strMyTableRow=AddElement(*this\rows\rows())
-		_MyTableInitRow(*this\table\application,*this\table,*this,*row,text,sep,image,flags)
+		_MyTableInitRow(*this\table,*this,*row,text,sep,image,flags)
 		*this\table\dirty=#True
 		*this\dirty=#True
 		_MyTable_Table_Redraw(*this\table)
@@ -46,7 +40,7 @@ Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,text.s,rows.i)
 		LastElement(*this\rows\rows())
 		For idx=1 To rows
 			Protected *row.strMyTableRow=AddElement(*this\rows\rows())
-			_MyTableInitRow(*this\table\application,*this\table,*this,*row,"","",0,0)
+			_MyTableInitRow(*this\table,*this,*row,"","",0,0)
 			*this\dirty=#True
 		Next
 		_callcountEnde()

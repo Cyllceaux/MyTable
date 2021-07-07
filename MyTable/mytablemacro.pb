@@ -31,7 +31,6 @@ Macro _MyTable_GetStyleCell(name)
 		*style\rowStyle=*this\row\name#Style
 		*style\colStyle=*this\col\name#Style
 		*style\tableStyle=*this\table\name#Style
-		*style\applicationStyle=*this\application\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -45,7 +44,6 @@ Macro _MyTable_GetStyleCol(name)
 		
 		*style\colStyle=*this\name#Style
 		*style\tableStyle=*this\table\name#Style
-		*style\applicationStyle=*this\application\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -59,7 +57,6 @@ Macro _MyTable_GetStyleRow(name)
 		
 		*style\rowStyle=*this\name#Style
 		*style\tableStyle=*this\table\name#Style
-		*style\applicationStyle=*this\application\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -72,19 +69,6 @@ Macro _MyTable_GetStyleTable(name)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
 		*style\tableStyle=*this\name#Style		
-		*style\applicationStyle=*this\application\name#Style
-		
-		_MyTableInitStyleObject(*style,*this,*this\name#Style)
-		ProcedureReturn *style
-	EndProcedure
-EndMacro
-
-Macro _MyTable_GetStyleApplication(name)
-	_AddAutoDeclare(MyTable,_MyTable_Application_Get#name#Style(*this.strMyTableApplication))
-	Procedure _MyTable_Application_Get#name#Style(*this.strMyTableApplication)
-		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
-		
-		*style\applicationStyle=*this\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -303,7 +287,7 @@ Macro _MyTableDataSectionDefaultTableObject(gruppe)
 	_DataSectionGetter(MyTable,gruppe,ZebraStyle)
 	_DataSectionGetter(MyTable,gruppe,TitleStyle)
 	_DataSectionGetter(MyTable,gruppe,EmptyStyle)
-	_DataSectionGetter(MyTable,gruppe,Application)
+	
 	
 	_DataSectionGetter(MyTable,gruppe,Pages)
 	
@@ -462,9 +446,6 @@ Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
-					If *table\application
-						result=_MyTable_Get#gruppe#name(*table\application,#False)
-					EndIf
 			EndSelect
 		EndIf
 		If root And Not result
@@ -496,9 +477,6 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
-					If *table\application
-						result=_MyTable_Get#gruppe#name(*table\application,#False)
-					EndIf
 			EndSelect
 		EndIf
 		If root And Not result
@@ -530,9 +508,6 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 					*result=_MyTable_Get#gruppe#name(*col\table,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
-					If *table\application
-						*result=_MyTable_Get#gruppe#name(*table\application,#False)
-					EndIf
 			EndSelect
 		EndIf
 		If root And Not *result
@@ -564,9 +539,6 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 					result=_MyTable_Get#gruppe#name(*col\table,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
-					If *table\application
-						result=_MyTable_Get#gruppe#name(*table\application,#False)
-					EndIf
 			EndSelect
 		EndIf
 		If root And Not result
@@ -593,9 +565,6 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 					result= _MyTable_Get#gruppe#Border#name#pos(*col\table,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
-					If *table\application
-						result= _MyTable_Get#gruppe#Border#name#pos(*table\application,#False)
-					EndIf
 			EndSelect
 		EndIf
 		

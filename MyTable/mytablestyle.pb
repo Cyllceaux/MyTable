@@ -21,10 +21,6 @@ _MyTableStyleBorder(Bottom)
 
 Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 	Select *this\obj\type
-		Case My::#MY_TYPE_APPLICATION
-			Protected *application.strMyTableApplication=*this\obj
-			*application\dirty=#True
-			_MyTable_Application_Redraw(*application)
 		Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 			Protected *table.strMyTableTable=*this\obj
 			*table\dirty=#True

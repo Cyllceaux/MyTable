@@ -2,21 +2,6 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|\_MyTable\_Application\_GetData||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetDefaultStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetDisabledStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetElementSelectedStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetEmptyStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetFixedStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetMouseOverStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetSelectedStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_SetData||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , <span style="color:#FFFFAA">*value</span>||
-|\_MyTable\_Application\_SetDirty||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.b||
-|\_MyTable\_Application\_SetDisabled||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.b||
-|\_MyTable\_Application\_SetFlags||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.i||
-|\_MyTable\_Application\_SetTooltip||<span style="color:#FFFFAA">*this.</span>strMyTableApplication , value.s||
 |\_MyTable\_Border\_SetColor||<span style="color:#FFFFAA">*this.</span>strMyTableBorderObject , value.q||
 |\_MyTable\_Border\_SetWidth||<span style="color:#FFFFAA">*this.</span>strMyTableBorderObject , value.i||
 |\_MyTable\_Cell\_GetCol||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -177,8 +162,6 @@
 |\_MyTable\_Table\_SetType||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetVScroll||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_SetWindow||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
-|\_MyTable\_Application\_GetDirty|b|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetDisabled|b|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Cell\_GetChecked|b|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetDirty|b|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetDisabled|b|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -210,8 +193,6 @@
 |\_MyTable\_Table\_GetDirty|b|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetDisabled|b|<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Cell\_GetValue|d|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
-|\_MyTable\_Application\_GetFlags|i|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
-|\_MyTable\_Application\_GetType|i|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Border\_GetWidth|i|<span style="color:#FFFFAA">*this.strMyTableBorderObject</span>||
 |\_MyTable\_Cell\_GetColspan|i|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetDatatype|i|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -403,7 +384,6 @@
 |\_MyTable\_Style\_GetBorderColorTop|q|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
 |\_MyTable\_Style\_GetForeColor|q|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
 |\_MyTable\_Style\_GetFrontColor|q|<span style="color:#FFFFAA">*this.strMyTableStyleObject</span>||
-|\_MyTable\_Application\_GetTooltip|s|<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Cell\_GetFormula|s|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetMask|s|<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetText|s|<span style="color:#FFFFAA">*this.strMyTableCell</span>||

@@ -56,11 +56,6 @@ Procedure _MyTable_Col_SetDatatype(*this.strMyTableCol,value.i)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Col_GetApplication(*this.strMyTableCol)
-	If *this
-		ProcedureReturn *this\table\application
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Col_GetPosition(*this.strMyTableCol)
 	If *this

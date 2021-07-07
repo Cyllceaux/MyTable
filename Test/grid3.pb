@@ -24,9 +24,7 @@ UseModule MyTable
 	Global panel=PanelGadget(#PB_Any,0,by,WindowWidth(window),WindowHeight(window)-by)
 	CloseGadgetList()
 	
-	
-	Global *app.MyTableApplication=MyTableCreateApplication()
-	
+		
 	Procedure KeyEdit()
 		Protected gadget=GetActiveGadget()
 		Protected *element.Element=GetGadgetData(gadget)
@@ -130,14 +128,14 @@ UseModule MyTable
 		CloseGadgetList()	
 		
 		SetGadgetData(*element\string,*element)
-		*element\grid=*app\AddGrid(window,
+		*element\grid=MyTableCreateGrid(window,
 		                           *element\canvas,
 		                           *element\vscroll,
 		                           *element\hscroll,
 		                           10000,
 		                           100,
-		                           "",
 		                           #MYTABLE_TABLE_FLAGS_DEFAULT_GRID|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_MARK_MOUSE_OVER)		
+		*element\grid\SetName("Grid "+CountGadgetItems(panel))
 		*element\grid\SetData(*element)
 		SetGadgetItemText(panel,CountGadgetItems(panel)-1,*element\grid\GetName())
 		*element\grid\BindEventCellSelected(@EvtCellSelect())
@@ -185,5 +183,4 @@ UseModule MyTable
 	
 	Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
 	
-	*app\Free()
 UnuseModule MyTable

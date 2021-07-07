@@ -37,7 +37,6 @@ Module MyTable
 	IncludeFile "mytableglobal.pb"
 	IncludeFile "mytablestyle.pb"
 	IncludeFile "mytableborder.pb"
-	IncludeFile "mytableapplication.pb"
 	IncludeFile "mytabletable.pb"
 	IncludeFile "mytabletree.pb"
 	IncludeFile "mytablegrid.pb"
@@ -58,26 +57,7 @@ Module MyTable
 		_MyTableDataSectionBorderDefault(Border)
 		
 		
-		vtable_application:;- Application
-		_MyTableDataSectionDefault(Application)
-		_DataSectionGetter(MyTable,Application,ElementSelectedStyle)
-		_DataSectionGetter(MyTable,Application,ZebraStyle)
-		_DataSectionGetter(MyTable,Application,TitleStyle)
-		_DataSectionGetter(MyTable,Application,EmptyStyle)
-		_DataSectionSetterGetter(MyTable,Application,Redraw)
-		_DataSectionSetterGetter(MyTable,Application,Recalc)
-		
-		_DataSectionMethode(MyTable,Application,AddTable)
-		_DataSectionMethode(MyTable,Application,AddTree)
-		_DataSectionMethode(MyTable,Application,AddGrid)
-		_DataSectionMethode(MyTable,Application,AddNewTable)
-		_DataSectionMethode(MyTable,Application,AddNewTree)
-		_DataSectionMethode(MyTable,Application,AddNewGrid)
-		_DataSectionMethode(MyTable,Application,ClearTables)
-		_DataSectionMethode(MyTable,Application,Redraw)
-		_DataSectionMethode(MyTable,Application,Recalc)
-		_DataSectionMethode(MyTable,Application,Free)
-		_DataSectionMethode(MyTable,Application,Save)
+
 		
 		vtable_table:;- Table
 		_MyTableDataSectionDefaultTable(Table)
@@ -93,7 +73,6 @@ Module MyTable
 		vtable_row:;- Row
 		_MyTableDataSectionDefault(Row)
 		_DataSectionGetter(MyTable,Row,ElementSelectedStyle)
-		_DataSectionGetter(MyTable,Row,Application)
 		_DataSectionGetter(MyTable,Row,Table)
 		_DataSectionGetter(MyTable,Row,Parent)
 		_DataSectionGetter(MyTable,Row,LevelPosition)
@@ -116,7 +95,6 @@ Module MyTable
 		vtable_col:;- Col
 		_MyTableDataSectionDefault(Col)
 		_DataSectionGetter(MyTable,Col,ElementSelectedStyle)
-		_DataSectionGetter(MyTable,Col,Application)
 		_DataSectionGetter(MyTable,Col,Table)
 		_DataSectionGetter(MyTable,Col,Position)
 		_DataSectionSetterGetter(MyTable,Col,Text)
@@ -133,7 +111,6 @@ Module MyTable
 		
 		vtable_cell:;- Cell
 		_MyTableDataSectionDefault(Cell)
-		_DataSectionGetter(MyTable,Cell,Application)
 		_DataSectionGetter(MyTable,Cell,Table)
 		_DataSectionGetter(MyTable,Cell,Row)
 		_DataSectionGetter(MyTable,Cell,Col)

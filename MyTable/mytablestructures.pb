@@ -151,7 +151,7 @@ Structure strMyTableTable Extends strMyTableObject
 	window.i
 	canvas.i
 	
-	*application.strMyTableApplication
+
 	List rows.strMyTableRow()
 	List expRows.i()
 	List cols.strMyTableCol()
@@ -266,12 +266,6 @@ Structure strMyTableGrid Extends strMyTableTable
 	
 EndStructure
 
-Structure strMyTableApplication Extends strMyTableObject
-	List tables.strMyTableTable()
-	lastindex.i
-	redraw.b
-	recalc.b
-EndStructure
 
 Structure strMyTableRowCol
 	row.i
@@ -295,60 +289,4 @@ EndStructure
 
 Structure strMyTableRowList
 	List rows.strMyTableRow()
-EndStructure
-
-Structure strMyTableSaveStyleFont
-	name.s
-	size.i
-	flags.i	
-EndStructure
-
-Structure strMyTableSaveStyleBorder
-	color.q
-	width.i
-EndStructure
-
-Structure strMyTableSaveStyle
-	border.i	
-	boderDefault.strMyTableSaveStyleBorder
-	boderTop.strMyTableSaveStyleBorder
-	boderBottom.strMyTableSaveStyleBorder
-	boderLeft.strMyTableSaveStyleBorder
-	boderRight.strMyTableSaveStyleBorder
-	font.strMyTableSaveStyleFont
-	backcolor.q
-	frontcolor.q
-	forecolor.q
-EndStructure
-
-Structure strMyTableSaveObject
-	flags.i
-EndStructure
-
-Structure strMyTableSaveCell Extends strMyTableSaveObject
-	text.s
-	value.d
-	checked.b
-	selected.b
-EndStructure
-
-Structure strMyTableSaveRow Extends strMyTableSaveObject
-	checked.b
-	selected.b
-EndStructure
-
-Structure strMyTableSaveCol Extends strMyTableSaveObject
-	text.s
-	selected.b
-EndStructure
-
-Structure strMyTableSaveTable Extends strMyTableSaveObject
-	name.s
-	title.s
-	List cols.strMyTableSaveCol()
-	List rows.strMyTableSaveRow()
-EndStructure
-
-Structure strMyTableSaveApplication Extends strMyTableSaveObject
-	List tables.strMyTableSaveTable()
 EndStructure

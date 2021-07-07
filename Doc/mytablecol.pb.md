@@ -4,7 +4,6 @@
 | --- | --- | --- | --- |
 |\_MyTable\_Col\_SetMask||<span style="color:#FFFFAA">*this.</span>strMyTableCol , value.s||
 |\_MyTable\_Col\_SetDatatype||<span style="color:#FFFFAA">*this.</span>strMyTableCol , value.i||
-|\_MyTable\_Col\_GetApplication||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetPosition||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetSort||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_CreateSort||<span style="color:#FFFFAA">*row.</span>strMyTableRow , col.i , sort.i , numeric.b||

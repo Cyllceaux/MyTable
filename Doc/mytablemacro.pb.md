@@ -7,7 +7,6 @@
 |\_MyTable\_GetStyleCol||name||
 |\_MyTable\_GetStyleRow||name||
 |\_MyTable\_GetStyleTable||name||
-|\_MyTable\_GetStyleApplication||name||
 |\_callcountStart||||
 |\_callcountEnde||||
 |\_MyTable\_GetStylesApplication||||

@@ -6,7 +6,6 @@
 |\_MyTable\_Cell\_SetFormula||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetText||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.s||
 |\_MyTable\_Cell\_SetValue||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.d||
-|\_MyTable\_Cell\_GetApplication||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_StartEdit||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_StopEdit||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_SetSelected||<span style="color:#FFFFAA">*this.</span>strMyTableCell , value.b||

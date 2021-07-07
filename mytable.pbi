@@ -4,8 +4,8 @@ XIncludeFile "myimage.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3785
-	#MYTABLE_VERSION_DATE = 20210706
+	#MYTABLE_VERSION = 3793
+	#MYTABLE_VERSION_DATE = 20210707
 
 
 	
@@ -99,7 +99,7 @@ DeclareModule MyTable
 	EndEnumeration
 	
 	Interface MyTableCell Extends MyTableObject
-		GetApplication()
+		
 		GetTable()
 		GetRow()
 		GetCol()
@@ -142,7 +142,7 @@ DeclareModule MyTable
 	
 	Interface MyTableCol Extends MyTableObject
 		GetElementSelectedStyle()
-		GetApplication()
+		
 		GetTable()
 		GetPosition()
 		SetText(value.s):GetText.s()
@@ -169,7 +169,7 @@ DeclareModule MyTable
 	
 	Interface MyTableRow Extends MyTableObject
 		GetElementSelectedStyle()
-		GetApplication()
+		
 		GetTable()
 		GetParent()
 		GetLevelPosition()
@@ -254,7 +254,7 @@ DeclareModule MyTable
 		GetTitleStyle()
 		GetEmptyStyle()		
 		
-		GetApplication()
+		
 		GetPages()
 		SetName(value.s):GetName.s()
 		SetTitle(value.s):GetTitle.s()
@@ -367,32 +367,7 @@ DeclareModule MyTable
 		BindEventColSelected(event.MyTableProtoEventColSelected)
 	EndInterface
 	
-	Interface MyTableApplication Extends MyTableObject
-		GetElementSelectedStyle()
-		GetZebraStyle()
-		GetTitleStyle()
-		GetEmptyStyle()	
-		
-		SetRedraw(value.b):GetRedraw.b()
-		SetRecalc(value.b):GetRecalc.b()
-		
-		AddTable(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
-		AddTree(window.i,canvas.i,vscroll.i,hscroll.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)			
-		AddGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)
-		
-		AddNewTable(x.i,y.i,w.i,h.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)			
-		AddNewTree(x.i,y.i,w.i,h.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)			
-		AddNewGrid(x.i,y.i,w.i,h.i,rows.i,cols.i,name.s="",flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)			
-		
-		ClearTables()
-		Redraw()
-		Recalc()
-		Free()
-		Save.b(file.s); TODO
-	EndInterface
 	
-	Declare MyTableCreateApplication(flags.i=0)	
-	Declare MyTableLoadApplication(file.s); TODO
 	Declare MyTableCreateTable(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TABLE)	
 	Declare MyTableCreateTree(window.i,canvas.i,vscroll.i,hscroll.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_TREE)	
 	Declare MyTableCreateGrid(window.i,canvas.i,vscroll.i,hscroll.i,rows.i,cols.i,flags.i=#MYTABLE_TABLE_FLAGS_DEFAULT_GRID)	

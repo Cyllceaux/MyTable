@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3785||
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210706||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3793||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210707||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
@@ -215,7 +215,6 @@
 ### MyTableCell : [MyTableObject](#MyTableObject)
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|GetApplication||||
 |GetTable||||
 |GetRow||||
 |GetCol||||
@@ -256,7 +255,6 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
-|GetApplication||||
 |GetTable||||
 |GetPosition||||
 |SetText||value.s||
@@ -282,7 +280,6 @@
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
 |GetElementSelectedStyle||||
-|GetApplication||||
 |GetTable||||
 |GetParent||||
 |GetLevelPosition||||
@@ -316,7 +313,6 @@
 |GetZebraStyle||||
 |GetTitleStyle||||
 |GetEmptyStyle||||
-|GetApplication||||
 |GetPages||||
 |SetName||value.s||
 |GetName|s|||
@@ -435,36 +431,11 @@
 |ResizeGrid||rows.i = <span style="color:#AAAAFF">\#PB\_Ignore</span> , cols.i = <span style="color:#AAAAFF">\#PB\_Ignore</span>||
 |BindEventColSelected||event.MyTableProtoEventColSelected||
 
-### MyTableApplication : [MyTableObject](#MyTableObject)
-|Name|Return|Parameter|Comment|
-| --- | --- | --- | --- |
-|GetElementSelectedStyle||||
-|GetZebraStyle||||
-|GetTitleStyle||||
-|GetEmptyStyle||||
-|SetRedraw||value.b||
-|GetRedraw|b|||
-|SetRecalc||value.b||
-|GetRecalc|b|||
-|AddTable||window.i , canvas.i , vscroll.i , hscroll.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
-|AddTree||window.i , canvas.i , vscroll.i , hscroll.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
-|AddGrid||window.i , canvas.i , vscroll.i , hscroll.i , rows.i , cols.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
-|AddNewTable||x.i , y.i , w.i , h.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
-|AddNewTree||x.i , y.i , w.i , h.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
-|AddNewGrid||x.i , y.i , w.i , h.i , rows.i , cols.i , name.s = <span style="color:#AAFFAA">""</span> , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||
-|ClearTables||||
-|Redraw||||
-|Recalc||||
-|Free||||
-|Save|b|file.s|TODO|
-
 
 ## Declares
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|MyTableCreateApplication||flags.i = 0||
-|MyTableLoadApplication||file.s|TODO|
 |MyTableCreateTable||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>||
 |MyTableCreateTree||window.i , canvas.i , vscroll.i , hscroll.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>||
 |MyTableCreateGrid||window.i , canvas.i , vscroll.i , hscroll.i , rows.i , cols.i , flags.i = <span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_GRID</span>||

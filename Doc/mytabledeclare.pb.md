@@ -5,20 +5,17 @@
 |\_MyTableInitStyleTable||<span style="color:#FFFFAA">*style.strMyTableStyle</span>||
 |\_MyTableInitStyleObject||<span style="color:#FFFFAA">*style.</span>strMyTableStyleObject , ||
 |\_MyTableInitBorderObject||<span style="color:#FFFFAA">*border.</span>strMyTableBorderObject , ||
-|\_MyTableInitApplication||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitTable||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitTree||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitGrid||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitRow||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitCol||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
-|\_MyTableInitCell||<span style="color:#FFFFAA">*application.</span>strMyTableApplication , ||
+|\_MyTableInitTable||<span style="color:#FFFFAA">*table.</span>strMyTableTable , ||
+|\_MyTableInitTree||<span style="color:#FFFFAA">*table.</span>strMyTableTable , ||
+|\_MyTableInitGrid||<span style="color:#FFFFAA">*table.</span>strMyTableTable , ||
+|\_MyTableInitRow||<span style="color:#FFFFAA">*table.</span>strMyTableTable , ||
+|\_MyTableInitCol||<span style="color:#FFFFAA">*table.</span>strMyTableTable , ||
+|\_MyTableInitCell||<span style="color:#FFFFAA">*table.</span>strMyTableTable , ||
 |\_MyTableGetOrAddCell||<span style="color:#FFFFAA">*row.</span>strMyTableRow , idx.i , force.b||
 |\_MyTable\_StartEdit||<span style="color:#FFFFAA">*rc.strMyTableRowCol</span>||
 |\_MyTable\_StartEditCell||<span style="color:#FFFFAA">*cll.strMyTableCell</span>||
 |\_MyTable\_StopEdit||<span style="color:#FFFFAA">*this.</span>strMyTableTable , save.b||
 |\_MyTableSelectObject||<span style="color:#FFFFAA">*obj.</span>strMyTableObject , shift.b , pages.b||
-|\_MyTableLoadApp||<span style="color:#FFFFAA">*save.</span>strMyTableSaveApplication , <span style="color:#FFFFAA">*app.strMyTableApplication</span>||
-|\_MyTableSaveApp||<span style="color:#FFFFAA">*app.</span>strMyTableApplication , <span style="color:#FFFFAA">*save.strMyTableSaveApplication</span>||
 |\_MyTable\_IsHierarchical|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_IsCheckboxes|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_IsSortable|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
@@ -37,8 +34,6 @@
 |\_MyTable\_IsHeader|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_IsRedraw|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
 |\_MyTable\_IsElement\_Selected|b|<span style="color:#FFFFAA">*obj.strMyTableObject</span>||
-|\_MyTable\_Application\_HasName|b|<span style="color:#FFFFAA">*this.</span>strMyTableApplication , name.s||
-|\_MyTable\_Application\_Redraw||<span style="color:#FFFFAA">*this.strMyTableApplication</span>||
 |\_MyTable\_Table\_Redraw||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_Predraw||<span style="color:#FFFFAA">*this.</span>strMyTableTable , force.b = <span style="color:#AAAAFF">\#False</span>||
 |\_MyTable\_Table\_Recalc||<span style="color:#FFFFAA">*this.strMyTableTable</span>||

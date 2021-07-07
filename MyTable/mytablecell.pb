@@ -74,11 +74,6 @@ Procedure _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
 	EndIf
 EndProcedure
 
-Procedure _MyTable_Cell_GetApplication(*this.strMyTableCell)
-	If *this
-		ProcedureReturn *this\table\application
-	EndIf
-EndProcedure
 
 Procedure _MyTable_Cell_StartEdit(*this.strMyTableCell)
 	If *this
@@ -176,7 +171,7 @@ Procedure _MyTable_Cell_AddCell(*this.strMyTableCell,text.s,image.i=0,flags.i=0)
 		EndIf
 		LastElement(*this\cells\cells())
 		Protected *cell.strMyTableCell=AddElement(*this\cells\cells())
-		_MyTableInitCell(*this\table\application,*this\table,*this\row,*this\col,*this,*cell,Flags)
+		_MyTableInitCell(*this\table,*this\row,*this\col,*this,*cell,Flags)
 		*cell\text=text
 		ProcedureReturn *cell
 	EndIf

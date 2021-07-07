@@ -2,7 +2,6 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
-|\_MyTable\_Row\_GetApplication||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_AddRow||<span style="color:#FFFFAA">*this.</span>strMyTableRow , text.s , sep.s = <span style="color:#AAFFAA">" \| "</span> , image.i = 0 , flags.i = 0||
 |\_MyTable\_Row\_AddDirtyRows||<span style="color:#FFFFAA">*this.</span>strMyTableRow , text.s , rows.i||
 |\_MyTable\_Row\_Delete||<span style="color:#FFFFAA">*this.strMyTableRow</span>||

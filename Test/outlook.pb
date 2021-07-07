@@ -18,12 +18,12 @@ UseModule MyTable
 			Global hscrollfavoriten=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 			Global vscrollfavoriten=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 			CloseGadgetList()
-						
+			
 			Global ordner=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Keyboard)
 			Global hscrollordner=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 			Global vscrollordner=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 			CloseGadgetList()
-
+			
 			
 			Global mails=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Keyboard)
 			Global hscrollmails=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
@@ -63,21 +63,20 @@ UseModule MyTable
 			Global *splitter0.MySplitter=MySplitterCreateSplitter(0,0,WindowWidth(window),WindowHeight(window),*splitter1,*splitterb,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_SECONDFIXED)
 			
 			
-
+			
 			
 			
 			Define *cell.MyTableCell=0,*cell2.MyTableCell=0,*cell3.MyTableCell=0
-			Global *app.MyTableApplication=MyTableCreateApplication()
-			Define *appstyle.MyTableStyle=*app\GetDefaultStyle()
+			
+			
 			Define *colstyle.MyTableStyle=0
 			Define *cellstyle.MyTableStyle=0
-			*appstyle\SetFont(normal)
-			Global *favoriten.MyTableTable=*app\AddTree(window,favoriten,vscrollfavoriten,hscrollfavoriten,"favoriten",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-			Global *ordner.MyTableTable=*app\AddTree(window,ordner,vscrollordner,hscrollordner,"ordner",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-			Global *mails.MyTableTable=*app\AddTree(window,mails,vscrollmails,hscrollmails,"mails",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_BORDER)
-			Global *termine.MyTableTable=*app\AddTree(window,termine,vscrolltermine,hscrolltermine,"termine",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-			Global *kontakte.MyTableTable=*app\AddTree(window,kontakte,vscrollkontakte,hscrollkontakte,"kontakte",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
-			Global *aufgaben.MyTableTable=*app\AddTree(window,aufgaben,vscrollaufgaben,hscrollaufgaben,"aufgaben",#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+			Global *favoriten.MyTableTable=MyTableCreateTree(window,favoriten,vscrollfavoriten,hscrollfavoriten,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+			Global *ordner.MyTableTable=MyTableCreateTree(window,ordner,vscrollordner,hscrollordner,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+			Global *mails.MyTableTable=MyTableCreateTree(window,mails,vscrollmails,hscrollmails,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT|#MYTABLE_TABLE_FLAGS_BORDER)
+			Global *termine.MyTableTable=MyTableCreateTree(window,termine,vscrolltermine,hscrolltermine,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+			Global *kontakte.MyTableTable=MyTableCreateTree(window,kontakte,vscrollkontakte,hscrollkontakte,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+			Global *aufgaben.MyTableTable=MyTableCreateTree(window,aufgaben,vscrollaufgaben,hscrollaufgaben,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 			
 			*favoriten\SetDefaultImagePlusArrow(MyTableDefaultImagePlusArrow)
 			*favoriten\SetDefaultImageMinusArrow(MyTableDefaultImageMinusArrow)
@@ -374,7 +373,6 @@ UseModule MyTable
 			
 			Procedure Resize()
 				Protected fh=*favoriten\GetCalcHeight()
-				*app\SetRedraw(#False)
 				*splitter0\Resize(0,
 				                  0,
 				                  WindowWidth(window),
@@ -400,7 +398,6 @@ UseModule MyTable
 				*aufgaben\AutosizeCols()
 				*kontakte\AutosizeCols()
 				*termine\AutosizeCols()
-				*app\SetRedraw(#True)
 			EndProcedure
 			
 			Procedure favExp(*row.MyTableRow)
@@ -426,8 +423,6 @@ UseModule MyTable
 			*splittera\SetValue(200)
 			
 			Repeat:Until WaitWindowEvent()=#PB_Event_CloseWindow
-			
-			*app\Free()
 			
 		UnuseModule MySplitter
 	UnuseModule MyFont

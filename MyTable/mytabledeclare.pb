@@ -91,24 +91,20 @@ Declare _MyTableInitStyleObject(*style.strMyTableStyleObject,
 Declare _MyTableInitBorderObject(*border.strMyTableBorderObject,
                                  *style.strMyTableStyleObject,
                                  *b.strMyTableStyleBorderStyle)
-Declare _MyTableInitApplication(*application.strMyTableApplication,
-                                flags.i)
-Declare _MyTableInitTable(*application.strMyTableApplication,
-                          *table.strMyTableTable,
+
+Declare _MyTableInitTable(*table.strMyTableTable,
                           window.i,
                           canvas.i,
                           vscroll.i,
                           hscroll.i,
                           flags.i)
-Declare _MyTableInitTree(*application.strMyTableApplication,
-                          *table.strMyTableTable,
+Declare _MyTableInitTree(*table.strMyTableTable,
                           window.i,
                           canvas.i,
                           vscroll.i,
                           hscroll.i,
                           flags.i)
-Declare _MyTableInitGrid(*application.strMyTableApplication,
-                         *table.strMyTableTable,
+Declare _MyTableInitGrid(*table.strMyTableTable,
                          window.i,
                          canvas.i,
                          vscroll.i,
@@ -116,23 +112,20 @@ Declare _MyTableInitGrid(*application.strMyTableApplication,
                          rows.i,
                          cols.i,
                           flags.i)
-Declare _MyTableInitRow(*application.strMyTableApplication,
-                        *table.strMyTableTable,
+Declare _MyTableInitRow(*table.strMyTableTable,
                         *parent.strMyTableRow,
                         *row.strMyTableRow,
                         text.s,
                         sep.s,
                         image.i,
                         flags.i)
-Declare _MyTableInitCol(*application.strMyTableApplication,
-                        *table.strMyTableTable,
+Declare _MyTableInitCol(*table.strMyTableTable,
                         *col.strMyTableCol,
                         text.s,
                         width.i,
                         image.i,
                         flags.i)
-Declare _MyTableInitCell(*application.strMyTableApplication,
-                         *table.strMyTableTable,
+Declare _MyTableInitCell(*table.strMyTableTable,
                          *row.strMyTableRow,
                          *col.strMyTableCol,
                          *parent.strMyTableCell,
@@ -144,8 +137,7 @@ Declare _MyTable_StartEdit(*rc.strMyTableRowCol)
 Declare _MyTable_StartEditCell(*cll.strMyTableCell)
 Declare _MyTable_StopEdit(*this.strMyTableTable,save.b)
 Declare _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
-Declare _MyTableLoadApp(*save.strMyTableSaveApplication,*app.strMyTableApplication)
-Declare _MyTableSaveApp(*app.strMyTableApplication,*save.strMyTableSaveApplication)
+
 
 Declare.b _MyTable_IsHierarchical(*obj.strMyTableObject)
 Declare.b _MyTable_IsCheckboxes(*obj.strMyTableObject)
@@ -166,9 +158,6 @@ Declare.b _MyTable_IsHeader(*obj.strMyTableObject)
 Declare.b _MyTable_IsRedraw(*obj.strMyTableObject)
 Declare.b _MyTable_IsElement_Selected(*obj.strMyTableObject)
 
-;- Application
-Declare.b _MyTable_Application_HasName(*this.strMyTableApplication,name.s)
-Declare _MyTable_Application_Redraw(*this.strMyTableApplication)
 
 ;- Tables
 Declare _MyTable_Table_Redraw(*this.strMyTableTable)

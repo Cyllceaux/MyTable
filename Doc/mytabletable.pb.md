@@ -45,7 +45,6 @@
 |\_MyTable\_Table\_DeleteCol||<span style="color:#FFFFAA">*this.</span>strMyTableTable , idx.i||
 |\_MyTable\_Table\_GetRow||<span style="color:#FFFFAA">*this.</span>strMyTableTable , row.i||
 |\_MyTable\_Table\_GetCol||<span style="color:#FFFFAA">*this.</span>strMyTableTable , col.i||
-|\_MyTable\_Table\_GetApplication||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_GetCell||<span style="color:#FFFFAA">*this.</span>strMyTableTable , row.i , col.i||
 |\_MyTable\_Table\_GetVisibleCell||<span style="color:#FFFFAA">*this.</span>strMyTableTable , row.i , col.i||
 |\_MyTable\_Table\_RowCount||<span style="color:#FFFFAA">*this.strMyTableTable</span>||

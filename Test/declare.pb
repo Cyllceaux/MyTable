@@ -80,6 +80,12 @@ LineXY(MyTableW4,MyTableH6,MyTableW8,MyTableH10,RGBA(255,255,255,255))
 LineXY(MyTableW8,MyTableH10,MyTableW12,MyTableH6,RGBA(255,255,255,255))
 StopDrawing()
 
+Macro AssertNotEquals(value1,value2)
+	If value1=value2
+		DebuggerError("EQ")
+	EndIf
+EndMacro
+
 Macro AssertEquals(value1,value2)
 	If value1<>value2
 		DebuggerError("Not EQ")
