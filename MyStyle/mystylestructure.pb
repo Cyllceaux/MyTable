@@ -5,7 +5,6 @@ Structure strMyStyleBorder Extends strMy
 	padding.i
 	size.i
 	color.q
-	List styles.i()
 EndStructure
 
 Structure strMyStyleStyle Extends strMy
@@ -19,6 +18,4 @@ Structure strMyStyleStyle Extends strMy
 	*bordersRight.strMyStyleBorder
 	*bordersBottom.strMyStyleBorder
 	*bordersTop.strMyStyleBorder
-	
-	List elements.i()
 EndStructure

@@ -25,3 +25,12 @@ Structure strMyScrollableGadget Extends strMyGadget
 	maxvscroll.i
 	maxhscroll.i
 EndStructure
+
+Structure strXYWH
+	x.i
+	y.i
+	w.i
+	h.i
+	ow.i
+	oh.i
+EndStructure

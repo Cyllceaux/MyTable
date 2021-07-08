@@ -78,9 +78,17 @@ EndMacro
 Macro _MyDefaultSetterPointerRedraw(projekt,gruppe,name)
 	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value) 
 		If *this
-			*this\name=*value
+			*this\name=*value			
 		EndIf
 		_#projekt#_#gruppe#_Redraw(*this)
+	EndProcedure
+EndMacro
+
+Macro _MyDefaultSetterPointer(projekt,gruppe,name)
+	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value) 
+		If *this
+			*this\name=*value			
+		EndIf
 	EndProcedure
 EndMacro
 
@@ -97,6 +105,11 @@ EndMacro
 Macro _MyDefaultGetterSetterPointerRedraw(projekt,gruppe,name)
 	_MyDefaultGetterPointer(projekt,gruppe,name)
 	_MyDefaultSetterPointerRedraw(projekt,gruppe,name)
+EndMacro
+
+Macro _MyDefaultGetterSetterPointer(projekt,gruppe,name)
+	_MyDefaultGetterPointer(projekt,gruppe,name)
+	_MyDefaultSetterPointer(projekt,gruppe,name)
 EndMacro
 
 

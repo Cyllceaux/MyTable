@@ -1,19 +1,11 @@
 ﻿_MyDefaultMy(MyStyle,Style)
-_MyDefaultGetterSetterRedraw(MyStyle,Style,BackColor,q)
-_MyDefaultGetterSetterRedraw(MyStyle,Style,FrontColor,q)
-_MyDefaultGetterSetterRedraw(MyStyle,Style,HAlign,i)
-_MyDefaultGetterSetterRedraw(MyStyle,Style,VAlign,i)
-_MyDefaultGetterSetterPointerRedraw(MyStyle,Style,Font)
+_MyDefaultGetterSetter(MyStyle,Style,BackColor,q)
+_MyDefaultGetterSetter(MyStyle,Style,FrontColor,q)
+_MyDefaultGetterSetter(MyStyle,Style,HAlign,i)
+_MyDefaultGetterSetter(MyStyle,Style,VAlign,i)
+_MyDefaultGetterSetterPointer(MyStyle,Style,Font)
 
 
-Procedure _MyStyle_Style_Redraw(*this.strMyStyleStyle)
-	If *this
-		ForEach *this\elements()
-			Protected *m.My::MyGadget=*this\elements()
-			*m\Redraw()
-		Next
-	EndIf
-EndProcedure
 
 Procedure _MyStyle_Style_GetBorder(*this.strMyStyleStyle,type.i)
 	If *this

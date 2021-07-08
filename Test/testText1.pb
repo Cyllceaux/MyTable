@@ -6,10 +6,12 @@ SetWindowTitle(window,"Test1")
 
 Define y=5
 Global *text1.MyText=MyTextCreate(5,y,100,50,"Test 1"):y+55
+Global *text1a.MyText=MyTextCreate(5,y,100,22,"Test 1a"):y+35
 Global *text2.MyText=MyTextCreate(5,y,100,22,"Test 2"):y+27
 Global *text3.MyText=MyTextCreate(5,y,100,22,"Test 3"):y+27
 Global *text4.MyText=MyTextCreate(5,y,100,22,"Test 4"):y+27
-Global *text1a.MyText=MyTextCreate(5,y,100,22,"Test 1a"):y+27
+Global *text5.MyText=MyTextCreate(5,y,100,22,"Ganz langer Text... Also ein wenig länger als nur 'Test *'"):y+27
+Global *text6.MyText=MyTextCreate(5,y,100,22,"Ganz langer Text... Also ein wenig länger als nur 'Test *'"):y+27
 
 Global *style1.MyStyle=MyStyleCreate()
 Global *style2.MyStyle=MyStyleCreate()
@@ -37,5 +39,6 @@ Global *border2.MyBorder=MyBorderCreate(1,1,1,#Green)
 *text4\SetStyle(*style4)
 
 *text1a\Resize(#PB_Ignore,#PB_Ignore,*text1a\GetCalcWidth(),*text1a\GetCalcHeight())
+*text6\Resize(#PB_Ignore,#PB_Ignore,*text6\GetCalcWidth(),*text6\GetCalcHeight())
 
 XIncludeFile "testUnDeclare.pb"
