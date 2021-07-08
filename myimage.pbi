@@ -2,20 +2,14 @@
 
 DeclareModule MyImage
 	
-	#MYIMAGE_VERSION = 247
-	#MYIMAGE_VERSION_DATE = 20210707
-	
-	Interface MyImage
-		GetType()
-		
+	Interface MyImage Extends My::My
 		GetImage()
 		GetImageID()
-		
-		GetSized(size.i)
-		GetSizedID(size.i)
+		GetSizedImage(width.i,height.i,scaled.b=#False)
+		GetSizedImageID(width.i,height.i,scaled.b=#False)
 	EndInterface
 	
-	Declare MyImageCreateImage(image.i)	
+	Declare MyImageCreate(image.i)
 	
 EndDeclareModule
 

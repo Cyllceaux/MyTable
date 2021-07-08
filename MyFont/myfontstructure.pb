@@ -1,10 +1,10 @@
 ﻿IncludeFile "../MyGlobal/myglobalstructure.pb"
 
-Structure strMyFontFont Extends strMyVTable
+Structure strMyFontFont Extends strMy
 	name.s
 	size.i
-	flags.i
-		
+	style.i
+	
 	font.i
-	fontid.i
+	fontID.i
 EndStructure

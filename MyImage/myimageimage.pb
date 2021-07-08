@@ -1,34 +1,38 @@
-﻿_SimpleGetter(MyImage,Image,Type,i)
-_SimpleGetter(MyImage,Image,Image,i,image\)
-_SimpleGetter(MyImage,Image,ImageID,i,image\)
+﻿_MyDefaultGetter(MyImage,Image,Type,i)
+_MyDefaultGetter(MyImage,Image,Image,i)
+_MyDefaultGetter(MyImage,Image,ImageID,i)
 
-Procedure _MyImage_ResizeImage(image,size)
-	ResizeImage(image,size,size)
+Procedure MyImage_Image_GetAddSizedImage(*this.strMyImageImage,width.i,height.i,scaled.b)
+	ForEach *this\sized()
+		If *this\sized()\width=width And *this\sized()\height=height And *this\sized()\scaled=scaled
+			ProcedureReturn *this\sized()
+		EndIf
+	Next
+	Protected *image.strImage=AddElement(*this\sized())
+	With *image
+		\height=height
+		\width=width
+		\image=CopyImage(*this\image,#PB_Any)
+		If scaled
+			ResizeImage(\image,width,height)
+		Else
+			ResizeImage(\image,width,height)
+		EndIf
+		\imageid=ImageID(\image)
+	EndWith
+	ProcedureReturn *image
 EndProcedure
 
-Procedure _MyImage_Image_GetSized(*this.strMyImageImage,size.i)
-	If *this
-		Protected *img.strMyImage=FindMapElement(*this\images(),Str(size))
-		If Not *img
-			*img=AddMapElement(*this\images(),Str(size))
-			*img\image=CopyImage(*this\image\image,#PB_Any)
-			_MyImage_ResizeImage(*img\image,size)
-			*img\imageID=ImageID(*img\image)
-		EndIf
+Procedure _MyImage_Image_GetSizedImage(*this.strMyImageImage,width.i,height.i,scaled.b=#False)
+	Protected *img.strImage=MyImage_Image_GetAddSizedImage(*this,width,height,scaled)
+	If *img
 		ProcedureReturn *img\image
 	EndIf
 EndProcedure
 
-
-Procedure _MyImage_Image_GetSizedID(*this.strMyImageImage,size.i)
-	If *this
-		Protected *img.strMyImage=FindMapElement(*this\images(),Str(size))
-		If Not *img
-			*img=AddMapElement(*this\images(),Str(size))
-			*img\image=CopyImage(*this\image\image,#PB_Any)
-			_MyImage_ResizeImage(*img\image,size)
-			*img\imageID=ImageID(*img\image)
-		EndIf
-		ProcedureReturn *img\imageID
+Procedure _MyImage_Image_GetSizedImageID(*this.strMyImageImage,width.i,height.i,scaled.b=#False)
+	Protected *img.strImage=MyImage_Image_GetAddSizedImage(*this,width,height,scaled)
+	If *img
+		ProcedureReturn *img\imageid
 	EndIf
 EndProcedure

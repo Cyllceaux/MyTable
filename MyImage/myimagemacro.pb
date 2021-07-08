@@ -1,0 +1,1 @@
+﻿IncludeFile "../MyGlobal/myglobalmacro.pb"

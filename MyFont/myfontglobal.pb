@@ -1,35 +1,26 @@
-﻿Procedure _MyFontInitFont(*font.strMyFontFont,
-                           name.s,
-                           size.i,
-                           flags.i,
-                           font.i)
-	With *font
-		\vtable=?vtable_font
-		\name=name
-		\size=size
-		\flags=flags
-		\font=font
-		\fontid=FontID(font)
-		\type=My::#MY_TYPE_FONT
-	EndWith
-	
-EndProcedure
+﻿IncludeFile "../MyGlobal/myglobalglobal.pb"
+
 
 Global NewList fonts.strMyFontFont()
 
-Procedure MyFontCreateFont(name.s,size.i,flags.i=0)
+Procedure MyFontCreate(name.s,size.i,style.i=0)
 	ForEach fonts()
-		If fonts()\name=name And 
-		   fonts()\size=size And 
-		   fonts()\flags=flags
+		If fonts()\name=name And fonts()\size=size And fonts()\style=style
 			ProcedureReturn fonts()
 		EndIf
 	Next
-	
-	Protected font=LoadFont(#PB_Any,name,size,flags)
+	Protected font.i=LoadFont(#PB_Any,name,size,style)
 	If font
 		Protected *this.strMyFontFont=AddElement(fonts())
-		_MyFontInitFont(*this,name,size,flags,font)
+		With *this
+			\vtable=?vtable_myfont
+			\type=My::#MY_TYPE_FONT
+			\name=name
+			\size=size
+			\style=style
+			\font=font
+			\fontID=FontID(font)
+		EndWith		
 		ProcedureReturn *this
 	EndIf
 EndProcedure

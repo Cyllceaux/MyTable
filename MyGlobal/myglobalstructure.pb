@@ -1,17 +1,16 @@
-﻿Structure strMyVTable
+﻿Structure strMy
 	vtable.i
 	type.i
 EndStructure
 
-Structure strMyGadget Extends strMyVTable
-	window.i
+Structure strMyGadget Extends strMy
 	canvas.i
-	flags.i
 EndStructure
 
-Structure strMyScrollGadget Extends strMyGadget
+Structure strMyScrollableGadget Extends strMyGadget
 	vscroll.i
 	hscroll.i
+	
 	maxvscroll.i
 	maxhscroll.i
 EndStructure

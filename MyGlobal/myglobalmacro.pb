@@ -1,210 +1,40 @@
-﻿
-Macro MM
-	"
+﻿Macro _MyDataSectionMethode(projekt,gruppe,name)
+	Data.i @_#projekt#_#gruppe#_#name()
 EndMacro
 
-CompilerIf #PB_Compiler_Debugger And Defined(AUTODECLARE,#PB_Module)
-	Macro _AddAutoDeclare(projekt,line)
-		AddElement(AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare())		
-		AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()=Trim(MM#line#MM)
-		If Left(AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare(),1)="."
-			AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()="Declare"+AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()
-		Else
-			AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()="Declare "+AUTODECLARE::autodeclare(MM#projekt#MM)\autodeclare()
-		EndIf		
-	EndMacro	
-CompilerElse
-	Macro _AddAutoDeclare(projekt,line):EndMacro
-CompilerEndIf
+Macro _MyDataSectionGetter(projekt,gruppe,name)
+	_MyDataSectionMethode(projekt,gruppe,Get#name)
+EndMacro
 
+Macro _MyDataSectionSetter(projekt,gruppe,name)
+	_MyDataSectionMethode(projekt,gruppe,Set#name)
+EndMacro
 
-;{
-;- workaround for MacOS. thx to mestnyi (https://www.purebasic.fr/english/viewtopic.php?p=571500#p571500)
-	Macro PB( _pb_function_name_ ) 
-		_pb_function_name_
-	EndMacro
-	Macro ClipOutput(_x_,_y_,_width_,_height_)
-		CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
-			PB(ClipOutput)(_x_,_y_,_width_,_height_)
-		CompilerEndIf
-	EndMacro
-	Macro UnclipOutput()
-		CompilerIf #PB_Compiler_OS <> #PB_OS_MacOS
-			PB(UnclipOutput)()
-		CompilerEndIf
-	EndMacro
-	Macro DrawingFont(_font_id_)
-		CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
-			If _font_id_
-				PB(DrawingFont)(_font_id_)
-			EndIf
-		CompilerElse
-			PB(DrawingFont)(_font_id_)
-		CompilerEndIf
-	EndMacro
-;}
+Macro _MyDataSectionGetterSetter(projekt,gruppe,name)
+	_MyDataSectionGetter(projekt,gruppe,name)
+	_MyDataSectionSetter(projekt,gruppe,name)
+EndMacro
 
+Macro _MyDataSectionDefault(projekt,gruppe)
+	_MyDataSectionGetter(projekt,gruppe,Type)
+EndMacro
 
+Macro _MyDataSectionGadgetDefault(projekt,gruppe)
+	_MyDataSectionDefault(projekt,gruppe)
+	_MyDataSectionGetter(projekt,gruppe,Canvas)
+EndMacro
 
-Macro _BindEvent(projekt,gruppe,name)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#gruppe,event.projekt#ProtoEvent#name))
-	Procedure _#projekt#_#gruppe#_BindEvent#name(*this.str#projekt#gruppe,event.projekt#ProtoEvent#name)
+Macro _MyDataSectionScrollableGadgetDefault(projekt,gruppe)
+	_MyDataSectionGadgetDefault(projekt,gruppe)
+	_MyDataSectionGetter(projekt,gruppe,Canvas)
+	_MyDataSectionGetter(projekt,gruppe,VScroll)
+	_MyDataSectionGetter(projekt,gruppe,HScroll)
+EndMacro
+
+Macro _MyDefaultGetter(projekt,gruppe,name,typ)
+	Procedure.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe) 
 		If *this
-			*this\Event#name=event
-			_#projekt#_#gruppe#_Redraw(*this)
+			ProcedureReturn *this\name
 		EndIf
 	EndProcedure
-EndMacro
-
-
-Macro _SimpleGetterPointer(projekt,gruppe,name,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
-	Procedure _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe)
-		If *this
-			ProcedureReturn *this\sub#name
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleGetter(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe))
-	Procedure.typ _#projekt#_#gruppe#_Get#name(*this.str#projekt#gruppe)
-		If *this
-			ProcedureReturn *this\sub#name
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetter(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
-		If *this
-			*this\sub#name=value
-			*this\dirty=#True
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterPointer(projekt,gruppe,name,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value)
-		If *this
-			*this\sub#name=*value
-			*this\dirty=#True
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterPointerStructure(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,*value.typ)
-		If *this
-			*this\sub#name=*value
-			*this\dirty=#True
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterRedraw(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
-		If *this
-			*this\sub#name=value
-			*this\dirty=#True			
-			_#projekt#_#gruppe#_Redraw(*this)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
-		If *this
-			*this\sub#name=value
-			*this\dirty=#True			
-			*this\table\dirty=#True
-			_#projekt#_#gruppe#_Redraw(*this\table)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
-		If *this
-			*this\sub#name=value
-			*this\dirty=#True			
-			*this\table\dirty=#True
-			_#projekt#_#gruppe#_Predraw(*this\table)						
-			_#projekt#_#gruppe#_Redraw(*this\table)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterPredraw(projekt,gruppe,name,typ,sub=)
-	_AddAutoDeclare(projekt,_#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ))
-	Procedure _#projekt#_#gruppe#_Set#name(*this.str#projekt#gruppe,value.typ)
-		If *this
-			*this\sub#name=value
-			*this\dirty=#True			
-			*this\dirty=#True
-			_#projekt#_#gruppe#_Predraw(*this)						
-			_#projekt#_#gruppe#_Redraw(*this)						
-		EndIf
-	EndProcedure
-EndMacro
-
-Macro _SimpleSetterGetter(projekt,gruppe,name,typ,sub=)
-	_SimpleGetter(projekt,gruppe,name,typ,sub)
-	_SimpleSetter(projekt,gruppe,name,typ,sub)
-EndMacro
-
-Macro _SimpleSetterGetterRedraw(projekt,gruppe,name,typ,sub=)
-	_SimpleGetter(projekt,gruppe,name,typ,sub)
-	_SimpleSetterRedraw(projekt,gruppe,name,typ,sub)
-EndMacro
-
-Macro _SimpleSetterGetterPointer(projekt,gruppe,name,sub=)
-	_SimpleGetterPointer(projekt,gruppe,name,sub)
-	_SimpleSetterPointer(projekt,gruppe,name,sub)
-EndMacro
-
-Macro _SimpleSetterGetterPointerStructure(projekt,gruppe,name,typ,sub=)
-	_SimpleGetterPointer(projekt,gruppe,name,sub)
-	_SimpleSetterPointerStructure(projekt,gruppe,name,typ,sub)
-EndMacro
-
-Macro _SimpleSetterGetterSubRedraw(projekt,gruppe,name,typ,sub=)
-	_SimpleGetter(projekt,gruppe,name,typ,sub)
-	_SimpleSetterSubRedraw(projekt,gruppe,name,typ,sub)
-EndMacro
-
-Macro _SimpleSetterGetterSubPredraw(projekt,gruppe,name,typ,sub=)
-	_SimpleGetter(projekt,gruppe,name,typ,sub)
-	_SimpleSetterSubPredraw(projekt,gruppe,name,typ,sub)
-EndMacro
-
-Macro _SimpleSetterGetterPredraw(projekt,gruppe,name,typ,sub=)
-	_SimpleGetter(projekt,gruppe,name,typ,sub)
-	_SimpleSetterPredraw(projekt,gruppe,name,typ,sub)
-EndMacro
-
-
-
-
-Macro _DataSectionMethode(projekt,gruppe,methode)
-	Data.i @_#projekt#_#gruppe#_#methode()
-EndMacro
-
-Macro _DataSectionSetter(projekt,gruppe,name)
-	_DataSectionMethode(projekt,gruppe,Set#name)
-EndMacro
-
-Macro _DataSectionGetter(projekt,gruppe,name)
-	_DataSectionMethode(projekt,gruppe,Get#name)
-EndMacro
-
-Macro _DataSectionSetterGetter(projekt,gruppe,name)
-	_DataSectionSetter(projekt,gruppe,name)
-	_DataSectionGetter(projekt,gruppe,name)
 EndMacro

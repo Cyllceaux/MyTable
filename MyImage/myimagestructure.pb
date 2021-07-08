@@ -1,11 +1,16 @@
 ﻿IncludeFile "../MyGlobal/myglobalstructure.pb"
 
-Structure strMyImage
+Structure strImage
 	image.i
-	imageID.i
+	imageid.i
+	
+	width.i
+	height.i
+	scaled.b
 EndStructure
 
-Structure strMyImageImage Extends strMyVTable
-	image.strMyImage
-	Map images.strMyImage()
+Structure strMyImageImage Extends strMy
+	image.i
+	imageid.i
+	List sized.strImage()
 EndStructure

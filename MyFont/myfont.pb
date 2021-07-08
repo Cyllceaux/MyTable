@@ -1,24 +1,21 @@
 ﻿Module MyFont
 	EnableExplicit
 	
-	IncludeFile "myfontstructure.pb"
-	IncludeFile "../MyGlobal/myglobalmacro.pb"
-	IncludeFile "../MyGlobal/myglobaldeclare.pb"
-	IncludeFile "myfontdeclare.pb"
-	IncludeFile "myfontautodeclare.pb"
-	IncludeFile "myfontglobal.pb"
-	IncludeFile "myfontfont.pb"
-	IncludeFile "../MyGlobal/myglobalglobal.pb"
+	
+	XIncludeFile "myfontmacro.pb"
+	XIncludeFile "myfontstructure.pb"
+	XIncludeFile "myfontdeclare.pb"
+	XIncludeFile "myfontautodeclare.pb"
+	XIncludeFile "myfontglobal.pb"
+	XIncludeFile "myfontfont.pb"
 	
 	DataSection
-		vtable_font: ;- Font
-		_DataSectionGetter(MyFont,Font,Type)
-		_DataSectionGetter(MyFont,Font,Flags)
-		_DataSectionGetter(MyFont,Font,Name)
-		_DataSectionGetter(MyFont,Font,Size)
-		
-		_DataSectionGetter(MyFont,Font,Font)
-		_DataSectionGetter(MyFont,Font,FontID)
-	EndDataSection
-	
+		vtable_myfont:
+		_MyDataSectionDefault(MyFont,Font)
+		_MyDataSectionGetter(MyFont,Font,Name)
+		_MyDataSectionGetter(MyFont,Font,Size)
+		_MyDataSectionGetter(MyFont,Font,Style)
+		_MyDataSectionGetter(MyFont,Font,Font)
+		_MyDataSectionGetter(MyFont,Font,FontID)
+	EndDataSection	
 EndModule

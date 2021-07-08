@@ -1,26 +1,22 @@
-﻿Procedure _MyImageInitImage(*image.strMyImageImage,
-                           image.i)
-	With *image
-		\vtable=?vtable_image
-		\image\image=image
-		\image\imageID=ImageID(image)
-		\type=My::#MY_TYPE_IMAGE
-	EndWith
-	
-EndProcedure
+﻿IncludeFile "../MyGlobal/myglobalglobal.pb"
+
 
 Global NewList images.strMyImageImage()
 
-Procedure MyImageCreateImage(image.i)
+Procedure MyImageCreate(image.i)
 	ForEach images()
-		If images()\image\image=image
+		If images()\image=image
 			ProcedureReturn images()
 		EndIf
 	Next
-	
 	If IsImage(image)
 		Protected *this.strMyImageImage=AddElement(images())
-		_MyImageInitImage(*this,image)
+		With *this
+			\vtable=?vtable_myimage
+			\type=My::#MY_TYPE_IMAGE
+			\image=image
+			\imageid=ImageID(image)
+		EndWith
 		ProcedureReturn *this
 	EndIf
 EndProcedure

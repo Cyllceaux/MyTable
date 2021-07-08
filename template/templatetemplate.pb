@@ -1,0 +1,1 @@
+﻿_MyDefaultGetter(MyTemplate,Template,Type,i)
