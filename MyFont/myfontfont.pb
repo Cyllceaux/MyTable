@@ -1,4 +1,4 @@
-﻿_MyDefaultGetter(MyFont,Font,Type,i)
+﻿_MyDefaultMy(MyFont,Font)
 _MyDefaultGetter(MyFont,Font,Name,s)
 _MyDefaultGetter(MyFont,Font,Size,i)
 _MyDefaultGetter(MyFont,Font,Style,i)

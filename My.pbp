@@ -7,16 +7,48 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-08 09:26" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-08 12:21" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="my.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="0d9105eeca95f600d9fccf4fa798ec25"/>
+      <fingerprint md5="464c1d827b559aed8b7a160ac17e6555"/>
     </file>
     <file name="My\my.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="a9c63e51af2a80572cb394c51fbfe8a0"/>
+    </file>
+    <file name="myfont.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="d8424ce30e025d097713d629914ce430"/>
+    </file>
+    <file name="MyFont\myfont.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="3d721dadff122dbd5738bfe818bd5d01"/>
+    </file>
+    <file name="MyFont\myfontautodeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="MyFont\myfontdeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
+    </file>
+    <file name="MyFont\myfontfont.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="598c105a0f040bfd74be5a899b4a12fd"/>
+    </file>
+    <file name="MyFont\myfontglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="43c650947929d4d660afc2e2d942df11"/>
+    </file>
+    <file name="MyFont\myfontmacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
+    </file>
+    <file name="MyFont\myfontstructure.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="5c3d0196f1419aad7f5a16ea815745d0"/>
     </file>
     <file name="MyGlobal\myglobaldeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -28,11 +60,43 @@
     </file>
     <file name="MyGlobal\myglobalmacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="7c7c655c3ec4f26e244685e594d26b29"/>
+      <fingerprint md5="eec39f7ae2268ff5bed6520ae7c2c53c"/>
     </file>
     <file name="MyGlobal\myglobalstructure.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="1579b5d889d5b74938700bca938df963"/>
+      <fingerprint md5="3a692036bbc96ad3b1a94d85ca5884d0"/>
+    </file>
+    <file name="myimage.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="e802d5a3c6ead65317c0755edf839678"/>
+    </file>
+    <file name="MyImage\myimage.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="f20639bdea320cc678b2c3e5216e38e1"/>
+    </file>
+    <file name="MyImage\myimageautodeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="MyImage\myimagedeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
+    </file>
+    <file name="MyImage\myimageglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="7e8e0791ab607f4619a2465246bfd3fd"/>
+    </file>
+    <file name="MyImage\myimageimage.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="a9797818b12755b1a445caae360124e2"/>
+    </file>
+    <file name="MyImage\myimagemacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
+    </file>
+    <file name="MyImage\myimagestructure.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="6ce7a4615a5f9fb5ad7babc31c84d7be"/>
     </file>
     <file name="template.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -64,88 +128,109 @@
     </file>
     <file name="template\templatetemplate.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="31d31acf6f2b68b1b1c498b060a2864a"/>
+      <fingerprint md5="df613f8780bf1d132485e6ff6b2c1ddf"/>
     </file>
     <file name="Test\testDeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="4c5d6c4ae9169dfd5ffe7181b4527eea"/>
+      <fingerprint md5="cc292189e56fd0cb88cb957d1388093b"/>
     </file>
     <file name="Test\testMy1.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="adcee4e315f976f58bff133410c9a0fc"/>
-    </file>
-    <file name="myfont.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="d8424ce30e025d097713d629914ce430"/>
-    </file>
-    <file name="MyFont\myfont.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="3d721dadff122dbd5738bfe818bd5d01"/>
-    </file>
-    <file name="MyFont\myfontautodeclare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
-    </file>
-    <file name="MyFont\myfontdeclare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
-    </file>
-    <file name="MyFont\myfontglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="43c650947929d4d660afc2e2d942df11"/>
-    </file>
-    <file name="MyFont\myfontmacro.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
-    </file>
-    <file name="MyFont\myfontstructure.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="5c3d0196f1419aad7f5a16ea815745d0"/>
-    </file>
-    <file name="MyFont\myfontfont.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
-      <fingerprint md5="3e300cbec54a7109a62c07b6f9caf99a"/>
-    </file>
-    <file name="myimage.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="e802d5a3c6ead65317c0755edf839678"/>
-    </file>
-    <file name="MyImage\myimage.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="f20639bdea320cc678b2c3e5216e38e1"/>
+      <fingerprint md5="5d8a59681752d597534aa1257e77889a"/>
     </file>
-    <file name="MyImage\myimageautodeclare.pb">
+    <file name="mytext.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="77b9aca02ecb05e965b9526bc5956bc5"/>
+    </file>
+    <file name="MyText\mytext.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="c322d7fb6fb3c4859cbe1b4e860a9d54"/>
+    </file>
+    <file name="MyText\mytextautodeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
     </file>
-    <file name="MyImage\myimagedeclare.pb">
+    <file name="MyText\mytextdeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
+      <fingerprint md5="6d14f716f6e8386e6aa8df0c0b52628c"/>
     </file>
-    <file name="MyImage\myimageglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="7e8e0791ab607f4619a2465246bfd3fd"/>
-    </file>
-    <file name="MyImage\myimageimage.pb">
+    <file name="MyText\mytextglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="798c63fec45adefbe384780f7c045f97"/>
+      <fingerprint md5="00bd9f083aa677f53b2fa0d6daff0fcf"/>
     </file>
-    <file name="MyImage\myimagemacro.pb">
+    <file name="MyText\mytextmacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
     </file>
-    <file name="MyImage\myimagestructure.pb">
+    <file name="MyText\mytextstructure.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="6ce7a4615a5f9fb5ad7babc31c84d7be"/>
+      <fingerprint md5="27eb645cafd364612939a1bad0fee06f"/>
+    </file>
+    <file name="MyText\mytexttext.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="3bc016a847ce05fd80832cd28988e1bd"/>
+    </file>
+    <file name="Test\testText1.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="244321e450151f76db31fcc292a15725"/>
+    </file>
+    <file name="mystyle.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="60daec564909597893ddc37071564f5b"/>
+    </file>
+    <file name="MyStyle\mystyle.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="6d5a9ee9a770106e95c9e516b436ee5c"/>
+    </file>
+    <file name="MyStyle\mystyleautodeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="MyStyle\mystyledeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="cb2dac295685b5843de42448524f6eac"/>
+    </file>
+    <file name="MyStyle\mystyleglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="c1e563835d81e58c97d9e633680765c1"/>
+    </file>
+    <file name="MyStyle\mystylemacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
+    </file>
+    <file name="MyStyle\mystylestructure.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="a53e72099a591811648f34c8933699c1"/>
+    </file>
+    <file name="MyStyle\mystylestyle.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="c67f26fd0bca2acabd5a6a256d049002"/>
+    </file>
+    <file name="MyStyle\mystyleborder.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="c3655b06a9937180aab600e4a5f55d6a"/>
+    </file>
+    <file name="Test\testUnDeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="df62f70496f8d7e634409ff92b51df67"/>
     </file>
   </section>
   <section name="targets">
-    <target name="Standard-Ziel" enabled="0" default="1">
+    <target name="Backend" enabled="0" default="0">
       <inputfile value="Test\testMy1.pb"/>
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
-      <compilecount enable="1" value="40"/>
+      <compilecount enable="1" value="58"/>
+      <buildcount enable="1" value="0"/>
+      <execonstant enable="1"/>
+    </target>
+    <target name="Text1" enabled="0" default="1">
+      <inputfile value="Test\testText1.pb"/>
+      <outputfile value=""/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <format exe="default" cpu="1"/>
+      <compilecount enable="1" value="124"/>
       <buildcount enable="1" value="0"/>
       <execonstant enable="1"/>
     </target>

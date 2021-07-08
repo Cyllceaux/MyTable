@@ -1,4 +1,4 @@
-﻿_MyDefaultGetter(MyImage,Image,Type,i)
+﻿_MyDefaultMy(MyImage,Image)
 _MyDefaultGetter(MyImage,Image,Image,i)
 _MyDefaultGetter(MyImage,Image,ImageID,i)
 
