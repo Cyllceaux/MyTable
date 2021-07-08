@@ -1,5 +1,7 @@
 ﻿IncludeFile "../MyGlobal/myglobalglobal.pb"
 
+Global defaultfont=GetGadgetFont(#PB_Default)
+
 Procedure MyTextCreate(x.i,y.i,w.i,h.i,text.s)
 	Protected *this.strMyTextText=AllocateStructure(strMyTextText)
 	With *this
@@ -33,18 +35,22 @@ Procedure _MyText_DrawText(*this.strMyTextText,*xywh.strXYWH)
 		Protected *font.MyFont::MyFont=*this\style\GetFont()
 		If *font And *this\text<>""
 			DrawingFont(*font\GetFontID())
+		Else
+			DrawingFont(defaultfont)
 		EndIf
 		
-		If *this\text<>""
-			If *this\textheight=0
-				*this\textheight=_My_TextHeight(*this\text)
-			EndIf
-			
-			If *this\textwidth=0
-				*this\textwidth=_My_TextWidth(*this\text)
-			EndIf
+	Else
+		DrawingFont(defaultfont)
+	EndIf
+	
+	If *this\text<>""
+		If *this\textheight=0
+			*this\textheight=_My_TextHeight(*this\text)
 		EndIf
 		
+		If *this\textwidth=0
+			*this\textwidth=_My_TextWidth(*this\text)
+		EndIf
 	EndIf
 	
 	If *this\text<>""
@@ -56,15 +62,31 @@ Procedure _MyText_DrawText(*this.strMyTextText,*xywh.strXYWH)
 			*xywh\y+*xywh\h-*this\textheight
 		EndIf
 		
-		If halign=MyStyle::#MYSTYLE_HALIGN_CENTER
-			*xywh\x+(*xywh\w/2-*this\textwidth/2)
-		ElseIf halign=MyStyle::#MYSTYLE_HALIGN_RIGHT
-			*xywh\x+*xywh\w-*this\textwidth
-		EndIf
+		
 		
 		DrawingMode(#PB_2DDrawing_Transparent)
-		
-		DrawText(*xywh\x,*xywh\y,*this\text,color)
+		Protected ttext.s=""
+		If *this\style And *this\style\GetLinebreak()
+			ttext=_My_LineBreakText(*this\text,*xywh\w)
+		Else
+			ttext=_My_ShortText(*this\text,*xywh\w)
+		EndIf
+		Protected c=CountString(ttext,#CRLF$)+1
+		Protected i
+		For i=1 To c
+			Protected tt.s=StringField(ttext,i,#CRLF$)
+			
+			Protected x=*xywh\x
+			
+			If halign=MyStyle::#MYSTYLE_HALIGN_CENTER
+				x+(*xywh\w/2-TextWidth(tt)/2)
+			ElseIf halign=MyStyle::#MYSTYLE_HALIGN_RIGHT
+				x+*xywh\w-TextWidth(tt)
+			EndIf
+			
+			DrawText(x,*xywh\y,tt,color)
+			*xywh\y+TextHeight(tt)
+		Next
 		UnclipOutput()
 		*this\calcheight+*this\textheight
 		*this\calcwidth+*this\textwidth

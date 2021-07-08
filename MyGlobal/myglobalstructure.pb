@@ -12,6 +12,8 @@ Structure strMyGadget Extends strMy
 	calcheight.i
 	calcwidth.i
 	
+	*customDraw.My::CustomDraw
+	
 	x.i
 	y.i
 	w.i

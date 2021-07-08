@@ -12,6 +12,7 @@ Structure strMyStyleStyle Extends strMy
 	frontcolor.q
 	valign.i
 	halign.i
+	linebreak.b
 	*font.MyFont::MyFont	
 	*bordersDefault.strMyStyleBorder
 	*bordersLeft.strMyStyleBorder

@@ -18,23 +18,30 @@ Procedure _MyText_Text_Redraw(*this.strMyTextText)
 		StartDrawing(CanvasOutput(*this\canvas))
 		*xywh\ow=OutputWidth()
 		*xywh\oh=OutputHeight()
-		
+		Box(0,0,*xywh\ow,*xywh\ow,#White)
 		
 		*xywh\w=*xywh\ow
 		*xywh\h=*xywh\oh
 		
-		*this\calcheight=0
-		*this\calcwidth=0
-
-		
-		_MyText_DrawCell(*this,*xywh)
-
-		
-		If *this\text<>""
-			_MyText_DrawText(*this,*xywh)
+		Protected custom.b=#False
+		If *this\customDraw
+			custom=*this\customDraw(*this,*xywh\x,*xywh\y,*xywh\w,*xywh\h)
 		EndIf
 		
-
+		If Not custom
+			
+			
+			*this\calcheight=0
+			*this\calcwidth=0
+			
+			_MyText_DrawCell(*this,*xywh)
+			
+			
+			If *this\text<>""
+				_MyText_DrawText(*this,*xywh)
+			EndIf
+			
+		EndIf
 		
 		StopDrawing()
 		

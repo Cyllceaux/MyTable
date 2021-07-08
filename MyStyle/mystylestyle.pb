@@ -3,6 +3,7 @@ _MyDefaultGetterSetter(MyStyle,Style,BackColor,q)
 _MyDefaultGetterSetter(MyStyle,Style,FrontColor,q)
 _MyDefaultGetterSetter(MyStyle,Style,HAlign,i)
 _MyDefaultGetterSetter(MyStyle,Style,VAlign,i)
+_MyDefaultGetterSetter(MyStyle,Style,Linebreak,b)
 _MyDefaultGetterSetterPointer(MyStyle,Style,Font)
 
 

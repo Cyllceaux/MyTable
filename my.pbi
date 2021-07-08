@@ -12,6 +12,7 @@
 		GetType.i()
 	EndInterface
 	
+	Prototype.b CustomDraw(*my,x,y,w,h)
 	
 	Interface MyGadget Extends My
 		GetX():GetY():GetW():GetH()
@@ -21,6 +22,7 @@
 		
 		Resize(x.i,y.i,w.i,h.i)		
 		Free()
+		BindCustomDraw(*cust.CustomDraw)
 	EndInterface
 	
 	Interface MyScrollableGadget Extends MyGadget

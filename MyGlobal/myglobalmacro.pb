@@ -35,6 +35,7 @@ Macro _MyDataSectionGadgetDefault(projekt,gruppe)
 	_MyDataSectionMethode(projekt,gruppe,Redraw)
 	_MyDataSectionMethode(projekt,gruppe,Resize)
 	_MyDataSectionMethode(projekt,gruppe,Free)
+	_MyDataSectionMethode(projekt,gruppe,BindCustomDraw)
 EndMacro
 
 Macro _MyDataSectionScrollableGadgetDefault(projekt,gruppe)
@@ -92,6 +93,15 @@ Macro _MyDefaultSetterPointer(projekt,gruppe,name)
 	EndProcedure
 EndMacro
 
+Macro _MyDefaultBind(projekt,gruppe,name)
+	Procedure _#projekt#_#gruppe#_Bind#name(*this.str#projekt#gruppe,*value) 
+		If *this
+			*this\name=*value		
+			_#projekt#_#gruppe#_Redraw(*this)
+		EndIf
+	EndProcedure
+EndMacro
+
 Macro _MyDefaultGetterSetter(projekt,gruppe,name,typ)
 	_MyDefaultGetter(projekt,gruppe,name,typ)
 	_MyDefaultSetter(projekt,gruppe,name,typ)
@@ -126,6 +136,7 @@ Macro _MyDefaultMyGadget(projekt,gruppe)
 	_MyDefaultGetter(projekt,gruppe,CalcHeight,i)
 	_MyDefaultGetter(projekt,gruppe,CalcWidth,i)
 	_MyDefaultGetterSetterRedraw(projekt,gruppe,Redraw,b)
+	_MyDefaultBind(projekt,gruppe,CustomDraw)
 EndMacro
 
 Macro _MyDefaultMyScrollableGadget(projekt,gruppe)

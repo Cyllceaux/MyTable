@@ -3,3 +3,5 @@
 Structure strMyTemplateTemplate Extends strMy
 	
 EndStructure
+
+

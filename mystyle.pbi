@@ -39,6 +39,7 @@ DeclareModule MyStyle
 		GetBorder.i(type.i):SetBorder(type.i,*value.MyBorder)
 		GetVAlign.i():SetVAlign(value.i)
 		GetHAlign.i():SetHAlign(value.i)
+		GetLinebreak.b():SetLinebreak(value.b)
 	EndInterface
 	
 	Declare MyStyleCreate()

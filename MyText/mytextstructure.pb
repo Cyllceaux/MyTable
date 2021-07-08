@@ -7,3 +7,5 @@ Structure strMyTextText Extends strMyGadget
 	textheight.i
 	textwidth.i
 EndStructure
+
+

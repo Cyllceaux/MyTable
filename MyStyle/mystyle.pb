@@ -19,6 +19,7 @@
 		_MyDataSectionGetterSetter(MyStyle,Style,Border)
 		_MyDataSectionGetterSetter(MyStyle,Style,VAlign)
 		_MyDataSectionGetterSetter(MyStyle,Style,HAlign)
+		_MyDataSectionGetterSetter(MyStyle,Style,Linebreak)
 		
 		vtable_myborder:
 		_MyDataSectionDefault(MyStyle,Border)
