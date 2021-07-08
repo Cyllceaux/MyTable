@@ -7,20 +7,16 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-08 08:24" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-08 09:26" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="my.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="07957b852bab695877aed38767edfbee"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="0d9105eeca95f600d9fccf4fa798ec25"/>
     </file>
-    <file name="Test\testMy1.pb">
+    <file name="My\my.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="3ad4c37ef4fdcd91a68517fdda563360"/>
-    </file>
-    <file name="MyGlobal\myglobalstructure.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="fde50db591cbfe3173b31321df44b438"/>
+      <fingerprint md5="a9c63e51af2a80572cb394c51fbfe8a0"/>
     </file>
     <file name="MyGlobal\myglobaldeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -30,49 +26,117 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
     </file>
-    <file name="Test\testDeclare.pb">
+    <file name="MyGlobal\myglobalmacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="c0938e11c0c63fd321321be14df0026d"/>
+      <fingerprint md5="7c7c655c3ec4f26e244685e594d26b29"/>
     </file>
-    <file name="My\my.pb">
+    <file name="MyGlobal\myglobalstructure.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="a9c63e51af2a80572cb394c51fbfe8a0"/>
-    </file>
-    <file name="template\templatedeclare.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
-    </file>
-    <file name="template\templatestructure.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="c20cb68f11b6a9d7c9b35c7e152e1759"/>
-    </file>
-    <file name="template\templateglobal.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="5cc33e652ed930c4ccdd50a3c045a30f"/>
-    </file>
-    <file name="template\template.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="58b3e7343d3cb95ad09e36090b4666ef"/>
-    </file>
-    <file name="template\templatetemplate.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+      <fingerprint md5="1579b5d889d5b74938700bca938df963"/>
     </file>
     <file name="template.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="04640fb5d27915cc7337db289cc71114"/>
+      <fingerprint md5="a4535fc4b0a2946d4ad3f6ce4f1d0404"/>
     </file>
-    <file name="MyGlobal\myglobalmacro.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="0eef9681ee3ef73a1e431d8232ef2fb3"/>
+    <file name="template\template.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="a368290ae3eb453940eb462de742a163"/>
+    </file>
+    <file name="template\templateautodeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="template\templatedeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
+    </file>
+    <file name="template\templateglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="8857f187d9920877987761a45a850e2e"/>
     </file>
     <file name="template\templatemacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
+    </file>
+    <file name="template\templatestructure.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="7de49c0a9363c35e665c4f14b5478f7c"/>
+    </file>
+    <file name="template\templatetemplate.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="31d31acf6f2b68b1b1c498b060a2864a"/>
+    </file>
+    <file name="Test\testDeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="4c5d6c4ae9169dfd5ffe7181b4527eea"/>
+    </file>
+    <file name="Test\testMy1.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="adcee4e315f976f58bff133410c9a0fc"/>
+    </file>
+    <file name="myfont.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="d8424ce30e025d097713d629914ce430"/>
+    </file>
+    <file name="MyFont\myfont.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="3d721dadff122dbd5738bfe818bd5d01"/>
+    </file>
+    <file name="MyFont\myfontautodeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="MyFont\myfontdeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
+    </file>
+    <file name="MyFont\myfontglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="43c650947929d4d660afc2e2d942df11"/>
+    </file>
+    <file name="MyFont\myfontmacro.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
+    </file>
+    <file name="MyFont\myfontstructure.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="5c3d0196f1419aad7f5a16ea815745d0"/>
+    </file>
+    <file name="MyFont\myfontfont.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="3e300cbec54a7109a62c07b6f9caf99a"/>
+    </file>
+    <file name="myimage.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="e802d5a3c6ead65317c0755edf839678"/>
+    </file>
+    <file name="MyImage\myimage.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="f20639bdea320cc678b2c3e5216e38e1"/>
+    </file>
+    <file name="MyImage\myimageautodeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </file>
+    <file name="MyImage\myimagedeclare.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="f976102656e11a737c6df0c8312eae95"/>
+    </file>
+    <file name="MyImage\myimageglobal.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="7e8e0791ab607f4619a2465246bfd3fd"/>
+    </file>
+    <file name="MyImage\myimageimage.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="798c63fec45adefbe384780f7c045f97"/>
+    </file>
+    <file name="MyImage\myimagemacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="b9e4a185127322a543eab5dc010b318d"/>
     </file>
-    <file name="template\templateautodeclare.pb">
+    <file name="MyImage\myimagestructure.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+      <fingerprint md5="6ce7a4615a5f9fb5ad7babc31c84d7be"/>
     </file>
   </section>
   <section name="targets">
@@ -81,7 +145,7 @@
       <outputfile value=""/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
-      <compilecount enable="1" value="12"/>
+      <compilecount enable="1" value="40"/>
       <buildcount enable="1" value="0"/>
       <execonstant enable="1"/>
     </target>
