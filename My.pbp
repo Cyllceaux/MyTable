@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-07 09:07" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-08 05:23" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
@@ -171,7 +171,7 @@
       <fingerprint md5="f085ea33b8b0a854e5f9dbce6ebf48c6"/>
     </file>
     <file name="MyTable\mytablestructures.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="e18e4993ea008f36a38f719c818b5624"/>
     </file>
     <file name="MyTable\mytablestyle.pb">
@@ -365,10 +365,6 @@
     <file name="Test\tree6.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="6bd5ba56b6f0046df7d202bad1087e82"/>
-    </file>
-    <file name="myapplication.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5=""/>
     </file>
   </section>
   <section name="targets">
