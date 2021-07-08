@@ -9,6 +9,9 @@ Structure strMyGadget Extends strMy
 	canvas.i
 	redraw.b
 	
+	calcheight.i
+	calcwidth.i
+	
 	x.i
 	y.i
 	w.i

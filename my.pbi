@@ -15,6 +15,7 @@
 	
 	Interface MyGadget Extends My
 		GetX():GetY():GetW():GetH()
+		GetCalcHeight():GetCalcWidth()
 		GetRedraw.b():SetRedraw(value.b)
 		Redraw()
 		
