@@ -330,6 +330,7 @@ DeclareModule MyTable
 		GetHScroll()
 		GetVScroll()
 		GetWindow()
+		Resize(x.i,y.i,w.i,h.i)
 	EndInterface
 	
 	Interface MyTableTable Extends MyTableTableObject

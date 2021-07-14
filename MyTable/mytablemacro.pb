@@ -365,6 +365,7 @@ Macro _MyTableDataSectionDefaultTableObject(gruppe)
 	_DataSectionGetter(MyTable,gruppe,HScroll)
 	_DataSectionGetter(MyTable,gruppe,VScroll)
 	_DataSectionGetter(MyTable,gruppe,Window)
+	_DataSectionMethode(MyTable,gruppe,Resize)
 EndMacro
 
 Macro _MyTableDataSectionDefaultTable(gruppe)

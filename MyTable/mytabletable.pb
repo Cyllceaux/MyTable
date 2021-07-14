@@ -50,6 +50,14 @@ _SimpleSetterGetter(MyTable,Table,HScroll,i)
 _SimpleSetterGetter(MyTable,Table,VScroll,i)
 _SimpleSetterGetter(MyTable,Table,Window,i)
 
+Procedure _MyTable_Table_Resize(*this.strMyTableTable,x.i,y.i,w.i,h.i)
+	If *this
+		ResizeGadget(*this\canvas,x,y,w,h)
+		
+	EndIf
+EndProcedure
+
+
 Procedure _MyTable_Table_Reinit(*this.strMyTableTable)
 	If *this
 		Protected rows=ListSize(*this\rows())

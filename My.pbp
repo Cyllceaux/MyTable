@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-08 05:23" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-14 15:15" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
@@ -127,8 +127,8 @@
       <fingerprint md5="4ab8c74b2958b5f234b17158ae803c38"/>
     </file>
     <file name="mytable.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="5a462a1e6e6ed5c16234e8e8fe4df45b"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="ed6e55b0f1c020e597024213ff9c9f64"/>
     </file>
     <file name="MyTable\mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -164,7 +164,7 @@
     </file>
     <file name="MyTable\mytablemacro.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="589bcfe4fdfac8a7024e157e273f1a2e"/>
+      <fingerprint md5="d04d83d4646fd38892ea11db165f8253"/>
     </file>
     <file name="MyTable\mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -180,7 +180,7 @@
     </file>
     <file name="MyTable\mytabletable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="d5b8bb02cec6ddfe633d5e84b321ce0b"/>
+      <fingerprint md5="186c0de29b30e835c36b16c11c0a6338"/>
     </file>
     <file name="MyTable\mytabletree.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -375,7 +375,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Tree" enabled="0" default="0">
+    <target name="Tree" enabled="0" default="1">
       <inputfile value="Test\tree.pb"/>
       <outputfile value=""/>
       <executable value="Test\tree.exe"/>
@@ -634,7 +634,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Creator" enabled="0" default="1">
+    <target name="Creator" enabled="0" default="0">
       <inputfile value="Creator\Creator.pb"/>
       <outputfile value="Creator\Creator.exe"/>
       <executable value="Creator\Creator.exe"/>
