@@ -4,7 +4,7 @@ XIncludeFile "myimage.pbi"
 
 DeclareModule MyTable
 	
-	#MYTABLE_VERSION = 3795
+	#MYTABLE_VERSION = 3796
 	#MYTABLE_VERSION_DATE = 20210715
 
 
@@ -44,12 +44,14 @@ DeclareModule MyTable
 	EndInterface
 	
 	Enumeration _mytable_style_valign
+		#MYTABLE_STYLE_VALIGN_DEFAULT
 		#MYTABLE_STYLE_VALIGN_TOP
 		#MYTABLE_STYLE_VALIGN_MIDDLE
 		#MYTABLE_STYLE_VALIGN_BOTTOM
 	EndEnumeration
 	
 	Enumeration _mytable_style_halign
+		#MYTABLE_STYLE_HALIGN_DEFAULT
 		#MYTABLE_STYLE_HALIGN_LEFT
 		#MYTABLE_STYLE_HALIGN_CENTER
 		#MYTABLE_STYLE_HALIGN_RIGHT

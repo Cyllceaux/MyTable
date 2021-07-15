@@ -29,11 +29,7 @@ UseModule MyTable
 			Global hscrollmails=ScrollBarGadget(#PB_Any,0,0,0,20,0,0,0)
 			Global vscrollmails=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 			CloseGadgetList()
-			
-			
-			Global web=EditorGadget(#PB_Any,0,0,0,0,#PB_Editor_ReadOnly)
-			SetGadgetText(web,"Hier könnte Ihre Werbung stehen")
-			
+
 			Global container2=ContainerGadget(#PB_Any,0,0,0,0)
 			Global calendar=CalendarGadget(#PB_Any,0,0,0,0)
 			Global termine=CanvasGadget(#PB_Any,0,0,0,0,#PB_Canvas_Container|#PB_Canvas_Keyboard)
@@ -52,17 +48,7 @@ UseModule MyTable
 			Global vscrollaufgaben=ScrollBarGadget(#PB_Any,0,0,20,0,0,0,0,#PB_ScrollBar_Vertical)
 			CloseGadgetList()
 			
-			Global *splitterF.MySplitter=MySplitterCreateSplitter(0,0,0,0,favoriten,ordner,#MYSPLITTER_FLAGS_NO_SIZEABLE|#MYSPLITTER_FLAGS_FIRSTFIXED)
-			
-			
-			Global *splittera.MySplitter=MySplitterCreateSplitter(0,0,0,0,kontakte,aufgaben)
-			Global *splitterb.MySplitter=MySplitterCreateSplitter(0,0,0,0,container2,*splittera,#MYSPLITTER_FLAGS_FIRSTFIXED)
-			
-			Global *splitter2.MySplitter=MySplitterCreateSplitter(0,0,0,0,mails,web,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_FIRSTFIXED)
-			Global *splitter1.MySplitter=MySplitterCreateSplitter(0,0,WindowWidth(window),WindowHeight(window),*splitterF,*splitter2,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_FIRSTFIXED)
-			Global *splitter0.MySplitter=MySplitterCreateSplitter(0,0,WindowWidth(window),WindowHeight(window),*splitter1,*splitterb,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_SECONDFIXED)
-			
-			
+		
 			
 			
 			
@@ -77,6 +63,21 @@ UseModule MyTable
 			Global *termine.MyTableTable=MyTableCreateTree(window,termine,vscrolltermine,hscrolltermine,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 			Global *kontakte.MyTableTable=MyTableCreateTree(window,kontakte,vscrollkontakte,hscrollkontakte,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
 			Global *aufgaben.MyTableTable=MyTableCreateTree(window,aufgaben,vscrollaufgaben,hscrollaufgaben,#MYTABLE_TABLE_FLAGS_NO_HEADER|#MYTABLE_TABLE_FLAGS_NO_REDRAW|#MYTABLE_TABLE_FLAGS_FULLROWSELECT)
+			Global *web.MyTableTable=MyTableCreateNewTable(0,0,0,0)
+			*web\SetEmptyText("Hier könnte Ihre Werbung stehen")
+			
+			Global *splitterF.MySplitter=MySplitterCreateSplitter(0,0,0,0,*favoriten,*ordner,#MYSPLITTER_FLAGS_NO_SIZEABLE|#MYSPLITTER_FLAGS_FIRSTFIXED)
+			
+			
+			Global *splittera.MySplitter=MySplitterCreateSplitter(0,0,0,0,*kontakte,*aufgaben)
+			Global *splitterb.MySplitter=MySplitterCreateSplitter(0,0,0,0,container2,*splittera,#MYSPLITTER_FLAGS_FIRSTFIXED)
+			
+			Global *splitter2.MySplitter=MySplitterCreateSplitter(0,0,0,0,*mails,*web,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_FIRSTFIXED)
+			Global *splitter1.MySplitter=MySplitterCreateSplitter(0,0,WindowWidth(window),WindowHeight(window),*splitterF,*splitter2,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_FIRSTFIXED)
+			Global *splitter0.MySplitter=MySplitterCreateSplitter(0,0,WindowWidth(window),WindowHeight(window),*splitter1,*splitterb,#MYSPLITTER_FLAGS_VERTICAL|#MYSPLITTER_FLAGS_SECONDFIXED)
+			
+	
+			
 			
 			*favoriten\SetDefaultImagePlusArrow(MyTableDefaultImagePlusArrow)
 			*favoriten\SetDefaultImageMinusArrow(MyTableDefaultImageMinusArrow)

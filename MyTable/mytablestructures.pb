@@ -25,8 +25,7 @@ Structure strMyTableStyle
 	border.strMyTableStyleBorder
 EndStructure
 
-Structure strMyTableObject Extends strMyVTable
-	flags.i
+Structure strMyTableObject Extends strMyScrollGadget
 	*data
 	dirty.b
 	defaultStyle.strMyTableStyle
@@ -143,15 +142,7 @@ Structure strMyTableTableEdit
 EndStructure
 
 Structure strMyTableTable Extends strMyTableObject
-	vscroll.i
-	hscroll.i
-	maxvscroll.i
-	maxhscroll.i
 	
-	window.i
-	canvas.i
-	
-
 	List rows.strMyTableRow()
 	List expRows.i()
 	List cols.strMyTableCol()

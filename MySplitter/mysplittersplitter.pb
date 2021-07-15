@@ -20,7 +20,7 @@ Procedure _MySplitter_Splitter_Draw(*this.strMySplitterSplitter)
 		Box(0,0,OutputWidth(),OutputHeight(),RGBA(100,100,100,255))			
 		Box(0,0,OutputWidth()-2,OutputHeight()-2,RGBA(200,200,200,255))
 	EndIf
-
+	
 	StopDrawing()	
 EndProcedure
 
@@ -28,6 +28,7 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 	If *this
 		Protected *obj.strMyVTable=0
 		Protected *spl.MySplitter=0
+		Protected *cobj.strMyGadget=0
 		Protected vertical.b=_MySplitter_Splitter_IsVertical(*this)
 		_MySplitter_Splitter_Check(*this)
 		If vertical
@@ -53,6 +54,13 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 							            *this\y,
 							            *this\value,
 							            *this\h)
+						Case my::#MY_TYPE_TABLE,my::#MY_TYPE_GRID,my::#MY_TYPE_TREE
+							*cobj=*obj
+							ResizeGadget(*cobj\canvas,
+							             *this\x,
+							             *this\y,
+							             *this\value,
+							             *this\h)
 					EndSelect
 				EndIf
 			EndIf
@@ -73,6 +81,15 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 							            *this\y,
 							            *this\w-*this\value-*this\separatorsize,
 							            *this\h)
+						Case my::#MY_TYPE_TABLE,my::#MY_TYPE_GRID,my::#MY_TYPE_TREE
+							*cobj=*obj
+							If IsGadget(*cobj\canvas)
+								ResizeGadget(*cobj\canvas,
+								             *this\x+*this\value+*this\separatorsize,
+								             *this\y,
+								             *this\w-*this\value-*this\separatorsize,
+								             *this\h)
+							EndIf
 					EndSelect
 				EndIf
 			EndIf
@@ -100,6 +117,13 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 							            *this\y,
 							            *this\w,
 							            *this\value)
+						Case my::#MY_TYPE_TABLE,my::#MY_TYPE_GRID,my::#MY_TYPE_TREE
+							*cobj=*obj
+							ResizeGadget(*cobj\canvas,
+							             *this\x,
+							             *this\y,
+							             *this\w,
+							             *this\value)
 					EndSelect
 				EndIf
 			EndIf
@@ -117,6 +141,13 @@ Procedure _MySplitter_Splitter_Redraw(*this.strMySplitterSplitter)
 						Case my::#MY_TYPE_SPLITTER						
 							*spl=*obj
 							*spl\Resize( *this\x,
+							             *this\y+*this\value+*this\separatorsize,
+							             *this\w,
+							             *this\h-*this\value-*this\separatorsize)
+						Case my::#MY_TYPE_TABLE,my::#MY_TYPE_GRID,my::#MY_TYPE_TREE
+							*cobj=*obj
+							ResizeGadget(*cobj\canvas,
+							             *this\x,
 							             *this\y+*this\value+*this\separatorsize,
 							             *this\w,
 							             *this\h-*this\value-*this\separatorsize)

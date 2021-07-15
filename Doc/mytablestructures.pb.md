@@ -28,10 +28,9 @@
 |halign|i||
 |border|[strMyTableStyleBorder](#strMyTableStyleBorder)||
 
-### strMyTableObject : [strMyVTable](#strMyVTable)
+### strMyTableObject : [strMyScrollGadget](#strMyScrollGadget)
 |Field|Type|Comment|
 | --- | --- | --- |
-|flags|i||
 |<span style="color:#FFFFAA">*data</span>||
 |dirty|b||
 |defaultStyle|[strMyTableStyle](#strMyTableStyle)||
@@ -143,12 +142,6 @@
 ### strMyTableTable : [strMyTableObject](#strMyTableObject)
 |Field|Type|Comment|
 | --- | --- | --- |
-|vscroll|i||
-|hscroll|i||
-|maxvscroll|i||
-|maxhscroll|i||
-|window|i||
-|canvas|i||
 |List rows|[strMyTableRow](#strMyTableRow)()||
 |List expRows|i()||
 |List cols|[strMyTableCol](#strMyTableCol)()||

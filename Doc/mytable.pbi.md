@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3795||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3796||
 |<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210715||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
@@ -19,16 +19,18 @@
 ### \_mytable\_style\_valign
 |Name|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_TOP</span>|0||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_MIDDLE</span>|1||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_BOTTOM</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_DEFAULT</span>|0||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_TOP</span>|1||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_MIDDLE</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_VALIGN\_BOTTOM</span>|3||
 
 ### \_mytable\_style\_halign
 |Name|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_LEFT</span>|0||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_CENTER</span>|1||
-|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_RIGHT</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_DEFAULT</span>|0||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_LEFT</span>|1||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_CENTER</span>|2||
+|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_HALIGN\_RIGHT</span>|3||
 
 ### \_mytable\_datatype
 |Name|Value|Comment|
