@@ -782,7 +782,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 							EndIf
 						EndIf
 						DrawingMode(#PB_2DDrawing_Default)
-						addx+MyTableW20
+						If Not alwaysexpanded
+							addx+MyTableW20						
+						EndIf
 					EndIf
 				EndIf
 				

@@ -24,6 +24,7 @@ Procedure _MyTable_Row_AddRow(*this.strMyTableRow,text.s,sep.s="|",image.i=0,fla
 		_MyTableInitRow(*this\table,*this,*row,text,sep,image,flags)
 		*this\table\dirty=#True
 		*this\dirty=#True
+		_MyTable_Table_Predraw(*this\table)
 		_MyTable_Table_Redraw(*this\table)
 		ProcedureReturn *row
 	EndIf
@@ -45,6 +46,7 @@ Procedure _MyTable_Row_AddDirtyRows(*this.strMyTableRow,text.s,rows.i)
 		Next
 		_callcountEnde()
 		*this\table\dirty=#True
+		_MyTable_Table_Predraw(*this\table)
 		_MyTable_Table_Redraw(*this\table)		
 	EndIf
 EndProcedure
@@ -73,6 +75,7 @@ Procedure _MyTable_Row_Delete(*this.strMyTableRow)
 			Next
 		EndIf
 		*table\dirty=#True
+		_MyTable_Table_Predraw(*this\table)
 		_MyTable_Table_Redraw(*table)
 	EndIf
 EndProcedure

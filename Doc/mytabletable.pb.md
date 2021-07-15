@@ -2,6 +2,7 @@
 
 |Name|Return|Parameter|Comment|
 | --- | --- | --- | --- |
+|\_MyTable\_Table\_Resize||<span style="color:#FFFFAA">*this.</span>strMyTableTable , x.i , y.i , w.i , h.i||
 |\_MyTable\_Table\_Reinit||<span style="color:#FFFFAA">*this.strMyTableTable</span>||
 |\_MyTable\_Table\_SetFlags||<span style="color:#FFFFAA">*this.</span>strMyTableTable , value.i||
 |\_MyTable\_Table\_GetPages||<span style="color:#FFFFAA">*this.strMyTableTable</span>||

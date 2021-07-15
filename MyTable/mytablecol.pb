@@ -307,12 +307,16 @@ EndProcedure
 
 Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
+	Protected hierarchicalAlwaysExpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this\table)
 	Protected checkboxes.b=_MyTable_IsCheckboxes(*this\table)
 	Protected *lastfont.MyFont::MyFont=0
 	Protected tresult.i=0
 	If *this\listindex=0
 		If hierarchical And *this\listindex=0
 			tresult+(MyTableW20 * (*row\level + 1))
+		EndIf
+		If hierarchicalAlwaysExpanded
+			tresult-MyTableW20
 		EndIf
 		If checkboxes And *this\listindex=0
 			tresult+MyTableW20

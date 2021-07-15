@@ -412,6 +412,9 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		If (hierarchical Or checkboxes) And Not disabled
 			Checkboxes=_MyTable_IsCheckboxes(*rc\trow)
 			Protected ex=*row\level*MyTableW20
+			If alwaysexpanded
+				ex-MyTableW20
+			EndIf
 			If mx>ex
 				ex=mx-ex
 				If hierarchical And checkboxes

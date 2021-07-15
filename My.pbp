@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="Test\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-07-14 15:15" user="silko" host="DESKTOP-6IPP9OH"/>
+    <lastopen date="2021-07-15 09:26" user="silko" host="DESKTOP-6IPP9OH"/>
   </section>
   <section name="files">
     <file name="Creator\Creator.pb">
@@ -16,11 +16,11 @@
     </file>
     <file name="my.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="105d463d8d1093d0800c8355da500fba"/>
+      <fingerprint md5="79d9241c7a1f1f9ec25f927e1c9334a2"/>
     </file>
     <file name="myfont.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="cec82573cde75d2e1d4ecd362038cee4"/>
+      <fingerprint md5="afd2f561874cf98d5378728ce5326761"/>
     </file>
     <file name="MyFont\myfont.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -72,7 +72,7 @@
     </file>
     <file name="myimage.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="ee2735923c1cfb199ba5b3e945e10d56"/>
+      <fingerprint md5="588b730038977e62533a1eb33caf21e7"/>
     </file>
     <file name="MyImage\myimage.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -100,7 +100,7 @@
     </file>
     <file name="mysplitter.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="d4f4cfc6dfaa665e52f3c8e4318a4b12"/>
+      <fingerprint md5="7da2c4cf2164b513f2aefdcde8690091"/>
     </file>
     <file name="MySplitter\mysplitter.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -127,8 +127,8 @@
       <fingerprint md5="4ab8c74b2958b5f234b17158ae803c38"/>
     </file>
     <file name="mytable.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="ed6e55b0f1c020e597024213ff9c9f64"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="9e481cfa760fc8d074ecf575fdc9f93c"/>
     </file>
     <file name="MyTable\mytable.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -148,7 +148,7 @@
     </file>
     <file name="MyTable\mytablecol.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="4918ce2e0785f17f03501fd4100f7df5"/>
+      <fingerprint md5="ae8b11c679f9e94af412789839ddf9ef"/>
     </file>
     <file name="MyTable\mytabledeclare.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -156,7 +156,7 @@
     </file>
     <file name="MyTable\mytableglobal.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="13bdedcf7c7a9cb0a64895bcbad3579c"/>
+      <fingerprint md5="ab556af9ac028a9dabf6135ad5c14123"/>
     </file>
     <file name="MyTable\mytablegrid.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -168,10 +168,10 @@
     </file>
     <file name="MyTable\mytablerow.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="f085ea33b8b0a854e5f9dbce6ebf48c6"/>
+      <fingerprint md5="8ce4a357880818e9583744ffbe818faf"/>
     </file>
     <file name="MyTable\mytablestructures.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="e18e4993ea008f36a38f719c818b5624"/>
     </file>
     <file name="MyTable\mytablestyle.pb">
@@ -179,8 +179,8 @@
       <fingerprint md5="3d8b10f0ba662cb10c9cff82c4705a4e"/>
     </file>
     <file name="MyTable\mytabletable.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="186c0de29b30e835c36b16c11c0a6338"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="ad6ca1e75a81d4f44df705769969b802"/>
     </file>
     <file name="MyTable\mytabletree.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -207,7 +207,7 @@
       <fingerprint md5="fbd2da6d6847ad9970d6eb0be2d535ff"/>
     </file>
     <file name="Test\grid3.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="45c90e662c9aeb1d327bffc7cd50fb92"/>
     </file>
     <file name="Test\kontakte.pb">
@@ -366,6 +366,10 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="6bd5ba56b6f0046df7d202bad1087e82"/>
     </file>
+    <file name="Test\tree7.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
+      <fingerprint md5="ef7a9a9efb6266b75c5223426f8c79bb"/>
+    </file>
   </section>
   <section name="targets">
     <target name="Backend (Only functions)" enabled="0" default="0">
@@ -375,7 +379,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Tree" enabled="0" default="1">
+    <target name="Tree" enabled="0" default="0">
       <inputfile value="Test\tree.pb"/>
       <outputfile value=""/>
       <executable value="Test\tree.exe"/>
@@ -412,6 +416,13 @@
     </target>
     <target name="Tree6 (Checkbox, Border, Multiselect, No Header)" enabled="0" default="0">
       <inputfile value="Test\tree6.pb"/>
+      <outputfile value=""/>
+      <executable value="Test\tree6.exe"/>
+      <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
+      <format exe="default" cpu="1"/>
+    </target>
+    <target name="Tree7 (Checkbox, Border, Multiselect, No Header, AlwaysExpanded)" enabled="0" default="0">
+      <inputfile value="Test\tree7.pb"/>
       <outputfile value=""/>
       <executable value="Test\tree6.exe"/>
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
@@ -606,7 +617,7 @@
       <options thread="1" xpskin="1" dpiaware="1" debug="1"/>
       <format exe="default" cpu="1"/>
     </target>
-    <target name="Complete (only pbcompiler check)" enabled="0" default="0">
+    <target name="Complete (only pbcompiler check)" enabled="0" default="1">
       <inputfile value="Test\complete.pb"/>
       <outputfile value=""/>
       <executable value="Test\kontakte.exe"/>

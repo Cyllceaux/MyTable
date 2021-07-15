@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3793||
-|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210707||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION</span>| 3795||
+|<span style="color:#AAAAFF">\#MYTABLE\_VERSION\_DATE</span>| 20210715||
 |<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_ALL</span>|<span style="color:#AAAAFF">\#MYTABLE\_STYLE\_BORDER\_TOP \| \#MYTABLE\_STYLE\_BORDER\_RIGHT \| \#MYTABLE\_STYLE\_BORDER\_BOTTOM \| \#MYTABLE\_STYLE\_BORDER\_LEFT</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TABLE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_SORTABLE \| \#MYTABLE\_TABLE\_FLAGS\_RESIZABLE</span>||
 |<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_DEFAULT\_TREE</span>|<span style="color:#AAAAFF">\#MYTABLE\_TABLE\_FLAGS\_BORDER \| \#MYTABLE\_TABLE\_FLAGS\_HIERARCHICAL</span>||
@@ -389,6 +389,7 @@
 |GetHScroll||||
 |GetVScroll||||
 |GetWindow||||
+|Resize||x.i , y.i , w.i , h.i||
 
 ### MyTableTable : [MyTableTableObject](#MyTableTableObject)
 |Name|Return|Parameter|Comment|

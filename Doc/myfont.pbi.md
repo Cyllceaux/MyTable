@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYFONT\_VERSION</span>| 280||
-|<span style="color:#AAAAFF">\#MYFONT\_VERSION\_DATE</span>| 20210707||
+|<span style="color:#AAAAFF">\#MYFONT\_VERSION</span>| 282||
+|<span style="color:#AAAAFF">\#MYFONT\_VERSION\_DATE</span>| 20210715||
 
 
 ## Interfaces
