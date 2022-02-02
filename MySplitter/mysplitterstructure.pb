@@ -3,7 +3,6 @@
 Structure strMySplitterSplitter Extends strMyGadget
 	value.i
 	
-	dirty.b
 	gadget1.i
 	gadget2.i
 	x.i

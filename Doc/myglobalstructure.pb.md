@@ -7,6 +7,7 @@
 |window|i||
 |canvas|i||
 |flags|i||
+|dirty|b||
 
 ### strMyScrollGadget : [strMyGadget](#strMyGadget)
 |Field|Type|Comment|

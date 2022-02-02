@@ -15,7 +15,6 @@
 |\_MyTable\_Cell\_GetParent||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetRow||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetSelectedStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
-|\_MyTable\_Cell\_GetTable||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
 |\_MyTable\_Cell\_Predraw||<span style="color:#FFFFAA">*this.strMyTableCell</span>||
@@ -37,7 +36,6 @@
 |\_MyTable\_Col\_GetFixedStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetMouseOverStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetSelectedStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
-|\_MyTable\_Col\_GetTable||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
 |\_MyTable\_Col\_Predraw||<span style="color:#FFFFAA">*this.strMyTableCol</span>||
@@ -67,7 +65,6 @@
 |\_MyTable\_Row\_GetMouseOverStyle||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetParent||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetSelectedStyle||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
-|\_MyTable\_Row\_GetTable||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetTitleStyle||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_GetZebraStyle||<span style="color:#FFFFAA">*this.strMyTableRow</span>||
 |\_MyTable\_Row\_Predraw||<span style="color:#FFFFAA">*this.strMyTableRow</span>||

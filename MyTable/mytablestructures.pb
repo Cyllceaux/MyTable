@@ -27,7 +27,6 @@ EndStructure
 
 Structure strMyTableObject Extends strMyScrollGadget
 	*data
-	dirty.b
 	defaultStyle.strMyTableStyle
 	selectedStyle.strMyTableStyle
 	zebraStyle.strMyTableStyle
@@ -68,7 +67,7 @@ Structure strMyTableCell Extends strMyTableObject
 	*parent.strMyTableCell
 	*col.strMyTableCol
 	*row.strMyTableRow
-	*table.strMyTableTable
+	*main.strMyTableTable
 	*application.strMyTableApplication
 	listindex.i
 	text.s
@@ -91,7 +90,7 @@ Structure strMyTableCell Extends strMyTableObject
 EndStructure
 
 Structure strMyTableCol Extends strMyTableObject
-	*table.strMyTableTable
+	*main.strMyTableTable
 	*application.strMyTableApplication
 	*parent.strMyTableCol
 	listindex.i
@@ -115,7 +114,7 @@ Structure strMyTableCol Extends strMyTableObject
 EndStructure
 
 Structure strMyTableRow Extends strMyTableObject
-	*table.strMyTableTable
+	*main.strMyTableTable
 	*application.strMyTableApplication
 	*cells.strMyTableCellList
 	*rows.strMyTableRowList

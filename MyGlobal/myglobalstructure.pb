@@ -7,6 +7,7 @@ Structure strMyGadget Extends strMyVTable
 	window.i
 	canvas.i
 	flags.i
+	dirty.b
 EndStructure
 
 Structure strMyScrollGadget Extends strMyGadget

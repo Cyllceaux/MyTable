@@ -32,7 +32,6 @@
 |Field|Type|Comment|
 | --- | --- | --- |
 |<span style="color:#FFFFAA">*data</span>||
-|dirty|b||
 |defaultStyle|[strMyTableStyle](#strMyTableStyle)||
 |selectedStyle|[strMyTableStyle](#strMyTableStyle)||
 |zebraStyle|[strMyTableStyle](#strMyTableStyle)||
@@ -73,7 +72,7 @@
 |<span style="color:#FFFFAA">*parent|[strMyTableCell](#strMyTableCell)</span>||
 |<span style="color:#FFFFAA">*col|[strMyTableCol](#strMyTableCol)</span>||
 |<span style="color:#FFFFAA">*row|[strMyTableRow](#strMyTableRow)</span>||
-|<span style="color:#FFFFAA">*table|[strMyTableTable](#strMyTableTable)</span>||
+|<span style="color:#FFFFAA">*main|[strMyTableTable](#strMyTableTable)</span>||
 |<span style="color:#FFFFAA">*application|strMyTableApplication</span>||
 |listindex|i||
 |text|s||
@@ -94,7 +93,7 @@
 ### strMyTableCol : [strMyTableObject](#strMyTableObject)
 |Field|Type|Comment|
 | --- | --- | --- |
-|<span style="color:#FFFFAA">*table|[strMyTableTable](#strMyTableTable)</span>||
+|<span style="color:#FFFFAA">*main|[strMyTableTable](#strMyTableTable)</span>||
 |<span style="color:#FFFFAA">*application|strMyTableApplication</span>||
 |<span style="color:#FFFFAA">*parent|[strMyTableCol](#strMyTableCol)</span>||
 |listindex|i||
@@ -115,7 +114,7 @@
 ### strMyTableRow : [strMyTableObject](#strMyTableObject)
 |Field|Type|Comment|
 | --- | --- | --- |
-|<span style="color:#FFFFAA">*table|[strMyTableTable](#strMyTableTable)</span>||
+|<span style="color:#FFFFAA">*main|[strMyTableTable](#strMyTableTable)</span>||
 |<span style="color:#FFFFAA">*application|strMyTableApplication</span>||
 |<span style="color:#FFFFAA">*cells|[strMyTableCell](#strMyTableCell)List</span>||
 |<span style="color:#FFFFAA">*rows|[strMyTableRow](#strMyTableRow)List</span>||

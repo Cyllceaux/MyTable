@@ -5,7 +5,7 @@ Macro _MyTableMakeDraws(gruppe)
 	_AddAutoDeclare(MyTable,_MyTable_#gruppe#_Redraw(*this.strMyTable#gruppe))
 	Procedure _MyTable_#gruppe#_Redraw(*this.strMyTable#gruppe)
 		If *this\type=My::#MY_TYPE_#gruppe
-			ProcedureReturn _MyTable_Table_Redraw(*this\table)
+			ProcedureReturn _MyTable_Table_Redraw(*this\main)
 		Else
 			ProcedureReturn _MyTable_Table_Redraw(*this)
 		EndIf
@@ -14,7 +14,7 @@ Macro _MyTableMakeDraws(gruppe)
 	_AddAutoDeclare(MyTable,_MyTable_#gruppe#_Predraw(*this.strMyTable#gruppe))
 	Procedure _MyTable_#gruppe#_Predraw(*this.strMyTable#gruppe)
 		If *this\type=My::#MY_TYPE_#gruppe
-			ProcedureReturn _MyTable_Table_Predraw(*this\table)
+			ProcedureReturn _MyTable_Table_Predraw(*this\main)
 		Else
 			ProcedureReturn _MyTable_Table_Predraw(*this)
 		EndIf
@@ -30,7 +30,7 @@ Macro _MyTable_GetStyleCell(name)
 		*style\cellStyle=*this\name#Style
 		*style\rowStyle=*this\row\name#Style
 		*style\colStyle=*this\col\name#Style
-		*style\tableStyle=*this\table\name#Style
+		*style\tableStyle=*this\main\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -43,7 +43,7 @@ Macro _MyTable_GetStyleCol(name)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
 		*style\colStyle=*this\name#Style
-		*style\tableStyle=*this\table\name#Style
+		*style\tableStyle=*this\main\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -56,7 +56,7 @@ Macro _MyTable_GetStyleRow(name)
 		Protected *style.strMyTableStyleObject=AllocateStructure(strMyTableStyleObject)
 		
 		*style\rowStyle=*this\name#Style
-		*style\tableStyle=*this\table\name#Style
+		*style\tableStyle=*this\main\name#Style
 		
 		_MyTableInitStyleObject(*style,*this,*this\name#Style)
 		ProcedureReturn *style
@@ -82,13 +82,13 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 		Select *this\type
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*this
-				ProcedureReturn *cell\table\name
+				ProcedureReturn *cell\main\name
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*this
-				ProcedureReturn *row\table\name
+				ProcedureReturn *row\main\name
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*this
-				ProcedureReturn *col\table\name
+				ProcedureReturn *col\main\name
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 				Protected *table.strMyTableTable=*this
 				ProcedureReturn *table\name
@@ -104,13 +104,13 @@ CompilerIf #PB_Compiler_Debugger And Defined(MYTABLE_DEBUG,#PB_Module)
 		Select *this\type
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*this
-				ProcedureReturn *cell\table\canvas
+				ProcedureReturn *cell\main\canvas
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*this
-				ProcedureReturn *row\table\canvas
+				ProcedureReturn *row\main\canvas
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*this
-				ProcedureReturn *col\table\canvas
+				ProcedureReturn *col\main\canvas
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 				Protected *table.strMyTableTable=*this
 				ProcedureReturn *table\canvas
@@ -438,13 +438,13 @@ Macro _MyTable_StyleMethods(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj					
-					result=_MyTable_Get#gruppe#name(*cell\table,#False)
+					result=_MyTable_Get#gruppe#name(*cell\main,#False)
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
-					result=_MyTable_Get#gruppe#name(*row\table,#False)
+					result=_MyTable_Get#gruppe#name(*row\main,#False)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
-					result=_MyTable_Get#gruppe#name(*col\table,#False)					
+					result=_MyTable_Get#gruppe#name(*col\main,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 			EndSelect
@@ -465,17 +465,17 @@ Macro _MyTable_StyleMethodsRow(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
-					If Not *cell\table\datagrid						
+					If Not *cell\main\datagrid						
 						result=_MyTable_Get#gruppe#name(*cell\row,#False)
 					Else
-						result=_MyTable_Get#gruppe#name(*cell\table,#False)
+						result=_MyTable_Get#gruppe#name(*cell\main,#False)
 					EndIf
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
-					result=_MyTable_Get#gruppe#name(*row\table,#False)
+					result=_MyTable_Get#gruppe#name(*row\main,#False)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
-					result=_MyTable_Get#gruppe#name(*col\table,#False)					
+					result=_MyTable_Get#gruppe#name(*col\main,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 			EndSelect
@@ -496,17 +496,17 @@ Macro _MyTable_StyleMethodsRowPointer(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj			
-					If Not *cell\table\datagrid
+					If Not *cell\main\datagrid
 						*result=_MyTable_Get#gruppe#name(*cell\row,#False)
 					Else
-						*result=_MyTable_Get#gruppe#name(*cell\table,#False)
+						*result=_MyTable_Get#gruppe#name(*cell\main,#False)
 					EndIf
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
-					*result=_MyTable_Get#gruppe#name(*row\table,#False)
+					*result=_MyTable_Get#gruppe#name(*row\main,#False)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
-					*result=_MyTable_Get#gruppe#name(*col\table,#False)					
+					*result=_MyTable_Get#gruppe#name(*col\main,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 			EndSelect
@@ -527,17 +527,17 @@ Macro _MyTable_StyleMethodsCol(gruppe,name,typ,sub=)
 			Select *obj\type
 				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj		
-					If Not *cell\table\datagrid						
+					If Not *cell\main\datagrid						
 						result=_MyTable_Get#gruppe#name(*cell\col,#False)
 					Else
-						result=_MyTable_Get#gruppe#name(*cell\table,#False)
+						result=_MyTable_Get#gruppe#name(*cell\main,#False)
 					EndIf
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
-					result=_MyTable_Get#gruppe#name(*row\table,#False)
+					result=_MyTable_Get#gruppe#name(*row\main,#False)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
-					result=_MyTable_Get#gruppe#name(*col\table,#False)					
+					result=_MyTable_Get#gruppe#name(*col\main,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 			EndSelect
@@ -557,13 +557,13 @@ Macro _MyTable_StyleBorderMethods(gruppe,name,pos,typ)
 			Select *obj\type
 				Case My::#MY_TYPE_CELL
 					Protected *cell.strMyTableCell=*obj					
-					result= _MyTable_Get#gruppe#Border#name#pos(*cell\table,#False)
+					result= _MyTable_Get#gruppe#Border#name#pos(*cell\main,#False)
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*obj					
-					result= _MyTable_Get#gruppe#Border#name#pos(*row\table,#False)
+					result= _MyTable_Get#gruppe#Border#name#pos(*row\main,#False)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*obj					
-					result= _MyTable_Get#gruppe#Border#name#pos(*col\table,#False)					
+					result= _MyTable_Get#gruppe#Border#name#pos(*col\main,#False)					
 				Case My::#MY_TYPE_TABLE,My::#MY_TYPE_GRID,My::#MY_TYPE_TREE
 					Protected *table.strMyTableTable=*obj
 			EndSelect
@@ -602,7 +602,7 @@ Macro _MyTable_IsTableColNo(name)
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result Or _Mytable_Is#name(*col\main))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
@@ -622,18 +622,18 @@ Macro _MyTable_IsTableCellColRowNo(name)
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*cell\table))
+				result=Bool(result Or _Mytable_Is#name(*cell\main))
 				result=Bool(result Or _Mytable_Is#name(*cell\col))
 				result=Bool(result And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_#name))
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result Or _Mytable_Is#name(*col\main))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result Or _Mytable_Is#name(*row\main))
 				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
@@ -653,7 +653,7 @@ Macro _MyTable_IsTableRow(name)
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result Or _Mytable_Is#name(*row\main))
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
@@ -672,12 +672,12 @@ Macro _MyTable_IsTableRowColNo(name)
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result Or _Mytable_Is#name(*row\main))
 				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result Or _Mytable_Is#name(*col\main))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
@@ -697,19 +697,19 @@ Macro _MyTable_IsTableAllNo(name)
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*cell\table))
+				result=Bool(result Or _Mytable_Is#name(*cell\main))
 				result=Bool(result Or _Mytable_Is#name(*cell\row))
 				result=Bool(result Or _Mytable_Is#name(*cell\col))
 				result=Bool(result And Not Bool(*cell\flags & #MYTABLE_CELL_FLAGS_NO_#name))
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result Or _Mytable_Is#name(*row\main))
 				result=Bool(result And Not Bool(*row\flags & #MYTABLE_ROW_FLAGS_NO_#name))
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result Or _Mytable_Is#name(*col\main))
 				result=Bool(result And Not Bool(*col\flags & #MYTABLE_COL_FLAGS_NO_#name))
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
@@ -729,17 +729,17 @@ Macro _MyTable_IsTableAll(name)
 			Case My::#MY_TYPE_CELL
 				Protected *cell.strMyTableCell=*obj
 				result=Bool(*cell\flags & #MYTABLE_CELL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*cell\table))
+				result=Bool(result Or _Mytable_Is#name(*cell\main))
 				result=Bool(result Or _Mytable_Is#name(*cell\row))
 				result=Bool(result Or _Mytable_Is#name(*cell\col))
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
 				result=Bool(*row\flags & #MYTABLE_ROW_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*row\table))
+				result=Bool(result Or _Mytable_Is#name(*row\main))
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
 				result=Bool(*col\flags & #MYTABLE_COL_FLAGS_#name)
-				result=Bool(result Or _Mytable_Is#name(*col\table))
+				result=Bool(result Or _Mytable_Is#name(*col\main))
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				result=Bool(*obj\flags & #MYTABLE_TABLE_FLAGS_#name)
 			Default
@@ -788,16 +788,16 @@ Macro _MyTable_Style_GetterSetter(name,typ,sub=)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*this\obj
 					*this\style\sub#name=value
-					If *col\table\datagrid
-						ForEach *col\table\rows()
-							*cell=_MyTableGetOrAddCell(*col\table\rows(),*col\listindex,#True)
+					If *col\main\datagrid
+						ForEach *col\main\rows()
+							*cell=_MyTableGetOrAddCell(*col\main\rows(),*col\listindex,#True)
 							*cell\defaultStyle\sub#name=value
 						Next
 					EndIf					
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
 					
-					For idx=1 To ListSize(*row\table\cols())
+					For idx=1 To ListSize(*row\main\cols())
 						*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
 						*cell\defaultStyle\sub#name=value
 					Next
@@ -832,16 +832,16 @@ Macro _MyTable_Style_GetterSetterPointer(name,typ,sub=)
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*this\obj
 					*this\style\sub#name=*value
-					If *col\table\datagrid
-						ForEach *col\table\rows()							
-							*cell=_MyTableGetOrAddCell(*col\table\rows(),*col\listindex,#True)
+					If *col\main\datagrid
+						ForEach *col\main\rows()							
+							*cell=_MyTableGetOrAddCell(*col\main\rows(),*col\listindex,#True)
 							*cell\defaultStyle\sub#name=*value							
 						Next
 					EndIf					
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
 					
-					For idx=1 To ListSize(*row\table\cols())
+					For idx=1 To ListSize(*row\main\cols())
 						*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
 						*cell\defaultStyle\sub#name=*value
 					Next
@@ -875,9 +875,9 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 			Select *this\obj\type
 				Case My::#MY_TYPE_COL
 					Protected *col.strMyTableCol=*this\obj
-					If *col\table\datagrid
-						ForEach *col\table\rows()
-							*cell=_MyTableGetOrAddCell(*col\table\rows(),*col\listindex,#True)
+					If *col\main\datagrid
+						ForEach *col\main\rows()
+							*cell=_MyTableGetOrAddCell(*col\main\rows(),*col\listindex,#True)
 							*cell\defaultStyle\border\border#pos\name=value
 						Next
 					EndIf					
@@ -885,7 +885,7 @@ Macro _MyTable_Style_GetterSetterBorder(name,typ,pos)
 				Case My::#MY_TYPE_ROW
 					Protected *row.strMyTableRow=*this\obj					
 					
-					For idx=1 To ListSize(*row\table\cols())
+					For idx=1 To ListSize(*row\main\cols())
 						*cell=_MyTableGetOrAddCell(*row,idx-1,#True)
 						*cell\defaultStyle\border\border#pos\name=value
 					Next

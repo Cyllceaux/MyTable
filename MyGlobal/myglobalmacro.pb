@@ -122,8 +122,8 @@ Macro _SimpleSetterSubRedraw(projekt,gruppe,name,typ,sub=)
 		If *this
 			*this\sub#name=value
 			*this\dirty=#True			
-			*this\table\dirty=#True
-			_#projekt#_#gruppe#_Redraw(*this\table)						
+			*this\main\dirty=#True
+			_#projekt#_#gruppe#_Redraw(*this\main)						
 		EndIf
 	EndProcedure
 EndMacro
@@ -134,9 +134,9 @@ Macro _SimpleSetterSubPredraw(projekt,gruppe,name,typ,sub=)
 		If *this
 			*this\sub#name=value
 			*this\dirty=#True			
-			*this\table\dirty=#True
-			_#projekt#_#gruppe#_Predraw(*this\table)						
-			_#projekt#_#gruppe#_Redraw(*this\table)						
+			*this\main\dirty=#True
+			_#projekt#_#gruppe#_Predraw(*this\main)						
+			_#projekt#_#gruppe#_Redraw(*this\main)						
 		EndIf
 	EndProcedure
 EndMacro

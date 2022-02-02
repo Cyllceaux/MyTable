@@ -1,6 +1,6 @@
 # My
 
-VERSION = 256
+VERSION = 260
 
 VERSION_DATE = 20220202
 
@@ -13,6 +13,8 @@ VERSION_DATE = 20220202
 [mysplitter.pbi](Doc/mysplitter.pbi.md)
 
 [mytable.pbi](Doc/mytable.pbi.md)
+
+[mytoolbar.pbi](Doc/mytoolbar.pbi.md)
 
 ## MyGlobal
 
@@ -30,7 +32,7 @@ VERSION_DATE = 20220202
 
 ## MyFont
 
-VERSION = 284
+VERSION = 288
 
 VERSION_DATE = 20220202
 
@@ -48,7 +50,7 @@ VERSION_DATE = 20220202
 
 ## MyImage
 
-VERSION = 251
+VERSION = 255
 
 VERSION_DATE = 20220202
 
@@ -66,7 +68,7 @@ VERSION_DATE = 20220202
 
 ## MyTable
 
-VERSION = 3797
+VERSION = 3801
 
 VERSION_DATE = 20220202
 
@@ -100,7 +102,7 @@ VERSION_DATE = 20220202
 
 ## MySplitter
 
-VERSION = 159
+VERSION = 163
 
 VERSION_DATE = 20220202
 

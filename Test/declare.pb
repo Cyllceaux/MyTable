@@ -18,6 +18,7 @@ UsePNGImageDecoder()
 
 XIncludeFile "../mytable.pbi"
 XIncludeFile "../mysplitter.pbi"
+XIncludeFile "../mytoolbar.pbi"
 
 Macro MM
 	"

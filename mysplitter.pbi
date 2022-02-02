@@ -2,7 +2,7 @@
 
 DeclareModule MySplitter
 	
-	#MYSPLITTER_VERSION = 160
+	#MYSPLITTER_VERSION = 164
 	#MYSPLITTER_VERSION_DATE = 20220202
 	
 	EnumerationBinary _mysplitter_flags

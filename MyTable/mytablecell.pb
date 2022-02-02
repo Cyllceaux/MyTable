@@ -14,7 +14,7 @@ _SimpleGetter(MyTable,Cell,Type,i)
 _SimpleGetterPointer(MyTable,Cell,Parent)
 _SimpleGetterPointer(MyTable,Cell,Row)
 _SimpleGetterPointer(MyTable,Cell,Col)
-_SimpleGetterPointer(MyTable,Cell,Table)
+_SimpleGetterPointer(MyTable,Cell,Main)
 _SimpleSetterGetterSubPredraw(MyTable,Cell,Colspan,i)
 
 Procedure _MyTable_Cell_SetTextExp(*this.strMyTableCell,value.s)
@@ -30,7 +30,7 @@ Procedure _MyTable_Cell_SetTextExp(*this.strMyTableCell,value.s)
 		*this\textheight=0
 		*this\textwidth=0
 		*this\dirty=#True
-		*this\table\dirty=#True
+		*this\main\dirty=#True
 	EndIf
 EndProcedure
 
@@ -44,15 +44,15 @@ Procedure _MyTable_Cell_SetFormula(*this.strMyTableCell,value.s)
 		*this\textheight=0
 		*this\textwidth=0
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
 Procedure _MyTable_Cell_SetText(*this.strMyTableCell,value.s)
 	If *this
 		_MyTable_Cell_SetTextExp(*this,value)
-		_MyTable_Table_Redraw(*this\table)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -69,8 +69,8 @@ Procedure _MyTable_Cell_SetValue(*this.strMyTableCell,value.d)
 		*this\textheight=0
 		*this\textwidth=0
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -83,17 +83,17 @@ EndProcedure
 
 Procedure _MyTable_Cell_StopEdit(*this.strMyTableCell)
 	If *this
-		_MyTable_StopEdit(*this\table,#True)
+		_MyTable_StopEdit(*this\main,#True)
 	EndIf
 EndProcedure
 
 
 Procedure _MyTable_Cell_SetSelected(*this.strMyTableCell,value.b)
 	If *this
-		*this\table\selectedcells(Str(*this))=value
-		*this\table\dirty=#True
+		*this\main\selectedcells(Str(*this))=value
+		*this\main\dirty=#True
 		*this\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -125,8 +125,8 @@ Procedure _MyTable_Cell_SetImageLeft(*this.strMyTableCell,*value.MyImage::MyImag
 	If *this
 		*this\imageLeft=*value
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -134,8 +134,8 @@ Procedure _MyTable_Cell_SetImageRight(*this.strMyTableCell,*value.MyImage::MyIma
 	If *this
 		*this\imageRight=*value
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -145,14 +145,14 @@ Procedure _MyTable_Cell_ScrollTo(*this.strMyTableCell,setSelect.b=#False,redraw.
 	If *this			
 		_MyTable_Row_ScrollTo(*this\row,#False,#False)
 		_MyTable_Col_ScrollTo(*this\col,#False,#False)
-		Protected multiselect.b=_MyTable_IsMultiselect(*this\table)
+		Protected multiselect.b=_MyTable_IsMultiselect(*this\main)
 		If Not multiselect
-			ClearMap(*this\table\selectedCells())
+			ClearMap(*this\main\selectedCells())
 		EndIf
-		*this\table\selectedCells(Str(*this))=#True
-		*this\table\dirty=#True		
+		*this\main\selectedCells(Str(*this))=#True
+		*this\main\dirty=#True		
 		If redraw
-			_MyTable_Table_Redraw(*this\table)
+			_MyTable_Table_Redraw(*this\main)
 		EndIf
 	EndIf
 EndProcedure
@@ -171,7 +171,7 @@ Procedure _MyTable_Cell_AddCell(*this.strMyTableCell,text.s,image.i=0,flags.i=0)
 		EndIf
 		LastElement(*this\cells\cells())
 		Protected *cell.strMyTableCell=AddElement(*this\cells\cells())
-		_MyTableInitCell(*this\table,*this\row,*this\col,*this,*cell,Flags)
+		_MyTableInitCell(*this\main,*this\row,*this\col,*this,*cell,Flags)
 		*cell\text=text
 		ProcedureReturn *cell
 	EndIf

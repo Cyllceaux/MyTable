@@ -3,7 +3,7 @@ _SimpleSetterGetter(MyTable,Col,Tooltip,s)
 _SimpleSetterGetterSubRedraw(MyTable,Col,Dirty,b)
 _SimpleSetterGetterSubPredraw(MyTable,Col,Flags,i)
 _SimpleSetterGetterSubPredraw(MyTable,Col,Disabled,b)
-_SimpleGetterPointer(MyTable,Col,Table)
+_SimpleGetterPointer(MyTable,Col,Main)
 _SimpleGetter(MyTable,Col,Type,i)
 _SimpleSetterGetterPointer(MyTable,Col,Data)
 _SimpleSetterGetterSubRedraw(MyTable,Col,Text,s)
@@ -14,9 +14,9 @@ _SimpleGetter(MyTable,Col,Datatype,i)
 
 Procedure _MyTable_Col_SetMask(*this.strMyTableCol,value.s)
 	If *this
-		ForEach *this\table\rows()
-			If *this\table\rows()\cells And ListSize(*this\table\rows()\cells\cells())>*this\listindex
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),*this\listindex,#True)
+		ForEach *this\main\rows()
+			If *this\main\rows()\cells And ListSize(*this\main\rows()\cells\cells())>*this\listindex
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\main\rows(),*this\listindex,#True)
 				If *cell\mask=*this\mask
 					*cell\mask=value
 					*cell\dirty=#True
@@ -25,8 +25,8 @@ Procedure _MyTable_Col_SetMask(*this.strMyTableCol,value.s)
 		Next
 		*this\mask=value
 		*this\dirty=#True
-		*this\table\dirty=#True		
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True		
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -39,9 +39,9 @@ Procedure _MyTable_Col_SetDatatype(*this.strMyTableCol,value.i)
 		Else
 			*this\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_LEFT
 		EndIf
-		ForEach *this\table\rows()
-			If *this\table\rows()\cells And ListSize(*this\table\rows()\cells\cells())>*this\listindex
-				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\table\rows(),*this\listindex,#True)
+		ForEach *this\main\rows()
+			If *this\main\rows()\cells And ListSize(*this\main\rows()\cells\cells())>*this\listindex
+				Protected *cell.strMyTableCell=_MyTableGetOrAddCell(*this\main\rows(),*this\listindex,#True)
 				If *cell\datatype=*this\datatype
 					*cell\datatype=value
 					*cell\defaultStyle\halign=*this\defaultStyle\halign
@@ -51,8 +51,8 @@ Procedure _MyTable_Col_SetDatatype(*this.strMyTableCol,value.i)
 		Next
 		*this\datatype=value
 		*this\dirty=#True
-		*this\table\dirty=#True		
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True		
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -100,8 +100,8 @@ EndProcedure
 
 Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 	If *this				
-		ForEach *this\table\cols()
-			*this\table\cols()\sort=#MYTABLE_COL_SORT_NONE
+		ForEach *this\main\cols()
+			*this\main\cols()\sort=#MYTABLE_COL_SORT_NONE
 		Next
 		*this\sort=sort
 		Protected numeric.b=Bool(_MyTable_IsCheckboxes(*this) Or 
@@ -109,7 +109,7 @@ Procedure _MyTable_Col_Sort(*this.strMyTableCol,sort.i)
 		                         *this\datatype & #MYTABLE_DATATYPE_DATE)
 		
 		_callcountStart()
-		Protected *table.strMyTableTable=*this\table
+		Protected *table.strMyTableTable=*this\main
 		Protected *row.strMyTableRow=0
 		
 		ForEach *table\rows()			
@@ -140,13 +140,13 @@ Procedure _MyTable_Col_SetSort(*this.strMyTableCol,value.i)
 	If *this
 		*this\sort=value
 		*this\dirty=#True
-		*this\table\dirty=#True		
+		*this\main\dirty=#True		
 		If *this\parent
 			_MyTable_Col_Sort(*this\parent,value)
 		Else
 			_MyTable_Col_Sort(*this,value)
 		EndIf
-		_MyTable_Table_Redraw(*this\table)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -166,9 +166,9 @@ Procedure _MyTable_Col_SetWidth(*this.strMyTableCol,value.i)
 			*this\calcwidth=DesktopScaledX(value)
 		EndIf
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Predraw(*this\table)
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Predraw(*this\main)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -183,9 +183,9 @@ Procedure _MyTable_Col_SetMinWidth(*this.strMyTableCol,value.i)
 		*this\minwidth=value
 		*this\calcminwidth=DesktopScaledX(value)		
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Predraw(*this\table)
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Predraw(*this\main)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -208,21 +208,21 @@ EndProcedure
 Procedure _MyTable_Col_Delete(*this.strMyTableCol)
 	If *this
 		Protected idx=0
-		Protected *table.strMyTableTable=*this\table
-		ForEach *this\table\cols()
-			If *this\table\cols()=*this
-				DeleteElement(*this\table\cols())
-				ForEach *this\table\rows()
-					_MyTable_Col_DeleteColRow(*this\table\rows(),idx)
+		Protected *table.strMyTableTable=*this\main
+		ForEach *this\main\cols()
+			If *this\main\cols()=*this
+				DeleteElement(*this\main\cols())
+				ForEach *this\main\rows()
+					_MyTable_Col_DeleteColRow(*this\main\rows(),idx)
 				Next
 			Else
-				*this\table\cols()\listindex=idx
+				*this\main\cols()\listindex=idx
 				idx+1
-				If *this\table\datagrid
-					*this\table\cols()\text=_MyTableGridColumnName(idx)
-					*this\table\cols()\dirty=#True
-					*this\table\cols()\textheight=0
-					*this\table\cols()\textwidth=0
+				If *this\main\datagrid
+					*this\main\cols()\text=_MyTableGridColumnName(idx)
+					*this\main\cols()\dirty=#True
+					*this\main\cols()\textheight=0
+					*this\main\cols()\textwidth=0
 				EndIf
 			EndIf
 		Next		
@@ -243,9 +243,9 @@ Procedure _MyTable_Col_SetImage(*this.strMyTableCol,*value.MyImage::MyImage)
 	If *this
 		*this\image=*value
 		*this\dirty=#True
-		*this\table\dirty=#True
-		_MyTable_Table_Predraw(*this\table)
-		_MyTable_Table_Redraw(*this\table)
+		*this\main\dirty=#True
+		_MyTable_Table_Predraw(*this\main)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
@@ -259,30 +259,30 @@ EndProcedure
 
 Procedure _MyTable_Col_SetSelected(*this.strMyTableCol,value.b)
 	If *this
-		*this\table\selectedcols(Str(*this))=value
-		*this\table\dirty=#True
+		*this\main\selectedcols(Str(*this))=value
+		*this\main\dirty=#True
 		*this\dirty=#True
-		_MyTable_Table_Redraw(*this\table)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure
 
 
 Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=#True)
 	If *this		
-		_MyTable_Table_Predraw(*this\table,#True)
+		_MyTable_Table_Predraw(*this\main,#True)
 		Protected w=0
 		Protected idw=0
-		ForEach *this\table\cols()			
-			Protected *col.strMyTableCol=*this\table\cols()			
+		ForEach *this\main\cols()			
+			Protected *col.strMyTableCol=*this\main\cols()			
 			If *col=*this
 				If setSelect
 					Protected multiselect.b=_MyTable_IsMultiselect(*this)
 					Protected fullrow.b=_MyTable_IsFullrowselect(*this)
 					If fullrow
 						If Not multiselect
-							ClearMap(*this\table\selectedCols())															
+							ClearMap(*this\main\selectedCols())															
 						EndIf
-						*this\table\selectedCols(Str(*col))=#True
+						*this\main\selectedCols(Str(*col))=#True
 					EndIf
 				EndIf
 				Break						
@@ -290,25 +290,25 @@ Procedure _MyTable_Col_ScrollTo(*this.strMyTableCol,setSelect.b=#False,redraw.b=
 			w+*col\width
 			idw+1
 		Next
-		If IsGadget(*this\table\hscroll)
-			SetGadgetState(*this\table\hscroll,w)
+		If IsGadget(*this\main\hscroll)
+			SetGadgetState(*this\main\hscroll,w)
 		Else
-			*this\table\hscroll=w
-			If *this\table\hscroll>*this\table\maxhscroll
-				*this\table\hscroll=*this\table\maxhscroll
+			*this\main\hscroll=w
+			If *this\main\hscroll>*this\main\maxhscroll
+				*this\main\hscroll=*this\main\maxhscroll
 			EndIf
 		EndIf
-		*this\table\dirty=#True
+		*this\main\dirty=#True
 		If redraw
-			_MyTable_Table_Redraw(*this\table)
+			_MyTable_Table_Redraw(*this\main)
 		EndIf
 	EndIf
 EndProcedure
 
 Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
-	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
-	Protected hierarchicalAlwaysExpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this\table)
-	Protected checkboxes.b=_MyTable_IsCheckboxes(*this\table)
+	Protected hierarchical.b=_MyTable_IsHierarchical(*this\main)
+	Protected hierarchicalAlwaysExpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this\main)
+	Protected checkboxes.b=_MyTable_IsCheckboxes(*this\main)
 	Protected *lastfont.MyFont::MyFont=0
 	Protected tresult.i=0
 	If *this\listindex=0
@@ -323,7 +323,7 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 		EndIf
 		If *row\image
 			If *this\listindex=0
-				tresult+*row\table\defaultrowheight+MyTableW8
+				tresult+*row\main\defaultrowheight+MyTableW8
 			EndIf
 		EndIf
 	EndIf
@@ -340,10 +340,10 @@ Procedure _MyTable_Col_AutosizeSubRow(*this.strMyTableCol,*row.strMyTableRow)
 		EndIf
 		tresult+*cell\textwidth+MyTableW8
 		If *cell\imageLeft
-			tresult+*cell\table\defaultrowheight+MyTableW8
+			tresult+*cell\main\defaultrowheight+MyTableW8
 		EndIf
 		If *cell\imageRight	
-			tresult+*cell\table\defaultrowheight+MyTableW8
+			tresult+*cell\main\defaultrowheight+MyTableW8
 		EndIf
 	EndIf
 	If *row\rows
@@ -360,12 +360,12 @@ EndProcedure
 Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 	If *this And Not *this\stretched
 		
-		If Not *this\table\drawing
-			If IsImage(*this\table\canvas)
-				StartDrawing(ImageOutput(*this\table\canvas))
+		If Not *this\main\drawing
+			If IsImage(*this\main\canvas)
+				StartDrawing(ImageOutput(*this\main\canvas))
 			EndIf
-			If IsGadget(*this\table\canvas)
-				StartDrawing(CanvasOutput(*this\table\canvas))
+			If IsGadget(*this\main\canvas)
+				StartDrawing(CanvasOutput(*this\main\canvas))
 			EndIf
 		EndIf
 		_callcountStart()
@@ -378,23 +378,23 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		EndIf
 		
 		Protected result.i=0
-		If *this\table\datagrid And *this\listindex=0
-			result=MyTableW8+_MyTableTextWidth(Str(ListSize(*this\table\rows())))+MyTableW8
+		If *this\main\datagrid And *this\listindex=0
+			result=MyTableW8+_MyTableTextWidth(Str(ListSize(*this\main\rows())))+MyTableW8
 		Else
 			result=*this\textwidth+MyTableW8
 			
 			If *this\image
-				result+*this\table\calcheaderheight-MyTableW8
+				result+*this\main\calcheaderheight-MyTableW8
 				result+MyTableW8			
 			EndIf
 			If *this\sort
 				result+MyTableW20
 			EndIf		
 			
-			ForEach *this\table\rows()
-				If *this\table\rows()\cells
-					If ListSize(*this\table\rows()\cells\cells())>*this\listindex					
-						Protected tresult=_MyTable_Col_AutosizeSubRow(*this,*this\table\rows())					
+			ForEach *this\main\rows()
+				If *this\main\rows()\cells
+					If ListSize(*this\main\rows()\cells\cells())>*this\listindex					
+						Protected tresult=_MyTable_Col_AutosizeSubRow(*this,*this\main\rows())					
 						If tresult>result
 							result=tresult
 						EndIf
@@ -405,12 +405,12 @@ Procedure _MyTable_Col_Autosize(*this.strMyTableCol)
 		*this\calcwidth=result+MyTableW8
 		*this\width=DesktopUnscaledX(*this\calcwidth)
 		*this\dirty=#True
-		*this\table\dirty=#True
-		If Not *this\table\drawing
+		*this\main\dirty=#True
+		If Not *this\main\drawing
 			StopDrawing()
 		EndIf
 		_callcountEnde()
-		_MyTable_Table_Predraw(*this\table)
-		_MyTable_Table_Redraw(*this\table)
+		_MyTable_Table_Predraw(*this\main)
+		_MyTable_Table_Redraw(*this\main)
 	EndIf
 EndProcedure

@@ -73,7 +73,7 @@ Module MyTable
 		vtable_row:;- Row
 		_MyTableDataSectionDefault(Row)
 		_DataSectionGetter(MyTable,Row,ElementSelectedStyle)
-		_DataSectionGetter(MyTable,Row,Table)
+		_DataSectionGetter(MyTable,Row,Main)
 		_DataSectionGetter(MyTable,Row,Parent)
 		_DataSectionGetter(MyTable,Row,LevelPosition)
 		_DataSectionGetter(MyTable,Row,VisiblePosition)
@@ -95,7 +95,7 @@ Module MyTable
 		vtable_col:;- Col
 		_MyTableDataSectionDefault(Col)
 		_DataSectionGetter(MyTable,Col,ElementSelectedStyle)
-		_DataSectionGetter(MyTable,Col,Table)
+		_DataSectionGetter(MyTable,Col,Main)
 		_DataSectionGetter(MyTable,Col,Position)
 		_DataSectionSetterGetter(MyTable,Col,Text)
 		_DataSectionSetterGetter(MyTable,Col,Mask)
@@ -111,7 +111,7 @@ Module MyTable
 		
 		vtable_cell:;- Cell
 		_MyTableDataSectionDefault(Cell)
-		_DataSectionGetter(MyTable,Cell,Table)
+		_DataSectionGetter(MyTable,Cell,Main)
 		_DataSectionGetter(MyTable,Cell,Row)
 		_DataSectionGetter(MyTable,Cell,Col)
 		_DataSectionGetter(MyTable,Cell,Parent)

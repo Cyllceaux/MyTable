@@ -536,7 +536,7 @@ Procedure _MyTable_Table_Draw_Header(*this.strMyTableTable,by,*font.MyFont::MyFo
 EndProcedure
 
 Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.MyFont::MyFont,fixed,selected,checkboxes,disabled,idx,*cell.strMyTableCell,cw)
-	Protected result=*cell\table\calcdefaultrowheight
+	Protected result=*cell\main\calcdefaultrowheight
 	Protected valign=_MyTable_GetDefaultVAlign(*cell)
 	Protected halign=_MyTable_GetDefaultHAlign(*cell)
 	Protected *col.strMyTableCol=*cell\col
@@ -571,7 +571,7 @@ Procedure _MyTable_Table_Draw_CellText(bx,by,addx,addy,*font.MyFont::MyFont,fixe
 	If *cell\imageRight
 		
 		
-		tw=*this\table\calcdefaultrowheight+MyTableW4
+		tw=*this\main\calcdefaultrowheight+MyTableW4
 		
 		
 	EndIf
@@ -624,13 +624,13 @@ EndProcedure
 Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFont,width.i,height.i,scrollx.i,scrolly.i,zebra.b,fixed.b)	
 	Protected *lastfont.MyFont::MyFont=*font.MyFont::MyFont
 	Protected bx=-scrollx
-	Protected hierarchical.b=_MyTable_IsHierarchical(*this\table)
+	Protected hierarchical.b=_MyTable_IsHierarchical(*this\main)
 	Protected checkboxes.b=#False
-	Protected border.b=_MyTable_IsBorder(*this\table)
-	Protected callback.b=_MyTable_IsCallback(*this\table)
+	Protected border.b=_MyTable_IsBorder(*this\main)
+	Protected callback.b=_MyTable_IsCallback(*this\main)
 	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
-	Protected markmouseover.b=_MyTable_IsMark_Mouse_Over(*this\table)
-	Protected Fullrowselect.b=_MyTable_IsFullrowselect(*this\table)
+	Protected markmouseover.b=_MyTable_IsMark_Mouse_Over(*this\main)
+	Protected Fullrowselect.b=_MyTable_IsFullrowselect(*this\main)
 	Protected ElementSelected.b=_MyTable_IsElement_Selected(*this)
 	Protected *cell.strMyTableCell=0
 	
@@ -644,10 +644,10 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 		*this\dirty=#False
 	EndIf
 	
-	If *this\table\fixedcols
-		ForEach *this\table\cols()
-			If *this\table\fixedcols>ListIndex(*this\table\cols())
-				fwidth+*this\table\cols()\calcwidth
+	If *this\main\fixedcols
+		ForEach *this\main\cols()
+			If *this\main\fixedcols>ListIndex(*this\main\cols())
+				fwidth+*this\main\cols()\calcwidth
 			EndIf
 		Next
 	EndIf
@@ -656,9 +656,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 	If fixed
 		
 		If ElementSelected
-			ForEach *this\table\selectedCells()
-				If *this\table\selectedCells()
-					*cell=Val(MapKey(*this\table\selectedCells()))
+			ForEach *this\main\selectedCells()
+				If *this\main\selectedCells()
+					*cell=Val(MapKey(*this\main\selectedCells()))
 					If *cell\row=*this
 						bElementSelected=#True
 						Break
@@ -667,9 +667,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 			Next
 			
 			If Not bElementSelected
-				ForEach *this\table\tempselectedCells()
-					If *this\table\tempselectedCells()
-						*cell=Val(MapKey(*this\table\tempselectedCells()))
+				ForEach *this\main\tempselectedCells()
+					If *this\main\tempselectedCells()
+						*cell=Val(MapKey(*this\main\tempselectedCells()))
 						If *cell\row=*this
 							bElementSelected=#True
 							Break
@@ -681,11 +681,11 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 		bx=0		
 	Else
 		bx+fwidth
-		start+*this\table\fixedcols
+		start+*this\main\fixedcols
 	EndIf
 	
-	If callback And *this\dirty And *this\table\callback
-		*this\table\callback(*this)
+	If callback And *this\dirty And *this\main\callback
+		*this\main\callback(*this)
 	EndIf
 	Protected selected.b=#False
 	Protected mselected.b=#False
@@ -703,8 +703,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 			Protected g
 			For g=2 To *cell\colspan
 				If g<=cols
-					SelectElement(*this\table\cols(),*col\listindex+(g-1))
-					cw+*this\table\cols()\calcwidth
+					SelectElement(*this\main\cols(),*col\listindex+(g-1))
+					cw+*this\main\cols()\calcwidth
 				EndIf
 			Next
 		EndIf
@@ -725,9 +725,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 			
 			mselected=#False
 			If markmouseover And Not selected
-				mselected=Bool(mselected Or Bool(*this\table\mvcell=*cell))		
+				mselected=Bool(mselected Or Bool(*this\main\mvcell=*cell))		
 				If Fullrowselect
-					mselected=Bool(mselected Or Bool(*this\table\mvrow=*this))
+					mselected=Bool(mselected Or Bool(*this\main\mvrow=*this))
 				EndIf
 			EndIf
 			
@@ -736,8 +736,8 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 			ClipOutput(bx,by,cw,ch)
 			*cell\startx=bx
 			*cell\starty=by
-			If *this\table\eventCustomCellDraw
-				customdraw=*this\table\eventCustomCellDraw(*cell,bx,by,cw,ch)
+			If *this\main\eventCustomCellDraw
+				customdraw=*this\main\eventCustomCellDraw(*cell,bx,by,cw,ch)
 			EndIf
 			
 			If Not customdraw
@@ -774,9 +774,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 							If ListSize(*this\rows\rows())>0
 								If Not alwaysexpanded
 									If *this\expanded
-										DrawImage(ImageID(*this\table\DefaultImageMinusArrow),bx+addx,by)
+										DrawImage(ImageID(*this\main\DefaultImageMinusArrow),bx+addx,by)
 									Else
-										DrawImage(ImageID(*this\table\DefaultImagePlusArrow),bx+addx,by)
+										DrawImage(ImageID(*this\main\DefaultImagePlusArrow),bx+addx,by)
 									EndIf
 								EndIf
 							EndIf
@@ -792,9 +792,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 					If idx=1
 						DrawingMode(#PB_2DDrawing_AlphaClip)				
 						If *this\checked
-							DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+							DrawImage(ImageID(*this\main\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
 						Else
-							DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
+							DrawImage(ImageID(*this\main\DefaultImageCheckBox),bx+addx,by+MyTableH2)
 						EndIf				
 						DrawingMode(#PB_2DDrawing_Default)
 						addx+MyTableW20
@@ -809,10 +809,10 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 						addx+DesktopScaledX(2)
 						
 						DrawingMode(#PB_2DDrawing_AlphaClip)
-						DrawImage(*this\image\GetSizedID(*this\table\calcdefaultrowheight-MyTableW8),bx+addx,by+addy+MyTableW4)
+						DrawImage(*this\image\GetSizedID(*this\main\calcdefaultrowheight-MyTableW8),bx+addx,by+addy+MyTableW4)
 						DrawingMode(#PB_2DDrawing_Default)
 						
-						addx+*this\table\calcdefaultrowheight
+						addx+*this\main\calcdefaultrowheight
 						
 					EndIf
 				EndIf
@@ -820,10 +820,10 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 				If *cell\imageLeft
 					addx+DesktopScaledX(2)
 					DrawingMode(#PB_2DDrawing_AlphaClip)
-					DrawImage(*cell\imageLeft\GetSizedID(*this\table\calcdefaultrowheight-MyTableW8),bx+addx,by+addy+MyTableW4)
+					DrawImage(*cell\imageLeft\GetSizedID(*this\main\calcdefaultrowheight-MyTableW8),bx+addx,by+addy+MyTableW4)
 					DrawingMode(#PB_2DDrawing_Default)
 					
-					addx+*this\table\calcdefaultrowheight
+					addx+*this\main\calcdefaultrowheight
 					
 				EndIf
 				
@@ -833,9 +833,9 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 					If idx>1
 						DrawingMode(#PB_2DDrawing_AlphaClip)
 						If *cell\checked
-							DrawImage(ImageID(*this\table\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
+							DrawImage(ImageID(*this\main\DefaultImageCheckBoxChecked),bx+addx,by+MyTableH2)
 						Else
-							DrawImage(ImageID(*this\table\DefaultImageCheckBox),bx+addx,by+MyTableH2)
+							DrawImage(ImageID(*this\main\DefaultImageCheckBox),bx+addx,by+MyTableH2)
 						EndIf
 						DrawingMode(#PB_2DDrawing_Default)
 						addx+MyTableW20
@@ -848,7 +848,7 @@ Procedure _MyTable_Table_Draw_Row(*this.strMyTableRow,by,cols,*font.MyFont::MyFo
 				
 				If *cell\imageRight
 					DrawingMode(#PB_2DDrawing_AlphaClip)				
-					DrawImage(*cell\imageRight\GetSizedID(*this\table\calcdefaultrowheight-MyTableW8),bx+cw-*this\table\calcdefaultrowheight,by+addy+MyTableW4)
+					DrawImage(*cell\imageRight\GetSizedID(*this\main\calcdefaultrowheight-MyTableW8),bx+cw-*this\main\calcdefaultrowheight,by+addy+MyTableW4)
 					DrawingMode(#PB_2DDrawing_Default)
 				EndIf
 				

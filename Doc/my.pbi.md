@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#VERSION</span>| 257||
+|<span style="color:#AAAAFF">\#VERSION</span>| 261||
 |<span style="color:#AAAAFF">\#VERSION\_DATE</span>| 20220202||
 
 
@@ -28,5 +28,7 @@
 |<span style="color:#AAAAFF">\#MY\_TYPE\_BORDER</span>|10||
 |<span style="color:#AAAAFF">\#MY\_TYPE\_IMAGE</span>|11||
 |<span style="color:#AAAAFF">\#MY\_TYPE\_SPLITTER</span>|12||
+|<span style="color:#AAAAFF">\#MY\_TYPE\_TOOLBAR</span>|13||
+|<span style="color:#AAAAFF">\#MY\_TYPE\_TOOLBAR\_BUTTON</span>|14||
 
 

@@ -4,31 +4,31 @@ Procedure.b _MyTable_IsSelected(*obj.strMyTableObject)
 	Select *obj\type
 		Case My::#MY_TYPE_CELL
 			Protected *cell.strMyTableCell=*obj
-			If FindMapElement(*cell\table\selectedCells(),Str(*obj))
-				ProcedureReturn *cell\table\selectedCells()
+			If FindMapElement(*cell\main\selectedCells(),Str(*obj))
+				ProcedureReturn *cell\main\selectedCells()
 			EndIf
-			If FindMapElement(*cell\table\tempselectedCells(),Str(*obj))
-				ProcedureReturn *cell\table\tempselectedCells()
+			If FindMapElement(*cell\main\tempselectedCells(),Str(*obj))
+				ProcedureReturn *cell\main\tempselectedCells()
 			EndIf
-			ProcedureReturn *cell\table\selectall
+			ProcedureReturn *cell\main\selectall
 		Case My::#MY_TYPE_COL
 			Protected *col.strMyTableCol=*obj
-			If FindMapElement(*col\table\selectedCols(),Str(*obj))
-				ProcedureReturn *col\table\selectedCols()
+			If FindMapElement(*col\main\selectedCols(),Str(*obj))
+				ProcedureReturn *col\main\selectedCols()
 			EndIf
-			If FindMapElement(*col\table\tempselectedCols(),Str(*obj))
-				ProcedureReturn *col\table\tempselectedCols()
+			If FindMapElement(*col\main\tempselectedCols(),Str(*obj))
+				ProcedureReturn *col\main\tempselectedCols()
 			EndIf
-			ProcedureReturn *col\table\selectall
+			ProcedureReturn *col\main\selectall
 		Case My::#MY_TYPE_ROW			
 			Protected *row.strMyTableRow=*obj
-			If FindMapElement(*row\table\selectedRows(),Str(*obj))
-				ProcedureReturn *row\table\selectedRows()
+			If FindMapElement(*row\main\selectedRows(),Str(*obj))
+				ProcedureReturn *row\main\selectedRows()
 			EndIf
-			If FindMapElement(*row\table\tempselectedRows(),Str(*obj))
-				ProcedureReturn *row\table\tempselectedRows()
+			If FindMapElement(*row\main\tempselectedRows(),Str(*obj))
+				ProcedureReturn *row\main\tempselectedRows()
 			EndIf
-			ProcedureReturn *row\table\selectall
+			ProcedureReturn *row\main\selectall
 		Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 			Protected *table.strMyTableTable=*obj
 			ProcedureReturn *table\selectall
@@ -692,7 +692,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 			*cell=*obj
 			*row=*cell\row
 			*col=*cell\col
-			*this=*cell\table		
+			*this=*cell\main		
 			ClearMap(*this\tempselectedCells())
 			ClearMap(*this\tempselectedRows())
 			ClearMap(*this\tempselectedCols())	
@@ -742,7 +742,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 			EndIf			
 		ElseIf *obj\type=My::#MY_TYPE_COL
 			*col=*obj
-			*this=*col\table
+			*this=*col\main
 			If Not shift
 				ClearMap(*this\selectedCells())
 				ClearMap(*this\selectedRows())
@@ -752,7 +752,7 @@ Procedure _MyTableSelectObject(*obj.strMyTableObject,shift.b,pages.b)
 			*this\lastcol=*obj
 		ElseIf *obj\type=My::#MY_TYPE_ROW
 			*row=*obj
-			*this=*row\table
+			*this=*row\main
 			If Not shift
 				ClearMap(*this\selectedCells())
 				ClearMap(*this\selectedRows())
@@ -1016,13 +1016,13 @@ Procedure.s _MyTable_GetTooltip(*this.strMyTableObject)
 				*table=*this
 			Case My::#MY_TYPE_ROW
 				*row=*this
-				*table=*row\table
+				*table=*row\main
 			Case My::#MY_TYPE_COL
 				*col=*this
-				*table=*col\table
+				*table=*col\main
 			Case My::#MY_TYPE_CELL
 				*cell=*this
-				*table=*cell\table
+				*table=*cell\main
 		EndSelect
 		
 		If result="" And *cell		
@@ -1563,7 +1563,7 @@ Procedure _MyTableInitRow(*table.strMyTableTable,
 		\vtable=?vtable_row
 		\type=My::#MY_TYPE_ROW
 		\flags=flags			
-		\table=*table
+		\main=*table
 		\parent=*parent
 		\dirty=#True
 		\height=*table\defaultrowheight
@@ -1601,7 +1601,7 @@ Procedure _MyTableInitCol(*table.strMyTableTable,
 		\vtable=?vtable_col
 		\type=My::#MY_TYPE_COL
 		\flags=flags
-		\table=*table
+		\main=*table
 		\dirty=#True
 		\text=text
 		\width=width
@@ -1631,10 +1631,10 @@ Procedure _MyTableInitCol(*table.strMyTableTable,
 		
 		\calcwidth=DesktopScaledX(\width)
 		\listindex=ListSize(*table\cols())-1
-		If \table\datagrid And text="" And \listindex>0
+		If \main\datagrid And text="" And \listindex>0
 			\text=_MyTableGridColumnName(ListSize(*table\cols())-1)
 			\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_CENTER
-		ElseIf \table\datagrid And text="" And \listindex=0
+		ElseIf \main\datagrid And text="" And \listindex=0
 			\text=""
 			\defaultStyle\halign=#MYTABLE_STYLE_HALIGN_RIGHT
 			\datatype=#MYTABLE_DATATYPE_NUMBER
@@ -1656,7 +1656,7 @@ Procedure _MyTableInitCell(*table.strMyTableTable,
 		\vtable=?vtable_cell
 		\type=My::#MY_TYPE_CELL
 		\flags=flags
-		\table=*table
+		\main=*table
 		\parent=*parent
 		\row=*row
 		\col=*col
@@ -1682,12 +1682,12 @@ EndProcedure
 Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i,force.b)
 	If *row
 		Protected tidx=idx
-		If *row\table\datagrid And Not force
+		If *row\main\datagrid And Not force
 			tidx+1
 		EndIf
 		
-		If ListSize(*row\table\cols())>tidx
-			Protected *col.strMyTableCol=SelectElement(*row\table\cols(),tidx)
+		If ListSize(*row\main\cols())>tidx
+			Protected *col.strMyTableCol=SelectElement(*row\main\cols(),tidx)
 			Protected *cell.strMyTableCell=0
 			If Not *row\cells
 				*row\cells=AllocateStructure(strMyTableCellList)
@@ -1695,7 +1695,7 @@ Procedure _MyTableGetOrAddCell(*row.strMyTableRow,idx.i,force.b)
 			While ListSize(*row\cells\cells())<=tidx
 				LastElement(*row\cells\cells())
 				*cell=AddElement(*row\cells\cells())
-				_MyTableInitCell(*row\table,*row,*col,0,*cell,0)
+				_MyTableInitCell(*row\main,*row,*col,0,*cell,0)
 			Wend
 			If *cell
 				ProcedureReturn *cell
@@ -1717,10 +1717,10 @@ Procedure.b _MyTable_IsDisabled(*obj.strMyTableObject)
 				result=Bool(_MyTable_IsDisabled(*cell\col) Or _MyTable_IsDisabled(*cell\row))
 			Case My::#MY_TYPE_ROW
 				Protected *row.strMyTableRow=*obj
-				result=_MyTable_IsDisabled(*row\table)	
+				result=_MyTable_IsDisabled(*row\main)	
 			Case My::#MY_TYPE_COL
 				Protected *col.strMyTableCol=*obj
-				result=_MyTable_IsDisabled(*col\table)
+				result=_MyTable_IsDisabled(*col\main)
 			Case My::#MY_TYPE_TABLE,My::#MY_TYPE_TREE,My::#MY_TYPE_GRID
 				Protected *table.strMyTableTable=*obj
 		EndSelect
@@ -1736,8 +1736,8 @@ Procedure _MyTable_StopEdit(*this.strMyTableTable,save.b)
 				With *this\edit\cell
 					Protected old.s=\text
 					_MyTable_Cell_SetText(*this\edit\cell,GetGadgetText(*this\edit\gadget))					
-					If \table\eventCellChangedText
-						\table\eventCellChangedText(*this\edit\cell,old)
+					If \main\eventCellChangedText
+						\main\eventCellChangedText(*this\edit\cell,old)
 					EndIf
 				EndWith
 			EndIf
@@ -1768,7 +1768,7 @@ EndProcedure
 
 Procedure _MyTable_StartEditCell(*cell.strMyTableCell)
 	If *cell
-		Protected *this.strMyTableTable=*cell\table
+		Protected *this.strMyTableTable=*cell\main
 		
 		Protected editable.b=_MyTable_IsEditable(*cell)		
 		Protected disabled.b=_MyTable_IsDisabled(*cell)		

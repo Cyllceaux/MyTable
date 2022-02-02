@@ -29,21 +29,21 @@ Procedure _MyTable_Style_Redraw(*this.strMyTableStyleObject)
 		Case My::#MY_TYPE_ROW
 			Protected *row.strMyTableRow=*this\obj
 			*row\dirty=#True
-			*row\table\dirty=#True
-			_MyTable_Table_Predraw(*row\table)
-			_MyTable_Table_Redraw(*row\table)
+			*row\main\dirty=#True
+			_MyTable_Table_Predraw(*row\main)
+			_MyTable_Table_Redraw(*row\main)
 		Case My::#MY_TYPE_COL
 			Protected *col.strMyTableCol=*this\obj
 			*col\dirty=#True
-			*col\table\dirty=#True
-			_MyTable_Table_Predraw(*col\table)
-			_MyTable_Table_Redraw(*col\table)
+			*col\main\dirty=#True
+			_MyTable_Table_Predraw(*col\main)
+			_MyTable_Table_Redraw(*col\main)
 		Case My::#MY_TYPE_CELL
 			Protected *cell.strMyTableCell=*this\obj
 			*cell\dirty=#True
-			*cell\table\dirty=#True
-			_MyTable_Table_Predraw(*cell\table)
-			_MyTable_Table_Redraw(*cell\table)
+			*cell\main\dirty=#True
+			_MyTable_Table_Predraw(*cell\main)
+			_MyTable_Table_Redraw(*cell\main)
 	EndSelect
 EndProcedure
 

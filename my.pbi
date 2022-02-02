@@ -2,7 +2,7 @@
 
 DeclareModule My
 	
-	#VERSION = 257
+	#VERSION = 261
 	#VERSION_DATE = 20220202
 		
 	Enumeration _my_type
@@ -19,6 +19,8 @@ DeclareModule My
 		#MY_TYPE_BORDER
 		#MY_TYPE_IMAGE
 		#MY_TYPE_SPLITTER
+		#MY_TYPE_TOOLBAR
+		#MY_TYPE_TOOLBAR_BUTTON
 	EndEnumeration
 	
 EndDeclareModule

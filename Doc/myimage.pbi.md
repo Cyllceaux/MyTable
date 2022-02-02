@@ -5,7 +5,7 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYIMAGE\_VERSION</span>| 252||
+|<span style="color:#AAAAFF">\#MYIMAGE\_VERSION</span>| 256||
 |<span style="color:#AAAAFF">\#MYIMAGE\_VERSION\_DATE</span>| 20220202||
 
 
