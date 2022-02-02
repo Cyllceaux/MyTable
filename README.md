@@ -1,8 +1,8 @@
 # My
 
-VERSION = 254
+VERSION = 256
 
-VERSION_DATE = 20210715
+VERSION_DATE = 20220202
 
 [my.pbi](Doc/my.pbi.md)
 
@@ -30,9 +30,9 @@ VERSION_DATE = 20210715
 
 ## MyFont
 
-VERSION = 282
+VERSION = 284
 
-VERSION_DATE = 20210715
+VERSION_DATE = 20220202
 
 [myfont.pb](Doc/myfont.pb.md)
 
@@ -48,9 +48,9 @@ VERSION_DATE = 20210715
 
 ## MyImage
 
-VERSION = 249
+VERSION = 251
 
-VERSION_DATE = 20210715
+VERSION_DATE = 20220202
 
 [myimage.pb](Doc/myimage.pb.md)
 
@@ -66,9 +66,9 @@ VERSION_DATE = 20210715
 
 ## MyTable
 
-VERSION = 3795
+VERSION = 3797
 
-VERSION_DATE = 20210715
+VERSION_DATE = 20220202
 
 [mytable.pb](Doc/mytable.pb.md)
 
@@ -100,9 +100,9 @@ VERSION_DATE = 20210715
 
 ## MySplitter
 
-VERSION = 157
+VERSION = 159
 
-VERSION_DATE = 20210715
+VERSION_DATE = 20220202
 
 [mysplitter.pb](Doc/mysplitter.pb.md)
 

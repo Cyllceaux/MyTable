@@ -2,8 +2,8 @@
 
 DeclareModule MyImage
 	
-	#MYIMAGE_VERSION = 250
-	#MYIMAGE_VERSION_DATE = 20210715
+	#MYIMAGE_VERSION = 252
+	#MYIMAGE_VERSION_DATE = 20220202
 	
 	Interface MyImage
 		GetType()

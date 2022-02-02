@@ -5,8 +5,8 @@
 
 |Constants|Value|Comment|
 | --- | --- | --- |
-|<span style="color:#AAAAFF">\#MYSPLITTER\_VERSION</span>| 158||
-|<span style="color:#AAAAFF">\#MYSPLITTER\_VERSION\_DATE</span>| 20210715||
+|<span style="color:#AAAAFF">\#MYSPLITTER\_VERSION</span>| 160||
+|<span style="color:#AAAAFF">\#MYSPLITTER\_VERSION\_DATE</span>| 20220202||
 
 
 ## EnumerationBinarys
