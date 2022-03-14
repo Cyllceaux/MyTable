@@ -293,6 +293,7 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 	Protected alwaysexpanded.b=_MyTable_IsHierarchical_Always_Expanded(*this)
 	Protected disabled.b=_MyTable_IsDisabled(*this)
 	
+	
 	Protected *row.strMyTableRow=0
 	Protected *cell.strMyTableCell=0
 	Protected mx=GetGadgetAttribute(*this\canvas,#PB_Canvas_MouseX)
@@ -436,6 +437,8 @@ Procedure _MyTableGetRowCol(*this.strMyTableTable)
 		EndIf
 		
 	EndIf
+	
+	
 	
 	ProcedureReturn *rc
 EndProcedure
@@ -1283,7 +1286,7 @@ EndProcedure
 Procedure _MyTableEvtCanvasMouseLeftDouble()
 	Protected *this.strMyTableTable=GetGadgetData(EventGadget())
 	_MyTable_StopEdit(*this,#True)
-	
+	Protected Fullrowselect.b=_MyTable_IsFullrowselect(*this)
 	
 	If IsGadget(*this\canvas)
 		Protected *rc.strMyTableRowCol=_MyTableGetRowCol(*this)
@@ -1295,7 +1298,7 @@ Procedure _MyTableEvtCanvasMouseLeftDouble()
 			_MyTable_Col_Autosize(*rc\tcol)
 		Else
 			
-			If *rc\tcell
+			If *rc\tcell And Not Fullrowselect
 				If *this\eventCellLeftDoubleClick
 					If Not *this\eventCellLeftDoubleClick(*rc\tcell)
 						_MyTable_StartEdit(*rc)

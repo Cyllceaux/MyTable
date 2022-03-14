@@ -239,10 +239,10 @@ DeclareModule MyTable
 	Prototype.b MyTableProtoEventRowChangedExpanded(*row.MyTableRow)
 	Prototype.b MyTableProtoEventRowChangedCollapsed(*row.MyTableRow)
 	Prototype.b MyTableProtoEventRowSelected(*row.MyTableRow)
-	Prototype.b MyTableProtoEventRowLeftClick(*cell.MyTableRow)	
-	Prototype.b MyTableProtoEventRowRightClick(*cell.MyTableRow)
-	Prototype.b MyTableProtoEventRowLeftDoubleClick(*cell.MyTableRow)		
-	Prototype.b MyTableProtoEventRowRightDoubleClick(*cell.MyTableRow)
+	Prototype.b MyTableProtoEventRowLeftClick(*row.MyTableRow)	
+	Prototype.b MyTableProtoEventRowRightClick(*row.MyTableRow)
+	Prototype.b MyTableProtoEventRowLeftDoubleClick(*row.MyTableRow)		
+	Prototype.b MyTableProtoEventRowRightDoubleClick(*row.MyTableRow)
 	
 	Prototype.b MyTableProtoEventCustomCellDraw(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is drawn
 	Prototype.b MyTableProtoEventCustomCellEdit(*cell.MyTableCell,x,y,w,h); Return #True if custom cell is edited
